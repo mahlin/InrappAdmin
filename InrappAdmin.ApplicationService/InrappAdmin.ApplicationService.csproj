@@ -45,6 +45,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\InrappAdmin.DomainModel\InrappAdmin.DomainModel.csproj">
+      <Project>{D48C58E7-FF52-45E0-8CE2-7D5EBDE99B7F}</Project>
+      <Name>InrappAdmin.DomainModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InrappAdminDataAccess\InrappAdmin.DataAccess.csproj">
       <Project>{3f4ed4fa-27a2-4b11-bce8-5cede12297b2}</Project>
       <Name>InrappAdmin.DataAccess</Name>

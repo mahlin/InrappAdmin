@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InrappAdmin.DomainModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,17 @@ namespace InrappAdmin.ApplicationService.Interface
     {
 
         string HamtaHistorikForOrganisation(int orgId);
+
+        Organisation HamtaOrganisationForKommunkod(string kommunkod);
+        string HamtaKommunkodForOrg(int orgId);
+
+        IEnumerable<ApplicationUser> HamtaKontaktpersonerForOrg(int orgId);
+
+        IEnumerable<Organisationsenhet> HamtaOrgEnheterForOrg(int orgId);
+
+        IEnumerable<AdmUppgiftsskyldighet> HamtaUppgiftsskyldighetForOrg(int orgId);
+
+        void SkapaOrganisationsenhet(Organisationsenhet orgUnit);
 
     }
 }

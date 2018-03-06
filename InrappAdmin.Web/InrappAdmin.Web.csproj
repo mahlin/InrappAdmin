@@ -149,12 +149,14 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OrganisationController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ErrorManager.cs" />
     <Compile Include="Helpers\FileLogWriter.cs" />
     <Compile Include="Models\CustomErrorPageModel.cs" />
+    <Compile Include="Models\ViewModels\OrganisationViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +199,11 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\CustomError.cshtml" />
+    <Content Include="Views\Organisation\Index.cshtml" />
+    <Content Include="Views\Organisation\_Contactpersons.cshtml" />
+    <Content Include="Views\Organisation\_OrgUnits.cshtml" />
+    <Content Include="Views\Organisation\_ReportObligations.cshtml" />
+    <Content Include="Views\Organisation\CreateOrganisationUnit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -219,6 +226,10 @@
     <ProjectReference Include="..\InrappAdmin.ApplicationService\InrappAdmin.ApplicationService.csproj">
       <Project>{97874577-75b0-40a7-a195-a25a2f0c16cb}</Project>
       <Name>InrappAdmin.ApplicationService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InrappAdmin.DomainModel\InrappAdmin.DomainModel.csproj">
+      <Project>{d48c58e7-ff52-45e0-8ce2-7d5ebde99b7f}</Project>
+      <Name>InrappAdmin.DomainModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\InrappAdminDataAccess\InrappAdmin.DataAccess.csproj">
       <Project>{3F4ED4FA-27A2-4B11-BCE8-5CEDE12297B2}</Project>

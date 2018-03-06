@@ -1,0 +1,239 @@
+﻿@using InrappAdmin.Web.Models.ViewModels
+@model InrappAdmin.Web.Models.ViewModels.OrganisationViewModels.OrganisationViewModel
+@{
+    ViewBag.Title = "Organisation";
+}
+
+@*@using (Html.BeginForm("GetOrganisation", "Organisation", FormMethod.Post, new { @class = "form-horizontal", role = "form", style = "padding-top:50px;" }))
+    {
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default" value="Sök organisation" />
+            </div>
+        </div>
+    }*@
+
+
+<script type="text/javascript">
+    $(function () {
+        $("#txtKommunkod").focus();
+    });
+</script>
+
+<br /><br />
+<div class="row">
+    <div class="col-md-8 padding-top-25">
+        <section id="loginForm">
+            @using (Html.BeginForm("GetOrganisation", "Organisation", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <h4>Administrera organisation</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Kommunkod, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Kommunkod, new { @class = "form-control", id = "txtKommunkod" })
+                        @Html.ValidationMessageFor(m => m.Kommunkod, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Sök organisation" class="btn btn-default" />
+                    </div>
+                </div>
+            }
+        </section>
+    </div>
+</div>
+
+<hr />
+
+@if (Model != null)
+{
+    <div>
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Organisation.Kommunkod)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Organisation.Kommunkod)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Organisation.Inrapporteringskod)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Organisation.Inrapporteringskod)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Organisation.Organisationstyp)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Organisation.Organisationstyp)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Organisation.Organisationsnr)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Organisation.Organisationsnr)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Organisation.Organisationsnamn)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Organisation.Organisationsnamn)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Organisation.Hemsida)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Organisation.Hemsida)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Organisation.EpostAdress)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Organisation.EpostAdress)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Organisation.Telefonnr)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Organisation.Telefonnr)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Organisation.Adress)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Organisation.Adress)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Organisation.Postnr)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Organisation.Postnr)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Organisation.Postort)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Organisation.Postort)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Organisation.Epostdoman)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Organisation.Epostdoman)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Organisation.AktivFrom)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Organisation.AktivFrom)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Organisation.AktivTom)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Organisation.AktivTom)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Organisation.SkapadDatum)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Organisation.SkapadDatum)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Organisation.SkapadAv)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Organisation.SkapadAv)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Organisation.AndradDatum)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Organisation.AndradDatum)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Organisation.AndradAv)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Organisation.AndradAv)
+            </dd>
+
+        </dl>
+    </div>
+
+    <hr />
+
+    @Html.Partial("_Contactpersons")
+
+    <hr />
+
+    @Html.Partial("_OrgUnits")
+
+    <hr />
+
+    @Html.Partial("_ReportObligations")
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+@*<div class="row">
+        <div class="col-md-4">
+            <h2>jada jada</h2>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>bla bla</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum..</p>
+            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Överkurs</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum..</p>
+            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+        </div>
+    </div>*@

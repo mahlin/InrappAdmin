@@ -7,7 +7,6 @@ namespace InrappAdmin.DomainModel
 {
     public class Organisation
     {
-        //[Column("organisationsid")]
         public int Id { get; set; }
         public string Landstingskod { get; set; }
         public string Kommunkod { get; set; }

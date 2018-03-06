@@ -8,7 +8,6 @@ using InrappAdmin.ApplicationService;
 using InrappAdmin.ApplicationService.Interface;
 using InrappAdmin.DataAccess;
 using InrappAdmin.Web.Helpers;
-using InrappAdminDataAccess;
 using InrapporteringsPortal.Web.Models;
 
 namespace InrappAdmin.Web.Controllers

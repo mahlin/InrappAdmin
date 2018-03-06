@@ -1,0 +1,76 @@
+﻿@model InrappAdmin.Web.Models.ViewModels.OrganisationViewModels.OrganisationViewModel
+
+<script>
+    var x =  @Html.Raw(Model.Organisation.Id);
+</script>
+
+<h4>Organisationsenheter</h4>
+<p>
+    @Html.ActionLink("Skapa ny organisationsenhet", "CreateOrganisationUnit", "Organisation", new { orgId = Model.Organisation.Id }, null)
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Enhetsnamn
+        </th>
+        <th>
+            Enhetskod
+        </th>
+        <th>
+            Aktiv från
+        </th>
+        <th>
+            Aktiv tom
+        </th>
+        <th>
+            Skapad
+        </th>
+        <th>
+            Skapad av
+        </th>
+        <th>
+            Andrad
+        </th>
+        <th>
+            Andrad Av
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model.OrgUnits)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Enhetsnamn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Enhetskod)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AktivFrom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AktivTom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SkapadDatum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SkapadAv)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AndradDatum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AndradAv)
+            </td>
+
+            @*<td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                </td>*@
+        </tr>
+    }
+
+
+</table>

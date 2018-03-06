@@ -8,7 +8,7 @@ namespace InrappAdmin.Web.Helpers
 {
     public sealed class FileLogWriter
     {
-        private string errorLogFilePath = "C:\\logs\\InrappAdmin\\";
+        private string errorLogFilePath = "C:\\logs\\InrapporteringsportalAdmin\\";
         private string errorLogFileName = "error.txt";
         private string time = DateTime.Now.ToString("yyyy-MM-dd");
         private string errorLogFile = String.Empty;
