@@ -33,5 +33,20 @@ namespace InrappAdmin.Web.Models.ViewModels
             public DateTime? AktivTom { get; set; }
 
         }
+
+
+        public class ApplicationUserViewModel
+        {
+            public int OrganisationId { get; set; }
+            public string Namn { get; set; }
+            public DateTime? AktivFrom { get; set; }
+            public DateTime? AktivTom { get; set; }
+            public int? Status { get; set; }
+            public DateTime SkapadDatum { get; set; }
+            public string SkapadAv { get; set; }
+            public DateTime AndradDatum { get; set; }
+            public string AndradAv { get; set; }
+
+        }
     }
 }

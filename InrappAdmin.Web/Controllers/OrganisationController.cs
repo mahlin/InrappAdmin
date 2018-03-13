@@ -11,6 +11,7 @@ using InrappAdmin.DomainModel;
 using InrappAdmin.Web.Helpers;
 using InrappAdmin.Web.Models.ViewModels;
 using InrapporteringsPortal.Web.Models;
+using Microsoft.AspNet.Identity;
 
 namespace InrappAdmin.Web.Controllers
 {
@@ -54,6 +55,42 @@ namespace InrappAdmin.Web.Controllers
 
             }
             return View("Index",model);
+
+        }
+
+        // GET
+        public ActionResult GetOrganisationsContacts(int orgId = 0)
+        {
+            var model = new OrganisationViewModels.OrganisationViewModel();
+            //TODO skicka med
+            model.Organisation = new Organisation();
+            model.Organisation.Id = 29;
+            //model.Organisation.Id = orgId;
+            model.ContactPersons = _portalAdminService.HamtaKontaktpersonerForOrg(model.Organisation.Id);
+
+            return View("EditContacts", model);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateOrganisationsContact(ApplicationUser user)
+        {
+            if (ModelState.IsValid)
+            {
+                _portalAdminService.UppdateraKontaktperson(user);
+
+                //Employee emp = db.Employees.Single(em => em.Id == employee.Id);
+                //emp.Name = employee.Name;
+                //emp.Designation = employee.Designation;
+                //emp.City = employee.City;
+                //emp.State = employee.State;
+                //emp.Zip = employee.Zip;
+                //db.Entry(emp).State = EntityState.Modified;
+                //db.SaveChanges();
+
+            }
+            return RedirectToAction("GetOrganisationsContacts", new {orgId = user.OrganisationId});
+
+            //return View("EditContacts");
 
         }
 

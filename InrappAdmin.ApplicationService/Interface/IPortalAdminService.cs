@@ -23,5 +23,7 @@ namespace InrappAdmin.ApplicationService.Interface
 
         void SkapaOrganisationsenhet(Organisationsenhet orgUnit);
 
+        void UppdateraKontaktperson(ApplicationUser user);
+
     }
 }

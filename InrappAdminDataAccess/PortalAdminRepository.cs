@@ -67,5 +67,12 @@ namespace InrappAdmin.DataAccess
             var kommunkod = DbContext.Organisation.Where(x => x.Id == orgId).Select(x => x.Kommunkod).SingleOrDefault();
             return kommunkod;
         }
+
+        public void UpdateContactPerson(ApplicationUser user)
+        {
+            var usr = DbContext.Users.Where(u => u.Id == user.Id).Select(u => u).SingleOrDefault();
+            usr.Namn = user.Namn;
+            DbContext.SaveChanges(); ;
+        }
     }
 }

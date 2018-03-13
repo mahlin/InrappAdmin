@@ -23,5 +23,7 @@ namespace InrappAdmin.DataAccess
         IEnumerable<AdmUppgiftsskyldighet> GetReportObligationInformationForOrg(int orgId);
 
         void CreateOrgUnit(Organisationsenhet orgUnit);
+
+        void UpdateContactPerson(ApplicationUser user);
     }
 }
