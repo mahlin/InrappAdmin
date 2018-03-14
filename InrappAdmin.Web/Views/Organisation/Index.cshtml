@@ -10,10 +10,34 @@
         $("#txtKommunkod").focus();
     });
 
-    //$(document).ready(function () {
-    //    alert("Kommunkod: " + $('#Kommunkod').val());
-    //    //$("#txtKommunkod").focus();
-    //});
+    $(document).ready(function () {
+        hideEditableForm();
+    });
+
+    function showEditableForm() {
+        $('#readOnlyOrg').hide();
+        $('#editOrg').show();
+    };
+
+    function hideEditableForm() {
+         $('#editOrg').hide();
+        $('#readOnlyOrg').show();
+    };
+
+
+    $('#cancelLink').click(function() {
+        $('#editOrg').hide();
+        $('#readOnlyOrg').show();
+        return false;
+    });
+
+    $('#editLink').click(function() {
+        $('#readOnlyOrg').hide();
+        $('#editOrg').show();
+        return false;
+    });
+
+
 </script>
 
 <br /><br />
@@ -47,160 +71,300 @@
 @if (Model != null)
 {
     @Html.HiddenFor(m => m.Kommunkod);
-    <div>
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Organisation.Kommunkod)
-            </dt>
+<div id="readOnlyOrg">
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.Kommunkod)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Organisation.Kommunkod)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.Kommunkod)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Organisation.Inrapporteringskod)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.Inrapporteringskod)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Organisation.Inrapporteringskod)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.Inrapporteringskod)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Organisation.Organisationstyp)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.Organisationstyp)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Organisation.Organisationstyp)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.Organisationstyp)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Organisation.Organisationsnr)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.Organisationsnr)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Organisation.Organisationsnr)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.Organisationsnr)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Organisation.Organisationsnamn)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.Organisationsnamn)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Organisation.Organisationsnamn)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.Organisationsnamn)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Organisation.Hemsida)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.Hemsida)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Organisation.Hemsida)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.Hemsida)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Organisation.EpostAdress)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.EpostAdress)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Organisation.EpostAdress)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.EpostAdress)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Organisation.Telefonnr)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.Telefonnr)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Organisation.Telefonnr)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.Telefonnr)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Organisation.Adress)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.Adress)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Organisation.Adress)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.Adress)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Organisation.Postnr)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.Postnr)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Organisation.Postnr)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.Postnr)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Organisation.Postort)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.Postort)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Organisation.Postort)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.Postort)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Organisation.Epostdoman)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.Epostdoman)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Organisation.Epostdoman)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.Epostdoman)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Organisation.AktivFrom)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.AktivFrom)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Organisation.AktivFrom)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.AktivFrom)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Organisation.AktivTom)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.AktivTom)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Organisation.AktivTom)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.AktivTom)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Organisation.SkapadDatum)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.SkapadDatum)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Organisation.SkapadDatum)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.SkapadDatum)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Organisation.SkapadAv)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.SkapadAv)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Organisation.SkapadAv)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.SkapadAv)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Organisation.AndradDatum)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.AndradDatum)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Organisation.AndradDatum)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.AndradDatum)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Organisation.AndradAv)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.AndradAv)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Organisation.AndradAv)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.AndradAv)
+        </dd>
 
-        </dl>
+    </dl>
+    <input type="button" class="btn btn-primary" value="Ändra organisation" id="editLink" onclick="showEditableForm(); return false;"/>
+</div>
+
+    <div id="editOrg" class="form-horizontal">
+        @using (Html.BeginForm("UpdateOrganisation", "Organisation", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+            @Html.HiddenFor(model => model.Organisation.Id)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Organisation.Landstingskod, htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Organisation.Landstingskod, new {htmlAttributes = new {@class = "form-control"}})
+                    @Html.ValidationMessageFor(model => model.Organisation.Landstingskod, "", new {@class = "text-danger"})
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Organisation.Kommunkod, htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Organisation.Kommunkod, new {htmlAttributes = new {@class = "form-control"}})
+                    @Html.ValidationMessageFor(model => model.Organisation.Kommunkod, "", new {@class = "text-danger"})
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Organisation.Inrapporteringskod, htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Organisation.Inrapporteringskod, new {htmlAttributes = new {@class = "form-control"}})
+                    @Html.ValidationMessageFor(model => model.Organisation.Inrapporteringskod, "", new {@class = "text-danger"})
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Organisation.Organisationstyp, htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Organisation.Organisationstyp, new {htmlAttributes = new {@class = "form-control"}})
+                    @Html.ValidationMessageFor(model => model.Organisation.Organisationstyp, "", new {@class = "text-danger"})
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Organisation.Organisationsnr, htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Organisation.Organisationsnr, new {htmlAttributes = new {@class = "form-control"}})
+                    @Html.ValidationMessageFor(model => model.Organisation.Organisationsnr, "", new {@class = "text-danger"})
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Organisation.Organisationsnamn, htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Organisation.Organisationsnamn, new {htmlAttributes = new {@class = "form-control"}})
+                    @Html.ValidationMessageFor(model => model.Organisation.Organisationsnamn, "", new {@class = "text-danger"})
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Organisation.Hemsida, htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Organisation.Hemsida, new {htmlAttributes = new {@class = "form-control"}})
+                    @Html.ValidationMessageFor(model => model.Organisation.Hemsida, "", new {@class = "text-danger"})
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Organisation.EpostAdress, htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Organisation.EpostAdress, new {htmlAttributes = new {@class = "form-control"}})
+                    @Html.ValidationMessageFor(model => model.Organisation.EpostAdress, "", new {@class = "text-danger"})
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Organisation.Telefonnr, htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Organisation.Telefonnr, new {htmlAttributes = new {@class = "form-control"}})
+                    @Html.ValidationMessageFor(model => model.Organisation.Telefonnr, "", new {@class = "text-danger"})
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Organisation.Adress, htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Organisation.Adress, new {htmlAttributes = new {@class = "form-control"}})
+                    @Html.ValidationMessageFor(model => model.Organisation.Adress, "", new {@class = "text-danger"})
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Organisation.Postnr, htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Organisation.Postnr, new {htmlAttributes = new {@class = "form-control"}})
+                    @Html.ValidationMessageFor(model => model.Organisation.Postnr, "", new {@class = "text-danger"})
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Organisation.Postort, htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Organisation.Postort, new {htmlAttributes = new {@class = "form-control"}})
+                    @Html.ValidationMessageFor(model => model.Organisation.Postort, "", new {@class = "text-danger"})
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Organisation.Epostdoman, htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Organisation.Epostdoman, new {htmlAttributes = new {@class = "form-control"}})
+                    @Html.ValidationMessageFor(model => model.Organisation.Epostdoman, "", new {@class = "text-danger"})
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Organisation.AktivFrom, htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Organisation.AktivFrom, new {htmlAttributes = new {@class = "form-control"}})
+                    @Html.ValidationMessageFor(model => model.Organisation.AktivFrom, "", new {@class = "text-danger"})
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Organisation.AktivTom, htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Organisation.AktivTom, new {htmlAttributes = new {@class = "form-control"}})
+                    @Html.ValidationMessageFor(model => model.Organisation.AktivTom, "", new {@class = "text-danger"})
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="btn-toolbar">
+                    <div class="col-md-offset-2">
+                        <input type="submit" value="Spara" class="btn btn-default" style="margin-right: 15px; margin-left: 20px;"/>
+                        <input type="button" class="btn btn-default" value="Avbryt" id="cancelEditLink" onclick="hideEditableForm();return false;">
+                    </div>
+                </div>
+            </div>
+        }
+
     </div>
     <br /><br />
 
 
     @Html.Partial("_Contactpersons")
     <p>
-        @Html.ActionLink(HttpUtility.HtmlDecode("Administrera kontaktpersoner &raquo;"), "GetOrganisationsContacts", "Organisation", new { kommunkod = Model.Kommunkod }, new {@class = "btn btn-primary" })
+        @Html.ActionLink(HttpUtility.HtmlDecode("Administrera kontaktpersoner &raquo;"), "GetOrganisationsContacts", "Organisation", new { kommunkod = Model.Kommunkod }, new { @class = "btn btn-primary" })
     </p>
 
 
@@ -208,14 +372,14 @@
 
     @Html.Partial("_OrgUnits")
     <p>
-        @Html.ActionLink(HttpUtility.HtmlDecode("Administrera organisationsenheter &raquo;"), "GetOrganisationsOrgUnits", "Organisation", new { kommunkod = Model.Kommunkod }, new {@class = "btn btn-primary" })
+        @Html.ActionLink(HttpUtility.HtmlDecode("Administrera organisationsenheter &raquo;"), "GetOrganisationsOrgUnits", "Organisation", new { kommunkod = Model.Kommunkod }, new { @class = "btn btn-primary" })
     </p>
 
     <br /><br />
 
     @Html.Partial("_ReportObligations")
     <p>
-        @Html.ActionLink(HttpUtility.HtmlDecode("Administrera uppgiftsskyldighet &raquo;"), "GetOrganisationsReportObligations", "Organisation", new { kommunkod = Model.Kommunkod }, new {@class = "btn btn-primary" })
+        @Html.ActionLink(HttpUtility.HtmlDecode("Administrera uppgiftsskyldighet &raquo;"), "GetOrganisationsReportObligations", "Organisation", new { kommunkod = Model.Kommunkod }, new { @class = "btn btn-primary" })
     </p>
 
 }

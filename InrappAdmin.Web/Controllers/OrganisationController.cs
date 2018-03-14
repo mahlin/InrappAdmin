@@ -9,8 +9,8 @@ using InrappAdmin.ApplicationService.Interface;
 using InrappAdmin.DataAccess;
 using InrappAdmin.DomainModel;
 using InrappAdmin.Web.Helpers;
+using InrappAdmin.Web.Models;
 using InrappAdmin.Web.Models.ViewModels;
-using InrapporteringsPortal.Web.Models;
 using Microsoft.AspNet.Identity;
 
 namespace InrappAdmin.Web.Controllers
@@ -105,6 +105,17 @@ namespace InrappAdmin.Web.Controllers
             model.ReportObligations = _portalAdminService.HamtaUppgiftsskyldighetForOrg(model.Organisation.Id);
 
             return View("EditReportObligations", model);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateOrganisation(OrganisationViewModels.OrganisationViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                _portalAdminService.UppdateraOrganisation(model.Organisation);
+            }
+            return RedirectToAction("GetOrganisation", new { kommunkod = model.Organisation.Kommunkod });
+
         }
 
         [HttpPost]

@@ -83,6 +83,11 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.CreateOrgUnit(orgUnit);
         }
 
+        public void UppdateraOrganisation(Organisation org)
+        {
+            _portalAdminRepository.UpdateOrganisation(org);
+        }
+
         public void UppdateraKontaktperson(ApplicationUser user)
         {
             _portalAdminRepository.UpdateContactPerson(user);

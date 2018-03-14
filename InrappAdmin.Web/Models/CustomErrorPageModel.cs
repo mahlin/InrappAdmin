@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace InrapporteringsPortal.Web.Models
+namespace InrappAdmin.Web.Models
 {
     public class CustomErrorPageModel
     {

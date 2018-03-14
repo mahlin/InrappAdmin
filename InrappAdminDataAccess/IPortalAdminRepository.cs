@@ -36,6 +36,8 @@ namespace InrappAdmin.DataAccess
 
         void CreateOrgUnit(Organisationsenhet orgUnit);
 
+        void UpdateOrganisation(Organisation org);
+
         void UpdateContactPerson(ApplicationUser user);
 
         void UpdateOrgUnit(Organisationsenhet orgUnit);

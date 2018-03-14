@@ -113,6 +113,30 @@ namespace InrappAdmin.DataAccess
             return kommunkod;
         }
 
+        public void UpdateOrganisation(Organisation org)
+        {
+            var orgDb = DbContext.Organisation.Where(u => u.Id == org.Id).Select(u => u).SingleOrDefault();
+            orgDb.Landstingskod = org.Landstingskod;
+            orgDb.Kommunkod = org.Kommunkod;
+            orgDb.Inrapporteringskod = org.Inrapporteringskod;
+            orgDb.Organisationstyp = org.Organisationstyp;
+            orgDb.Organisationsnr = org.Organisationsnr;
+            orgDb.Organisationsnamn = org.Organisationsnamn;
+            orgDb.Hemsida = org.Hemsida;
+            orgDb.EpostAdress = org.EpostAdress;
+            orgDb.Telefonnr = org.Telefonnr;
+            orgDb.Postnr = org.Postnr;
+            orgDb.Postort = org.Postort;
+            orgDb.Adress = org.Adress;
+            orgDb.Epostdoman = org.Epostdoman;
+            orgDb.AktivFrom = org.AktivFrom;
+            orgDb.AktivTom = org.AktivTom;
+            orgDb.AndradDatum = DateTime.Now;
+            orgDb.AndradAv = "Admin";
+
+            DbContext.SaveChanges();
+        }
+
         public void UpdateContactPerson(ApplicationUser user)
         {
             var usr = DbContext.Users.Where(u => u.Id == user.Id).Select(u => u).SingleOrDefault();
