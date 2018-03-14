@@ -4,16 +4,14 @@
         ViewBag.Title = "Skapa ny organisationsenhet";
     }
 
-    <h2>Skapa organisationsenhet</h2>
-   
 
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.Organisationsid)
 
-        <div class="form-horizontal">
-            <h4>Organisationsenhet</h4>
+        <div class="form-horizontal padding-top-55" >
+            <h4>Skapa organisationsenhet</h4>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
@@ -57,14 +55,15 @@
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" />
+                    <input type="submit" value="Spara" class="btn btn-default" />
                 </div>
             </div>
         </div>
     }
 
     <div>
-        @Html.ActionLink("Tillbaka", "Index")
+        @Html.ActionLink("Tillbaka", "GetOrganisationsOrgUnits", "Organisation", new { orgId = 29 }, null)
+
     </div>
 
     @section Scripts {
