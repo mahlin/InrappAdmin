@@ -54,6 +54,12 @@ namespace InrappAdmin.ApplicationService
             var uppgiftsskyldigheter = _portalAdminRepository.GetReportObligationInformationForOrg(orgId);
             return uppgiftsskyldigheter;
         }
+        public Organisation HamtaOrgForAnvandare(string userId)
+        {
+            var org = _portalAdminRepository.GetOrgForUser(userId);
+            return org;
+        }
+
 
         public void SkapaOrganisationsenhet(Organisationsenhet orgUnit)
         {

@@ -4,26 +4,22 @@
     ViewBag.Title = "Organisation";
 }
 
-@*@using (Html.BeginForm("GetOrganisation", "Organisation", FormMethod.Post, new { @class = "form-horizontal", role = "form", style = "padding-top:50px;" }))
-    {
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" class="btn btn-default" value="Sök organisation" />
-            </div>
-        </div>
-    }*@
-
 
 <script type="text/javascript">
     $(function () {
         $("#txtKommunkod").focus();
     });
+
+    //$(document).ready(function () {
+    //    alert("Kommunkod: " + $('#Kommunkod').val());
+    //    //$("#txtKommunkod").focus();
+    //});
 </script>
 
 <br /><br />
 <div class="row">
     <div class="col-md-8 padding-top-25">
-        <section id="loginForm">
+        <section id="orgForm">
             @using (Html.BeginForm("GetOrganisation", "Organisation", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()
@@ -42,15 +38,15 @@
                         <input type="submit" value="Sök organisation" class="btn btn-default" />
                     </div>
                 </div>
+                <hr />
             }
         </section>
     </div>
 </div>
 
-<hr />
-
 @if (Model != null)
 {
+    @Html.HiddenFor(m => m.Kommunkod);
     <div>
         <dl class="dl-horizontal">
             <dt>
@@ -199,24 +195,36 @@
 
         </dl>
     </div>
+    <br /><br />
 
-    <hr />
 
     @Html.Partial("_Contactpersons")
+    <p>
+        @Html.ActionLink(HttpUtility.HtmlDecode("Administrera kontaktpersoner &raquo;"), "GetOrganisationsContacts", "Organisation", new { kommunkod = Model.Kommunkod }, new {@class = "btn btn-primary" })
+    </p>
 
-    <hr />
+
+    <br /><br />
 
     @Html.Partial("_OrgUnits")
+    <p>
+        @Html.ActionLink(HttpUtility.HtmlDecode("Administrera organisationsenheter &raquo;"), "GetOrganisationsContacts", "Organisation", new { kommunkod = Model.Kommunkod }, new {@class = "btn btn-primary" })
+    </p>
 
-    <hr />
+    <br /><br />
 
     @Html.Partial("_ReportObligations")
+    <p>
+        @Html.ActionLink(HttpUtility.HtmlDecode("Administrera uppgiftsskyldighet &raquo;"), "GetOrganisationsContacts", "Organisation", new { kommunkod = Model.Kommunkod }, new {@class = "btn btn-primary" })
+    </p>
 
 }
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
 }
+
 
 @*<div class="row">
         <div class="col-md-4">

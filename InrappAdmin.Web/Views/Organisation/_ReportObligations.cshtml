@@ -1,8 +1,10 @@
 ﻿@model InrappAdmin.Web.Models.ViewModels.OrganisationViewModels.OrganisationViewModel
 
+<hr />
+
 <h4>Uppgiftsskyldighet</h4>
 
-<table class="table">
+<table class="table table-small">
     <tr>
         <th>
             Delregister
@@ -16,19 +18,6 @@
         <th>
             Rapportera per enhet
         </th>
-        <th>
-            Skapad
-        </th>
-        <th>
-            Skapad av
-        </th>
-        <th>
-            Andrad
-        </th>
-        <th>
-            Andrad Av
-        </th>
-        <th></th>
     </tr>
     @foreach (var item in Model.ReportObligations)
     {
@@ -45,26 +34,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.RapporterarPerEnhet)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SkapadDatum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SkapadAv)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AndradDatum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AndradAv)
-            </td>
 
             @*<td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-            </td>*@
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                </td>*@
         </tr>
     }
-    
-    
+
+
 </table>

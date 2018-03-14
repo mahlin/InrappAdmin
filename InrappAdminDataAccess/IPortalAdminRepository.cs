@@ -16,6 +16,10 @@ namespace InrappAdmin.DataAccess
 
         string GetKommunkodForOrg(int orgId);
 
+        Organisation GetOrgForUser(string userId);
+
+        int GetUserOrganisationId(string userId);
+
         IEnumerable<ApplicationUser> GetContactPersonsForOrg(int orgId);
 
         IEnumerable<Organisationsenhet> GetOrgUnitsForOrg(int orgId);

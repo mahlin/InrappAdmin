@@ -37,6 +37,7 @@ namespace InrappAdmin.Web.Controllers
             var model = new OrganisationViewModels.OrganisationViewModel();
             try
             {
+                model.Kommunkod = kommunkod;
                 model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
                 model.ContactPersons = _portalAdminService.HamtaKontaktpersonerForOrg(model.Organisation.Id);
                 model.OrgUnits = _portalAdminService.HamtaOrgEnheterForOrg(model.Organisation.Id);
@@ -59,12 +60,19 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // GET
-        public ActionResult GetOrganisationsContacts(int orgId = 0)
+        public ActionResult GetContacts()
+        {
+            return View("EditContacts");
+        }
+
+        // GET
+        public ActionResult GetOrganisationsContacts(string kommunkod)
         {
             var model = new OrganisationViewModels.OrganisationViewModel();
+            model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
             //TODO skicka med
-            model.Organisation = new Organisation();
-            model.Organisation.Id = 29;
+            //model.Organisation = new Organisation();
+            //model.Organisation.Id = 29;
             //model.Organisation.Id = orgId;
             model.ContactPersons = _portalAdminService.HamtaKontaktpersonerForOrg(model.Organisation.Id);
 
@@ -74,9 +82,12 @@ namespace InrappAdmin.Web.Controllers
         [HttpPost]
         public ActionResult UpdateOrganisationsContact(ApplicationUser user)
         {
+            var org = _portalAdminService.HamtaOrgForAnvandare(user.Id);
+            var kommunkod = _portalAdminService.HamtaKommunkodForOrg(org.Id);
             if (ModelState.IsValid)
             {
                 _portalAdminService.UppdateraKontaktperson(user);
+                
 
                 //Employee emp = db.Employees.Single(em => em.Id == employee.Id);
                 //emp.Name = employee.Name;
@@ -88,7 +99,7 @@ namespace InrappAdmin.Web.Controllers
                 //db.SaveChanges();
 
             }
-            return RedirectToAction("GetOrganisationsContacts", new {orgId = user.OrganisationId});
+            return RedirectToAction("GetOrganisationsContacts", new { kommunkod = kommunkod });
 
             //return View("EditContacts");
 

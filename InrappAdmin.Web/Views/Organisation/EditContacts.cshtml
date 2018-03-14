@@ -16,11 +16,11 @@
 
             //Creating ApplicationUser JSON object
             var applicationUser =
-            {
-                "Id": contactId,
-                "Namn": contactName,
-                "SkapadDatum": contactSkapadDatum
-            };
+                {
+                    "Id": contactId,
+                    "Namn": contactName,
+                    "SkapadDatum": contactSkapadDatum
+                };
             //Posting ApplicationUser object to controller's Update action method
             $.ajax({
                 url: '/Organisation/UpdateOrganisationsContact',
@@ -29,7 +29,7 @@
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
                     //location.reload();
-                    $("#gridContent").html(data);
+                    $("#pageContainer").html(data);
                     tr.find('.edit-mode, .display-mode').toggle();
                     $('#footer').hide();
                     //alert('Record updated Successfully!!');
@@ -120,7 +120,6 @@
         width: 200px;
         margin: -5px;
         padding: 3px 7px 2px;
-        
     }
 
     .col3Width {
@@ -128,10 +127,10 @@
         margin: -5px;
         padding: 0;
     }
+
     label {
         font-weight: normal;
         width: 200px;
-        
     }
 </style>
 
@@ -139,39 +138,72 @@
     ViewBag.Title = "Index";
 }
 
-<div id="gridContent" style="font-family: Arial; padding: 20px;">
 
-    <h2>Editera kontaktpersoner</h2>
+<div id="pageContainer">
+    <div class="row">
+        <div class="col-md-8 padding-top-55">
+            <h4>Editera kontaktpersoner för organisation</h4>
+            <br />
+            <section id="orgForm">
+                @using (Html.BeginForm("GetOrganisationsContacts", "Organisation", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Kommunkod, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.Kommunkod, new { @class = "form-control", id = "txtKommunkod" })
+                            @Html.ValidationMessageFor(m => m.Kommunkod, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Sök kontaktpersoner" class="btn btn-default" />
+                        </div>
+                    </div>
+                }
+            </section>
+        </div>
+    </div>
 
-    @{
-        ViewBag.Title = "Editera kontaktpersoner";
-        var grid = new WebGrid(source: Model.ContactPersons, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "contatcsGrid");
-        grid.Pager(WebGridPagerModes.All);
-    }
+
+    @if (Model != null)
+    {
+
+        <div id="gridContent" style="font-family: Arial; padding: 20px;">
 
 
-    @grid.GetHtml(tableStyle: "webgrid-table",
-            headerStyle: "webgrid-header",
-            footerStyle: "webgrid-footer",
-            alternatingRowStyle: "webgrid-alternating-row",
-            selectedRowStyle: "webgrid-selected-row",
-            rowStyle: "webgrid-row-style",
-            mode: WebGridPagerModes.All,
-            columns: grid.Columns(
-                grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="ContactId" class="edit-mode col2Width">@item.Id</label></text>,
-                                            style: "col1Width"),
-                                grid.Column("Namn", "Namn", format: @<text><span class="display-mode"><label id="lblName">@item.Namn</label></span>
+
+            @{
+                ViewBag.Title = "Administrera kontaktpersoner";
+                var grid = new WebGrid(source: Model.ContactPersons, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "contatcsGrid");
+                grid.Pager(WebGridPagerModes.All);
+            }
+
+
+            @grid.GetHtml(tableStyle: "webgrid-table",
+                     headerStyle: "webgrid-header",
+                     footerStyle: "webgrid-footer",
+                     alternatingRowStyle: "webgrid-alternating-row",
+                     selectedRowStyle: "webgrid-selected-row",
+                     rowStyle: "webgrid-row-style",
+                     mode: WebGridPagerModes.All,
+                     columns: grid.Columns(
+                         grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="ContactId" class="edit-mode col2Width">@item.Id</label></text>,
+                                     style: "col1Width"),
+                                 grid.Column("Namn", "Namn", format: @<text><span class="display-mode"><label id="lblName">@item.Namn</label></span>
                                 <input type="text" id="ContactName" value="@item.Namn" class="edit-mode form-control" /></text>, style: "col2Width"),
 
-                                               grid.Column("Skapad", "SkapadDatum", format: @<text> <span class="display-mode"><label id="lblSkapadDatum">@item.SkapadDatum</label></span>
-                                            <input type="text" id="ContactSkapadDatum" value="@item.SkapadDatum" class="edit-mode form-control" /></text>, style: "col2Width"),
+                                         grid.Column("Skapad", "SkapadDatum", format: @<text> <span class="display-mode"><label id="lblSkapadDatum">@item.SkapadDatum</label></span>
+                                        <input type="text" id="ContactSkapadDatum" value="@item.SkapadDatum" class="edit-mode form-control" /></text>, style: "col2Width"),
 
-                                                     grid.Column("Action", format: @<text>
-                                                        <button class="edit-user display-mode btn btn-default">Edit</button>
-                                                        <button class="save-user edit-mode btn btn-default">Save</button>
-                                                        <button class="cancel-user edit-mode btn btn-default">Cancel</button>
-                                                    </text>, style: "col3Width", canSort: false)
-                                                                                                    ))
+                                                 grid.Column("Action", format: @<text>
+                                                    <button class="edit-user display-mode btn btn-default">Ändra</button>
+                                                    <button class="save-user edit-mode btn btn-default">Spara</button>
+                                                    <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                                                </text>, style: "col3Width", canSort: false)
+                                                         ))
+        </div>
+    }
 </div>
-
 

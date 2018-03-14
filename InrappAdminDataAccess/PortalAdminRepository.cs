@@ -37,6 +37,21 @@ namespace InrappAdmin.DataAccess
             return org;
         }
 
+        public Organisation GetOrgForUser(string userId)
+        {
+            var orgId = GetUserOrganisationId(userId);
+
+            var org = DbContext.Organisation.Where(o => o.Id == orgId).Select(o => o).FirstOrDefault();
+
+            return org;
+        }
+
+        public int GetUserOrganisationId(string userId)
+        {
+            var orgId = DbContext.Users.Where(u => u.Id == userId).Select(o => o.OrganisationId).SingleOrDefault();
+            return orgId;
+        }
+
         public IEnumerable<ApplicationUser> GetContactPersonsForOrg(int orgId)
         {
             var contacts = DbContext.Users.Where(x => x.OrganisationId == orgId).ToList();

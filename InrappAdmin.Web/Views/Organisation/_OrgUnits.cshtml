@@ -4,11 +4,13 @@
     var x =  @Html.Raw(Model.Organisation.Id);
 </script>
 
+<hr />
+
 <h4>Organisationsenheter</h4>
-<p>
-    @Html.ActionLink("Skapa ny organisationsenhet", "CreateOrganisationUnit", "Organisation", new { orgId = Model.Organisation.Id }, null)
-</p>
-<table class="table">
+@*<p>
+        @Html.ActionLink("Skapa ny organisationsenhet", "CreateOrganisationUnit", "Organisation", new { orgId = Model.Organisation.Id }, null)
+    </p>*@
+<table class="table table-small">
     <tr>
         <th>
             Enhetsnamn
@@ -22,19 +24,6 @@
         <th>
             Aktiv tom
         </th>
-        <th>
-            Skapad
-        </th>
-        <th>
-            Skapad av
-        </th>
-        <th>
-            Andrad
-        </th>
-        <th>
-            Andrad Av
-        </th>
-        <th></th>
     </tr>
     @foreach (var item in Model.OrgUnits)
     {
@@ -50,18 +39,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AktivTom)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SkapadDatum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SkapadAv)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AndradDatum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AndradAv)
             </td>
 
             @*<td>

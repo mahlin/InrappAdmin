@@ -14,6 +14,7 @@ namespace InrappAdmin.ApplicationService.Interface
 
         Organisation HamtaOrganisationForKommunkod(string kommunkod);
         string HamtaKommunkodForOrg(int orgId);
+        Organisation HamtaOrgForAnvandare(string userId);
 
         IEnumerable<ApplicationUser> HamtaKontaktpersonerForOrg(int orgId);
 
