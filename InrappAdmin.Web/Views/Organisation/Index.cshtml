@@ -208,14 +208,14 @@
 
     @Html.Partial("_OrgUnits")
     <p>
-        @Html.ActionLink(HttpUtility.HtmlDecode("Administrera organisationsenheter &raquo;"), "GetOrganisationsContacts", "Organisation", new { kommunkod = Model.Kommunkod }, new {@class = "btn btn-primary" })
+        @Html.ActionLink(HttpUtility.HtmlDecode("Administrera organisationsenheter &raquo;"), "GetOrganisationsOrgUnits", "Organisation", new { kommunkod = Model.Kommunkod }, new {@class = "btn btn-primary" })
     </p>
 
     <br /><br />
 
     @Html.Partial("_ReportObligations")
     <p>
-        @Html.ActionLink(HttpUtility.HtmlDecode("Administrera uppgiftsskyldighet &raquo;"), "GetOrganisationsContacts", "Organisation", new { kommunkod = Model.Kommunkod }, new {@class = "btn btn-primary" })
+        @Html.ActionLink(HttpUtility.HtmlDecode("Administrera uppgiftsskyldighet &raquo;"), "GetOrganisationsReportObligations", "Organisation", new { kommunkod = Model.Kommunkod }, new {@class = "btn btn-primary" })
     </p>
 
 }

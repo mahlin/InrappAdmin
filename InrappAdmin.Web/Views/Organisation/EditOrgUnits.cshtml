@@ -7,6 +7,7 @@
         $("#txtKommunkod").focus();
     });
 
+
     $(function () {
         $('.edit-mode').hide();
         $('.edit-user, .cancel-user').on('click', function () {
@@ -15,21 +16,25 @@
         });
         $('.save-user').on('click', function () {
             var tr = $(this).parents('tr:first');
-            var contactId = tr.find("#ContactId").html();
-            var contactName = tr.find("#ContactName").val();
-            var contactSkapadDatum = tr.find("#ContactSkapadDatum").val();
+            var orgUnitId = tr.find("#OrgUnitId").html();
+            var orgUnitName = tr.find("#OrgUnitName").val();
+            var orgUnitCode = tr.find("#OrgUnitCode").val();
+            var orgUnitActiveFrom = tr.find("#OrgUnitAktivFrom").val();
+            var orgUnitActiveTom = tr.find("#OrgUnitAktivTom").val();
 
-            //Creating ApplicationUser JSON object
-            var applicationUser =
+            //Creating Organisationsenhet JSON object
+            var orgUnit =
             {
-                "Id": contactId,
-                "Namn": contactName,
-                "SkapadDatum": contactSkapadDatum
+                "Id": orgUnitId,
+                "Enhetsnamn": orgUnitName,
+                "Enhetskod": orgUnitCode,
+                "AktivFrom": orgUnitActiveFrom,
+                "AktivTom": orgUnitActiveTom
             };
             //Posting ApplicationUser object to controller's Update action method
             $.ajax({
-                url: '/Organisation/UpdateOrganisationsContact',
-                data: JSON.stringify(applicationUser),
+                url: '/Organisation/UpdateOrganisationsOrgUnit',
+                data: JSON.stringify(orgUnit),
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
@@ -45,12 +50,16 @@
 
         $('.edit-user').on('click', function () {
             var tr = $(this).parents('tr:first');
-            var contactId = tr.find("#ContactId").html();
-            var contactName = tr.find("#ContactName").val();
-            var contactSkapadDatum = tr.find("#SkapadDatum").val();
+            var orgUnitId = tr.find("#OrgUnitId").html();
+            var orgUnitName = tr.find("#OrgUnitName").val();
+            var orgUnitCode = tr.find("#OrgUnitCode").val();
+            var orgUnitActiveFrom = tr.find("#OrgUnitAktivFrom").val();
+            var orgUnitActiveTom = tr.find("#OrgUnitAktivTom").val();
 
-            tr.find("#lblName").text(contactName);
-            tr.find("#lblSkapadDatum").text(contactSkapadDatum);
+            tr.find("#lblName").text(orgUnitName);
+            tr.find("#lblCode").text(orgUnitCode);
+            tr.find("#lblAktivFrom").text(orgUnitActiveFrom);
+            tr.find("#lblAktivTom").text(orgUnitActiveTom);
         });
     })
 </script>
@@ -150,7 +159,7 @@
             <h4>Editera kontaktpersoner för organisation</h4>
             <br />
             <section id="orgForm">
-                @using (Html.BeginForm("GetOrganisationsContacts", "Organisation", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                @using (Html.BeginForm("GetOrganisationsOrgUnits", "Organisation", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -163,7 +172,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Sök kontaktpersoner" class="btn btn-default" />
+                            <input type="submit" value="Sök organisationsenheter" class="btn btn-default" />
                         </div>
                     </div>
                 }
@@ -180,8 +189,8 @@
 
 
             @{
-                ViewBag.Title = "Administrera kontaktpersoner";
-                var grid = new WebGrid(source: Model.ContactPersons, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "contatcsGrid");
+                ViewBag.Title = "Administrera organisationsenheter";
+                var grid = new WebGrid(source: Model.OrgUnits, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "orgUnitsGrid");
                 grid.Pager(WebGridPagerModes.All);
             }
 
@@ -194,13 +203,16 @@
                      rowStyle: "webgrid-row-style",
                      mode: WebGridPagerModes.All,
                      columns: grid.Columns(
-                         grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="ContactId" class="edit-mode col2Width">@item.Id</label></text>,
+                         grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="OrgUnitId" class="edit-mode col2Width">@item.Id</label></text>,
                                      style: "col1Width"),
-                                 grid.Column("Namn", "Namn", format: @<text><span class="display-mode"><label id="lblName">@item.Namn</label></span>
-                                <input type="text" id="ContactName" value="@item.Namn" class="edit-mode form-control" /></text>, style: "col2Width"),
-
-                                         grid.Column("Skapad", "SkapadDatum", format: @<text> <span class="display-mode"><label id="lblSkapadDatum">@item.SkapadDatum</label></span>
-                                        <input type="text" id="ContactSkapadDatum" value="@item.SkapadDatum" class="edit-mode form-control" /></text>, style: "col2Width"),
+                                 grid.Column("Enhetsnamn", "Enhetsnamn", format: @<text><span class="display-mode"><label id="lblName">@item.Enhetsnamn</label></span>
+                                    <input type="text" id="OrgUnitName" value="@item.Enhetsnamn" class="edit-mode form-control" /></text>, style: "col2Width"),
+                                 grid.Column("Enhetskod", "Enhetskod", format: @<text><span class="display-mode"><label id="lblCode">@item.Enhetskod</label></span>
+                                    <input type="text" id="OrgUnitCode" value="@item.Enhetskod" class="edit-mode form-control" /></text>, style: "col2Width"),
+                                         grid.Column("Aktiv from", "AktivFrom", format: @<text> <span class="display-mode"><label id="lblAktivFrom">@item.AktivFrom</label></span>
+                                            <input type="text" id="OrgUnitAktivFrom" value="@item.AktivFrom" class="edit-mode form-control" /></text>, style: "col2Width"),
+                                        grid.Column("Aktiv tom", "AktivTom", format: @<text> <span class="display-mode"><label id="lblAktivTom">@item.AktivTom</label></span>
+                                            <input type="text" id="OrgUnitAktivTom" value="@item.AktivTom" class="edit-mode form-control" /></text>, style: "col2Width"),
 
                                                  grid.Column("Action", format: @<text>
                                                     <button class="edit-user display-mode btn btn-default">Ändra</button>

@@ -36,11 +36,13 @@
                         <ul class="dropdown-menu">
                             <li>@Html.ActionLink("Organisation", "Index", "Organisation")</li>
                             <li>@Html.ActionLink("Kontaktpersoner", "GetContacts", "Organisation")</li>
-                            <li><a href="#">Something else here</a></li>
+                            <li>@Html.ActionLink("Organisationsenheter", "GetOrgUnits", "Organisation")</li>
+                            <li>@Html.ActionLink("Uppgiftsskyldighet", "GetReportObligations", "Organisation")</li>
+                            @*<li><a href="#">Something else here</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="#">Separated link</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#">One more separated link</a></li>
+                            <li><a href="#">One more separated link</a></li>*@
                         </ul>
                     </li>
                     @*<li>@Html.ActionLink("About", "About", "Home")</li>

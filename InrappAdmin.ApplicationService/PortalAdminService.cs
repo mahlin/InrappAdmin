@@ -60,6 +60,17 @@ namespace InrappAdmin.ApplicationService
             return org;
         }
 
+        public Organisation HamtaOrgForOrganisationsenhet(int orgUnitId)
+        {
+            var org = _portalAdminRepository.GetOrgForOrgUnit(orgUnitId);
+            return org;
+        }
+
+        public Organisation HamtaOrgForUppgiftsskyldighet(int uppgSkId)
+        {
+            var org = _portalAdminRepository.GetOrgForReportObligation(uppgSkId);
+            return org;
+        }
 
         public void SkapaOrganisationsenhet(Organisationsenhet orgUnit)
         {
@@ -76,5 +87,17 @@ namespace InrappAdmin.ApplicationService
         {
             _portalAdminRepository.UpdateContactPerson(user);
         }
+
+        public void UppdateraOrganisationsenhet(Organisationsenhet orgUnit)
+        {
+            _portalAdminRepository.UpdateOrgUnit(orgUnit);
+        }
+
+        public void UppdateraUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSkyldighet)
+        {
+            _portalAdminRepository.UpdateReportObligation(uppgSkyldighet);
+        }
+
+
     }
 }

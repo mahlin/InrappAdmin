@@ -18,7 +18,15 @@ namespace InrappAdmin.DataAccess
 
         Organisation GetOrgForUser(string userId);
 
+        Organisation GetOrgForOrgUnit(int orgUnitId);
+
+        Organisation GetOrgForReportObligation(int repObligationId);
+
         int GetUserOrganisationId(string userId);
+
+        int GetOrgUnitOrganisationId(int orgUnitId);
+
+        int GetReportObligationOrganisationId(int repObligationId);
 
         IEnumerable<ApplicationUser> GetContactPersonsForOrg(int orgId);
 
@@ -29,5 +37,9 @@ namespace InrappAdmin.DataAccess
         void CreateOrgUnit(Organisationsenhet orgUnit);
 
         void UpdateContactPerson(ApplicationUser user);
+
+        void UpdateOrgUnit(Organisationsenhet orgUnit);
+
+        void UpdateReportObligation(AdmUppgiftsskyldighet repObligation);
     }
 }

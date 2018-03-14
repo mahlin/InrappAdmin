@@ -15,6 +15,9 @@ namespace InrappAdmin.ApplicationService.Interface
         Organisation HamtaOrganisationForKommunkod(string kommunkod);
         string HamtaKommunkodForOrg(int orgId);
         Organisation HamtaOrgForAnvandare(string userId);
+        Organisation HamtaOrgForOrganisationsenhet(int orgUnitId);
+
+        Organisation HamtaOrgForUppgiftsskyldighet(int uppgSkId);
 
         IEnumerable<ApplicationUser> HamtaKontaktpersonerForOrg(int orgId);
 
@@ -25,6 +28,10 @@ namespace InrappAdmin.ApplicationService.Interface
         void SkapaOrganisationsenhet(Organisationsenhet orgUnit);
 
         void UppdateraKontaktperson(ApplicationUser user);
+
+        void UppdateraOrganisationsenhet(Organisationsenhet orgUnit);
+
+        void UppdateraUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSkyldighet);
 
     }
 }

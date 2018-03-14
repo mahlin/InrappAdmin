@@ -48,5 +48,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public string AndradAv { get; set; }
 
         }
+
+
     }
 }

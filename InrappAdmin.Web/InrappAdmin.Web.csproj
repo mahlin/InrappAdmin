@@ -221,6 +221,8 @@
     <Content Include="Views\Organisation\_ReportObligations.cshtml" />
     <Content Include="Views\Organisation\CreateOrganisationUnit.cshtml" />
     <Content Include="Views\Organisation\EditContacts.cshtml" />
+    <Content Include="Views\Organisation\EditOrgUnits.cshtml" />
+    <Content Include="Views\Organisation\EditReportObligations.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

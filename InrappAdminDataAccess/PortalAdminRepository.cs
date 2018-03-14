@@ -46,10 +46,40 @@ namespace InrappAdmin.DataAccess
             return org;
         }
 
+        public Organisation GetOrgForOrgUnit(int orgUnitId)
+        {
+            var orgId = GetOrgUnitOrganisationId(orgUnitId);
+            var org = DbContext.Organisation.Where(o => o.Id == orgId).Select(o => o).FirstOrDefault();
+
+            return org;
+        }
+
+        public Organisation GetOrgForReportObligation(int repObligationId)
+        {
+            var orgId = GetReportObligationOrganisationId(repObligationId);
+            var org = DbContext.Organisation.Where(o => o.Id == orgId).Select(o => o).FirstOrDefault();
+
+            return org;
+
+        }
+
         public int GetUserOrganisationId(string userId)
         {
             var orgId = DbContext.Users.Where(u => u.Id == userId).Select(o => o.OrganisationId).SingleOrDefault();
             return orgId;
+        }
+
+        public int GetOrgUnitOrganisationId(int orgUnitId)
+        {
+            var orgId = DbContext.Organisationsenhet.Where(u => u.Id == orgUnitId).Select(o => o.OrganisationsId).SingleOrDefault();
+            return orgId;
+        }
+
+        public int GetReportObligationOrganisationId(int repObligationId)
+        {
+            var orgId = DbContext.AdmUppgiftsskyldighet.Where(u => u.Id == repObligationId).Select(o => o.OrganisationId).SingleOrDefault();
+            return orgId;
+
         }
 
         public IEnumerable<ApplicationUser> GetContactPersonsForOrg(int orgId)
@@ -87,7 +117,27 @@ namespace InrappAdmin.DataAccess
         {
             var usr = DbContext.Users.Where(u => u.Id == user.Id).Select(u => u).SingleOrDefault();
             usr.Namn = user.Namn;
-            DbContext.SaveChanges(); ;
+            DbContext.SaveChanges(); 
         }
+
+        public void UpdateOrgUnit(Organisationsenhet orgUnit)
+        {
+            var orgU = DbContext.Organisationsenhet.Where(u => u.Id == orgUnit.Id).Select(u => u).SingleOrDefault();
+            orgU.Enhetsnamn = orgUnit.Enhetsnamn;
+            orgU.Enhetskod = orgUnit.Enhetskod;
+            DbContext.SaveChanges(); 
+        }
+
+        public void UpdateReportObligation(AdmUppgiftsskyldighet repObligation)
+        {
+            var repObl = DbContext.AdmUppgiftsskyldighet.Where(u => u.Id == repObligation.Id).Select(u => u).SingleOrDefault();
+            repObl.DelregisterId = repObligation.DelregisterId;
+            repObl.RapporterarPerEnhet = repObligation.RapporterarPerEnhet;
+            repObl.SkyldigFrom = repObligation.SkyldigFrom;
+            repObl.SkyldigTom = repObligation.SkyldigTom;
+            DbContext.SaveChanges();
+        }
+
+
     }
 }

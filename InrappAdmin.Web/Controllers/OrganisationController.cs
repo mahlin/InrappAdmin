@@ -65,18 +65,46 @@ namespace InrappAdmin.Web.Controllers
             return View("EditContacts");
         }
 
+
         // GET
         public ActionResult GetOrganisationsContacts(string kommunkod)
         {
             var model = new OrganisationViewModels.OrganisationViewModel();
             model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
-            //TODO skicka med
-            //model.Organisation = new Organisation();
-            //model.Organisation.Id = 29;
-            //model.Organisation.Id = orgId;
             model.ContactPersons = _portalAdminService.HamtaKontaktpersonerForOrg(model.Organisation.Id);
 
             return View("EditContacts", model);
+        }
+
+        //GET
+        public ActionResult GetOrgUnits()
+        {
+            return View("EditOrgUnits");
+        }
+
+        // GET
+        public ActionResult GetOrganisationsOrgUnits(string kommunkod)
+        {
+            var model = new OrganisationViewModels.OrganisationViewModel();
+            model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+            model.OrgUnits = _portalAdminService.HamtaOrgEnheterForOrg(model.Organisation.Id);
+
+            return View("EditOrgUnits", model);
+        }
+
+        //GET
+        public ActionResult GetReportObligations()
+        {
+            return View("EditReportObligations");
+        }
+
+        public ActionResult GetOrganisationsReportObligations(string kommunkod)
+        {
+            var model = new OrganisationViewModels.OrganisationViewModel();
+            model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+            model.ReportObligations = _portalAdminService.HamtaUppgiftsskyldighetForOrg(model.Organisation.Id);
+
+            return View("EditReportObligations", model);
         }
 
         [HttpPost]
@@ -87,21 +115,34 @@ namespace InrappAdmin.Web.Controllers
             if (ModelState.IsValid)
             {
                 _portalAdminService.UppdateraKontaktperson(user);
-                
-
-                //Employee emp = db.Employees.Single(em => em.Id == employee.Id);
-                //emp.Name = employee.Name;
-                //emp.Designation = employee.Designation;
-                //emp.City = employee.City;
-                //emp.State = employee.State;
-                //emp.Zip = employee.Zip;
-                //db.Entry(emp).State = EntityState.Modified;
-                //db.SaveChanges();
-
             }
             return RedirectToAction("GetOrganisationsContacts", new { kommunkod = kommunkod });
 
-            //return View("EditContacts");
+        }
+
+        [HttpPost]
+        public ActionResult UpdateOrganisationsOrgUnit(Organisationsenhet orgUnit)
+        {
+            var org = _portalAdminService.HamtaOrgForOrganisationsenhet(orgUnit.Id);
+            var kommunkod = _portalAdminService.HamtaKommunkodForOrg(org.Id);
+            if (ModelState.IsValid)
+            {
+                _portalAdminService.UppdateraOrganisationsenhet(orgUnit);
+            }
+            return RedirectToAction("GetOrganisationsOrgUnits", new { kommunkod = kommunkod });
+
+        }
+
+        [HttpPost]
+        public ActionResult UpdateOrganisationsReportObligation(AdmUppgiftsskyldighet admUppgSkyldighet)
+        {
+            var org = _portalAdminService.HamtaOrgForUppgiftsskyldighet(admUppgSkyldighet.Id);
+            var kommunkod = _portalAdminService.HamtaKommunkodForOrg(org.Id);
+            if (ModelState.IsValid)
+            {
+                _portalAdminService.UppdateraUppgiftsskyldighet(admUppgSkyldighet);
+            }
+            return RedirectToAction("GetOrganisationsReportObligations", new { kommunkod = kommunkod });
 
         }
 

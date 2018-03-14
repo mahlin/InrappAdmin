@@ -15,21 +15,25 @@
         });
         $('.save-user').on('click', function () {
             var tr = $(this).parents('tr:first');
-            var contactId = tr.find("#ContactId").html();
-            var contactName = tr.find("#ContactName").val();
-            var contactSkapadDatum = tr.find("#ContactSkapadDatum").val();
+            var repId = tr.find("#RepId").html();
+            var repDelRegId= tr.find("#RepDelRegId").val();
+            var repSkyldigFrom = tr.find("#RepSkyldigFrom").val();
+            var repSkyldigTom = tr.find("#RepSkyldigTom").val();
+            var repRapporterarPerEnhet = tr.find("#RepRapporterarPerEnhet").val();
 
-            //Creating ApplicationUser JSON object
-            var applicationUser =
+            //Creating AdmUppgiftsskyldighet JSON object
+            var uppgiftsskyldighet =
             {
-                "Id": contactId,
-                "Namn": contactName,
-                "SkapadDatum": contactSkapadDatum
+                "Id": repId,
+                "DelregisterId": repDelRegId,
+                "SkyldigFrom": repSkyldigFrom,
+                "SkyldigTom": repSkyldigTom,
+                "RapporterarPerEnhet": repRapporterarPerEnhet
             };
             //Posting ApplicationUser object to controller's Update action method
             $.ajax({
-                url: '/Organisation/UpdateOrganisationsContact',
-                data: JSON.stringify(applicationUser),
+                url: '/Organisation/UpdateOrganisationsReportObligation',
+                data: JSON.stringify(uppgiftsskyldighet),
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
@@ -45,12 +49,16 @@
 
         $('.edit-user').on('click', function () {
             var tr = $(this).parents('tr:first');
-            var contactId = tr.find("#ContactId").html();
-            var contactName = tr.find("#ContactName").val();
-            var contactSkapadDatum = tr.find("#SkapadDatum").val();
+            var repId = tr.find("#RepId").html();
+            var repDelRegId = tr.find("#RepDelRegId").val();
+            var repSkyldigFrom = tr.find("#RepSkyldigFrom").val();
+            var repSkyldigTom = tr.find("#RepSkyldigTom").val();
+            var repRapporterarPerEnhet = tr.find("#RepRapporterarPerEnhet").val();
 
-            tr.find("#lblName").text(contactName);
-            tr.find("#lblSkapadDatum").text(contactSkapadDatum);
+            tr.find("#lblRepDelRegId").text(repDelRegId);
+            tr.find("#lblSkyldigFrom").text(repSkyldigFrom);
+            tr.find("#lblSkyldigTom").text(repSkyldigTom);
+            tr.find("#lblRappPerEnhet").text(repRapporterarPerEnhet);
         });
     })
 </script>
@@ -147,10 +155,10 @@
 <div id="pageContainer">
     <div class="row">
         <div class="col-md-8 padding-top-55">
-            <h4>Editera kontaktpersoner för organisation</h4>
+            <h4>Editera uppgiftsskyldighet för organisation</h4>
             <br />
             <section id="orgForm">
-                @using (Html.BeginForm("GetOrganisationsContacts", "Organisation", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                @using (Html.BeginForm("GetOrganisationsReportObligations", "Organisation", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -163,7 +171,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Sök kontaktpersoner" class="btn btn-default" />
+                            <input type="submit" value="Sök uppgiftskyldighet" class="btn btn-default" />
                         </div>
                     </div>
                 }
@@ -180,8 +188,8 @@
 
 
             @{
-                ViewBag.Title = "Administrera kontaktpersoner";
-                var grid = new WebGrid(source: Model.ContactPersons, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "contatcsGrid");
+                ViewBag.Title = "Administrera uppgiftsskyldighet";
+                var grid = new WebGrid(source: Model.ReportObligations, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "contatcsGrid");
                 grid.Pager(WebGridPagerModes.All);
             }
 
@@ -194,13 +202,16 @@
                      rowStyle: "webgrid-row-style",
                      mode: WebGridPagerModes.All,
                      columns: grid.Columns(
-                         grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="ContactId" class="edit-mode col2Width">@item.Id</label></text>,
+                         grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="RepId" class="edit-mode col2Width">@item.Id</label></text>,
                                      style: "col1Width"),
-                                 grid.Column("Namn", "Namn", format: @<text><span class="display-mode"><label id="lblName">@item.Namn</label></span>
-                                <input type="text" id="ContactName" value="@item.Namn" class="edit-mode form-control" /></text>, style: "col2Width"),
-
-                                         grid.Column("Skapad", "SkapadDatum", format: @<text> <span class="display-mode"><label id="lblSkapadDatum">@item.SkapadDatum</label></span>
-                                        <input type="text" id="ContactSkapadDatum" value="@item.SkapadDatum" class="edit-mode form-control" /></text>, style: "col2Width"),
+                                 grid.Column("Delregister", "DelregisterId", format: @<text><span class="display-mode"><label id="lblRepDelRegId">@item.DelregisterId</label></span>
+                                <input type="text" id="RepDelRegId" value="@item.DelregisterId" class="edit-mode form-control" /></text>, style: "col2Width"),
+                                         grid.Column("Fr o m", "SkyldigFrom", format: @<text> <span class="display-mode"><label id="lblSkyldigFrom">@item.SkyldigFrom</label></span>
+                                        <input type="text" id="RepSkyldigFrom" value="@item.SkyldigFrom" class="edit-mode form-control" /></text>, style: "col2Width"),
+                                        grid.Column("T o m", "SkyldigTom", format: @<text> <span class="display-mode"><label id="lblSkyldigTom">@item.SkyldigTom</label></span>
+                                        <input type="text" id="RepSkyldigTom" value="@item.SkyldigTom" class="edit-mode form-control" /></text>, style: "col2Width"),
+                                        grid.Column("Per enhet", "RapporterarPerEnhet", format: @<text> <span class="display-mode"><label id="lblRappPerEnhet">@item.RapporterarPerEnhet</label></span>
+                                        <input type="text" id="RepRapporterarPerEnhet" value="@item.RapporterarPerEnhet" class="edit-mode form-control" /></text>, style: "col2Width"),
 
                                                  grid.Column("Action", format: @<text>
                                                     <button class="edit-user display-mode btn btn-default">Ändra</button>
