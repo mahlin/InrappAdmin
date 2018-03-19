@@ -112,6 +112,12 @@ namespace InrappAdmin.DataAccess
             return faqCats;
         }
 
+        public IEnumerable<AdmInformation> GetInformationTexts()
+        {
+            var infoTexts = DbContext.AdmInformation.ToList();
+            return infoTexts;
+        }
+
         public void CreateOrgUnit(Organisationsenhet orgUnit)
         {
             DbContext.Organisationsenhet.Add(orgUnit);
@@ -122,6 +128,12 @@ namespace InrappAdmin.DataAccess
         public void CreateFAQCategory(AdmFAQKategori faqCategory)
         {
             DbContext.AdmFAQKategori.Add(faqCategory);
+            DbContext.SaveChanges();
+        }
+
+        public void CreateInformationText(AdmInformation infoText)
+        {
+            DbContext.AdmInformation.Add(infoText);
             DbContext.SaveChanges();
         }
 
@@ -178,6 +190,14 @@ namespace InrappAdmin.DataAccess
         {
             var faqCatDb = DbContext.AdmFAQKategori.Where(x => x.Id == faqCategory.Id).Select(x => x).SingleOrDefault();
             faqCatDb.Kategori = faqCategory.Kategori;
+            DbContext.SaveChanges();
+        }
+
+        public void UpdateInfoText(AdmInformation infoText)
+        {
+            var infoTextDb = DbContext.AdmInformation.Where(x => x.Id == infoText.Id).Select(x => x).SingleOrDefault();
+            infoTextDb.Informationstyp = infoText.Informationstyp;
+            infoTextDb.Text = infoText.Text;
             DbContext.SaveChanges();
         }
 

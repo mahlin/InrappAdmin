@@ -31,7 +31,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // GET: FAQs
-        public ActionResult GetFAQs(string kommunkod)
+        public ActionResult GetFAQs()
         {
             var model = new SystemViewModels.SystemViewModel();
             try
@@ -51,6 +51,40 @@ namespace InrappAdmin.Web.Controllers
 
             }
             return View("EditFAQCategory", model);
+        }
+
+        // GET: InformationTexts
+        public ActionResult GetInformationTexts()
+        {
+            var model = new SystemViewModels.SystemViewModel();
+            try
+            {
+                model.InfoPages = _portalAdminService.HamtaInformationstexter();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("SystemController", "GetInformationTexts", e.ToString(), e.HResult, "InrappAdmin");
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid hämtning av informationstexter.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+
+            }
+            return View("EditInfoTexts", model);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateInformationText(AdmInformation infoText)
+        {
+            if (ModelState.IsValid)
+            {
+                _portalAdminService.UppdateraInformationstext(infoText);
+            }
+            return RedirectToAction("GetInformationTexts");
+
         }
 
         [HttpPost]
@@ -131,7 +165,41 @@ namespace InrappAdmin.Web.Controllers
                     };
                     return View("CustomError", errorModel);
                 }
-                return RedirectToAction("GetOrganisation", new { kommunkod = kommunkod });
+                return RedirectToAction("GetFAQs");
+            }
+
+            return View();
+        }
+
+        // GET
+        public ActionResult CreateInformationText()
+        {
+            return View();
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateInformationText(AdmInformation infoText)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _portalAdminService.SkapaInformationsText(infoText);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("SystemController", "CreateInfoText", e.ToString(), e.HResult, "InrappAdmin");
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade när ny informationstext skulle sparas.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
+                return RedirectToAction("GetInformationTexts");
             }
 
             return View();

@@ -37,5 +37,11 @@ namespace InrappAdmin.Web.Models.ViewModels
 
         }
 
+        public class InforTextViewModel
+        {
+            public string Informationstyp { get; set; }
+            public string Text { get; set; }
+
+        }
     }
 }

@@ -78,6 +78,12 @@ namespace InrappAdmin.ApplicationService
             return faqCats;
         }
 
+        public IEnumerable<AdmInformation> HamtaInformationstexter()
+        {
+            var infoTexts = _portalAdminRepository.GetInformationTexts();
+            return infoTexts;
+        }
+
         public void SkapaOrganisationsenhet(Organisationsenhet orgUnit)
         {
             //Sätt datum och användare
@@ -98,6 +104,16 @@ namespace InrappAdmin.ApplicationService
             faqKategori.AndradAv = "InrappAdmin";
 
             _portalAdminRepository.CreateFAQCategory(faqKategori);
+        }
+
+        public void SkapaInformationsText(AdmInformation infoText)
+        {
+            //Sätt datum och användare
+            infoText.SkapadDatum = DateTime.Now;
+            infoText.SkapadAv = "InrappAdmin";
+            infoText.AndradDatum = DateTime.Now;
+            infoText.AndradAv = "InrappAdmin";
+            _portalAdminRepository.CreateInformationText(infoText);
         }
 
         public void UppdateraOrganisation(Organisation org)
@@ -125,6 +141,13 @@ namespace InrappAdmin.ApplicationService
             faqKategori.AndradDatum = DateTime.Now;
             faqKategori.AndradAv = "InrappAdmin";
             _portalAdminRepository.UpdateFAQCategory(faqKategori);
+        }
+
+        public void UppdateraInformationstext(AdmInformation infoText)
+        {
+            infoText.AndradDatum = DateTime.Now;
+            infoText.AndradAv = "InrappAdmin";
+            _portalAdminRepository.UpdateInfoText(infoText);
         }
 
 
