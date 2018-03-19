@@ -25,7 +25,11 @@ namespace InrappAdmin.ApplicationService.Interface
 
         IEnumerable<AdmUppgiftsskyldighet> HamtaUppgiftsskyldighetForOrg(int orgId);
 
+        IEnumerable<AdmFAQKategori> HamtaFAQkategorier();
+
         void SkapaOrganisationsenhet(Organisationsenhet orgUnit);
+
+        void SkapaFAQKategori(AdmFAQKategori faqKategori);
 
         void UppdateraOrganisation(Organisation org);
 
@@ -34,6 +38,8 @@ namespace InrappAdmin.ApplicationService.Interface
         void UppdateraOrganisationsenhet(Organisationsenhet orgUnit);
 
         void UppdateraUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSkyldighet);
+
+        void UppdateraFAQKategori(AdmFAQKategori faqKategori);
 
     }
 }

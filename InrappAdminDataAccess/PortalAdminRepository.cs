@@ -100,6 +100,18 @@ namespace InrappAdmin.DataAccess
             return reportObligationInfo;
         }
 
+        public string GetKommunkodForOrg(int orgId)
+        {
+            var kommunkod = DbContext.Organisation.Where(x => x.Id == orgId).Select(x => x.Kommunkod).SingleOrDefault();
+            return kommunkod;
+        }
+
+        public IEnumerable<AdmFAQKategori> GetFAQCategories()
+        {
+            var faqCats = DbContext.AdmFAQKategori.Include(x => x.AdmFAQ).ToList();
+            return faqCats;
+        }
+
         public void CreateOrgUnit(Organisationsenhet orgUnit)
         {
             DbContext.Organisationsenhet.Add(orgUnit);
@@ -107,10 +119,10 @@ namespace InrappAdmin.DataAccess
             DbContext.SaveChanges();
         }
 
-        public string GetKommunkodForOrg(int orgId)
+        public void CreateFAQCategory(AdmFAQKategori faqCategory)
         {
-            var kommunkod = DbContext.Organisation.Where(x => x.Id == orgId).Select(x => x.Kommunkod).SingleOrDefault();
-            return kommunkod;
+            DbContext.AdmFAQKategori.Add(faqCategory);
+            DbContext.SaveChanges();
         }
 
         public void UpdateOrganisation(Organisation org)
@@ -132,7 +144,7 @@ namespace InrappAdmin.DataAccess
             orgDb.AktivFrom = org.AktivFrom;
             orgDb.AktivTom = org.AktivTom;
             orgDb.AndradDatum = DateTime.Now;
-            orgDb.AndradAv = "Admin";
+            orgDb.AndradAv = "InrappAdmin";
 
             DbContext.SaveChanges();
         }
@@ -159,6 +171,13 @@ namespace InrappAdmin.DataAccess
             repObl.RapporterarPerEnhet = repObligation.RapporterarPerEnhet;
             repObl.SkyldigFrom = repObligation.SkyldigFrom;
             repObl.SkyldigTom = repObligation.SkyldigTom;
+            DbContext.SaveChanges();
+        }
+
+        public void UpdateFAQCategory(AdmFAQKategori faqCategory)
+        {
+            var faqCatDb = DbContext.AdmFAQKategori.Where(x => x.Id == faqCategory.Id).Select(x => x).SingleOrDefault();
+            faqCatDb.Kategori = faqCategory.Kategori;
             DbContext.SaveChanges();
         }
 

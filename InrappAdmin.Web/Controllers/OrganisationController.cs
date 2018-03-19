@@ -46,7 +46,7 @@ namespace InrappAdmin.Web.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                ErrorManager.WriteToErrorLog("OrganisationController", "GetOrganisation", e.ToString(), e.HResult, "Admin");
+                ErrorManager.WriteToErrorLog("OrganisationController", "GetOrganisation", e.ToString(), e.HResult, "InrappAdmin");
                 var errorModel = new CustomErrorPageModel
                 {
                     Information = "Ett fel inträffade vid hämtning av organisation",
@@ -181,7 +181,7 @@ namespace InrappAdmin.Web.Controllers
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    ErrorManager.WriteToErrorLog("OrganisationController", "CreateOrganisationUnit", e.ToString(), e.HResult, "Admin");
+                    ErrorManager.WriteToErrorLog("OrganisationController", "CreateOrganisationUnit", e.ToString(), e.HResult, "InrappAdmin");
                     var errorModel = new CustomErrorPageModel
                     {
                         Information = "Ett fel inträffade när ny organisationsenhet skulle sparas.",

@@ -34,7 +34,11 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<AdmUppgiftsskyldighet> GetReportObligationInformationForOrg(int orgId);
 
+        IEnumerable<AdmFAQKategori> GetFAQCategories();
+
         void CreateOrgUnit(Organisationsenhet orgUnit);
+
+        void CreateFAQCategory(AdmFAQKategori faqCategory);
 
         void UpdateOrganisation(Organisation org);
 
@@ -43,5 +47,7 @@ namespace InrappAdmin.DataAccess
         void UpdateOrgUnit(Organisationsenhet orgUnit);
 
         void UpdateReportObligation(AdmUppgiftsskyldighet repObligation);
+
+        void UpdateFAQCategory(AdmFAQKategori faqCategory);
     }
 }

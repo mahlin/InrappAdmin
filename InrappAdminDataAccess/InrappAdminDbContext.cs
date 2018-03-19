@@ -288,6 +288,10 @@ namespace InrappAdmin.DataAccess
             modelBuilder.Entity<AdmFAQ>().Property(e => e.Id).HasColumnName("faqid");
             modelBuilder.Entity<AdmFAQ>().Property(e => e.RegisterId).HasColumnName("registerid");
             modelBuilder.Entity<AdmFAQ>().Property(e => e.FAQkategoriId).HasColumnName("faqkategoriid");
+            modelBuilder.Entity<AdmFAQ>()
+                .HasRequired(c => c.AdmFAQKategori)
+                .WithMany(d => d.AdmFAQ)
+                .HasForeignKey(c => c.FAQkategoriId);
             modelBuilder.Entity<AdmFAQ>().Property(e => e.Fraga).HasColumnName("fraga");
             modelBuilder.Entity<AdmFAQ>().Property(e => e.Svar).HasColumnName("svar");
             modelBuilder.Entity<AdmFAQ>().Property(e => e.SkapadDatum).HasColumnName("skapaddatum");

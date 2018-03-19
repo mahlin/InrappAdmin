@@ -72,6 +72,12 @@ namespace InrappAdmin.ApplicationService
             return org;
         }
 
+        public IEnumerable<AdmFAQKategori> HamtaFAQkategorier()
+        {
+            var faqCats = _portalAdminRepository.GetFAQCategories();
+            return faqCats;
+        }
+
         public void SkapaOrganisationsenhet(Organisationsenhet orgUnit)
         {
             //Sätt datum och användare
@@ -81,6 +87,17 @@ namespace InrappAdmin.ApplicationService
             orgUnit.AndradAv = "InrappAdmin";
 
             _portalAdminRepository.CreateOrgUnit(orgUnit);
+        }
+
+        public void SkapaFAQKategori(AdmFAQKategori faqKategori)
+        {
+            //Sätt datum och användare
+            faqKategori.SkapadDatum = DateTime.Now;
+            faqKategori.SkapadAv = "InrappAdmin";
+            faqKategori.AndradDatum = DateTime.Now;
+            faqKategori.AndradAv = "InrappAdmin";
+
+            _portalAdminRepository.CreateFAQCategory(faqKategori);
         }
 
         public void UppdateraOrganisation(Organisation org)
@@ -101,6 +118,13 @@ namespace InrappAdmin.ApplicationService
         public void UppdateraUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSkyldighet)
         {
             _portalAdminRepository.UpdateReportObligation(uppgSkyldighet);
+        }
+
+        public void UppdateraFAQKategori(AdmFAQKategori faqKategori)
+        {
+            faqKategori.AndradDatum = DateTime.Now;
+            faqKategori.AndradAv = "InrappAdmin";
+            _portalAdminRepository.UpdateFAQCategory(faqKategori);
         }
 
 
