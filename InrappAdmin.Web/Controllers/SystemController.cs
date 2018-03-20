@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using InrappAdmin.ApplicationService;
+using InrappAdmin.ApplicationService.DTOModel;
 using InrappAdmin.ApplicationService.Interface;
 using InrappAdmin.DataAccess;
 using InrappAdmin.DomainModel;
@@ -74,6 +75,32 @@ namespace InrappAdmin.Web.Controllers
 
             }
             return View("EditInfoTexts", model);
+        }
+
+
+        // GET: OpeningHours (AdmKonfiguration)
+        public ActionResult GetOpeningHours()
+        {
+            var model = new SystemViewModels.OpeningHours();
+            try
+            {
+                var admKonf = _portalAdminService.HamtaOppettider();
+                model.ClosedAnyway = admKonf.ClosedAnyway;
+                model.ClosedDaysList = _portalAdminService.MarkeraStangdaDagar(admKonf.ClosedDays);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("SystemController", "GetOpeningHours", e.ToString(), e.HResult, "InrappAdmin");
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid hämtning av öppettider.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+
+            }
+            return View("EditOpeningHours", model);
         }
 
         [HttpPost]
@@ -203,6 +230,15 @@ namespace InrappAdmin.Web.Controllers
             }
 
             return View();
+        }
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SaveOpeningHoursInfo(SystemViewModels.OpeningHours openHours )
+        {
+
+            return RedirectToAction("GetOpeningHours");
         }
     }
 }

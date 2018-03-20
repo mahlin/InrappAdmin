@@ -118,6 +118,12 @@ namespace InrappAdmin.DataAccess
             return infoTexts;
         }
 
+        public IEnumerable<AdmKonfiguration> GetAdmConfiguration()
+        {
+            var configInfo = DbContext.AdmKonfiguration.ToList();
+            return configInfo;
+        }
+
         public void CreateOrgUnit(Organisationsenhet orgUnit)
         {
             DbContext.Organisationsenhet.Add(orgUnit);
@@ -201,6 +207,11 @@ namespace InrappAdmin.DataAccess
             DbContext.SaveChanges();
         }
 
-
+        public void SaveOpeningHours(AdmKonfiguration admKonf)
+        {
+            var konfDb = DbContext.AdmKonfiguration.Where(x => x.Typ == admKonf.Typ).Select(x => x).FirstOrDefault();
+            konfDb.Varde = admKonf.Varde;
+            DbContext.SaveChanges();
+        }
     }
 }

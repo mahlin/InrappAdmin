@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using InrappAdmin.ApplicationService.DTOModel;
 using InrappAdmin.ApplicationService.Interface;
+using InrappAdmin.ApplicationService.Helpers;
 using InrappAdmin.DataAccess;
 using InrappAdmin.DomainModel;
 
@@ -84,6 +86,39 @@ namespace InrappAdmin.ApplicationService
             return infoTexts;
         }
 
+        public OpeningHoursInfoDTO HamtaOppettider()
+        {
+            var configInfo = _portalAdminRepository.GetAdmConfiguration();
+            var oppettiderObj = new OpeningHoursInfoDTO();
+
+            foreach (var item in configInfo)
+            {
+                switch (item.Typ)
+                {
+                    case "ClosedFromHour":
+                        oppettiderObj.ClosedFromHour = Convert.ToInt32(item.Varde);
+                        break;
+                    case "ClosedFromMin":
+                        oppettiderObj.ClosedFromMin = Convert.ToInt32(item.Varde);
+                        break;
+                    case "ClosedToHour":
+                        oppettiderObj.ClosedToHour = Convert.ToInt32(item.Varde);
+                        break;
+                    case "ClosedToMin":
+                        oppettiderObj.ClosedToMin = Convert.ToInt32(item.Varde);
+                        break;
+                    case "ClosedAnyway":
+                        oppettiderObj.ClosedAnyway = Convert.ToBoolean(item.Varde);
+                        break;
+                    case "ClosedDays":
+                        oppettiderObj.ClosedDays= item.Varde.Split(new char[] { ',' }).ToList();
+                        break;
+                }
+            }
+
+            return oppettiderObj;
+        }
+
         public void SkapaOrganisationsenhet(Organisationsenhet orgUnit)
         {
             //Sätt datum och användare
@@ -150,6 +185,86 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.UpdateInfoText(infoText);
         }
 
+        public void SparaOppettider(OpeningHoursInfoDTO oppetTider)
+        {
+            //Dela upp informationen i konf-objekt och spara till databasen
+            AdmKonfiguration admKonfClosedAnayway = new AdmKonfiguration();
+            admKonfClosedAnayway.Typ = "ClosedAnyway";
 
+            //Closed anyway
+            if (oppetTider.ClosedAnyway)
+            { 
+                admKonfClosedAnayway.Varde = "True";
+            }
+            else
+            {
+                admKonfClosedAnayway.Varde = "False";
+            }
+            _portalAdminRepository.SaveOpeningHours(admKonfClosedAnayway);
+
+            //Closed days
+            AdmKonfiguration admKonfClosedDays = new AdmKonfiguration
+            {
+                Typ = "ClosedDays",
+                Varde = oppetTider.ClosedDays.ToString()
+            };
+            _portalAdminRepository.SaveOpeningHours(admKonfClosedDays);
+
+            //Closed from hour
+            AdmKonfiguration admKonfClosedFromHour = new AdmKonfiguration
+            {
+                Typ = "ClosedFromHour",
+                Varde = oppetTider.ClosedFromHour.ToString()
+            };
+            _portalAdminRepository.SaveOpeningHours(admKonfClosedFromHour);
+
+            //Closed from minute
+            AdmKonfiguration admKonfClosedFromMin = new AdmKonfiguration
+            {
+                Typ = "ClosedFromMin",
+                Varde = oppetTider.ClosedFromMin.ToString()
+            };
+            _portalAdminRepository.SaveOpeningHours(admKonfClosedFromMin);
+
+            //Closed to hour
+            AdmKonfiguration admKonfClosedToHour = new AdmKonfiguration
+            {
+                Typ = "ClosedToHour",
+                Varde = oppetTider.ClosedToHour.ToString()
+            };
+            _portalAdminRepository.SaveOpeningHours(admKonfClosedToHour);
+
+            //Closed to minute
+            AdmKonfiguration admKonfClosedToMin = new AdmKonfiguration
+            {
+                Typ = "ClosedFromMin",
+                Varde = oppetTider.ClosedToMin.ToString()
+            };
+            _portalAdminRepository.SaveOpeningHours(admKonfClosedToMin);
+
+            //Closed informationtext
+            AdmInformation infoTextClosedpage = new AdmInformation
+            {
+                Informationstyp = "Stangtsida",
+                Text = oppetTider.InfoTextForClosedPage
+            };
+            _portalAdminRepository.UpdateInfoText(infoTextClosedpage);
+        }
+        
+        public List<OpeningDay> MarkeraStangdaDagar(List<string> closedDays)
+        {
+            var daysOfWeek = ExtensionMethods.GetDaysOfWeek();
+
+            foreach (var day in daysOfWeek)
+            {
+                if (closedDays.Contains(day.NameEnglish))
+                {
+                    day.Selected = true;
+                }
+            }
+            return daysOfWeek;
+        }
+
+ 
     }
 }

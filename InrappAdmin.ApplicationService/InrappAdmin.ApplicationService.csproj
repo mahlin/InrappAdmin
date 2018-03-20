@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOModel\OpeningHoursInfoDTO.cs" />
+    <Compile Include="Helpers\ExtensionMethods.cs" />
     <Compile Include="Interface\IPortalAdminService.cs" />
     <Compile Include="PortalAdminService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -54,5 +56,6 @@
       <Name>InrappAdmin.DataAccess</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

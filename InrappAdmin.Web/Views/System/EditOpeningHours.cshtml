@@ -1,0 +1,281 @@
+﻿@model InrappAdmin.Web.Models.ViewModels.SystemViewModels.OpeningHours
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<link href="~/Scripts/bootstrap-multiselect/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
+<script src="~/Scripts/bootstrap-multiselect/dist/js/bootstrap-multiselect.js" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+    var days = @Html.Raw(Json.Encode(Model.ClosedDaysList));
+
+    $(document).ready(function () {
+        //$('[id*=ClDays]').multiselect();
+        $('[id*=ClDays]').multiselect({
+            onInitialized: function() {
+                $.each(days, function (index, item) {
+                    if (item.Selected) {
+                        $("#ClDays > option")[index].selected = true;
+                        $("#ClDays > option")[index].checked = true;
+                    }
+                });
+                this.refresh();
+            },
+            onChange: function (option, checked, select) {
+                $.each(days, function (index, item) {
+                    if ($('#ClosedDaysList_' + index + '__NameEnglish').val() === $(option).val()) {
+                        if ($('#ClosedDaysList_' + index + '__Selected').val() === 'False')
+                            $('#ClosedDaysList_' + index + '__Selected').val('True');
+                        else
+                            $('#ClosedDaysList_' + index + '__Selected').val('False');
+                    }
+                });
+            },
+            onSelectAll: function() {
+                $.each(days, function (index, item) {
+                    $('#ClosedDaysList_' + index + '__Selected').val('True');
+                });
+            },
+            onDeselectAll: function () {
+                $.each(days, function (index, item) {
+                    $('#ClosedDaysList_' + index + '__Selected').val('False');
+                });
+            },
+            includeSelectAllOption: true,
+            nonSelectedText: 'Inget valt',
+            allSelectedText: 'Alla valda',
+            selectAllText: "Välj alla",
+            nSelectedText: "valda"
+        });
+
+    });
+</script>
+
+<script type="text/javascript">
+
+    $(function () {
+        $('.edit-mode').hide();
+        $('.edit-user, .cancel-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            tr.find('.edit-mode, .display-mode').toggle();
+        });
+        $('.save-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            var infoId = tr.find("#InfoId").html();
+            var informationsTyp = tr.find("#InfoTyp").val();
+            var infoText = tr.find("#InfoText").val();
+
+            //Creating AdmInformation JSON object
+            var infoText =
+            {
+                "Id": infoId,
+                "Informationstyp": informationsTyp,
+                "Text": infoText
+            };
+            //Posting AdmInformation object to controller's Update action method
+            $.ajax({
+                url: '/System/UpdateInformationText',
+                data: JSON.stringify(infoText),
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    //location.reload();
+                    $("#pageContainer").html(data);
+                    tr.find('.edit-mode, .display-mode').toggle();
+                    $('#footer').hide();
+                    //alert('Record updated Successfully!!');
+                }
+            });
+
+        });
+
+        $('.edit-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            var infoId = tr.find("#InfoId").html();
+            var informationsTyp = tr.find("#InfoTyp").val();
+            var infoText = tr.find("#InfoText").val();
+
+            tr.find("#lblInfoTyp").text(informationsTyp);
+            tr.find("#lblInfoText").text(infoText);
+        });
+    })
+</script>
+
+<style type="text/css">
+    .edit-mode {
+        font-weight: normal;
+    }
+
+    .edit-user {
+        font-weight: normal;
+    }
+
+        .edit-user display-mode {
+            font-weight: normal;
+        }
+
+    .save-user edit-mode {
+        font-weight: normal;
+    }
+
+    .display-mode {
+        font-weight: normal;
+    }
+
+    .cancel-user {
+        font-weight: normal;
+    }
+
+    .webgrid-table {
+        font-family: Arial,Helvetica,sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        width: 950px;
+        display: table;
+        border-collapse: collapse;
+        border: solid px #C5C5C5;
+        background-color: white;
+    }
+
+        .webgrid-table td, th {
+            border: 1px solid #C5C5C5;
+            padding: 3px 7px 2px;
+        }
+
+    .webgrid-header, .webgrid-header a {
+        background-color: #f9f9f9;
+        color: #494A4A;
+        text-align: left;
+        text-decoration: none;
+    }
+
+    .webgrid-footer {
+    }
+
+    .webgrid-row-style {
+        padding: 3px 7px 2px;
+    }
+
+    .webgrid-alternating-row {
+        background-color: #f9f9f9;
+        padding: 3px 7px 2px;
+    }
+
+    .col1Width {
+        width: 200px;
+        margin: -5px;
+        padding: 0;
+    }
+
+    .col2Width {
+        width: 200px;
+        margin: -5px;
+        padding: 3px 7px 2px;
+    }
+
+    .col3Width {
+        width: 220px;
+        margin: -5px;
+        padding: 0;
+    }
+
+    label {
+        font-weight: normal;
+        width: 200px;
+    }
+</style>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div id="pageContainer">
+    <div class="row">
+        <div class="col-md-8 padding-top-55">
+            <h4>Editera öppettider</h4>
+        </div>
+    </div>
+
+    @if (Model != null)
+    {
+        <hr />
+
+        using (Html.BeginForm("SaveOpeningHoursInfo", "System", FormMethod.Post))
+        {
+
+            if (Model.ClosedDaysList != null)
+            {
+                for (int i = 0; i < Model.ClosedDaysList.Count; i++)
+                {
+                    @Html.HiddenFor(x => x.ClosedDaysList[i].NameEnglish)
+                    @Html.HiddenFor(x => x.ClosedDaysList[i].NameSwedish)
+                    @Html.HiddenFor(x => x.ClosedDaysList[i].Selected)
+                }
+            }
+
+
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-8 padding-top-55">
+                        @Html.LabelFor(m => m.ClosedAnyway)
+                        @Html.CheckBoxFor(m => m.ClosedAnyway)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-8">
+                        @Html.Label("Dagar då portalen är stängd: ", new { @class = "control-label" })
+                        <select id="ClDays" multiple="multiple">
+                            @for (var i = 0; i < Model.ClosedDaysList.Count; i++)
+        {
+                    <option value=@Model.ClosedDaysList[i].NameEnglish>@Model.ClosedDaysList[i].NameSwedish</option>
+}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            @*<div id="gridContent" style="font-family: Arial; padding: 20px;">
+                    @{
+                        ViewBag.Title = "Administrera öppettider";
+                        var grid = new WebGrid(source: Model.InfoPages, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "openingHoursGrid");
+                        grid.Pager(WebGridPagerModes.All);
+                    }
+
+
+                    @grid.GetHtml(tableStyle: "webgrid-table",
+                        headerStyle: "webgrid-header",
+                        footerStyle: "webgrid-footer",
+                        alternatingRowStyle: "webgrid-alternating-row",
+                        selectedRowStyle: "webgrid-selected-row",
+                        rowStyle: "webgrid-row-style",
+                        mode: WebGridPagerModes.All,
+                        columns: grid.Columns(
+                            grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="InfoId" class="edit-mode col2Width">@item.Id</label></text>,
+                                style: "col1Width"),
+                            grid.Column("Informationstyp", "Informationstyp", format: @<text><span class="display-mode"><label id="lblInfoTyp">@item.Informationstyp</label></span>
+                                                                                          <input type="text" id="InfoTyp" value="@item.Informationstyp" class="edit-mode form-control"/></text>, style: "col2Width"),
+                            grid.Column("Text", "Text", format: @<text><span class="display-mode"><label id="lblInfoText">@item.Text</label></span>
+                                                                    <input type="text" id="InfoText" value="@item.Text" class="edit-mode form-control"/></text>, style: "col2Width"),
+                            grid.Column("Action", format: @<text>
+                                                              <button class="edit-user display-mode btn btn-default">Ändra</button>
+                                                              <button class="save-user edit-mode btn btn-default">Spara</button>
+                                                              <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                                                           </text>, style: "col3Width", canSort: false)
+                            ))
+                </div>*@
+            <br/>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Spara" class="btn btn-default" />
+                </div>
+            </div>
+        }
+    }
+</div>
+<br/><br/>
+

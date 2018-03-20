@@ -38,6 +38,8 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<AdmInformation> GetInformationTexts();
 
+        IEnumerable<AdmKonfiguration> GetAdmConfiguration();
+
         void CreateOrgUnit(Organisationsenhet orgUnit);
 
         void CreateFAQCategory(AdmFAQKategori faqCategory);
@@ -55,5 +57,7 @@ namespace InrappAdmin.DataAccess
         void UpdateFAQCategory(AdmFAQKategori faqCategory);
 
         void UpdateInfoText(AdmInformation infoText);
+
+        void SaveOpeningHours(AdmKonfiguration admKonf);
     }
 }

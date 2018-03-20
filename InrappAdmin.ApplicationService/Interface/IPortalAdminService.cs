@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using InrappAdmin.ApplicationService.DTOModel;
 
 namespace InrappAdmin.ApplicationService.Interface
 {
@@ -29,6 +30,8 @@ namespace InrappAdmin.ApplicationService.Interface
 
         IEnumerable<AdmInformation> HamtaInformationstexter();
 
+        OpeningHoursInfoDTO HamtaOppettider();
+
         void SkapaOrganisationsenhet(Organisationsenhet orgUnit);
 
         void SkapaFAQKategori(AdmFAQKategori faqKategori);
@@ -46,6 +49,10 @@ namespace InrappAdmin.ApplicationService.Interface
         void UppdateraFAQKategori(AdmFAQKategori faqKategori);
 
         void UppdateraInformationstext(AdmInformation infoText);
+
+        void SparaOppettider(OpeningHoursInfoDTO oppetTider);
+
+        List<OpeningDay> MarkeraStangdaDagar(List<string> closedDays);
 
     }
 }

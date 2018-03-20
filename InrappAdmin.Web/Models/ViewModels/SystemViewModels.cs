@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Permissions;
 using System.Web;
+using InrappAdmin.ApplicationService.DTOModel;
 using InrappAdmin.DomainModel;
 
 namespace InrappAdmin.Web.Models.ViewModels
@@ -19,6 +21,8 @@ namespace InrappAdmin.Web.Models.ViewModels
             public IEnumerable<AdmInformation> InfoPages { get; set; }
 
             public  AdmKonfiguration AdmConfig { get; set; }
+
+            public OpeningHoursInfoDTO OpeningHours { get; set; }
 
         }
 
@@ -43,5 +47,20 @@ namespace InrappAdmin.Web.Models.ViewModels
             public string Text { get; set; }
 
         }
+
+        public class OpeningHours
+        {
+            public int ClosedFromHour { get; set; }
+            public int ClosedFromMin { get; set; }
+            public int ClosedToHour { get; set; }
+            public int ClosedToMin { get; set; }
+            [DisplayName("Stäng portalen")]
+            public bool ClosedAnyway { get; set; }
+            public List<OpeningDay> ClosedDaysList { get; set; }
+            public string InfoTextForClosedPage { get; set; }
+
+        }
+
+   
     }
 }

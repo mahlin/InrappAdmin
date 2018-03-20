@@ -68,6 +68,7 @@
     <Compile Include="Inloggning.cs" />
     <Compile Include="Leverans.cs" />
     <Compile Include="LevereradFil.cs" />
+    <Compile Include="OpeningDay.cs" />
     <Compile Include="Organisation.cs" />
     <Compile Include="Organisationsenhet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
