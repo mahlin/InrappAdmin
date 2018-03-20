@@ -65,5 +65,13 @@ namespace InrappAdmin.ApplicationService.Helpers
             return days;
         }
 
+        //public static T SetAndradAv<T>(T inputObj, string userName)
+        //{
+        //    inputObj.SkapadAv = username
+
+
+        //}
+
+  
     }
 }

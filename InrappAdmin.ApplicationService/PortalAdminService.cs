@@ -119,6 +119,12 @@ namespace InrappAdmin.ApplicationService
             return oppettiderObj;
         }
 
+        public string HamtaInfoText(string infoTyp)
+        {
+            var info = _portalAdminRepository.GetInfoText(infoTyp);
+            return info.Text;
+        }
+
         public void SkapaOrganisationsenhet(Organisationsenhet orgUnit)
         {
             //Sätt datum och användare
@@ -189,6 +195,8 @@ namespace InrappAdmin.ApplicationService
         {
             //Dela upp informationen i konf-objekt och spara till databasen
             AdmKonfiguration admKonfClosedAnayway = new AdmKonfiguration();
+            admKonfClosedAnayway.AndradAv = "InrappAdmin";
+            admKonfClosedAnayway.AndradDatum = DateTime.Now;
             admKonfClosedAnayway.Typ = "ClosedAnyway";
 
             //Closed anyway
@@ -203,11 +211,14 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.SaveOpeningHours(admKonfClosedAnayway);
 
             //Closed days
+            string daysJoined = string.Join(",", oppetTider.ClosedDays);
             AdmKonfiguration admKonfClosedDays = new AdmKonfiguration
             {
                 Typ = "ClosedDays",
-                Varde = oppetTider.ClosedDays.ToString()
+                Varde = daysJoined
             };
+            admKonfClosedDays.AndradAv = "InrappAdmin";
+            admKonfClosedDays.AndradDatum = DateTime.Now;
             _portalAdminRepository.SaveOpeningHours(admKonfClosedDays);
 
             //Closed from hour
@@ -216,6 +227,8 @@ namespace InrappAdmin.ApplicationService
                 Typ = "ClosedFromHour",
                 Varde = oppetTider.ClosedFromHour.ToString()
             };
+            admKonfClosedFromHour.AndradAv = "InrappAdmin";
+            admKonfClosedFromHour.AndradDatum = DateTime.Now;
             _portalAdminRepository.SaveOpeningHours(admKonfClosedFromHour);
 
             //Closed from minute
@@ -224,6 +237,8 @@ namespace InrappAdmin.ApplicationService
                 Typ = "ClosedFromMin",
                 Varde = oppetTider.ClosedFromMin.ToString()
             };
+            admKonfClosedFromMin.AndradAv = "InrappAdmin";
+            admKonfClosedFromMin.AndradDatum = DateTime.Now;
             _portalAdminRepository.SaveOpeningHours(admKonfClosedFromMin);
 
             //Closed to hour
@@ -232,6 +247,8 @@ namespace InrappAdmin.ApplicationService
                 Typ = "ClosedToHour",
                 Varde = oppetTider.ClosedToHour.ToString()
             };
+            admKonfClosedToHour.AndradAv = "InrappAdmin";
+            admKonfClosedToHour.AndradDatum = DateTime.Now;
             _portalAdminRepository.SaveOpeningHours(admKonfClosedToHour);
 
             //Closed to minute
@@ -240,14 +257,20 @@ namespace InrappAdmin.ApplicationService
                 Typ = "ClosedFromMin",
                 Varde = oppetTider.ClosedToMin.ToString()
             };
+            admKonfClosedToMin.AndradAv = "InrappAdmin";
+            admKonfClosedToMin.AndradDatum = DateTime.Now;
             _portalAdminRepository.SaveOpeningHours(admKonfClosedToMin);
 
             //Closed informationtext
+            var infoPageId = _portalAdminRepository.GetPageInfoTextId("Stangtsida");
             AdmInformation infoTextClosedpage = new AdmInformation
             {
+                Id = infoPageId,
                 Informationstyp = "Stangtsida",
                 Text = oppetTider.InfoTextForClosedPage
             };
+            infoTextClosedpage.AndradAv = "InrappAdmin";
+            infoTextClosedpage.AndradDatum = DateTime.Now;
             _portalAdminRepository.UpdateInfoText(infoTextClosedpage);
         }
         
@@ -265,6 +288,8 @@ namespace InrappAdmin.ApplicationService
             return daysOfWeek;
         }
 
- 
+
+
+
     }
 }

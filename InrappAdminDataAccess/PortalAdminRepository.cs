@@ -124,6 +124,18 @@ namespace InrappAdmin.DataAccess
             return configInfo;
         }
 
+        public AdmInformation GetInfoText(string infoType)
+        {
+            var infoText = DbContext.AdmInformation.SingleOrDefault(x => x.Informationstyp == infoType);
+            return infoText;
+        }
+
+        public int GetPageInfoTextId(string pageType)
+        {
+            var pageInfoId = DbContext.AdmInformation.Where(x => x.Informationstyp == pageType).Select(x => x.Id).SingleOrDefault();
+            return pageInfoId;
+        }
+
         public void CreateOrgUnit(Organisationsenhet orgUnit)
         {
             DbContext.Organisationsenhet.Add(orgUnit);
@@ -213,5 +225,7 @@ namespace InrappAdmin.DataAccess
             konfDb.Varde = admKonf.Varde;
             DbContext.SaveChanges();
         }
+
+
     }
 }

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Permissions;
 using System.Web;
+using System.Web.Mvc;
 using InrappAdmin.ApplicationService.DTOModel;
 using InrappAdmin.DomainModel;
 
@@ -57,6 +58,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             [DisplayName("Stäng portalen")]
             public bool ClosedAnyway { get; set; }
             public List<OpeningDay> ClosedDaysList { get; set; }
+            [AllowHtml]
             public string InfoTextForClosedPage { get; set; }
 
         }

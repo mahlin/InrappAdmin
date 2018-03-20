@@ -40,6 +40,10 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<AdmKonfiguration> GetAdmConfiguration();
 
+        AdmInformation GetInfoText(string infoType);
+
+        int GetPageInfoTextId(string pageType);
+
         void CreateOrgUnit(Organisationsenhet orgUnit);
 
         void CreateFAQCategory(AdmFAQKategori faqCategory);

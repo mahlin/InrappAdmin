@@ -87,6 +87,7 @@ namespace InrappAdmin.Web.Controllers
                 var admKonf = _portalAdminService.HamtaOppettider();
                 model.ClosedAnyway = admKonf.ClosedAnyway;
                 model.ClosedDaysList = _portalAdminService.MarkeraStangdaDagar(admKonf.ClosedDays);
+                model.InfoTextForClosedPage = _portalAdminService.HamtaInfoText("Stangtsida");
             }
             catch (Exception e)
             {
@@ -237,7 +238,46 @@ namespace InrappAdmin.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SaveOpeningHoursInfo(SystemViewModels.OpeningHours openHours )
         {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    OpeningHoursInfoDTO openHoursDTO = new OpeningHoursInfoDTO
+                    {
+                        ClosedFromHour = openHours.ClosedFromHour,
+                        ClosedFromMin = openHours.ClosedFromMin,
+                        ClosedToHour = openHours.ClosedToHour,
+                        ClosedToMin = openHours.ClosedToMin,
+                        ClosedAnyway = openHours.ClosedAnyway,
+                        InfoTextForClosedPage = openHours.InfoTextForClosedPage
+                    };
 
+                    //Days
+                    var daysListDTO = new List<string>();
+                    foreach (var day in openHours.ClosedDaysList)
+                    {
+                        if (day.Selected)
+                            daysListDTO.Add(day.NameEnglish);
+                    }
+                    openHoursDTO.ClosedDays = daysListDTO;
+
+                    _portalAdminService.SparaOppettider(openHoursDTO);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("SystemController", "SaveOpeningHoursInfo", e.ToString(), e.HResult, "InrappAdmin");
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade när information om öppettider skulle sparas.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
+                return RedirectToAction("GetOpeningHours");
+            }
+
+            //var x = Server.HtmlEncode(openHours.InfoTextForClosedPage);
             return RedirectToAction("GetOpeningHours");
         }
     }

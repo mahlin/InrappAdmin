@@ -32,6 +32,8 @@ namespace InrappAdmin.ApplicationService.Interface
 
         OpeningHoursInfoDTO HamtaOppettider();
 
+        string HamtaInfoText(string infoTyp);
+
         void SkapaOrganisationsenhet(Organisationsenhet orgUnit);
 
         void SkapaFAQKategori(AdmFAQKategori faqKategori);
