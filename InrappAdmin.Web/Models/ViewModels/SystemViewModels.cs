@@ -52,6 +52,16 @@ namespace InrappAdmin.Web.Models.ViewModels
         public class OpeningHours
         {
             public int ClosedFromHour { get; set; }
+
+            [DataType(DataType.Time)]
+            [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true)]
+            public DateTime OpeningTime { get; set; }
+
+            public string OpeningTimeStr { get; set; }
+
+            [DataType(DataType.Time)]
+            [DisplayFormat(DataFormatString = "{0:HH:mm}")]
+            public DateTime ClosingTime { get; set; }
             public int ClosedFromMin { get; set; }
             public int ClosedToHour { get; set; }
             public int ClosedToMin { get; set; }

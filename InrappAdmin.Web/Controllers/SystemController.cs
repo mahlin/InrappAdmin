@@ -87,6 +87,13 @@ namespace InrappAdmin.Web.Controllers
                 var admKonf = _portalAdminService.HamtaOppettider();
                 model.ClosedAnyway = admKonf.ClosedAnyway;
                 model.ClosedDaysList = _portalAdminService.MarkeraStangdaDagar(admKonf.ClosedDays);
+                //model.OpeningTime = SetTime(admKonf.ClosedToHour, admKonf.ClosedToMin);
+                //model.ClosingTime = SetTime(admKonf.ClosedFromHour, admKonf.ClosedFromMin);
+                DateTime s = DateTime.MinValue;
+                TimeSpan ts = new TimeSpan(10, 30, 0);
+                model.OpeningTime = s.Date + ts;
+                model.OpeningTimeStr = admKonf.ClosedToHour.ToString() + ":" + admKonf.ClosedToMin.ToString();
+                model.ClosingTime = SetTime(admKonf.ClosedFromHour, admKonf.ClosedFromMin);
                 model.InfoTextForClosedPage = _portalAdminService.HamtaInfoText("Stangtsida");
             }
             catch (Exception e)
@@ -279,6 +286,16 @@ namespace InrappAdmin.Web.Controllers
 
             //var x = Server.HtmlEncode(openHours.InfoTextForClosedPage);
             return RedirectToAction("GetOpeningHours");
+        }
+
+
+        private DateTime SetTime(int hour, int minute)
+        {
+            DateTime time = new DateTime();
+
+            var newDate = time.Date + new TimeSpan(hour, minute, 00);
+
+            return newDate;
         }
     }
 }

@@ -192,7 +192,7 @@
 <div id="pageContainer">
     <div class="row">
         <div class="col-md-8 padding-top-55">
-            <h4>Editera öppettider</h4>
+            <h4>Administrera öppettider</h4>
         </div>
     </div>
 
@@ -240,41 +240,46 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-8">
-                        @Html.Label("Informationstext: ", new { @class = "control-label" })
-                        @Html.TextAreaFor(m => m.InfoTextForClosedPage, 10, 40, new { @class = "form-control required", style = "max-width:75% !important;" })
+                        @Html.Label("Öppet från", new { @class = "control-label" })
+                        @*@Html.EditorFor(model => model.OpeningTime, new { @class = "form-control", style = "border-radius:40px" })*@
+                        @Html.TextBoxFor(m => m.OpeningTime, new { @class = "form-control", style="display:inline;width:170px;" })
+                        @Html.ValidationMessageFor(m => m.OpeningTime, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
 
-                @*<div id="gridContent" style="font-family: Arial; padding: 20px;">
-                        @{
-                            ViewBag.Title = "Administrera öppettider";
-                            var grid = new WebGrid(source: Model.InfoPages, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "openingHoursGrid");
-                            grid.Pager(WebGridPagerModes.All);
-                        }
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-8">
+                        @Html.Label("Öppet från", new { @class = "control-label" })
+                        @*@Html.EditorFor(model => model.OpeningTime, new { @class = "form-control", style = "border-radius:40px" })*@
+                        @Html.TextBoxFor(m => m.OpeningTimeStr, new { @class = "form-control", style="display:inline;width:170px;" })
+                        @Html.ValidationMessageFor(m => m.OpeningTimeStr, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-8">
+                        @Html.Label("Öppet till", new { @class = "control-label" })
+                        @Html.EditorFor(model => model.ClosingTime, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ClosingTime, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                </div>
+                <br /><br />
 
+                @*@Html.EditorFor(model => model.Hour, new { @class = "form-control" })*@
 
-                        @grid.GetHtml(tableStyle: "webgrid-table",
-                            headerStyle: "webgrid-header",
-                            footerStyle: "webgrid-footer",
-                            alternatingRowStyle: "webgrid-alternating-row",
-                            selectedRowStyle: "webgrid-selected-row",
-                            rowStyle: "webgrid-row-style",
-                            mode: WebGridPagerModes.All,
-                            columns: grid.Columns(
-                                grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="InfoId" class="edit-mode col2Width">@item.Id</label></text>,
-                                    style: "col1Width"),
-                                grid.Column("Informationstyp", "Informationstyp", format: @<text><span class="display-mode"><label id="lblInfoTyp">@item.Informationstyp</label></span>
-                                                                                              <input type="text" id="InfoTyp" value="@item.Informationstyp" class="edit-mode form-control"/></text>, style: "col2Width"),
-                                grid.Column("Text", "Text", format: @<text><span class="display-mode"><label id="lblInfoText">@item.Text</label></span>
-                                                                        <input type="text" id="InfoText" value="@item.Text" class="edit-mode form-control"/></text>, style: "col2Width"),
-                                grid.Column("Action", format: @<text>
-                                                                  <button class="edit-user display-mode btn btn-default">Ändra</button>
-                                                                  <button class="save-user edit-mode btn btn-default">Spara</button>
-                                                                  <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-                                                               </text>, style: "col3Width", canSort: false)
-                                ))
-                    </div>*@
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-8">
+                            @Html.Label("Informationstext: ", new { @class = "control-label" })
+                            @Html.TextAreaFor(m => m.InfoTextForClosedPage, 5, 40, new { @class = "form-control required", style = "max-width:75% !important;" })
+                        </div>
+                    </div>
+                </div>
                 <br />
 
                 <div class="form-group">
