@@ -37,6 +37,12 @@ namespace InrappAdmin.DataAccess
             return org;
         }
 
+        public Organisation GetOrganisation(int orgId)
+        {
+            var org = DbContext.Organisation.Where(x => x.Id == orgId).Select(x => x).SingleOrDefault();
+            return org;
+        }
+
         public Organisation GetOrgForUser(string userId)
         {
             var orgId = GetUserOrganisationId(userId);
@@ -271,6 +277,16 @@ namespace InrappAdmin.DataAccess
             if (faqToDelete != null)
             {
                 DbContext.AdmFAQ.Remove(faqToDelete);
+                DbContext.SaveChanges();
+            }
+        }
+
+        public void DeleteContact(string contactId)
+        {
+            var contactToDelete = DbContext.Users.SingleOrDefault(x => x.Id == contactId);
+            if (contactToDelete != null)
+            {
+                DbContext.Users.Remove(contactToDelete);
                 DbContext.SaveChanges();
             }
         }

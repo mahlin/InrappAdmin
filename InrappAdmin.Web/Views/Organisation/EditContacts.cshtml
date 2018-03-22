@@ -3,9 +3,52 @@
 
 <script type="text/javascript">
 
+    $(document).ready(function () {
+
+        var modalConfirm = function test(callback) {
+            $("#modal-btn-si").on("click", function () {
+                callback(true);
+                $("#mi-modal").modal('hide');
+            });
+
+            $("#modal-btn-no").on("click", function () {
+                callback(false);
+                $("#mi-modal").modal('hide');
+            });
+        };
+
+        modalConfirm(function (confirm) {
+            if (confirm) {
+                var data = { 'contactId': $('#SelectedContactId').val(), 'kommunkod': $('#Kommunkod').val() };
+                $.ajax({
+                    url: '/Organisation/DeleteContact',
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(data),
+                    success: function (data) {
+                        //On ajax success do this
+                        $("#pageContainer").html(data);
+                        tr.find('.edit-mode, .display-mode').toggle();
+                        $('#footer').hide();
+                    }
+                });
+            } else {
+                //Do nothing
+                //$("#result").html("NO CONFIRMADO");
+            }
+        });
+    });
+
     $(function () {
         $("#txtKommunkod").focus();
     });
+
+    function deleteContact(id, name) {
+        $('#SelectedContactId').val(id);
+        $('#SelectedCountyCode').val($('#Kommunkod').val());
+        $("#mi-modal").modal("show");
+        $('#modal-body').html("Vill du verkligen ta bort ta bort " + name + " ?");
+    }
 
     $(function () {
         $('.edit-mode').hide();
@@ -17,15 +60,13 @@
             var tr = $(this).parents('tr:first');
             var contactId = tr.find("#ContactId").html();
             var contactName = tr.find("#ContactName").val();
-            var contactSkapadDatum = tr.find("#ContactSkapadDatum").val();
 
             //Creating ApplicationUser JSON object
             var applicationUser =
-            {
-                "Id": contactId,
-                "Namn": contactName,
-                "SkapadDatum": contactSkapadDatum
-            };
+                {
+                    "Id": contactId,
+                    "Namn": contactName
+                };
             //Posting ApplicationUser object to controller's Update action method
             $.ajax({
                 url: '/Organisation/UpdateOrganisationsContact',
@@ -47,10 +88,8 @@
             var tr = $(this).parents('tr:first');
             var contactId = tr.find("#ContactId").html();
             var contactName = tr.find("#ContactName").val();
-            var contactSkapadDatum = tr.find("#SkapadDatum").val();
 
             tr.find("#lblName").text(contactName);
-            tr.find("#lblSkapadDatum").text(contactSkapadDatum);
         });
     });
 </script>
@@ -142,7 +181,23 @@
 @{
     ViewBag.Title = "Index";
 }
+@Html.HiddenFor(m => m.Kommunkod)
 
+<div class="modal fade ui-widget-content" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body" id="modal-body">
+                <p>
+
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="modal-btn-si">Ja</button>
+                <button type="button" class="btn btn-default" id="modal-btn-no">Avbryt</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div id="pageContainer">
     <div class="row">
@@ -152,6 +207,7 @@
             <section id="orgForm">
                 @using (Html.BeginForm("GetOrganisationsContacts", "Organisation", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
+                    @Html.HiddenFor(m => m.SelectedContactId)
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="form-group">
@@ -187,27 +243,28 @@
 
 
             @grid.GetHtml(tableStyle: "webgrid-table",
-                     headerStyle: "webgrid-header",
-                     footerStyle: "webgrid-footer",
-                     alternatingRowStyle: "webgrid-alternating-row",
-                     selectedRowStyle: "webgrid-selected-row",
-                     rowStyle: "webgrid-row-style",
-                     mode: WebGridPagerModes.All,
-                     columns: grid.Columns(
-                         grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="ContactId" class="edit-mode col2Width">@item.Id</label></text>,
-                                     style: "col1Width"),
-                                 grid.Column("Namn", "Namn", format: @<text><span class="display-mode"><label id="lblName">@item.Namn</label></span>
+                           headerStyle: "webgrid-header",
+                           footerStyle: "webgrid-footer",
+                           alternatingRowStyle: "webgrid-alternating-row",
+                           selectedRowStyle: "webgrid-selected-row",
+                           rowStyle: "webgrid-row-style",
+                           mode: WebGridPagerModes.All,
+                           columns: grid.Columns(
+                               grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="ContactId" class="edit-mode col2Width">@item.Id</label></text>,
+                                                style: "col1Width"),
+                                   grid.Column("Namn", "Namn", format: @<text><span class="display-mode"><label id="lblName">@item.Namn</label></span>
                                 <input type="text" id="ContactName" value="@item.Namn" class="edit-mode form-control" /></text>, style: "col2Width"),
 
-                                         grid.Column("Skapad", "SkapadDatum", format: @<text> <span class="display-mode"><label id="lblSkapadDatum">@item.SkapadDatum</label></span>
-                                        <input type="text" id="ContactSkapadDatum" value="@item.SkapadDatum" class="edit-mode form-control" /></text>, style: "col2Width"),
+                                          grid.Column("Skapad", format: @<text><span class="display-mode">@item.SkapadDatum</span><label id="lblSkapadDatum" class="edit-mode col2Width">@item.SkapadDatum</label></text>,
+                                                     style: "col1Width"),
 
-                                                 grid.Column("Action", format: @<text>
-                                                    <button class="edit-user display-mode btn btn-default">Ändra</button>
-                                                    <button class="save-user edit-mode btn btn-default">Spara</button>
-                                                    <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-                                                </text>, style: "col3Width", canSort: false)
-                                                         ))
+                                                         grid.Column("Action", format: @<text>
+                                                            <button class="edit-user display-mode btn btn-default">Ändra</button>
+                                                            <button class="display-mode btn btn-default" onclick="deleteContact('@item.Id', '@item.Namn'); return false;">Ta bort</button>
+                                                            <button class="save-user edit-mode btn btn-default">Spara</button>
+                                                            <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                                                        </text>, style: "col3Width", canSort: false)))
+
         </div>
     }
 </div>

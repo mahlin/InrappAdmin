@@ -183,43 +183,46 @@
     @if (Model != null)
     {
 
-        <div id="gridContent" style="font-family: Arial; padding: 20px;">
+    <div id="gridContent" style="font-family: Arial; padding: 20px;">
 
 
 
-            @{
-                ViewBag.Title = "Administrera uppgiftsskyldighet";
-                var grid = new WebGrid(source: Model.ReportObligations, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "contatcsGrid");
-                grid.Pager(WebGridPagerModes.All);
-            }
+        @{
+        ViewBag.Title = "Administrera uppgiftsskyldighet";
+        var grid = new WebGrid(source: Model.ReportObligations, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "contatcsGrid");
+        grid.Pager(WebGridPagerModes.All);
+        }
 
 
-            @grid.GetHtml(tableStyle: "webgrid-table",
-                     headerStyle: "webgrid-header",
-                     footerStyle: "webgrid-footer",
-                     alternatingRowStyle: "webgrid-alternating-row",
-                     selectedRowStyle: "webgrid-selected-row",
-                     rowStyle: "webgrid-row-style",
-                     mode: WebGridPagerModes.All,
-                     columns: grid.Columns(
-                         grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="RepId" class="edit-mode col2Width">@item.Id</label></text>,
-                                     style: "col1Width"),
-                                 grid.Column("Delregister", "DelregisterId", format: @<text><span class="display-mode"><label id="lblRepDelRegId">@item.DelregisterId</label></span>
+        @grid.GetHtml(tableStyle: "webgrid-table",
+                   headerStyle: "webgrid-header",
+                   footerStyle: "webgrid-footer",
+                   alternatingRowStyle: "webgrid-alternating-row",
+                   selectedRowStyle: "webgrid-selected-row",
+                   rowStyle: "webgrid-row-style",
+                   mode: WebGridPagerModes.All,
+                   columns: grid.Columns(
+                       grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="RepId" class="edit-mode col2Width">@item.Id</label></text>,
+                                    style: "col1Width"),
+
+                                grid.Column("Delregister", "DelregisterId", format: @<text><span class="display-mode"><label id="lblRepDelRegId">@item.DelregisterId</label></span>
                                 <input type="text" id="RepDelRegId" value="@item.DelregisterId" class="edit-mode form-control" /></text>, style: "col2Width"),
-                                         grid.Column("Fr o m", "SkyldigFrom", format: @<text> <span class="display-mode"><label id="lblSkyldigFrom">@item.SkyldigFrom</label></span>
-                                        <input type="text" id="RepSkyldigFrom" value="@item.SkyldigFrom" class="edit-mode form-control" /></text>, style: "col2Width"),
-                                        grid.Column("T o m", "SkyldigTom", format: @<text> <span class="display-mode"><label id="lblSkyldigTom">@item.SkyldigTom</label></span>
-                                        <input type="text" id="RepSkyldigTom" value="@item.SkyldigTom" class="edit-mode form-control" /></text>, style: "col2Width"),
-                                        grid.Column("Per enhet", "RapporterarPerEnhet", format: @<text> <span class="display-mode"><label id="lblRappPerEnhet">@item.RapporterarPerEnhet</label></span>
-                                        <input type="text" id="RepRapporterarPerEnhet" value="@item.RapporterarPerEnhet" class="edit-mode form-control" /></text>, style: "col2Width"),
 
-                                                 grid.Column("Action", format: @<text>
-                                                    <button class="edit-user display-mode btn btn-default">Ändra</button>
-                                                    <button class="save-user edit-mode btn btn-default">Spara</button>
-                                                    <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-                                                </text>, style: "col3Width", canSort: false)
-                                                         ))
-        </div>
+                             grid.Column("Fr o m", format: @<text> <span class="display-mode">@item.SkyldigFrom</span><label id="lblSkyldigFrom" class="edit-mode col2Width">@item.SkyldigFrom</label></text>,
+                                     style: "col1Width"),
+                                    grid.Column("T o m", format: @<text> <span class="display-mode">@item.SkyldigTom</span><label id="lblSkyldigTom" class="edit-mode col2Width">@item.SkyldigTom</label></text>,
+                                             style: "col1Width"),
+
+                                             grid.Column("Per enhet", format: @<text> <span class="display-mode">@item.RapporterarPerEnhet</span><label id="lblRappPerEnhet" class="edit-mode col2Width">@item.RapporterarPerEnhet</label></text>,
+                                                 style: "col1Width"),
+
+                            grid.Column("Action", format: @<text>
+                                <button class="edit-user display-mode btn btn-default">Ändra</button>
+                                <button class="save-user edit-mode btn btn-default">Spara</button>
+                                <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                                </text>, style: "col3Width", canSort: false)
+                                                                                                                                                                                                         ))
+    </div>
     }
 </div>
 

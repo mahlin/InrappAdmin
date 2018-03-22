@@ -27,6 +27,12 @@ namespace InrappAdmin.ApplicationService
             return test;
         }
 
+        public Organisation HamtaOrganisation(int orgId)
+        {
+            var org = _portalAdminRepository.GetOrganisation(orgId);
+            return org;
+        }
+
         public string HamtaKommunkodForOrg(int orgId)
         {
             var kommunkod = _portalAdminRepository.GetKommunkodForOrg(orgId);
@@ -324,6 +330,9 @@ namespace InrappAdmin.ApplicationService
         {
             _portalAdminRepository.DeleteFAQ(faqId);}
 
-
+        public void TaBortKontaktperson(string contactId)
+        {
+            _portalAdminRepository.DeleteContact(contactId);
+        }
     }
 }

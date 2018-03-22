@@ -12,6 +12,8 @@ namespace InrappAdmin.DataAccess
 
         string GetLeveranserForOrganisation(int orgId);
 
+        Organisation GetOrganisation(int orgId);
+
         Organisation GetOrganisationFromKommunkod(string kommunkod);
 
         string GetKommunkodForOrg(int orgId);
@@ -73,5 +75,7 @@ namespace InrappAdmin.DataAccess
         void DeleteFAQCategory(int faqCategoryId);
 
         void DeleteFAQ(int faqId);
+
+        void DeleteContact(string contactId);
     }
 }

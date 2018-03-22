@@ -18,6 +18,10 @@ namespace InrappAdmin.Web.Models.ViewModels
 
             public IEnumerable<ApplicationUser> ContactPersons { get; set; }
 
+            public string SelectedContactId { get; set; }
+
+            public string SelectedCountyCode { get; set; }
+
             public IEnumerable<Organisationsenhet> OrgUnits { get; set; }
 
             public  IEnumerable<AdmUppgiftsskyldighet> ReportObligations { get; set; }

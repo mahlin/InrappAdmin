@@ -83,10 +83,18 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // GET
-        public ActionResult GetOrganisationsOrgUnits(string kommunkod)
+        public ActionResult GetOrganisationsOrgUnits(string kommunkod = "", int orgId = 0)
         {
             var model = new OrganisationViewModels.OrganisationViewModel();
-            model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+            if (kommunkod != "")
+            {
+                model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+            }
+            else if (orgId != 0)
+            {
+                model.Organisation = _portalAdminService.HamtaOrganisation(orgId);
+
+            }
             model.OrgUnits = _portalAdminService.HamtaOrgEnheterForOrg(model.Organisation.Id);
 
             return View("EditOrgUnits", model);
@@ -193,6 +201,27 @@ namespace InrappAdmin.Web.Controllers
             }
 
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult DeleteContact(string contactId, string kommunkod)
+        {
+            try
+            {
+                _portalAdminService.TaBortKontaktperson(contactId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("OrganisationController", "DeleteContact", e.ToString(), e.HResult, "InrappAdmin");
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade när kontaktperson skulle tas bort.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+            }
+            return RedirectToAction("GetOrganisationsContacts", new {kommunkod = kommunkod});
         }
 
         //// GET: Organisation/Details/5

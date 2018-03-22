@@ -157,7 +157,7 @@
     }
 
     .col1Width {
-        width: 200px;
+        width: 40px;
         margin: -5px;
         padding: 0;
     }
@@ -169,7 +169,7 @@
     }
 
     .col3Width {
-        width: 220px;
+        width: 320px;
         margin: -5px;
         padding: 0;
     }
@@ -230,11 +230,11 @@
                               grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="FAQId" class="edit-mode col2Width">@item.Id</label></text>,
                                          style: "col1Width"),
                                      grid.Column("Register", "Register", format: @<text><span class="display-mode"><label id="lblRegisterId">@item.RegisterId</label></span>
-                                    <input type="text" id="FAQRegisterId" value="@item.RegisterId" class="edit-mode form-control" /></text>, style: "col2Width"),
+                                    <input type="text" id="FAQRegisterId" value="@item.RegisterId" class="edit-mode form-control" /></text>, style: "col1Width"),
                                              grid.Column("Fråga", "Fraga", format: @<text> <span class="display-mode"><label id="lblFraga">@item.Fraga</label></span>
                                             <input type="text" id="FAQFraga" value="@item.Fraga" class="edit-mode form-control" /></text>, style: "col2Width"),
                                                      grid.Column("Svar", "Svar", format: @<text> <span class="display-mode"><label id="lblSvar">@item.Svar</label></span>
-                                                    <input type="text" id="FAQSvar" value="@item.Svar" class="edit-mode form-control" /></text>, style: "col2Width"),
+                                                    <input type="text" id="FAQSvar" value="@item.Svar" TextWrapping="Wrap" class="edit-mode form-control" /></text>, style: "col3Width"),
 
                                                              grid.Column("Action", format: @<text>
                                                                 <button class="edit-user display-mode btn btn-default">Ändra</button>

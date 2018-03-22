@@ -13,6 +13,8 @@ namespace InrappAdmin.ApplicationService.Interface
 
         string HamtaHistorikForOrganisation(int orgId);
 
+        Organisation HamtaOrganisation(int orgId);
+
         Organisation HamtaOrganisationForKommunkod(string kommunkod);
         string HamtaKommunkodForOrg(int orgId);
         Organisation HamtaOrgForAnvandare(string userId);
@@ -63,6 +65,8 @@ namespace InrappAdmin.ApplicationService.Interface
         void TaBortFAQKategori(int faqKategoriId);
 
         void TaBortFAQ(int faqId);
+
+        void TaBortKontaktperson(string contactId);
 
         List<OpeningDay> MarkeraStangdaDagar(List<string> closedDays);
 
