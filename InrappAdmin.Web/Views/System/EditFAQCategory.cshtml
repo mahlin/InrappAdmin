@@ -7,9 +7,6 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        $('#FragorOchSvar').hide();
-        $('#confirm').show();
-
 
         var modalConfirm = function test(callback){
   
@@ -233,7 +230,7 @@
 <div id="pageContainer">
     <div class="row">
         <div class="col-md-8 padding-top-55">
-            <h4>Editera FAQ</h4>
+            <h4>Administrera FAQ</h4>
             <br />
 
             @if (Model != null)
@@ -269,8 +266,8 @@
                                         <button class="display-mode btn btn-default" onclick="deleteFAQCategory(@item.Id, '@item.Kategori'); return false;">Ta bort</button>
                                         <button class="save-user edit-mode btn btn-default">Spara</button>
                                         <button class="cancel-user edit-mode btn btn-default">Avbryt</button>&nbsp;
-                                        <button class="btn btn-primary" onclick="showFAQs(@item.Id); return false;">@HttpUtility.HtmlDecode("Frågor och svar &raquo;")</button>  
-                                        @*@Html.ActionLink(HttpUtility.HtmlDecode("Administrera faq-frågor &raquo;"), "GetOrganisationsContacts", "System", null, new { @class = "btn btn-primary" })*@
+                                        @*<button class="btn btn-primary" onclick="showFAQs(@item.Id); return false;">@HttpUtility.HtmlDecode("Frågor och svar &raquo;")</button>*@  
+                                        @Html.ActionLink(HttpUtility.HtmlDecode("Administrera faq-frågor &raquo;"), "GetFAQs", "System", new { faqCatId = item.Id}, new { @class = "btn btn-primary" })
                                     </text>, style: "col3Width", canSort: false)))
                 </div>
             }
@@ -278,9 +275,6 @@
     </div>
 </div>
 
-<div id="FragorOchSvar">
-    @Html.Partial("_EditFAQs") 
-</div>
 
 
 

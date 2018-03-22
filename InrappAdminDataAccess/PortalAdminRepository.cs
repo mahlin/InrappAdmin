@@ -112,6 +112,12 @@ namespace InrappAdmin.DataAccess
             return faqCats;
         }
 
+        public IEnumerable<AdmFAQ> GetFAQs(int faqCatId)
+        {
+            var faqs = DbContext.AdmFAQ.Where(x => x.FAQkategoriId == faqCatId).ToList();
+            return faqs;
+        }
+
         public IEnumerable<AdmInformation> GetInformationTexts()
         {
             var infoTexts = DbContext.AdmInformation.ToList();
@@ -146,6 +152,12 @@ namespace InrappAdmin.DataAccess
         public void CreateFAQCategory(AdmFAQKategori faqCategory)
         {
             DbContext.AdmFAQKategori.Add(faqCategory);
+            DbContext.SaveChanges();
+        }
+
+        public void CreateFAQ(AdmFAQ faq)
+        {
+            DbContext.AdmFAQ.Add(faq);
             DbContext.SaveChanges();
         }
 
@@ -211,6 +223,14 @@ namespace InrappAdmin.DataAccess
             DbContext.SaveChanges();
         }
 
+        public void UpdateFAQ(AdmFAQ faq)
+        {
+            var faqDb = DbContext.AdmFAQ.Where(x => x.Id == faq.Id).Select(x => x).SingleOrDefault();
+            faqDb.Fraga = faq.Fraga;
+            faqDb.Svar = faq.Svar;
+            DbContext.SaveChanges();
+        }
+
         public void UpdateInfoText(AdmInformation infoText)
         {
             var infoTextDb = DbContext.AdmInformation.Where(x => x.Id == infoText.Id).Select(x => x).SingleOrDefault();
@@ -254,5 +274,7 @@ namespace InrappAdmin.DataAccess
                 DbContext.SaveChanges();
             }
         }
+
+
     }
 }

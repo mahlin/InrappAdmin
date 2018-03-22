@@ -31,8 +31,8 @@ namespace InrappAdmin.Web.Controllers
             return View();
         }
 
-        // GET: FAQs
-        public ActionResult GetFAQs()
+        // GET: FAQCategories
+        public ActionResult GetFAQCategories()
         {
             var model = new SystemViewModels.SystemViewModel();
             try
@@ -42,7 +42,7 @@ namespace InrappAdmin.Web.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                ErrorManager.WriteToErrorLog("SystemController", "GetFAQs", e.ToString(), e.HResult, "InrappAdmin");
+                ErrorManager.WriteToErrorLog("SystemController", "GetFAQCategories", e.ToString(), e.HResult, "InrappAdmin");
                 var errorModel = new CustomErrorPageModel
                 {
                     Information = "Ett fel inträffade vid hämtning av FAQ-kategorier",
@@ -53,6 +53,32 @@ namespace InrappAdmin.Web.Controllers
             }
             return View("EditFAQCategory", model);
         }
+
+
+        // GET: FAQs
+        public ActionResult GetFAQs(int faqCatId = 0)
+        {
+            var model = new SystemViewModels.SystemViewModel();
+            try
+            {
+                model.FAQs = _portalAdminService.HamtaFAQs(faqCatId);
+                model.SelectedFAQCategory = faqCatId;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("SystemController", "GetFAQs", e.ToString(), e.HResult, "InrappAdmin");
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid hämtning av FAQs",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+
+            }
+            return View("EditFAQs", model);
+        }
+
 
         // GET: InformationTexts
         public ActionResult GetInformationTexts()
@@ -129,7 +155,18 @@ namespace InrappAdmin.Web.Controllers
             {
                 _portalAdminService.UppdateraFAQKategori(faqCategory);
             }
-            return RedirectToAction("GetFAQs");
+            return RedirectToAction("GetFAQCategories");
+
+        }
+
+        [HttpPost]
+        public ActionResult UpdateFAQ(AdmFAQ faq)
+        {
+            if (ModelState.IsValid)
+            {
+                _portalAdminService.UppdateraFAQ(faq);
+            }
+            return RedirectToAction("GetFAQs", new { faqCatId = faq.FAQkategoriId });
 
         }
 
@@ -161,7 +198,7 @@ namespace InrappAdmin.Web.Controllers
                     };
                     return View("CustomError", errorModel);
                 }
-                return RedirectToAction("GetFAQs");
+                return RedirectToAction("GetFAQCategories");
             }
 
             return View();
@@ -179,28 +216,34 @@ namespace InrappAdmin.Web.Controllers
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateFAQ(Organisationsenhet orgenhet)
+        public ActionResult CreateFAQ(SystemViewModels.FAQViewModel model)
         {
-            var kommunkod = String.Empty;
+            
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _portalAdminService.SkapaOrganisationsenhet(orgenhet);
-                    kommunkod = _portalAdminService.HamtaKommunkodForOrg(orgenhet.OrganisationsId);
+                    AdmFAQ faq = new AdmFAQ
+                    {
+                        FAQkategoriId = model.FAQkategoriId,
+                        RegisterId = model.RegisterId,
+                        Fraga = model.Fraga,
+                        Svar = model.Svar
+                    };
+                    _portalAdminService.SkapaFAQ(faq);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    ErrorManager.WriteToErrorLog("OrganisationController", "CreateOrganisationUnit", e.ToString(), e.HResult, "InrappAdmin");
+                    ErrorManager.WriteToErrorLog("SystemController", "CreateFAQ", e.ToString(), e.HResult, "InrappAdmin");
                     var errorModel = new CustomErrorPageModel
                     {
-                        Information = "Ett fel inträffade när ny organisationsenhet skulle sparas.",
+                        Information = "Ett fel inträffade när ny faq skulle sparas.",
                         ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
                     };
                     return View("CustomError", errorModel);
                 }
-                return RedirectToAction("GetFAQs");
+                return RedirectToAction("GetFAQs", new { faqCatId = model.FAQkategoriId });
             }
 
             return View();
@@ -306,11 +349,11 @@ namespace InrappAdmin.Web.Controllers
                 };
                 return View("CustomError", errorModel);
             }
-            return RedirectToAction("GetFAQs");
+            return RedirectToAction("GetFAQCategories");
         }
 
         [HttpPost]
-        public ActionResult DeleteFAQ(int faqId)
+        public ActionResult DeleteFAQ(int faqId, int faqCatId)
         {
             try
             {
@@ -327,7 +370,7 @@ namespace InrappAdmin.Web.Controllers
                 };
                 return View("CustomError", errorModel);
             }
-            return RedirectToAction("GetFAQs");
+            return RedirectToAction("GetFAQs", new { faqCatId = faqCatId });
         }
 
 

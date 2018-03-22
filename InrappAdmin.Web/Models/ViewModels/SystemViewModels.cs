@@ -17,7 +17,11 @@ namespace InrappAdmin.Web.Models.ViewModels
         {
             public IEnumerable<AdmFAQKategori> FAQCategories { get; set; }
 
+            public IEnumerable<AdmFAQ> FAQs { get; set; }
+
             public int SelectedFAQCategory { get; set; }
+
+            public int SelectedFAQ { get; set; }
 
             public IEnumerable<AdmInformation> InfoPages { get; set; }
 

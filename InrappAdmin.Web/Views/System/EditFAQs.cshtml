@@ -1,0 +1,248 @@
+﻿@model InrappAdmin.Web.Models.ViewModels.SystemViewModels.SystemViewModel
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var modalConfirm = function test(callback) {
+            $("#modal-btn-si").on("click", function () {
+                callback(true);
+                $("#mi-modal").modal('hide');
+            });
+
+            $("#modal-btn-no").on("click", function () {
+                callback(false);
+                $("#mi-modal").modal('hide');
+            });
+        };
+
+        modalConfirm(function (confirm) {
+            if (confirm) {
+                alert($('#SelectedFAQ').val());
+                alert($('#SelectedFAQCategory').val());
+                var data = { 'faqId': $('#SelectedFAQ').val(), 'faqCatId': $('#SelectedFAQCategory').val() };
+                $.ajax({
+                    url: '/System/DeleteFAQ',
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(data),
+                    success: function (data) {
+                        //On ajax success do this
+                        $("#pageContainer").html(data);
+                        tr.find('.edit-mode, .display-mode').toggle();
+                        $('#footer').hide();
+                    }
+                });
+            } 
+        });
+    });
+
+    function deleteFAQ(id,fraga) {
+        $('#SelectedFAQ').val(id);
+        $("#mi-modal").modal("show");
+        $('#modal-body').html("Vill du verkligen ta bort ta bort hela FAQn för frågan: " + fraga + " ?");
+    }
+
+    $(function () {
+        $('.edit-mode').hide();
+        $('.edit-user, .cancel-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            tr.find('.edit-mode, .display-mode').toggle();
+        });
+        $('.save-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            var faqId = tr.find("#FAQId").html();
+            var faqRegisterId = tr.find("#FAQRegisterId").val();
+            var faqFraga = tr.find("#FAQFraga").val();
+            var faqSvar = tr.find("#FAQSvar").val();
+
+            //Creating AdmFAQ JSON object
+            var admFAQ =
+            {
+                "Id": faqId,
+                "FAQkategoriId": $('#SelectedFAQCategory').val(),
+                "RegsiterId": faqRegisterId,
+                "Fraga": faqFraga,
+                "Svar": faqSvar
+            };
+            //Posting ApplicationUser object to controller's Update action method
+            $.ajax({
+                url: '/System/UpdateFAQ',
+                data: JSON.stringify(admFAQ),
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    //location.reload();
+                    $("#pageContainer").html(data);
+                    tr.find('.edit-mode, .display-mode').toggle();
+                    $('#footer').hide();
+                    //alert('Record updated Successfully!!');
+                }
+            });
+
+        });
+
+        $('.edit-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            var faqId = tr.find("#FAQId").html();
+            var faqRegisterId = tr.find("#FAQRegisterId").val();
+            var faqFraga = tr.find("#FAQFraga").val();
+            var faqSvar = tr.find("#FAQSvar").val();
+
+            tr.find("#lblRegsiterId").text(faqRegisterId);
+            tr.find("#lblFraga").text(faqFraga);
+            tr.find("#lblSvar").text(faqSvar);
+        });
+    });
+</script>
+
+<style type="text/css">
+    .edit-mode {
+        font-weight: normal;
+    }
+
+    .edit-user {
+        font-weight: normal;
+    }
+
+        .edit-user display-mode {
+            font-weight: normal;
+        }
+
+    .save-user edit-mode {
+        font-weight: normal;
+    }
+
+    .display-mode {
+        font-weight: normal;
+    }
+
+    .cancel-user {
+        font-weight: normal;
+    }
+
+    .webgrid-table {
+        font-family: Arial,Helvetica,sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        width: 950px;
+        display: table;
+        border-collapse: collapse;
+        border: solid px #C5C5C5;
+        background-color: white;
+    }
+
+        .webgrid-table td, th {
+            border: 1px solid #C5C5C5;
+            padding: 3px 7px 2px;
+        }
+
+    .webgrid-header, .webgrid-header a {
+        background-color: #f9f9f9;
+        color: #494A4A;
+        text-align: left;
+        text-decoration: none;
+    }
+
+    .webgrid-footer {
+    }
+
+    .webgrid-row-style {
+        padding: 3px 7px 2px;
+    }
+
+    .webgrid-alternating-row {
+        background-color: #f9f9f9;
+        padding: 3px 7px 2px;
+    }
+
+    .col1Width {
+        width: 200px;
+        margin: -5px;
+        padding: 0;
+    }
+
+    .col2Width {
+        width: 200px;
+        margin: -5px;
+        padding: 3px 7px 2px;
+    }
+
+    .col3Width {
+        width: 220px;
+        margin: -5px;
+        padding: 0;
+    }
+
+    label {
+        font-weight: normal;
+        width: 200px;
+    }
+</style>
+
+@{
+    ViewBag.Title = "FAQ";
+}
+
+<div class="modal fade ui-widget-content" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body" id="modal-body">
+                <p>
+
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="modal-btn-si">Ja</button>
+                <button type="button" class="btn btn-default" id="modal-btn-no">Avbryt</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="pageContainer" class="padding-top-55">
+
+    <h4>Administrera FAQs</h4>
+    <br />
+
+    @if (Model != null)
+    {
+        @Html.HiddenFor(m => m.SelectedFAQ)
+        @Html.HiddenFor(m => m.SelectedFAQCategory)
+        @Html.ActionLink("Skapa ny FAQ", "CreateFAQ", "System", routeValues: new { catId = Model.SelectedFAQCategory }, htmlAttributes: null)
+        <div id="gridContent" style="font-family: Arial; padding: 20px;">
+
+            @{
+                ViewBag.Title = "Administrera FAQs";
+                var grid = new WebGrid(source: Model.FAQs, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "faqsGrid");
+                grid.Pager(WebGridPagerModes.All);
+            }
+
+
+            @grid.GetHtml(tableStyle: "webgrid-table",
+                          headerStyle: "webgrid-header",
+                          footerStyle: "webgrid-footer",
+                          alternatingRowStyle: "webgrid-alternating-row",
+                          selectedRowStyle: "webgrid-selected-row",
+                          rowStyle: "webgrid-row-style",
+                          mode: WebGridPagerModes.All,
+                          columns: grid.Columns(
+                              grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="FAQId" class="edit-mode col2Width">@item.Id</label></text>,
+                                         style: "col1Width"),
+                                     grid.Column("Register", "Register", format: @<text><span class="display-mode"><label id="lblRegisterId">@item.RegisterId</label></span>
+                                    <input type="text" id="FAQRegisterId" value="@item.RegisterId" class="edit-mode form-control" /></text>, style: "col2Width"),
+                                             grid.Column("Fråga", "Fraga", format: @<text> <span class="display-mode"><label id="lblFraga">@item.Fraga</label></span>
+                                            <input type="text" id="FAQFraga" value="@item.Fraga" class="edit-mode form-control" /></text>, style: "col2Width"),
+                                                     grid.Column("Svar", "Svar", format: @<text> <span class="display-mode"><label id="lblSvar">@item.Svar</label></span>
+                                                    <input type="text" id="FAQSvar" value="@item.Svar" class="edit-mode form-control" /></text>, style: "col2Width"),
+
+                                                             grid.Column("Action", format: @<text>
+                                                                <button class="edit-user display-mode btn btn-default">Ändra</button>
+                                                                <button class="display-mode btn btn-default" onclick="deleteFAQ(@item.Id,'@item.Fraga');return false;">Ta bort</button>
+                                                                <button class="save-user edit-mode btn btn-default">Spara</button>
+                                                                <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                                                            </text>, style: "col3Width", canSort: false)))
+        </div>
+    }
+</div>
+

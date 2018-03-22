@@ -36,6 +36,8 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<AdmFAQKategori> GetFAQCategories();
 
+        IEnumerable<AdmFAQ> GetFAQs(int faqCatId);
+
         IEnumerable<AdmInformation> GetInformationTexts();
 
         IEnumerable<AdmKonfiguration> GetAdmConfiguration();
@@ -48,6 +50,8 @@ namespace InrappAdmin.DataAccess
 
         void CreateFAQCategory(AdmFAQKategori faqCategory);
 
+        void CreateFAQ(AdmFAQ faq);
+
         void CreateInformationText(AdmInformation infoText);
 
         void UpdateOrganisation(Organisation org);
@@ -59,6 +63,8 @@ namespace InrappAdmin.DataAccess
         void UpdateReportObligation(AdmUppgiftsskyldighet repObligation);
 
         void UpdateFAQCategory(AdmFAQKategori faqCategory);
+
+        void UpdateFAQ(AdmFAQ faq);
 
         void UpdateInfoText(AdmInformation infoText);
 

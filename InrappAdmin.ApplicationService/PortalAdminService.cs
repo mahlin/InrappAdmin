@@ -80,6 +80,12 @@ namespace InrappAdmin.ApplicationService
             return faqCats;
         }
 
+        public IEnumerable<AdmFAQ> HamtaFAQs(int faqCatId)
+        {
+            var faqs = _portalAdminRepository.GetFAQs(faqCatId);
+            return faqs;
+        }
+
         public IEnumerable<AdmInformation> HamtaInformationstexter()
         {
             var infoTexts = _portalAdminRepository.GetInformationTexts();
@@ -147,6 +153,17 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.CreateFAQCategory(faqKategori);
         }
 
+        public void SkapaFAQ(AdmFAQ faq)
+        {
+            //Sätt datum och användare
+            faq.SkapadDatum = DateTime.Now;
+            faq.SkapadAv = "InrappAdmin";
+            faq.AndradDatum = DateTime.Now;
+            faq.AndradAv = "InrappAdmin";
+
+            _portalAdminRepository.CreateFAQ(faq);
+        }
+
         public void SkapaInformationsText(AdmInformation infoText)
         {
             //Sätt datum och användare
@@ -182,6 +199,13 @@ namespace InrappAdmin.ApplicationService
             faqKategori.AndradDatum = DateTime.Now;
             faqKategori.AndradAv = "InrappAdmin";
             _portalAdminRepository.UpdateFAQCategory(faqKategori);
+        }
+
+        public void UppdateraFAQ(AdmFAQ faq)
+        {
+            faq.AndradDatum = DateTime.Now;
+            faq.AndradAv = "InrappAdmin";
+            _portalAdminRepository.UpdateFAQ(faq);
         }
 
         public void UppdateraInformationstext(AdmInformation infoText)
@@ -293,9 +317,12 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.DeleteFAQCategory(faqKategoriId);
         }
 
+
+
         public void TaBortFAQ(int faqId)
         {
-            _portalAdminRepository.DeleteFAQ(faqId);
-        }
+            _portalAdminRepository.DeleteFAQ(faqId);}
+
+
     }
 }

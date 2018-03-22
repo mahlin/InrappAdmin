@@ -28,6 +28,8 @@ namespace InrappAdmin.ApplicationService.Interface
 
         IEnumerable<AdmFAQKategori> HamtaFAQkategorier();
 
+        IEnumerable<AdmFAQ> HamtaFAQs(int faqCatId);
+
         IEnumerable<AdmInformation> HamtaInformationstexter();
 
         OpeningHoursInfoDTO HamtaOppettider();
@@ -37,6 +39,8 @@ namespace InrappAdmin.ApplicationService.Interface
         void SkapaOrganisationsenhet(Organisationsenhet orgUnit);
 
         void SkapaFAQKategori(AdmFAQKategori faqKategori);
+
+        void SkapaFAQ(AdmFAQ faq);
 
         void SkapaInformationsText(AdmInformation infoText);
 
@@ -49,6 +53,8 @@ namespace InrappAdmin.ApplicationService.Interface
         void UppdateraUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSkyldighet);
 
         void UppdateraFAQKategori(AdmFAQKategori faqKategori);
+
+        void UppdateraFAQ(AdmFAQ faq);
 
         void UppdateraInformationstext(AdmInformation infoText);
 
