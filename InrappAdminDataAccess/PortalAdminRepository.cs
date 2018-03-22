@@ -226,6 +226,33 @@ namespace InrappAdmin.DataAccess
             DbContext.SaveChanges();
         }
 
+        public void DeleteFAQCategory(int faqCategoryId)
+        {
+            var faqCatToDelete = DbContext.AdmFAQKategori.SingleOrDefault(x => x.Id == faqCategoryId);
 
+            //Delete all children
+            if (faqCatToDelete != null)
+            {
+                var faqsToDelete = DbContext.AdmFAQ.Where(x => x.FAQkategoriId == faqCategoryId).ToList();
+                foreach (var faq in faqsToDelete)
+                {
+                    DbContext.AdmFAQ.Remove(faq);
+                }
+
+                //Delete category
+                DbContext.AdmFAQKategori.Remove(faqCatToDelete);
+                DbContext.SaveChanges();
+            }
+        }
+
+        public void DeleteFAQ(int faqId)
+        {
+            var faqToDelete = DbContext.AdmFAQ.SingleOrDefault(x => x.Id == faqId);
+            if (faqToDelete != null)
+            {
+                DbContext.AdmFAQ.Remove(faqToDelete);
+                DbContext.SaveChanges();
+            }
+        }
     }
 }

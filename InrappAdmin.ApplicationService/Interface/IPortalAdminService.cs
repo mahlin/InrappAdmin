@@ -54,6 +54,10 @@ namespace InrappAdmin.ApplicationService.Interface
 
         void SparaOppettider(OpeningHoursInfoDTO oppetTider);
 
+        void TaBortFAQKategori(int faqKategoriId);
+
+        void TaBortFAQ(int faqId);
+
         List<OpeningDay> MarkeraStangdaDagar(List<string> closedDays);
 
     }

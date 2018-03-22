@@ -288,6 +288,48 @@ namespace InrappAdmin.Web.Controllers
             return RedirectToAction("GetOpeningHours");
         }
 
+        [HttpPost]
+        public ActionResult DeleteFAQCategory(int faqCatId)
+        {
+            try
+            {
+               _portalAdminService.TaBortFAQKategori(faqCatId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("SystemController", "DeleteFAQCategory", e.ToString(), e.HResult, "InrappAdmin");
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade när FAQ-kategori skulle tas bort.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+            }
+            return RedirectToAction("GetFAQs");
+        }
+
+        [HttpPost]
+        public ActionResult DeleteFAQ(int faqId)
+        {
+            try
+            {
+                _portalAdminService.TaBortFAQ(faqId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("SystemController", "DeleteFAQ", e.ToString(), e.HResult, "InrappAdmin");
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade när FAQ skulle tas bort.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+            }
+            return RedirectToAction("GetFAQs");
+        }
+
 
         private DateTime SetTime(int hour, int minute)
         {

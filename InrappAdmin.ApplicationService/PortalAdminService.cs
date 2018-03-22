@@ -288,8 +288,14 @@ namespace InrappAdmin.ApplicationService
             return daysOfWeek;
         }
 
+        public void TaBortFAQKategori(int faqKategoriId)
+        {
+            _portalAdminRepository.DeleteFAQCategory(faqKategoriId);
+        }
 
-
-
+        public void TaBortFAQ(int faqId)
+        {
+            _portalAdminRepository.DeleteFAQ(faqId);
+        }
     }
 }

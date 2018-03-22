@@ -63,5 +63,9 @@ namespace InrappAdmin.DataAccess
         void UpdateInfoText(AdmInformation infoText);
 
         void SaveOpeningHours(AdmKonfiguration admKonf);
+
+        void DeleteFAQCategory(int faqCategoryId);
+
+        void DeleteFAQ(int faqId);
     }
 }
