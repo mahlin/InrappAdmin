@@ -23,6 +23,10 @@ namespace InrappAdmin.Web.Models.ViewModels
 
             public int SelectedFAQ { get; set; }
 
+            public string SelectedInfo { get; set; }
+            [AllowHtml]
+            public string SelectedInfoText { get; set; }
+
             public IEnumerable<AdmInformation> InfoPages { get; set; }
 
             public  AdmKonfiguration AdmConfig { get; set; }
@@ -46,8 +50,11 @@ namespace InrappAdmin.Web.Models.ViewModels
 
         }
 
-        public class InforTextViewModel
+
+
+        public class InfoTextViewModel
         {
+            public int Id { get; set; }
             public string Informationstyp { get; set; }
             public string Text { get; set; }
 

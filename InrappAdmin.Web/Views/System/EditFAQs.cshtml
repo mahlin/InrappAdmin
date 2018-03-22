@@ -18,8 +18,8 @@
 
         modalConfirm(function (confirm) {
             if (confirm) {
-                alert($('#SelectedFAQ').val());
-                alert($('#SelectedFAQCategory').val());
+                //alert($('#SelectedFAQ').val());
+                //alert($('#SelectedFAQCategory').val());
                 var data = { 'faqId': $('#SelectedFAQ').val(), 'faqCatId': $('#SelectedFAQCategory').val() };
                 $.ajax({
                     url: '/System/DeleteFAQ',

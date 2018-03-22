@@ -81,12 +81,15 @@ namespace InrappAdmin.Web.Controllers
 
 
         // GET: InformationTexts
-        public ActionResult GetInformationTexts()
+        [ValidateInput(false)]
+        public ActionResult GetInformationTexts(string selectedInfoType = "", string selectedText = "")
         {
             var model = new SystemViewModels.SystemViewModel();
             try
             {
                 model.InfoPages = _portalAdminService.HamtaInformationstexter();
+                model.SelectedInfo = selectedInfoType;
+                model.SelectedInfoText = selectedText;
             }
             catch (Exception e)
             {
@@ -103,6 +106,34 @@ namespace InrappAdmin.Web.Controllers
             return View("EditInfoTexts", model);
         }
 
+
+        ////// GET: InformationText för vald typ
+        //public ActionResult GetInfoText(string typ)
+        //{
+        //    SystemViewModels.SystemViewModel model = new SystemViewModels.SystemViewModel();
+        //    try
+        //    {
+        //        var infoText = _portalAdminService.HamtaInfoText(typ);
+        //        AdmInformation admInfo = new AdmInformation
+        //        {
+
+        //        };
+        //        model.InfoPages.Add(infoText);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e);
+        //        ErrorManager.WriteToErrorLog("SystemController", "GetInformationsText", e.ToString(), e.HResult, "InrappAdmin");
+        //        var errorModel = new CustomErrorPageModel
+        //        {
+        //            Information = "Ett fel inträffade vid hämtning av specifik informationstext.",
+        //            ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+        //        };
+        //        return View("CustomError", errorModel);
+
+        //    }
+        //    return RedirectToAction("GetInformationTexts");
+        //}
 
         // GET: OpeningHours (AdmKonfiguration)
         public ActionResult GetOpeningHours()
@@ -137,16 +168,6 @@ namespace InrappAdmin.Web.Controllers
             return View("EditOpeningHours", model);
         }
 
-        [HttpPost]
-        public ActionResult UpdateInformationText(AdmInformation infoText)
-        {
-            if (ModelState.IsValid)
-            {
-                _portalAdminService.UppdateraInformationstext(infoText);
-            }
-            return RedirectToAction("GetInformationTexts");
-
-        }
 
         [HttpPost]
         public ActionResult UpdateFAQCategory(AdmFAQKategori faqCategory)
@@ -167,6 +188,23 @@ namespace InrappAdmin.Web.Controllers
                 _portalAdminService.UppdateraFAQ(faq);
             }
             return RedirectToAction("GetFAQs", new { faqCatId = faq.FAQkategoriId });
+
+        }
+
+        [HttpPost]
+        public ActionResult UpdateInfoText(SystemViewModels.SystemViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                    AdmInformation info = new AdmInformation
+                    {
+                        Informationstyp = model.SelectedInfo,
+                        Text = model.SelectedInfoText
+                    };
+                    _portalAdminService.UppdateraInformationstext(info);
+                }
+                
+            return RedirectToAction("GetInformationTexts");
 
         }
 
