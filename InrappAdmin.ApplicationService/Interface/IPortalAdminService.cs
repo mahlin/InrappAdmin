@@ -46,6 +46,8 @@ namespace InrappAdmin.ApplicationService.Interface
 
         void SkapaInformationsText(AdmInformation infoText);
 
+        void SkapaUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSk);
+
         void UppdateraOrganisation(Organisation org);
 
         void UppdateraKontaktperson(ApplicationUser user);

@@ -38,6 +38,16 @@ namespace InrappAdmin.Web.Models.ViewModels
 
         }
 
+        public class ReportObligationsViewModel
+        {
+            public int Organisationsid { get; set; }
+            public int DelregisterId { get; set; }
+            public DateTime? SkyldigFrom { get; set; }
+            public DateTime? SkyldigTom { get; set; }
+            public bool RapporterarPerEnhet { get; set; }
+
+        }
+
 
         public class ApplicationUserViewModel
         {

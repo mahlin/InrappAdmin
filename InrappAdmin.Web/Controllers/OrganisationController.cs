@@ -88,12 +88,13 @@ namespace InrappAdmin.Web.Controllers
             var model = new OrganisationViewModels.OrganisationViewModel();
             if (kommunkod != "")
             {
+                model.Kommunkod = kommunkod;
                 model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
             }
             else if (orgId != 0)
             {
                 model.Organisation = _portalAdminService.HamtaOrganisation(orgId);
-
+                model.Kommunkod = _portalAdminService.HamtaKommunkodForOrg(orgId);
             }
             model.OrgUnits = _portalAdminService.HamtaOrgEnheterForOrg(model.Organisation.Id);
 
@@ -106,10 +107,19 @@ namespace InrappAdmin.Web.Controllers
             return View("EditReportObligations");
         }
 
-        public ActionResult GetOrganisationsReportObligations(string kommunkod)
+        public ActionResult GetOrganisationsReportObligations(string kommunkod = "", int orgId = 0)
         {
             var model = new OrganisationViewModels.OrganisationViewModel();
-            model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+            if (kommunkod != "")
+            {
+                model.Kommunkod = kommunkod;
+                model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+            }
+            else if (orgId != 0)
+            {
+                model.Organisation = _portalAdminService.HamtaOrganisation(orgId);
+                model.Kommunkod = _portalAdminService.HamtaKommunkodForOrg(orgId);
+            }
             model.ReportObligations = _portalAdminService.HamtaUppgiftsskyldighetForOrg(model.Organisation.Id);
 
             return View("EditReportObligations", model);
@@ -197,7 +207,45 @@ namespace InrappAdmin.Web.Controllers
                     };
                     return View("CustomError", errorModel);
                 }
-                return RedirectToAction("GetOrganisation", new { kommunkod = kommunkod});
+                return RedirectToAction("GetOrganisationsOrgUnits", new { kommunkod = kommunkod});
+            }
+
+            return View();
+        }
+
+        // GET
+        public ActionResult CreateReportObligation(int orgId = 0)
+        {
+            var model = new OrganisationViewModels.ReportObligationsViewModel();
+            model.Organisationsid = orgId;
+            return View(model);
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateReportObligation(AdmUppgiftsskyldighet uppgSk)
+        {
+            var kommunkod = String.Empty;
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _portalAdminService.SkapaUppgiftsskyldighet(uppgSk);
+                    kommunkod = _portalAdminService.HamtaKommunkodForOrg(uppgSk.OrganisationId);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("OrganisationController", "CreateReportObligation", e.ToString(), e.HResult, "InrappAdmin");
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade när ny uppgiftsskyldighet skulle sparas.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
+                return RedirectToAction("GetOrganisationsReportObligations", new { kommunkod = kommunkod });
             }
 
             return View();

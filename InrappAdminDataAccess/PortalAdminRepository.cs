@@ -173,6 +173,12 @@ namespace InrappAdmin.DataAccess
             DbContext.SaveChanges();
         }
 
+        public void CreateReportObligation(AdmUppgiftsskyldighet uppgSk)
+        {
+            DbContext.AdmUppgiftsskyldighet.Add(uppgSk);
+            DbContext.SaveChanges();
+        }
+
         public void UpdateOrganisation(Organisation org)
         {
             var orgDb = DbContext.Organisation.Where(u => u.Id == org.Id).Select(u => u).SingleOrDefault();

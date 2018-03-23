@@ -245,6 +245,7 @@
     <Content Include="Views\System\CreateInformationText.cshtml" />
     <Content Include="Views\System\EditOpeningHours.cshtml" />
     <Content Include="Views\System\_EditText.cshtml" />
+    <Content Include="Views\Organisation\CreateReportObligation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

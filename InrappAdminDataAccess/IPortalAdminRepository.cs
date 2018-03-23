@@ -55,6 +55,7 @@ namespace InrappAdmin.DataAccess
         void CreateFAQ(AdmFAQ faq);
 
         void CreateInformationText(AdmInformation infoText);
+        void CreateReportObligation(AdmUppgiftsskyldighet uppgSk);
 
         void UpdateOrganisation(Organisation org);
 

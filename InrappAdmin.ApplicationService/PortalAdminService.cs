@@ -180,6 +180,16 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.CreateInformationText(infoText);
         }
 
+        public void SkapaUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSk)
+        {
+            //Sätt datum och användare
+            uppgSk.SkapadDatum = DateTime.Now;
+            uppgSk.SkapadAv = "InrappAdmin";
+            uppgSk.AndradDatum = DateTime.Now;
+            uppgSk.AndradAv = "InrappAdmin";
+            _portalAdminRepository.CreateReportObligation(uppgSk);
+        }
+
         public void UppdateraOrganisation(Organisation org)
         {
             //Sätt datum och användare
@@ -343,5 +353,7 @@ namespace InrappAdmin.ApplicationService
         {
             _portalAdminRepository.DeleteContact(contactId);
         }
+
+
     }
 }
