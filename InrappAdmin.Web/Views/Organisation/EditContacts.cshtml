@@ -5,6 +5,7 @@
 
     $(document).ready(function () {
 
+        $('td:nth-child(1),th:nth-child(1)').hide();
         var modalConfirm = function test(callback) {
             $("#modal-btn-si").on("click", function () {
                 callback(true);
@@ -59,13 +60,17 @@
         $('.save-user').on('click', function () {
             var tr = $(this).parents('tr:first');
             var contactId = tr.find("#ContactId").html();
-            var contactName = tr.find("#ContactName").val();
+            var contactPhoneNumber = tr.find("#ContactPhoneNumber").val();
+            var contactAktivFrom = tr.find("#ContactAktivFrom").val();
+            var contactAktivTom = tr.find("#ContactAktivTom").val();
 
             //Creating ApplicationUser JSON object
             var applicationUser =
                 {
                     "Id": contactId,
-                    "Namn": contactName
+                    "PhoneNumber": contactPhoneNumber,
+                    "AktivFrom": contactAktivFrom,
+                    "AktivTom": contactAktivTom
                 };
             //Posting ApplicationUser object to controller's Update action method
             $.ajax({
@@ -86,10 +91,13 @@
 
         $('.edit-user').on('click', function () {
             var tr = $(this).parents('tr:first');
-            var contactId = tr.find("#ContactId").html();
-            var contactName = tr.find("#ContactName").val();
+            var contactPhoneNumber = tr.find("#ContactPhoneNumber").val();
+            var contactAktivFrom = tr.find("#ContactAktivFrom").val();
+            var contactAktivTom = tr.find("#ContactAktivTom").val();
 
-            tr.find("#lblName").text(contactName);
+            tr.find("#lblPhoneNumber").text(contactPhoneNumber);
+            tr.find("#lblAktivFrom").text(contactAktivFrom);
+            tr.find("#lblAktivTom").text(contactAktivTom);
         });
     });
 </script>
@@ -131,6 +139,7 @@
     }
 
         .webgrid-table td, th {
+            width: 100px;
             border: 1px solid #C5C5C5;
             padding: 3px 7px 2px;
         }
@@ -155,9 +164,9 @@
     }
 
     .col1Width {
-        width: 200px;
+        width: 100px;
         margin: -5px;
-        padding: 0;
+        padding: 2px;
     }
 
     .col2Width {
@@ -169,12 +178,12 @@
     .col3Width {
         width: 220px;
         margin: -5px;
-        padding: 0;
+        padding:2px;
     }
 
     label {
         font-weight: normal;
-        width: 200px;
+        width: 100px;
     }
 </style>
 
@@ -231,41 +240,47 @@
     @if (Model != null)
     {
 
-        <div id="gridContent" style="font-family: Arial; padding: 20px;">
+    <div id="gridContent" style="font-family: Arial; padding: 20px;">
 
 
 
-            @{
-                ViewBag.Title = "Administrera kontaktpersoner";
-                var grid = new WebGrid(source: Model.ContactPersons, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "contatcsGrid");
-                grid.Pager(WebGridPagerModes.All);
-            }
+        @{
+        ViewBag.Title = "Administrera kontaktpersoner";
+        var grid = new WebGrid(source: Model.ContactPersons, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "contatcsGrid");
+        grid.Pager(WebGridPagerModes.All);
+        }
 
 
-            @grid.GetHtml(tableStyle: "webgrid-table",
-                           headerStyle: "webgrid-header",
-                           footerStyle: "webgrid-footer",
-                           alternatingRowStyle: "webgrid-alternating-row",
-                           selectedRowStyle: "webgrid-selected-row",
-                           rowStyle: "webgrid-row-style",
-                           mode: WebGridPagerModes.All,
-                           columns: grid.Columns(
-                               grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="ContactId" class="edit-mode col2Width">@item.Id</label></text>,
-                                                style: "col1Width"),
-                                   grid.Column("Namn", "Namn", format: @<text><span class="display-mode"><label id="lblName">@item.Namn</label></span>
-                                <input type="text" id="ContactName" value="@item.Namn" class="edit-mode form-control" /></text>, style: "col2Width"),
+        @grid.GetHtml(tableStyle: "webgrid-table",
+                        headerStyle: "webgrid-header",
+                        footerStyle: "webgrid-footer",
+                        alternatingRowStyle: "webgrid-alternating-row",
+                        selectedRowStyle: "webgrid-selected-row",
+                        rowStyle: "webgrid-row-style",
+                        mode: WebGridPagerModes.All,
+                        columns: grid.Columns(
+                            grid.Column("Id", format: @<text><span class="display-mode col3Width ">@item.id</span><label id="ContactId" class="edit-mode col3Width">@item.Id</label></text>),
+                             grid.Column("Namn", format: @<text><span class="display-mode">@item.Namn</span><label id="ContactName" class="edit-mode">@item.Namn</label></text>,style: "col3Width"),
+                             grid.Column("E-post", format: @<text><span class="display-mode col3Width">@item.Email</span><label id="Epost" class="edit-mode col3Width">@item.Email</label></text>,style: "col3Width"),
 
-                                          grid.Column("Skapad", format: @<text><span class="display-mode">@item.SkapadDatum</span><label id="lblSkapadDatum" class="edit-mode col2Width">@item.SkapadDatum</label></text>,
-                                                     style: "col1Width"),
+                              grid.Column("Telefon", "Telefon", format: @<text><span class="display-mode col1Width"><label id="lblPhoneNumber">@item.PhoneNumber</label></span>
+                            <input type="text" id="ContactPhoneNumber" value="@item.PhoneNumber" class="edit-mode form-control" /></text>, style: "col1Width"),
+                             grid.Column("Aktiv fr.o.m", "Aktiv fr.o.m", format: @<text><span class="display-mode col1Width"><label id="lblAktivFrom">@item.AktivFrom</label></span>
+                            <input type="text" id="ContactAktivFrom" value="@item.AktivFrom" class="edit-mode form-control" /></text>, style: "col1Width"),
+                             grid.Column("Aktiv t.o.m", "Aktiv t.o.m", format: @<text><span class="display-mode col1Width"><label id="lblAktivTom">@item.AktivTom</label></span>
+                            <input type="text" id="ContactAktivTom" value="@item.AktivTom" class="edit-mode form-control" /></text>, style: "col1Width"),
+                             grid.Column("Status", "Status", format: @<text><span class="display-mode col1Width"><label id="lblStatus">@item.Status</label></span>
+                            <input type="text" id="ContactStatus" value="@item.Status" class="edit-mode form-control" /></text>, style: "col1Width"),
 
-                                                         grid.Column("Action", format: @<text>
-                                                            <button class="edit-user display-mode btn btn-default">Ändra</button>
-                                                            <button class="display-mode btn btn-default" onclick="deleteContact('@item.Id', '@item.Namn'); return false;">Ta bort</button>
-                                                            <button class="save-user edit-mode btn btn-default">Spara</button>
-                                                            <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-                                                        </text>, style: "col3Width", canSort: false)))
 
-        </div>
+                             grid.Column("Action", format: @<text>
+                                <button class="edit-user display-mode btn btn-default">Ändra</button>
+                                <button class="display-mode btn btn-default" onclick="deleteContact('@item.Id', '@item.Namn'); return false;">Ta bort</button>
+                                <button class="save-user edit-mode btn btn-default">Spara</button>
+                                <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                            </text>, style: "col3Width", canSort: false)))
+
+    </div>
     }
 </div>
 

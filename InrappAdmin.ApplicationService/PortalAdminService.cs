@@ -182,6 +182,9 @@ namespace InrappAdmin.ApplicationService
 
         public void UppdateraOrganisation(Organisation org)
         {
+            //Sätt datum och användare
+            org.AndradDatum = DateTime.Now;
+            org.AndradAv = "InrappAdmin";
             _portalAdminRepository.UpdateOrganisation(org);
         }
 
@@ -192,11 +195,17 @@ namespace InrappAdmin.ApplicationService
 
         public void UppdateraOrganisationsenhet(Organisationsenhet orgUnit)
         {
+            //Sätt datum och användare
+            orgUnit.AndradDatum = DateTime.Now;
+            orgUnit.AndradAv = "InrappAdmin";
             _portalAdminRepository.UpdateOrgUnit(orgUnit);
         }
 
         public void UppdateraUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSkyldighet)
         {
+            //Sätt datum och användare
+            uppgSkyldighet.AndradDatum = DateTime.Now;
+            uppgSkyldighet.AndradAv = "InrappAdmin";
             _portalAdminRepository.UpdateReportObligation(uppgSkyldighet);
         }
 

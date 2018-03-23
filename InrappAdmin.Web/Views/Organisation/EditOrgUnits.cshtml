@@ -58,6 +58,8 @@
 
             tr.find("#lblName").text(orgUnitName);
             tr.find("#lblCode").text(orgUnitCode);
+            tr.find("#lblAktivFrom").text(orgUnitActiveFrom);
+            tr.find("#lblAktivTom").text(orgUnitActiveTom);
         });
     })
 </script>
@@ -122,10 +124,16 @@
         padding: 3px 7px 2px;
     }
 
-    .col1Width {
-        width: 200px;
+    .colMinWidth {
+        width: 50px;
         margin: -5px;
-        padding: 0;
+        padding: 3px 7px 2px;
+    }
+
+    .col1Width {
+        width: 100px;
+        margin: -5px;
+        padding: 3px 7px 2px;
     }
 
     .col2Width {
@@ -137,12 +145,13 @@
     .col3Width {
         width: 220px;
         margin: -5px;
-        padding: 0;
+        padding: 3px 7px 2px;
     }
 
     label {
         font-weight: normal;
-        width: 200px;
+        width: 100px;
+        padding: 3px 7px 2px;
     }
 </style>
 
@@ -202,19 +211,20 @@
                     rowStyle: "webgrid-row-style",
                     mode: WebGridPagerModes.All,
                     columns: grid.Columns(
-                        grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="OrgUnitId" class="edit-mode col2Width">@item.Id</label></text>,
-                              style: "col1Width"),
+                        grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="OrgUnitId" class="edit-mode colMinWidth">@item.Id</label></text>,style: "colMinWidth"),
 
                           grid.Column("Enhetsnamn", "Enhetsnamn", format: @<text><span class="display-mode"><label id="lblName">@item.Enhetsnamn</label></span>
                         <input type="text" id="OrgUnitName" value="@item.Enhetsnamn" class="edit-mode form-control" /></text>, style: "col2Width"),
                          grid.Column("Enhetskod", "Enhetskod", format: @<text><span class="display-mode"><label id="lblCode">@item.Enhetskod</label></span>
                         <input type="text" id="OrgUnitCode" value="@item.Enhetskod" class="edit-mode form-control" /></text>, style: "col2Width"),
         
-                         grid.Column("Aktiv from", format: @<text><span class="display-mode">@item.AktivFrom</span><label id="lblAktivFrom" class="edit-mode col2Width">@item.AktivFrom</label></text>,
-                             style: "col1Width"),
+                        grid.Column("Aktiv from", "Aktiv from", format: @<text><span class="display-mode"><label id="lblAktivFrom">
+                        @if (item.AktivFrom != null){@item.AktivFrom.ToString("yyyy-MM-dd")}else{@item.AktivFrom}</label></span>
+                        <input type="text" id="OrgUnitAktivFrom" value="@if (item.AktivFrom != null){@item.AktivFrom.ToString("yyyy-MM-dd")}else{@item.AktivFrom}" class="edit-mode form-control" /></text>, style: "col2Width"),
 
-                        grid.Column("Aktiv tom", format: @<text> <span class="display-mode">@item.AktivTom</span><label id="lblAktivTom" class="edit-mode col2Width">@item.AktivTom</label></text>,
-                            style: "col1Width"),
+                        grid.Column("Aktiv tom", "Aktiv tom", format: @<text><span class="display-mode"><label id="lblAktivTom">
+                        @if (item.AktivTom != null){@item.AktivTom.ToString("yyyy-MM-dd")}else{@item.AktivTom}</label></span>
+                        <input type="text" id="OrgUnitAktivTom" value="@if (item.AktivTom != null){@item.AktivTom.ToString("yyyy-MM-dd")}else{@item.AktivTom}" class="edit-mode form-control" /></text>, style: "col2Width"),
 
                         grid.Column("Action", format: @<text>
                     <button class="edit-user display-mode btn btn-default">Ändra</button>

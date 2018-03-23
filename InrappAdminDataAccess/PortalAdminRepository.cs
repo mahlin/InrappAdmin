@@ -199,8 +199,13 @@ namespace InrappAdmin.DataAccess
 
         public void UpdateContactPerson(ApplicationUser user)
         {
-            var usr = DbContext.Users.Where(u => u.Id == user.Id).Select(u => u).SingleOrDefault();
-            usr.Namn = user.Namn;
+            var usrDb = DbContext.Users.Where(u => u.Id == user.Id).Select(u => u).SingleOrDefault();
+            usrDb.PhoneNumber= user.PhoneNumber;
+            usrDb.AktivFrom = user.AktivFrom;
+            usrDb.AktivTom = user.AktivTom;
+            //Sätt datum och användare (kräver referens till Identity, därför här istf i svc(?))
+            usrDb.AndradDatum = DateTime.Now;
+            usrDb.AndradAv = "InrappAdmin";
             DbContext.SaveChanges(); 
         }
 
