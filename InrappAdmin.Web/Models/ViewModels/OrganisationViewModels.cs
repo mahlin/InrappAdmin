@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Permissions;
 using System.Web;
 using InrappAdmin.DomainModel;
+using Microsoft.AspNet.Identity;
 
 namespace InrappAdmin.Web.Models.ViewModels
 {
@@ -16,7 +17,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public string Kommunkod { get; set; }
             public Organisation Organisation { get; set; }
 
-            public IEnumerable<ApplicationUser> ContactPersons { get; set; }
+            public IEnumerable<ApplicationUserViewModel> ContactPersons { get; set; }
 
             public string SelectedContactId { get; set; }
 
@@ -51,15 +52,20 @@ namespace InrappAdmin.Web.Models.ViewModels
 
         public class ApplicationUserViewModel
         {
+            public string ID { get; set; }
             public int OrganisationId { get; set; }
             public string Namn { get; set; }
             public DateTime? AktivFrom { get; set; }
             public DateTime? AktivTom { get; set; }
             public int? Status { get; set; }
+            public string Email { get; set; }
+            public string PhoneNumber { get; set; }
+            public bool PhoneNumberConfirmed { get; set; }
             public DateTime SkapadDatum { get; set; }
             public string SkapadAv { get; set; }
             public DateTime AndradDatum { get; set; }
             public string AndradAv { get; set; }
+            public bool OkToDelete { get; set; }
 
         }
 

@@ -39,7 +39,9 @@ namespace InrappAdmin.Web.Controllers
             {
                 model.Kommunkod = kommunkod;
                 model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
-                model.ContactPersons = _portalAdminService.HamtaKontaktpersonerForOrg(model.Organisation.Id);
+                var contacts = _portalAdminService.HamtaKontaktpersonerForOrg(model.Organisation.Id);
+                model.ContactPersons = ConvertUsersViewModelUser(contacts);
+
                 model.OrgUnits = _portalAdminService.HamtaOrgEnheterForOrg(model.Organisation.Id);
                 model.ReportObligations = _portalAdminService.HamtaUppgiftsskyldighetForOrg(model.Organisation.Id);
             }
@@ -71,7 +73,8 @@ namespace InrappAdmin.Web.Controllers
         {
             var model = new OrganisationViewModels.OrganisationViewModel();
             model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
-            model.ContactPersons = _portalAdminService.HamtaKontaktpersonerForOrg(model.Organisation.Id);
+            var contacts = _portalAdminService.HamtaKontaktpersonerForOrg(model.Organisation.Id);
+            model.ContactPersons = ConvertUsersViewModelUser(contacts);
 
             return View("EditContacts", model);
         }
@@ -270,6 +273,46 @@ namespace InrappAdmin.Web.Controllers
                 return View("CustomError", errorModel);
             }
             return RedirectToAction("GetOrganisationsContacts", new {kommunkod = kommunkod});
+        }
+
+        private IEnumerable<OrganisationViewModels.ApplicationUserViewModel> ConvertUsersViewModelUser(IEnumerable<ApplicationUser> contacts)
+        {
+            var contactPersonsView = new List<OrganisationViewModels.ApplicationUserViewModel>();
+
+            var okToDelete = false;
+
+            foreach (var contact in contacts)
+            {
+                if (!contact.PhoneNumberConfirmed)
+                {
+                    okToDelete = true;
+                }
+                else
+                {
+                    okToDelete = false;
+                }
+                var contactView = new OrganisationViewModels.ApplicationUserViewModel
+                {
+                    OrganisationId = contact.OrganisationId,
+                    Namn = contact.Namn,
+                    AktivFrom = contact.AktivFrom,
+                    AktivTom = contact.AktivTom,
+                    Status = contact.Status,
+                    Email = contact.Email,
+                    PhoneNumber = contact.PhoneNumber,
+                    PhoneNumberConfirmed = contact.PhoneNumberConfirmed,
+                    SkapadDatum = contact.SkapadDatum,
+                    SkapadAv = contact.SkapadAv,
+                    AndradDatum = contact.AndradDatum,
+                    AndradAv = contact.AndradAv,
+                    OkToDelete = okToDelete
+                };
+
+                contactPersonsView.Add(contactView);
+            }
+            return contactPersonsView;
+
+
         }
 
         //// GET: Organisation/Details/5

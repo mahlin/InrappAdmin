@@ -259,7 +259,7 @@
                         rowStyle: "webgrid-row-style",
                         mode: WebGridPagerModes.All,
                         columns: grid.Columns(
-                            grid.Column("Id", format: @<text><span class="display-mode col3Width ">@item.id</span><label id="ContactId" class="edit-mode col3Width">@item.Id</label></text>),
+                            grid.Column("ID", format: @<text><span class="display-mode col3Width ">@item.ID</span><label id="ContactId" class="edit-mode col3Width">@item.ID</label></text>),
                              grid.Column("Namn", format: @<text><span class="display-mode">@item.Namn</span><label id="ContactName" class="edit-mode">@item.Namn</label></text>,style: "col3Width"),
                              grid.Column("E-post", format: @<text><span class="display-mode col3Width">@item.Email</span><label id="Epost" class="edit-mode col3Width">@item.Email</label></text>,style: "col3Width"),
 
@@ -275,7 +275,10 @@
 
                              grid.Column("Action", format: @<text>
                                 <button class="edit-user display-mode btn btn-default">Ändra</button>
-                                <button class="display-mode btn btn-default" onclick="deleteContact('@item.Id', '@item.Namn'); return false;">Ta bort</button>
+                                @if (item.OkToDelete)
+                                {
+                                    <button class="display-mode btn btn-default" onclick="deleteContact('@item.Id', '@item.Namn'); return false;">Ta bort</button>
+                                }
                                 <button class="save-user edit-mode btn btn-default">Spara</button>
                                 <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
                             </text>, style: "col3Width", canSort: false)))
