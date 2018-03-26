@@ -20,6 +20,7 @@
             var repSkyldigFrom = tr.find("#RepSkyldigFrom").val();
             var repSkyldigTom = tr.find("#RepSkyldigTom").val();
             var repRapporterarPerEnhet = tr.find("#RepRapporterarPerEnhet").val();
+            var orgId = $('#Organisationsid').val();
 
             //Creating AdmUppgiftsskyldighet JSON object
             var uppgiftsskyldighet =
@@ -28,7 +29,8 @@
                 "DelregisterId": repDelRegId,
                 "SkyldigFrom": repSkyldigFrom,
                 "SkyldigTom": repSkyldigTom,
-                "RapporterarPerEnhet": repRapporterarPerEnhet
+                "RapporterarPerEnhet": repRapporterarPerEnhet,
+                "OrganisationId": orgId
             };
             //Posting ApplicationUser object to controller's Update action method
             $.ajax({

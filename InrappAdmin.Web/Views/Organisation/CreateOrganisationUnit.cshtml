@@ -4,8 +4,14 @@
     ViewBag.Title = "Skapa ny organisationsenhet";
 }
 
+<script>
 
-    @using (Html.BeginForm("CreateOrganisationUnit", "Organisation", FormMethod.Post))
+    //$(document).ready(function () {
+    //    alert("Orgid: " + $('#Organisationsid').val());
+    //});
+</script>
+
+@using (Html.BeginForm("CreateOrganisationUnit", "Organisation", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.Organisationsid)

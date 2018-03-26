@@ -224,7 +224,7 @@ namespace InrappAdmin.Web.Controllers
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateReportObligation(AdmUppgiftsskyldighet uppgSk)
+        public ActionResult CreateReportObligation(AdmUppgiftsskyldighet uppgSk, int orgId = 0)
         {
             var kommunkod = String.Empty;
             if (ModelState.IsValid)
