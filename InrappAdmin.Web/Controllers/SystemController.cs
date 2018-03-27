@@ -150,7 +150,7 @@ namespace InrappAdmin.Web.Controllers
                 TimeSpan ts = new TimeSpan(10, 30, 0);
                 model.OpeningTime = s.Date + ts;
                 model.OpeningTimeStr = admKonf.ClosedToHour.ToString() + ":" + admKonf.ClosedToMin.ToString();
-                model.ClosingTime = SetTime(admKonf.ClosedFromHour, admKonf.ClosedFromMin);
+                //model.ClosingTime = SetTime(admKonf.ClosedFromHour, admKonf.ClosedFromMin);
                 model.ClosingTimeStr = admKonf.ClosedFromHour.ToString() + ":" + admKonf.ClosedFromMin.ToString();
                 model.InfoTextForClosedPage = _portalAdminService.HamtaInfoText("Stangtsida");
             }
@@ -424,12 +424,12 @@ namespace InrappAdmin.Web.Controllers
             var openingHoursDTO = new OpeningHoursInfoDTO();
 
             string[] openFromSplit = openingHours.OpeningTimeStr.Split(':');
-            openingHoursDTO.ClosedToHour = Convert.ToInt32(openFromSplit[0]);
-            openingHoursDTO.ClosedToMin = Convert.ToInt32(openFromSplit[1]);
+            openingHoursDTO.ClosedToHour = openFromSplit[0];
+            openingHoursDTO.ClosedToMin = openFromSplit[1];
 
             string[] openToSplit = openingHours.ClosingTimeStr.Split(':');
-            openingHoursDTO.ClosedFromHour = Convert.ToInt32(openToSplit[0]);
-            openingHoursDTO.ClosedFromMin = Convert.ToInt32(openToSplit[1]);
+            openingHoursDTO.ClosedFromHour = openToSplit[0];
+            openingHoursDTO.ClosedFromMin = openToSplit[1];
 
             return openingHoursDTO;
 

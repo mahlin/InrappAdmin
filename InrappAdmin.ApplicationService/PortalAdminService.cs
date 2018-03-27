@@ -109,16 +109,16 @@ namespace InrappAdmin.ApplicationService
                 switch (item.Typ)
                 {
                     case "ClosedFromHour":
-                        oppettiderObj.ClosedFromHour = Convert.ToInt32(item.Varde);
+                        oppettiderObj.ClosedFromHour = item.Varde;
                         break;
                     case "ClosedFromMin":
-                        oppettiderObj.ClosedFromMin = Convert.ToInt32(item.Varde);
+                        oppettiderObj.ClosedFromMin = item.Varde;
                         break;
                     case "ClosedToHour":
-                        oppettiderObj.ClosedToHour = Convert.ToInt32(item.Varde);
+                        oppettiderObj.ClosedToHour = item.Varde;
                         break;
                     case "ClosedToMin":
-                        oppettiderObj.ClosedToMin = Convert.ToInt32(item.Varde);
+                        oppettiderObj.ClosedToMin = item.Varde;
                         break;
                     case "ClosedAnyway":
                         oppettiderObj.ClosedAnyway = Convert.ToBoolean(item.Varde);
