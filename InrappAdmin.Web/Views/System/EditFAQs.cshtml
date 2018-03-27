@@ -209,8 +209,17 @@
     {
         @Html.HiddenFor(m => m.SelectedFAQ)
         @Html.HiddenFor(m => m.SelectedFAQCategory)
-        @Html.ActionLink("Skapa ny FAQ", "CreateFAQ", "System", routeValues: new { catId = Model.SelectedFAQCategory }, htmlAttributes: null)
-        <div id="gridContent" style="font-family: Arial; padding: 20px;">
+
+        <div class="row">
+            <div class="col-md-8" >
+            @Html.ActionLink("Skapa ny FAQ", "CreateFAQ", "System", routeValues: new {catId = Model.SelectedFAQCategory}, htmlAttributes: null)
+            </div>
+
+            @Html.ActionLink("Tillbaka till kategorier", "GetFAQCategories", "System")
+
+        </div>
+
+            <div id="gridContent" style="font-family: Arial; padding: 20px;">
 
             @{
                 ViewBag.Title = "Administrera FAQs";

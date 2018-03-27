@@ -66,11 +66,11 @@
 
             //Creating AdmInformation JSON object
             var infoText =
-            {
-                "Id": infoId,
-                "Informationstyp": informationsTyp,
-                "Text": infoText
-            };
+                {
+                    "Id": infoId,
+                    "Informationstyp": informationsTyp,
+                    "Text": infoText
+                };
             //Posting AdmInformation object to controller's Update action method
             $.ajax({
                 url: '/System/UpdateInformationText',
@@ -242,8 +242,8 @@
                     <div class="col-md-8">
                         @Html.Label("Öppet från", new { @class = "control-label" })
                         @*@Html.EditorFor(model => model.OpeningTime, new { @class = "form-control", style = "border-radius:40px" })*@
-                        @Html.TextBoxFor(m => m.OpeningTime, new { @class = "form-control", style="display:inline;width:170px;" })
-                        @Html.ValidationMessageFor(m => m.OpeningTime, "", new { @class = "text-danger" })
+                        @Html.TextBoxFor(m => m.OpeningTimeStr, new { @class = "form-control", style = "display:inline;width:170px;" })
+                        @Html.ValidationMessageFor(m => m.OpeningTimeStr, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
@@ -251,15 +251,15 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-8">
-                        @Html.Label("Öppet från", new { @class = "control-label" })
+                        @Html.Label("Öppet till", new { @class = "control-label" })
                         @*@Html.EditorFor(model => model.OpeningTime, new { @class = "form-control", style = "border-radius:40px" })*@
-                        @Html.TextBoxFor(m => m.OpeningTimeStr, new { @class = "form-control", style="display:inline;width:170px;" })
-                        @Html.ValidationMessageFor(m => m.OpeningTimeStr, "", new { @class = "text-danger" })
+                        @Html.TextBoxFor(m => m.ClosingTimeStr, new { @class = "form-control", style = "display:inline;width:170px;" })
+                        @Html.ValidationMessageFor(m => m.ClosingTimeStr, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
-            
-            <div class="form-group">
+
+            @*<div class="form-group">
                 <div class="row">
                     <div class="col-md-8">
                         @Html.Label("Öppet till", new { @class = "control-label" })
@@ -267,28 +267,31 @@
                         @Html.ValidationMessageFor(m => m.ClosingTime, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                </div>
-                <br /><br />
-
-                @*@Html.EditorFor(model => model.Hour, new { @class = "form-control" })*@
-
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-8">
-                            @Html.Label("Informationstext: ", new { @class = "control-label" })
-                            @Html.TextAreaFor(m => m.InfoTextForClosedPage, 5, 40, new { @class = "form-control required", style = "max-width:75% !important;" })
-                        </div>
-                    </div>
-                </div>
-                <br />
-
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Spara" class="btn btn-default" />
-                    </div>
-                </div>
-                }
-                }
-            </div>
+                </div>*@
             <br /><br />
 
+            @*@Html.EditorFor(model => model.Hour, new { @class = "form-control" })*@
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-8">
+                        @Html.Label("Informationstext: ", new { @class = "control-label" })
+                        @Html.TextAreaFor(m => m.InfoTextForClosedPage, 5, 40, new { @class = "form-control required", style = "max-width:75% !important;" })
+                    </div>
+                </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Spara" class="btn btn-default" />
+                </div>
+            </div>
+        }
+    }
+</div>
+<br /><br />
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

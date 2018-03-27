@@ -68,11 +68,16 @@ namespace InrappAdmin.Web.Models.ViewModels
             [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true)]
             public DateTime OpeningTime { get; set; }
 
+            [RegularExpression("^(?:[01][0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Felaktigt format.")]
             public string OpeningTimeStr { get; set; }
 
             [DataType(DataType.Time)]
             [DisplayFormat(DataFormatString = "{0:HH:mm}")]
             public DateTime ClosingTime { get; set; }
+
+            [RegularExpression("^(?:[01][0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Felaktigt format.")]
+            public string ClosingTimeStr { get; set; }
+
             public int ClosedFromMin { get; set; }
             public int ClosedToHour { get; set; }
             public int ClosedToMin { get; set; }

@@ -151,6 +151,7 @@ namespace InrappAdmin.Web.Controllers
                 model.OpeningTime = s.Date + ts;
                 model.OpeningTimeStr = admKonf.ClosedToHour.ToString() + ":" + admKonf.ClosedToMin.ToString();
                 model.ClosingTime = SetTime(admKonf.ClosedFromHour, admKonf.ClosedFromMin);
+                model.ClosingTimeStr = admKonf.ClosedFromHour.ToString() + ":" + admKonf.ClosedFromMin.ToString();
                 model.InfoTextForClosedPage = _portalAdminService.HamtaInfoText("Stangtsida");
             }
             catch (Exception e)
@@ -330,15 +331,12 @@ namespace InrappAdmin.Web.Controllers
             {
                 try
                 {
-                    OpeningHoursInfoDTO openHoursDTO = new OpeningHoursInfoDTO
-                    {
-                        ClosedFromHour = openHours.ClosedFromHour,
-                        ClosedFromMin = openHours.ClosedFromMin,
-                        ClosedToHour = openHours.ClosedToHour,
-                        ClosedToMin = openHours.ClosedToMin,
-                        ClosedAnyway = openHours.ClosedAnyway,
-                        InfoTextForClosedPage = openHours.InfoTextForClosedPage
-                    };
+
+                    OpeningHoursInfoDTO openHoursDTO = new OpeningHoursInfoDTO();
+
+                    openHoursDTO = SetHoursAndMinutes(openHours);
+                    openHoursDTO.ClosedAnyway = openHours.ClosedAnyway;
+                    openHoursDTO.InfoTextForClosedPage = openHours.InfoTextForClosedPage;
 
                     //Days
                     var daysListDTO = new List<string>();
@@ -419,6 +417,23 @@ namespace InrappAdmin.Web.Controllers
             var newDate = time.Date + new TimeSpan(hour, minute, 00);
 
             return newDate;
+        }
+
+        private OpeningHoursInfoDTO SetHoursAndMinutes(SystemViewModels.OpeningHours openingHours)
+        {
+            var openingHoursDTO = new OpeningHoursInfoDTO();
+
+            string[] openFromSplit = openingHours.OpeningTimeStr.Split(':');
+            openingHoursDTO.ClosedToHour = Convert.ToInt32(openFromSplit[0]);
+            openingHoursDTO.ClosedToMin = Convert.ToInt32(openFromSplit[1]);
+
+            string[] openToSplit = openingHours.ClosingTimeStr.Split(':');
+            openingHoursDTO.ClosedFromHour = Convert.ToInt32(openToSplit[0]);
+            openingHoursDTO.ClosedFromMin = Convert.ToInt32(openToSplit[1]);
+
+            return openingHoursDTO;
+
+
         }
     }
 }
