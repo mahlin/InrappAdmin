@@ -12,23 +12,12 @@
     });
 
     function showTextarea(infoType) {
-
-        //$('#textArea').html("Yo!");
         $('#SelectedInfo').val(infoType);
         infoLista.forEach(function (info, index) {
             if (info.Informationstyp === infoType) {
                 $('#textArea').html(info.Text); 
             }
         });
-        //infoLista.forEach(function (info, index) {
-        //    if (info.Informationstyp === infoType) {
-        //        $('#SelectedInfoText').val(info.Text); 
-        //    }
-        //});
-
-        //$('#pageContainer').load('/System/GetInformationTexts', { selectedInfoType: $('#SelectedInfo').val(), selectedText: $('#SelectedInfoText').val()});   
-        //$('#footer').hide();
-        //$('#editInfoText').show();
     }
 
     $(function () {
