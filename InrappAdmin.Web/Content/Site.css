@@ -89,3 +89,100 @@ textarea {
 .navbar-inverse .navbar-link {
     color: #cccccc;
 }
+
+/* Grid styling */
+.edit-mode {
+    font-weight: normal;
+}
+
+.edit-user {
+    font-weight: normal;
+}
+
+.edit-user display-mode {
+    font-weight: normal;
+}
+
+.save-user edit-mode {
+    font-weight: normal;
+}
+
+.display-mode {
+    font-weight: normal;
+}
+
+.cancel-user {
+    font-weight: normal;
+}
+
+.webgrid-table {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    width: 1050px;
+    display: table;
+    border-collapse: collapse;
+    border: solid px #C5C5C5;
+    background-color: white;
+}
+
+.webgrid-table td, th {
+    border: 1px solid #C5C5C5;
+    padding: 3px 7px 2px;
+}
+
+.webgrid-header, .webgrid-header a {
+    background-color: #f9f9f9;
+    color: #494A4A;
+    text-align: left;
+    text-decoration: none;
+}
+
+.webgrid-footer {
+}
+
+.webgrid-row-style {
+    padding: 3px 7px 2px;
+}
+
+.webgrid-alternating-row {
+    background-color: #f9f9f9;
+    padding: 3px 7px 2px;
+}
+
+.colMinWidth {
+    width: 50px;
+    margin: -5px;
+    padding: 3px 7px 2px;
+}
+
+.col1Width {
+    width: 100px;
+    margin: -5px;
+    padding: 3px 7px 2px;
+}
+
+.col2Width {
+    width: 200px;
+    margin: -5px;
+    padding: 3px 7px 2px;
+}
+
+.col3Width {
+    width: 220px;
+    margin: -5px;
+    padding: 3px 7px 2px;
+}
+
+.col4Width {
+    width: 320px;
+    margin: -5px;
+    padding: 3px 7px 2px;
+}
+
+
+label {
+    font-weight: normal;
+    width: 100px;
+    padding: 3px 7px 2px;
+}

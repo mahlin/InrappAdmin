@@ -1,5 +1,7 @@
 ﻿@model InrappAdmin.Web.Models.ViewModels.OrganisationViewModels.OrganisationViewModel
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+
 
 <script type="text/javascript">
 
@@ -7,153 +9,67 @@
         $("#txtKommunkod").focus();
     });
 
-    $(function () {
+    $(function() {
         $('.edit-mode').hide();
-        $('.edit-user, .cancel-user').on('click', function () {
-            var tr = $(this).parents('tr:first');
-            tr.find('.edit-mode, .display-mode').toggle();
-        });
-        $('.save-user').on('click', function () {
-            var tr = $(this).parents('tr:first');
-            var repId = tr.find("#RepId").html();
-            var repDelRegId= tr.find("#RepDelRegId").val();
-            var repSkyldigFrom = tr.find("#RepSkyldigFrom").val();
-            var repSkyldigTom = tr.find("#RepSkyldigTom").val();
-            var repRapporterarPerEnhet = tr.find("#RepRapporterarPerEnhet").val();
-            var orgId = $('#Organisationsid').val();
+        $('.edit-user, .cancel-user').on('click',
+            function() {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+        $('.save-user').on('click',
+            function() {
+                var tr = $(this).parents('tr:first');
+                var repId = tr.find("#RepId").html();
+                var repDelRegId = tr.find("#RepDelRegId").val();
+                var repSkyldigFrom = tr.find("#RepSkyldigFrom").val();
+                var repSkyldigTom = tr.find("#RepSkyldigTom").val();
+                var repRapporterarPerEnhet = tr.find("#RepRapporterarPerEnhet").val();
+                var orgId = $('#Organisationsid').val();
 
-            //Creating AdmUppgiftsskyldighet JSON object
-            var uppgiftsskyldighet =
-            {
-                "Id": repId,
-                "DelregisterId": repDelRegId,
-                "SkyldigFrom": repSkyldigFrom,
-                "SkyldigTom": repSkyldigTom,
-                "RapporterarPerEnhet": repRapporterarPerEnhet,
-                "OrganisationId": orgId
-            };
-            //Posting ApplicationUser object to controller's Update action method
-            $.ajax({
-                url: '/Organisation/UpdateOrganisationsReportObligation',
-                data: JSON.stringify(uppgiftsskyldighet),
-                type: 'POST',
-                contentType: 'application/json; charset=utf-8',
-                success: function (data) {
-                    //location.reload();
-                    $("#pageContainer").html(data);
-                    tr.find('.edit-mode, .display-mode').toggle();
-                    $('#footer').hide();
-                    //alert('Record updated Successfully!!');
-                }
+                //Creating AdmUppgiftsskyldighet JSON object
+                var uppgiftsskyldighet =
+                {
+                    "Id": repId,
+                    "DelregisterId": repDelRegId,
+                    "SkyldigFrom": repSkyldigFrom,
+                    "SkyldigTom": repSkyldigTom,
+                    "RapporterarPerEnhet": repRapporterarPerEnhet,
+                    "OrganisationId": orgId
+                };
+                //Posting AdmUppgiftsskyldighet object to controller's Update action method
+                $.ajax({
+                    url: '/Organisation/UpdateOrganisationsReportObligation',
+                    data: JSON.stringify(uppgiftsskyldighet),
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(data) {
+                        //location.reload();
+                        $("#pageContainer").html(data);
+                        tr.find('.edit-mode, .display-mode').toggle();
+                        $('#footer').hide();
+                        //alert('Record updated Successfully!!');
+                    }
+                });
+
             });
 
-        });
+        $('.edit-user').on('click',
+            function() {
+                var tr = $(this).parents('tr:first');
+                var repId = tr.find("#RepId").html();
+                var repDelRegId = tr.find("#RepDelRegId").val();
+                var repSkyldigFrom = tr.find("#RepSkyldigFrom").val();
+                var repSkyldigTom = tr.find("#RepSkyldigTom").val();
+                var repRapporterarPerEnhet = tr.find("#RepRapporterarPerEnhet").val();
 
-        $('.edit-user').on('click', function () {
-            var tr = $(this).parents('tr:first');
-            var repId = tr.find("#RepId").html();
-            var repDelRegId = tr.find("#RepDelRegId").val();
-            var repSkyldigFrom = tr.find("#RepSkyldigFrom").val();
-            var repSkyldigTom = tr.find("#RepSkyldigTom").val();
-            var repRapporterarPerEnhet = tr.find("#RepRapporterarPerEnhet").val();
-
-            tr.find("#lblSkyldigFrom").text(repSkyldigFrom);
-            tr.find("#lblSkyldigTom").text(repSkyldigTom);
-            tr.find("#lblRappPerEnhet").text(repRapporterarPerEnhet);
-        });
-    })
+                tr.find("#lblSkyldigFrom").text(repSkyldigFrom);
+                tr.find("#lblSkyldigTom").text(repSkyldigTom);
+                tr.find("#lblRappPerEnhet").text(repRapporterarPerEnhet);
+            });
+    });
 </script>
 
-<style type="text/css">
-    .edit-mode {
-        font-weight: normal;
-    }
 
-    .edit-user {
-        font-weight: normal;
-    }
-
-        .edit-user display-mode {
-            font-weight: normal;
-        }
-
-    .save-user edit-mode {
-        font-weight: normal;
-    }
-
-    .display-mode {
-        font-weight: normal;
-    }
-
-    .cancel-user {
-        font-weight: normal;
-    }
-
-    .webgrid-table {
-        font-family: Arial,Helvetica,sans-serif;
-        font-size: 14px;
-        font-weight: normal;
-        width: 950px;
-        display: table;
-        border-collapse: collapse;
-        border: solid px #C5C5C5;
-        background-color: white;
-    }
-
-        .webgrid-table td, th {
-            border: 1px solid #C5C5C5;
-            padding: 3px 7px 2px;
-        }
-
-    .webgrid-header, .webgrid-header a {
-        background-color: #f9f9f9;
-        color: #494A4A;
-        text-align: left;
-        text-decoration: none;
-    }
-
-    .webgrid-footer {
-    }
-
-    .webgrid-row-style {
-        padding: 3px 7px 2px;
-    }
-
-    .webgrid-alternating-row {
-        background-color: #f9f9f9;
-        padding: 3px 7px 2px;
-    }
-
-    .colMinWidth {
-        width: 50px;
-        margin: -5px;
-        padding: 3px 7px 2px;
-    }
-
-    .col1Width {
-        width: 100px;
-        margin: -5px;
-        padding: 3px 7px 2px;
-    }
-
-    .col2Width {
-        width: 200px;
-        margin: -5px;
-        padding: 3px 7px 2px;
-    }
-
-    .col3Width {
-        width: 220px;
-        margin: -5px;
-        padding: 3px 7px 2px;
-    }
-
-    label {
-        font-weight: normal;
-        width: 100px;
-        padding: 3px 7px 2px;
-    }
-</style>
 
 @{
     ViewBag.Title = "Index";
@@ -163,7 +79,7 @@
 <div id="pageContainer">
     <div class="row">
         <div class="col-md-8 padding-top-55">
-            <h4>Editera uppgiftsskyldighet för organisation</h4>
+            <h4>Administrera uppgiftsskyldighet för organisation</h4>
             <br />
             <section id="orgForm">
                 @using (Html.BeginForm("GetOrganisationsReportObligations", "Organisation", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
@@ -190,62 +106,76 @@
 
     @if (Model != null)
     {
-        <br/><br/>
-        <hr/>
+        <br /><br />
+        <hr />
 
         @Html.ActionLink("Skapa ny uppgiftsskyldighet", "CreateReportObligation", "Organisation", new { orgId = Model.Organisation.Id }, null)
 
-    <div id="gridContent" style="font-family: Arial; padding: 20px;">
+        <div id="gridContent" style="font-family: Arial; padding: 20px;">
+            @{
+                ViewBag.Title = "Administrera uppgiftsskyldighet";
+                var grid = new WebGrid(source: Model.ReportObligations, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "reportObligationsGrid");
+                grid.Pager(WebGridPagerModes.All);
+            }
 
 
+            @grid.GetHtml(tableStyle: "webgrid-table",
+                             headerStyle: "webgrid-header",
+                             footerStyle: "webgrid-footer",
+                             alternatingRowStyle: "webgrid-alternating-row",
+                             selectedRowStyle: "webgrid-selected-row",
+                             rowStyle: "webgrid-row-style",
+                             mode: WebGridPagerModes.All,
+                             columns: grid.Columns(
+                                 grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="RepId" class="edit-mode colMinWidth">@item.Id</label></text>,style: "colMinWidth"),
+                                 grid.Column("Delregister", format: @<text><span class="display-mode">@item.DelregisterId</span>
+                                    <label id="lblRepDelRegId" class="edit-mode colMinWidth">@item.DelregisterId</label></text>,style: "colMinWidth"),
 
-        @{
-        ViewBag.Title = "Administrera uppgiftsskyldighet";
-        var grid = new WebGrid(source: Model.ReportObligations, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "reportObligationsGrid");
-        grid.Pager(WebGridPagerModes.All);
-        }
+                                grid.Column("Fr.o.m", "Fr.o.m", format: @<text><span class="display-mode">
+                                    <label id="lblSkyldigFrom">
+                                        @if (item.SkyldigFrom != null)
+                                        {
+                                            @item.SkyldigFrom.ToString("yyyy-MM-dd")
+                                        }
+                                        else
+                                        {
+                                            @item.SkyldigFrom
+                                        }
+                                    </label></span>
+                                    <input type="text" id="RepSkyldigFrom" value="@if (item.SkyldigFrom != null){@item.SkyldigFrom.ToString("yyyy-MM-dd")}else{@item.SkyldigFrom}" class="edit-mode form-control" /></text>, style: "col2Width"),
+
+                                    grid.Column("T.o.m", "T.o.m", format: @<text><span class="display-mode">
+                                        <label id="lblSkyldigTom">
+                                            @if (item.SkyldigTom != null)
+                                            {
+                                                @item.SkyldigTom.ToString("yyyy-MM-dd")
+                                            }
+                                            else
+                                            {
+                                                @item.SkyldigTom
+                                            }
+                                        </label></span>
+                                        <input type="text" id="RepSkyldigTom" value="@if (item.SkyldigTom != null){@item.SkyldigTom.ToString("yyyy-MM-dd")}else{@item.SkyldigTom}" class="edit-mode form-control" /></text>, style: "col2Width"),
+
+                                        grid.Column("Per enhet", "Per enhet", format: @<text><span class="display-mode"><label id="lblRappPerEnhet">@item.RapporterarPerEnhet</label></span>
+                                        <input type="text" id="RepRapporterarPerEnhet" value="@item.RapporterarPerEnhet.ToString()" class="edit-mode form-control" /></text>, style: "colMinWidth"),
 
 
-        @grid.GetHtml(tableStyle: "webgrid-table",
-                    headerStyle: "webgrid-header",
-                    footerStyle: "webgrid-footer",
-                    alternatingRowStyle: "webgrid-alternating-row",
-                    selectedRowStyle: "webgrid-selected-row",
-                    rowStyle: "webgrid-row-style",
-                    mode: WebGridPagerModes.All,
-                    columns: grid.Columns(
-                        grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="RepId" class="edit-mode colMinWidth">@item.Id</label></text>,
-                                          style: "colMinWidth"),
-                        grid.Column("Delregister", format: @<text><span class="display-mode">@item.DelregisterId</span><label id="lblRepDelRegId" class="edit-mode colMinWidth">@item.DelregisterId</label></text>,
-                            style: "colMinWidth"),
+                                        @*grid.Column("Per enhet", format: @<text> <span class="display-mode">@item.RapporterarPerEnhet</span><label id="lblRappPerEnhet" class="edit-mode col2Width">@item.RapporterarPerEnhet</label></text>,
+                                        style: "col1Width"),*@
 
-                        grid.Column("Fr.o.m", "Fr.o.m", format: @<text><span class="display-mode"><label id="lblSkyldigFrom">
-                        @if (item.SkyldigFrom != null){@item.SkyldigFrom.ToString("yyyy-MM-dd")}else{@item.SkyldigFrom}</label></span>
-                        <input type="text" id="RepSkyldigFrom" value="@if (item.SkyldigFrom != null){@item.SkyldigFrom.ToString("yyyy-MM-dd")}else{@item.SkyldigFrom}" class="edit-mode form-control" /></text>, style: "col2Width"),
-
-                        grid.Column("T.o.m", "T.o.m", format: @<text><span class="display-mode"><label id="lblSkyldigTom">
-                        @if (item.SkyldigTom != null){@item.SkyldigTom.ToString("yyyy-MM-dd")}else{@item.SkyldigTom}</label></span>
-                        <input type="text" id="RepSkyldigTom" value="@if (item.SkyldigTom != null){@item.SkyldigTom.ToString("yyyy-MM-dd")}else{@item.SkyldigTom}" class="edit-mode form-control" /></text>, style: "col2Width"),
-
-                        grid.Column("Per enhet", "Per enhet", format: @<text><span class="display-mode"><label id="lblRappPerEnhet">@item.RapporterarPerEnhet</label></span>
-                        <input type="text" id="RepRapporterarPerEnhet" value="@item.RapporterarPerEnhet.ToString()" class="edit-mode form-control" /></text>, style: "colMinWidth"),
+                                        @*grid.Column("Per enhet", "Per enhet", format: @<text><span class="display-mode col1Width"><label id="lblRappPerEnhet">@item.RapporterarPerEnhet</label></span>
+                                        <input type="text" id="RepRapporterarPerEnhet" value="@item.RapporterarPerEnhet" class="edit-mode form-control" /></text>, style: "col1Width"),*@
 
 
-                        @*grid.Column("Per enhet", format: @<text> <span class="display-mode">@item.RapporterarPerEnhet</span><label id="lblRappPerEnhet" class="edit-mode col2Width">@item.RapporterarPerEnhet</label></text>,
-                                style: "col1Width"),*@
+                                        grid.Column("Action", format: @<text>
+                                        <button class="edit-user display-mode btn btn-default">Ändra</button>
+                                        <button class="save-user edit-mode btn btn-default">Spara</button>
+                                        <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                                        </text>, style: "col3Width", canSort: false)
+                                                                                                                                                                                                                                                                                           ))
 
-                        @*grid.Column("Per enhet", "Per enhet", format: @<text><span class="display-mode col1Width"><label id="lblRappPerEnhet">@item.RapporterarPerEnhet</label></span>
-                        <input type="text" id="RepRapporterarPerEnhet" value="@item.RapporterarPerEnhet" class="edit-mode form-control" /></text>, style: "col1Width"),*@
-
-
-                                                grid.Column("Action", format: @<text>
-                                                    <button class="edit-user display-mode btn btn-default">Ändra</button>
-                                                    <button class="save-user edit-mode btn btn-default">Spara</button>
-                                                    <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-                                                </text>, style: "col3Width", canSort: false)
-                                                                                                                                                                                                                                  ))
-
-    </div>
+        </div>
     }
 </div>
 

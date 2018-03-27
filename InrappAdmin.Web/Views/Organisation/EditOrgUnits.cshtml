@@ -1,5 +1,6 @@
 ﻿@model InrappAdmin.Web.Models.ViewModels.OrganisationViewModels.OrganisationViewModel
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">
 
@@ -8,152 +9,65 @@
     });
 
 
-    $(function () {
+    $(function() {
         $('.edit-mode').hide();
-        $('.edit-user, .cancel-user').on('click', function () {
-            var tr = $(this).parents('tr:first');
-            tr.find('.edit-mode, .display-mode').toggle();
-        });
-        $('.save-user').on('click', function () {
-            var tr = $(this).parents('tr:first');
-            var orgUnitId = tr.find("#OrgUnitId").html();
-            var orgUnitName = tr.find("#OrgUnitName").val();
-            var orgUnitCode = tr.find("#OrgUnitCode").val();
-            var orgUnitActiveFrom = tr.find("#OrgUnitAktivFrom").val();
-            var orgUnitActiveTom = tr.find("#OrgUnitAktivTom").val();
+        $('.edit-user, .cancel-user').on('click',
+            function() {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+        $('.save-user').on('click',
+            function() {
+                var tr = $(this).parents('tr:first');
+                var orgUnitId = tr.find("#OrgUnitId").html();
+                var orgUnitName = tr.find("#OrgUnitName").val();
+                var orgUnitCode = tr.find("#OrgUnitCode").val();
+                var orgUnitActiveFrom = tr.find("#OrgUnitAktivFrom").val();
+                var orgUnitActiveTom = tr.find("#OrgUnitAktivTom").val();
 
-            //Creating Organisationsenhet JSON object
-            var orgUnit =
-            {
-                "Id": orgUnitId,
-                "Enhetsnamn": orgUnitName,
-                "Enhetskod": orgUnitCode,
-                "AktivFrom": orgUnitActiveFrom,
-                "AktivTom": orgUnitActiveTom
-            };
-            //Posting Organisationsenhet object to controller's Update action method
-            $.ajax({
-                url: '/Organisation/UpdateOrganisationsOrgUnit',
-                data: JSON.stringify(orgUnit),
-                type: 'POST',
-                contentType: 'application/json; charset=utf-8',
-                success: function (data) {
-                    //location.reload();
-                    $("#pageContainer").html(data);
-                    tr.find('.edit-mode, .display-mode').toggle();
-                    $('#footer').hide();
-                    //alert('Record updated Successfully!!');
-                }
+                //Creating Organisationsenhet JSON object
+                var orgUnit =
+                {
+                    "Id": orgUnitId,
+                    "Enhetsnamn": orgUnitName,
+                    "Enhetskod": orgUnitCode,
+                    "AktivFrom": orgUnitActiveFrom,
+                    "AktivTom": orgUnitActiveTom
+                };
+                //Posting Organisationsenhet object to controller's Update action method
+                $.ajax({
+                    url: '/Organisation/UpdateOrganisationsOrgUnit',
+                    data: JSON.stringify(orgUnit),
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(data) {
+                        //location.reload();
+                        $("#pageContainer").html(data);
+                        tr.find('.edit-mode, .display-mode').toggle();
+                        $('#footer').hide();
+                        //alert('Record updated Successfully!!');
+                    }
+                });
+
             });
 
-        });
+        $('.edit-user').on('click',
+            function() {
+                var tr = $(this).parents('tr:first');
+                var orgUnitId = tr.find("#OrgUnitId").html();
+                var orgUnitName = tr.find("#OrgUnitName").val();
+                var orgUnitCode = tr.find("#OrgUnitCode").val();
+                var orgUnitActiveFrom = tr.find("#OrgUnitAktivFrom").val();
+                var orgUnitActiveTom = tr.find("#OrgUnitAktivTom").val();
 
-        $('.edit-user').on('click', function () {
-            var tr = $(this).parents('tr:first');
-            var orgUnitId = tr.find("#OrgUnitId").html();
-            var orgUnitName = tr.find("#OrgUnitName").val();
-            var orgUnitCode = tr.find("#OrgUnitCode").val();
-            var orgUnitActiveFrom = tr.find("#OrgUnitAktivFrom").val();
-            var orgUnitActiveTom = tr.find("#OrgUnitAktivTom").val();
-
-            tr.find("#lblName").text(orgUnitName);
-            tr.find("#lblCode").text(orgUnitCode);
-            tr.find("#lblAktivFrom").text(orgUnitActiveFrom);
-            tr.find("#lblAktivTom").text(orgUnitActiveTom);
-        });
-    })
+                tr.find("#lblName").text(orgUnitName);
+                tr.find("#lblCode").text(orgUnitCode);
+                tr.find("#lblAktivFrom").text(orgUnitActiveFrom);
+                tr.find("#lblAktivTom").text(orgUnitActiveTom);
+            });
+    });
 </script>
 
-<style type="text/css">
-    .edit-mode {
-        font-weight: normal;
-    }
-
-    .edit-user {
-        font-weight: normal;
-    }
-
-        .edit-user display-mode {
-            font-weight: normal;
-        }
-
-    .save-user edit-mode {
-        font-weight: normal;
-    }
-
-    .display-mode {
-        font-weight: normal;
-    }
-
-    .cancel-user {
-        font-weight: normal;
-    }
-
-    .webgrid-table {
-        font-family: Arial,Helvetica,sans-serif;
-        font-size: 14px;
-        font-weight: normal;
-        width: 950px;
-        display: table;
-        border-collapse: collapse;
-        border: solid px #C5C5C5;
-        background-color: white;
-    }
-
-        .webgrid-table td, th {
-            border: 1px solid #C5C5C5;
-            padding: 3px 7px 2px;
-        }
-
-    .webgrid-header, .webgrid-header a {
-        background-color: #f9f9f9;
-        color: #494A4A;
-        text-align: left;
-        text-decoration: none;
-    }
-
-    .webgrid-footer {
-    }
-
-    .webgrid-row-style {
-        padding: 3px 7px 2px;
-    }
-
-    .webgrid-alternating-row {
-        background-color: #f9f9f9;
-        padding: 3px 7px 2px;
-    }
-
-    .colMinWidth {
-        width: 50px;
-        margin: -5px;
-        padding: 3px 7px 2px;
-    }
-
-    .col1Width {
-        width: 100px;
-        margin: -5px;
-        padding: 3px 7px 2px;
-    }
-
-    .col2Width {
-        width: 200px;
-        margin: -5px;
-        padding: 3px 7px 2px;
-    }
-
-    .col3Width {
-        width: 220px;
-        margin: -5px;
-        padding: 3px 7px 2px;
-    }
-
-    label {
-        font-weight: normal;
-        width: 100px;
-        padding: 3px 7px 2px;
-    }
-</style>
 
 @{
     ViewBag.Title = "Index";
@@ -163,7 +77,7 @@
 <div id="pageContainer">
     <div class="row">
         <div class="col-md-8 padding-top-55">
-            <h4>Editera organisationsenheter för organisation</h4>
+            <h4>Administrera organisationsenheter för organisation</h4>
             <br />
             <section id="orgForm">
                 @using (Html.BeginForm("GetOrganisationsOrgUnits", "Organisation", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))

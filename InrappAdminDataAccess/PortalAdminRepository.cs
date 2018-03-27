@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using InrappAdmin.DataAccess;
 using InrappAdmin.DomainModel;
+using Microsoft.Owin.Security;
 
 namespace InrappAdmin.DataAccess
 {
@@ -148,6 +149,36 @@ namespace InrappAdmin.DataAccess
             return pageInfoId;
         }
 
+        public IEnumerable<AdmRegister> GetDirectories()
+        {
+            var registers = DbContext.AdmRegister.ToList();
+            return registers;
+        }
+
+        public AdmRegister GetDirectoryByShortName(string shortName)
+        {
+            var register = DbContext.AdmRegister.SingleOrDefault(x => x.Kortnamn == shortName);
+            return register;
+        }
+
+        public AdmRegister GetDirectoryById(int dirId)
+        {
+            var register = DbContext.AdmRegister.SingleOrDefault(x => x.Id == dirId);
+            return register;
+        }
+
+        public IEnumerable<AdmDelregister> GetSubDirectories()
+        {
+            var subDirectories = DbContext.AdmDelregister.ToList();
+            return subDirectories;
+        }
+
+        public IEnumerable<AdmDelregister> GetSubDirectoriesForDirectory(int dirId)
+        {
+            var subDirectories = DbContext.AdmDelregister.Where(x => x.RegisterId == dirId).ToList();
+            return subDirectories;
+        }
+
         public void CreateOrgUnit(Organisationsenhet orgUnit)
         {
             DbContext.Organisationsenhet.Add(orgUnit);
@@ -176,6 +207,12 @@ namespace InrappAdmin.DataAccess
         public void CreateReportObligation(AdmUppgiftsskyldighet uppgSk)
         {
             DbContext.AdmUppgiftsskyldighet.Add(uppgSk);
+            DbContext.SaveChanges();
+        }
+
+        public void CreateSubDirectory(AdmDelregister subDir)
+        {
+            DbContext.AdmDelregister.Add(subDir);
             DbContext.SaveChanges();
         }
 
@@ -253,6 +290,27 @@ namespace InrappAdmin.DataAccess
             var infoTextDb = DbContext.AdmInformation.Where(x => x.Id == infoText.Id).Select(x => x).SingleOrDefault();
             infoTextDb.Informationstyp = infoText.Informationstyp;
             infoTextDb.Text = infoText.Text;
+            DbContext.SaveChanges();
+        }
+
+        public void UpdateDirectory(AdmRegister directory)
+        {
+            var registerToUpdate = DbContext.AdmRegister.Where(x => x.Id == directory.Id).SingleOrDefault();
+            registerToUpdate.Registernamn = directory.Registernamn;
+            registerToUpdate.Beskrivning = directory.Beskrivning;
+            registerToUpdate.Kortnamn = directory.Kortnamn;
+            registerToUpdate.Inrapporteringsportal = directory.Inrapporteringsportal;
+            DbContext.SaveChanges();
+        }
+
+        public void UpdateSubDirectory(AdmDelregister subDirectory)
+        {
+            var subDirectoryToUpdate = DbContext.AdmDelregister.Where(x => x.Id == subDirectory.Id).SingleOrDefault();
+            subDirectoryToUpdate.Delregisternamn = subDirectory.Delregisternamn;
+            subDirectoryToUpdate.Beskrivning = subDirectory.Beskrivning;
+            subDirectoryToUpdate.Kortnamn = subDirectory.Kortnamn;
+            subDirectoryToUpdate.Inrapporteringsportal = subDirectory.Inrapporteringsportal;
+            subDirectoryToUpdate.Slussmapp = subDirectory.Slussmapp;
             DbContext.SaveChanges();
         }
 

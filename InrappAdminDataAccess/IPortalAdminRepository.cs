@@ -45,8 +45,18 @@ namespace InrappAdmin.DataAccess
         IEnumerable<AdmKonfiguration> GetAdmConfiguration();
 
         AdmInformation GetInfoText(string infoType);
-
+        
         int GetPageInfoTextId(string pageType);
+
+        AdmRegister GetDirectoryByShortName(string shortName);
+
+        AdmRegister GetDirectoryById(int dirId);
+
+        IEnumerable<AdmRegister> GetDirectories();
+
+        IEnumerable<AdmDelregister> GetSubDirectories();
+
+        IEnumerable<AdmDelregister> GetSubDirectoriesForDirectory(int dirId);
 
         void CreateOrgUnit(Organisationsenhet orgUnit);
 
@@ -56,6 +66,8 @@ namespace InrappAdmin.DataAccess
 
         void CreateInformationText(AdmInformation infoText);
         void CreateReportObligation(AdmUppgiftsskyldighet uppgSk);
+
+        void CreateSubDirectory(AdmDelregister subDir);
 
         void UpdateOrganisation(Organisation org);
 
@@ -70,6 +82,10 @@ namespace InrappAdmin.DataAccess
         void UpdateFAQ(AdmFAQ faq);
 
         void UpdateInfoText(AdmInformation infoText);
+
+        void UpdateDirectory(AdmRegister directory);
+
+        void UpdateSubDirectory(AdmDelregister subDirectory);
 
         void SaveOpeningHours(AdmKonfiguration admKonf);
 

@@ -38,6 +38,16 @@ namespace InrappAdmin.ApplicationService.Interface
 
         string HamtaInfoText(string infoTyp);
 
+        IEnumerable<AdmRegister> HamtaRegister();
+
+        AdmRegister HamtaRegisterMedKortnamn(string regKortNamn);
+
+        AdmRegister HamtaRegisterMedId(int regId);
+
+        IEnumerable<AdmDelregister> HamtaDelRegister();
+
+        IEnumerable<AdmDelregister> HamtaDelRegisterForRegister(int regId);
+
         void SkapaOrganisationsenhet(Organisationsenhet orgUnit);
 
         void SkapaFAQKategori(AdmFAQKategori faqKategori);
@@ -47,6 +57,8 @@ namespace InrappAdmin.ApplicationService.Interface
         void SkapaInformationsText(AdmInformation infoText);
 
         void SkapaUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSk);
+
+        void SkapaDelregister(AdmDelregister delReg);
 
         void UppdateraOrganisation(Organisation org);
 
@@ -61,6 +73,10 @@ namespace InrappAdmin.ApplicationService.Interface
         void UppdateraFAQ(AdmFAQ faq);
 
         void UppdateraInformationstext(AdmInformation infoText);
+
+        void UppdateraRegister(AdmRegister register);
+
+        void UppdateraDelregister(AdmDelregister delregister);
 
         void SparaOppettider(OpeningHoursInfoDTO oppetTider);
 

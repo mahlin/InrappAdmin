@@ -156,6 +156,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrganisationController.cs" />
+    <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\SystemController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -163,6 +164,7 @@
     <Compile Include="Helpers\ErrorManager.cs" />
     <Compile Include="Helpers\FileLogWriter.cs" />
     <Compile Include="Models\CustomErrorPageModel.cs" />
+    <Compile Include="Models\ViewModels\RegisterViewModels.cs" />
     <Compile Include="Models\ViewModels\SystemViewModels.cs" />
     <Compile Include="Models\ViewModels\OrganisationViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -246,6 +248,9 @@
     <Content Include="Views\System\EditOpeningHours.cshtml" />
     <Content Include="Views\System\_EditText.cshtml" />
     <Content Include="Views\Organisation\CreateReportObligation.cshtml" />
+    <Content Include="Views\Register\Index.cshtml" />
+    <Content Include="Views\Register\EditSubDirectories.cshtml" />
+    <Content Include="Views\Register\CreateSubDirectory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

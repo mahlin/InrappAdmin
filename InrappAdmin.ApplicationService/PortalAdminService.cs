@@ -138,6 +138,36 @@ namespace InrappAdmin.ApplicationService
             return info.Text;
         }
 
+        public IEnumerable<AdmRegister> HamtaRegister()
+        {
+            var registerList = _portalAdminRepository.GetDirectories();
+            return registerList;
+        }
+
+        public AdmRegister HamtaRegisterMedKortnamn(string regKortNamn)
+        {
+            var register = _portalAdminRepository.GetDirectoryByShortName(regKortNamn);
+            return register;
+        }
+
+        public AdmRegister HamtaRegisterMedId(int regId)
+        {
+            var register = _portalAdminRepository.GetDirectoryById(regId);
+            return register;
+        }
+
+        public IEnumerable<AdmDelregister> HamtaDelRegister()
+        {
+            var subDirectories = _portalAdminRepository.GetSubDirectories();
+            return subDirectories;
+        }
+
+        public IEnumerable<AdmDelregister> HamtaDelRegisterForRegister(int regId)
+        {
+            var subDirectories = _portalAdminRepository.GetSubDirectoriesForDirectory(regId);
+            return subDirectories;
+        }
+
         public void SkapaOrganisationsenhet(Organisationsenhet orgUnit)
         {
             //Sätt datum och användare
@@ -191,6 +221,16 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.CreateReportObligation(uppgSk);
         }
 
+        public void SkapaDelregister(AdmDelregister delReg)
+        {
+            //Sätt datum och användare
+            delReg.SkapadDatum = DateTime.Now;
+            delReg.SkapadAv = "InrappAdmin";
+            delReg.AndradDatum = DateTime.Now;
+            delReg.AndradAv = "InrappAdmin";
+            _portalAdminRepository.CreateSubDirectory(delReg);
+        }
+
         public void UppdateraOrganisation(Organisation org)
         {
             //Sätt datum och användare
@@ -240,6 +280,16 @@ namespace InrappAdmin.ApplicationService
             infoText.AndradDatum = DateTime.Now;
             infoText.AndradAv = "InrappAdmin";
             _portalAdminRepository.UpdateInfoText(infoText);
+        }
+
+        public void UppdateraRegister(AdmRegister register)
+        {
+            _portalAdminRepository.UpdateDirectory(register);
+        }
+
+        public void UppdateraDelregister(AdmDelregister delregister)
+        {
+            _portalAdminRepository.UpdateSubDirectory(delregister);
         }
 
         public void SparaOppettider(OpeningHoursInfoDTO oppetTider)
