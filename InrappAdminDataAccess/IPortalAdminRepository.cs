@@ -67,6 +67,8 @@ namespace InrappAdmin.DataAccess
         void CreateInformationText(AdmInformation infoText);
         void CreateReportObligation(AdmUppgiftsskyldighet uppgSk);
 
+        void CreateDirectory(AdmRegister dir);
+
         void CreateSubDirectory(AdmDelregister subDir);
 
         void UpdateOrganisation(Organisation org);

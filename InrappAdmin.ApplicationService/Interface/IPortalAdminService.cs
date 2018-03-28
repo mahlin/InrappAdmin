@@ -58,6 +58,8 @@ namespace InrappAdmin.ApplicationService.Interface
 
         void SkapaUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSk);
 
+        void SkapaRegister(AdmRegister reg);
+
         void SkapaDelregister(AdmDelregister delReg);
 
         void UppdateraOrganisation(Organisation org);

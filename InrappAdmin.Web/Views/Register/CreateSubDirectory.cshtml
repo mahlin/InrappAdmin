@@ -1,4 +1,4 @@
-﻿@model InrappAdmin.Web.Models.ViewModels.RegisterViewModels
+﻿@model InrappAdmin.Web.Models.ViewModels.RegisterViewModels.AdmDelregisterViewModel
 
 @{
     ViewBag.Title = "Skapa nytt delregister";
@@ -11,53 +11,69 @@
     //});
 </script>
 
-@using (Html.BeginForm("CreateSubDirectory", "Register", FormMethod.Post))
+    @using (Html.BeginForm("CreateSubDirectory", "Register", FormMethod.Post))
     {
+        var x = Model.RegisterShortName;
         @Html.AntiForgeryToken()
-        @Html.HiddenFor(m => m.SelectedDirectoryId)
+        @Html.HiddenFor(m => m.RegisterId)
+        @Html.HiddenFor(m => m.RegisterShortName)
 
         <div class="form-horizontal padding-top-55">
             <h4>Skapa delregister</h4>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
-                @Html.LabelFor(model => model.SelectedDirectoryId, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.RegisterShortName, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.TextBoxFor(model => model.SelectedDirectoryId, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
-                </div>
-            </div>
-
-            @*<div class="form-group">
-                @Html.LabelFor(model => model.Enhetsnamn, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Enhetsnamn, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Enhetsnamn, "", new { @class = "text-danger" })
+                    @Html.TextBoxFor(model => model.RegisterShortName, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.Enhetskod, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.Delregisternamn, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Enhetskod, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Enhetskod, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.Delregisternamn, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Delregisternamn, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.AktivFrom, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.Beskrivning, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.AktivFrom, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.AktivFrom, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.Beskrivning, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Beskrivning, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.AktivTom, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.Kortnamn, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.AktivTom, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.AktivTom, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.Kortnamn, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Kortnamn, "", new { @class = "text-danger" })
                 </div>
-            </div>*@
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Slussmapp, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => Model.Slussmapp, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Slussmapp, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Slussmapp, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => Model.Slussmapp, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Slussmapp, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Inrapporteringsportal, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => Model.Inrapporteringsportal, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Inrapporteringsportal, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
@@ -66,7 +82,7 @@
             </div>
         </div>
         <div>
-            @Html.ActionLink("Tillbaka", "GetSubDirectoriesForDirectory", "Register", new { orgId = Model.SelectedDirectoryId }, null)
+            @Html.ActionLink("Tillbaka", "GetSubDirectoriesForDirectory", "Register", new { regShortName = Model.RegisterShortName }, null)
 
         </div>
     }

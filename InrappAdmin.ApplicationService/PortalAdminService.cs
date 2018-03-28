@@ -221,6 +221,16 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.CreateReportObligation(uppgSk);
         }
 
+        public void SkapaRegister(AdmRegister reg)
+        {
+            //Sätt datum och användare
+            reg.SkapadDatum = DateTime.Now;
+            reg.SkapadAv = "InrappAdmin";
+            reg.AndradDatum = DateTime.Now;
+            reg.AndradAv = "InrappAdmin"; 
+            _portalAdminRepository.CreateDirectory(reg);
+        }
+
         public void SkapaDelregister(AdmDelregister delReg)
         {
             //Sätt datum och användare

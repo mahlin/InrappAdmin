@@ -1,5 +1,5 @@
 ﻿@using InrappAdmin.Web.Models.ViewModels
-@model InrappAdmin.Web.Models.ViewModels.RegisterViewModels
+@model InrappAdmin.Web.Models.ViewModels.RegisterViewModels.RegisterViewModel
 @{
     ViewBag.Title = "Register";
 }
@@ -73,7 +73,7 @@
             <section id="registerForm">
                 <br /><br />
                 <hr />
-                @*@Html.ActionLink("Skapa nytt register", "CreateRegister", "Register", new { orgId = Model.Registers.Id }, null)*@
+                @Html.ActionLink("Skapa nytt register", "CreateDirectory", "Register")
 
                 <div id="gridContent" style="font-family: Arial; padding: 20px;">
                     @{

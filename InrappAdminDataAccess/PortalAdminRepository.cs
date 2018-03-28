@@ -210,6 +210,12 @@ namespace InrappAdmin.DataAccess
             DbContext.SaveChanges();
         }
 
+        public void CreateDirectory(AdmRegister dir)
+        {
+            DbContext.AdmRegister.Add(dir);
+            DbContext.SaveChanges();
+        }
+
         public void CreateSubDirectory(AdmDelregister subDir)
         {
             DbContext.AdmDelregister.Add(subDir);

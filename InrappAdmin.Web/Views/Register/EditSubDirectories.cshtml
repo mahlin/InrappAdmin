@@ -1,4 +1,4 @@
-﻿@model InrappAdmin.Web.Models.ViewModels.RegisterViewModels
+﻿@model InrappAdmin.Web.Models.ViewModels.RegisterViewModels.RegisterViewModel
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
 
@@ -112,7 +112,7 @@
         <br/><br/>
         <hr/>
 
-        @Html.ActionLink("Skapa nytt delregister", "CreateSubDirectory", "Register", new { orgId = Model.RegisterShortName }, null)
+        @Html.ActionLink("Skapa nytt delregister", "CreateSubDirectory", "Register", new { regShortName = Model.RegisterShortName }, null)
  
         <div id="gridContent" style="font-family: Arial; padding: 20px;">
             @{

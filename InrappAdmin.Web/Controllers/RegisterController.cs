@@ -28,7 +28,7 @@ namespace InrappAdmin.Web.Controllers
         // GET: Register
         public ActionResult Index()
         {
-            var model = new RegisterViewModels();
+            var model = new RegisterViewModels.RegisterViewModel();
             try
             {
                 model.Registers = _portalAdminService.HamtaRegister();
@@ -56,10 +56,11 @@ namespace InrappAdmin.Web.Controllers
         // GET
         public ActionResult GetSubDirectoriesForDirectory(string regShortName = "")
         {
-            var model = new RegisterViewModels();
+            var model = new RegisterViewModels.RegisterViewModel();
             try
             {
                 var register = _portalAdminService.HamtaRegisterMedKortnamn(regShortName);
+                model.RegisterShortName = regShortName;
                 model.DelRegisters = _portalAdminService.HamtaDelRegisterForRegister(register.Id);
             }
             catch (Exception e)
@@ -161,6 +162,58 @@ namespace InrappAdmin.Web.Controllers
             }
             return RedirectToAction("GetSubDirectoriesForDirectory", new { regShortName = regShortName });
 
+        }
+
+        // GET
+        public ActionResult CreateDirectory()
+        {
+            return View();
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateDirectory(RegisterViewModels.AdmRegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    AdmRegister register = new AdmRegister
+                    {
+                        Registernamn = model.Registernamn,
+                        Beskrivning = model.Beskrivning,
+                        Kortnamn = model.Kortnamn,
+                        Inrapporteringsportal = model.Inrapporteringsportal
+                    };
+                    _portalAdminService.SkapaRegister(register);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("RegisterController", "CreateDirectory", e.ToString(), e.HResult, "InrappAdmin");
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade när nytt register skulle sparas.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
+                return RedirectToAction("Index");
+            }
+
+            return View();
+        }
+
+
+        // GET
+        public ActionResult CreateSubDirectory(string regShortName)
+        {
+            var model = new RegisterViewModels.AdmDelregisterViewModel();
+            var register = _portalAdminService.HamtaRegisterMedKortnamn(regShortName);
+            model.RegisterShortName = register.Kortnamn;
+            model.RegisterId = register.Id;
+            return View(model);
         }
 
         // POST

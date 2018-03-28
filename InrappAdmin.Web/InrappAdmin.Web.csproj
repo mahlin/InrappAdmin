@@ -251,6 +251,7 @@
     <Content Include="Views\Register\Index.cshtml" />
     <Content Include="Views\Register\EditSubDirectories.cshtml" />
     <Content Include="Views\Register\CreateSubDirectory.cshtml" />
+    <Content Include="Views\Register\CreateDirectory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
