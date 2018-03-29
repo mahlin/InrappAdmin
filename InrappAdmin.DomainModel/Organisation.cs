@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -21,10 +22,14 @@ namespace InrappAdmin.DomainModel
         public string Postnr { get; set; }
         public string Postort { get; set; }
         public string Epostdoman { get; set; }
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? AktivFrom { get; set; }
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? AktivTom { get; set; }
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime SkapadDatum { get; set; }
         public string SkapadAv { get; set; }
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime AndradDatum { get; set; }
         public string AndradAv { get; set; }
         public virtual ICollection<ApplicationUser> Users { get; set; }

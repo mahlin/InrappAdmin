@@ -37,10 +37,6 @@ namespace InrappAdmin.Web.Controllers
                 foreach (var register in registerList)
                 {
                     var registerView = new RegisterViewModels.AdmRegisterViewModel();
-                    if (register.Beskrivning.Length > 15)
-                    {
-                        registerView.ShortedText = register.Beskrivning.Substring(0, 15) + "... ";
-                    }
                     registerView.Id = register.Id;
                     registerView.Beskrivning = register.Beskrivning;
                     registerView.Kortnamn = register.Kortnamn;

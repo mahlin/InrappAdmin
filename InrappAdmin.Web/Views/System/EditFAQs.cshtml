@@ -101,7 +101,7 @@
 
 
 @{
-    ViewBag.Title = "FAQ";
+    ViewBag.Title = "Frågor för FAQ-kategori";
 }
 
 <div class="modal fade ui-widget-content" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal">
@@ -122,7 +122,7 @@
 
 <div id="pageContainer" class="padding-top-55">
 
-    <h4>Administrera FAQs</h4>
+    <h4>Frågor för FAQ-kategori @Html.Raw(Json.Encode(Model.SelectedFAQCategory))</h4>
     <br />
 
     @if (Model != null)
@@ -154,21 +154,21 @@
                                rowStyle: "webgrid-row-style",
                                mode: WebGridPagerModes.All,
                                columns: grid.Columns(
-                                   grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="FAQId" class="edit-mode col2Width">@item.Id</label></text>,
+                                grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="FAQId" class="edit-mode col2Width">@item.Id</label></text>,
                                                 style: "col1Width"),
-                                            grid.Column("Register", "Register", format: @<text><span class="display-mode"><label id="lblRegisterId">@item.RegisterId</label></span>
-                                            <input type="text" id="FAQRegisterId" value="@item.RegisterId" class="edit-mode form-control" /></text>, style: "col1Width"),
-                                                         grid.Column("Fråga", "Fraga", format: @<text> <span class="display-mode"><label id="lblFraga">@item.Fraga</label></span>
-                                                        <input type="text" id="FAQFraga" value="@item.Fraga" class="edit-mode form-control" /></text>, style: "col2Width"),
-                                                                     grid.Column("Svar", "Svar", format: @<text> <span class="display-mode"><label id="lblSvar">@item.Svar</label></span>
-                                                                    <input type="text" id="FAQSvar" value="@item.Svar" TextWrapping="Wrap" class="edit-mode form-control" /></text>, style: "col3Width"),
+                                grid.Column("Register", "Register", format: @<text><span class="display-mode"><label id="lblRegisterId">@item.RegisterId</label></span>
+                                <input type="text" id="FAQRegisterId" value="@item.RegisterId" class="edit-mode form-control" /></text>, style: "col1Width"),
+                                grid.Column("Fråga", "Fraga", format: @<text> <span class="display-mode"><label id="lblFraga" class="longColumnText" style="width: 200px;">@item.Fraga</label></span>
+                                <textarea type="text" id="FAQFraga"  class="edit-mode form-control" style="height: 200px; width: 300px;">@item.Fraga</textarea></text>, style: "col2Width"),
+                                grid.Column("Svar", "Svar", format: @<text> <span class="display-mode"><label id="lblSvar" class="longColumnText" style="width: 200px;">@item.Svar</label></span>
+                                <textarea type="text" id="FAQSvar" TextWrapping="Wrap" class="edit-mode form-control" style="height: 200px; width: 300px;">@item.Svar</textarea></text>, style: "col3Width"),
 
-                                                                                 grid.Column("Action", format: @<text>
-                                                                                    <button class="edit-user display-mode btn btn-default">Ändra</button>
-                                                                                    <button class="display-mode btn btn-default" onclick="deleteFAQ(@item.Id,'@item.Fraga');return false;">Ta bort</button>
-                                                                                    <button class="save-user edit-mode btn btn-default">Spara</button>
-                                                                                    <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-                                                                                </text>, style: "col3Width", canSort: false)))
+                                grid.Column("Action", format: @<text>
+                                <button class="edit-user display-mode btn btn-default">Ändra</button>
+                                <button class="display-mode btn btn-default" onclick="deleteFAQ(@item.Id,'@item.Fraga');return false;">Ta bort</button>
+                                <button class="save-user edit-mode btn btn-default">Spara</button>
+                                <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                            </text>, style: "col3Width", canSort: false)))
         </div>
     }
 </div>

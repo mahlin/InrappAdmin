@@ -4,8 +4,14 @@
     ViewBag.Title = "Skapa ny informationstext";
 }
 
+<script>
+    $(function () {
+        $("#txtTyp").focus();
+    });
+</script>
 
-    @using (Html.BeginForm("CreateInformationText", "System", FormMethod.Post))
+
+@using (Html.BeginForm("CreateInformationText", "System", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
 
@@ -17,7 +23,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Informationstyp, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Informationstyp, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.Informationstyp, new { htmlAttributes = new { @class = "form-control", id = "txtTyp" } })
                     @Html.ValidationMessageFor(model => model.Informationstyp, "", new { @class = "text-danger" })
                 </div>
             </div>

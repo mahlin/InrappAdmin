@@ -122,9 +122,9 @@
  
         <div id="gridContent" style="font-family: Arial; padding: 20px;">
             @{
-        ViewBag.Title = "Administrera delregister";
-        var grid = new WebGrid(source: Model.DelRegisters, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "subDirectoriesGrid");
-        grid.Pager(WebGridPagerModes.All);
+                ViewBag.Title = "Administrera delregister";
+                var grid = new WebGrid(source: Model.DelRegisters, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "subDirectoriesGrid");
+                grid.Pager(WebGridPagerModes.All);
             }
 
 
@@ -152,12 +152,11 @@
 
 
 
-     grid.Column("Action", format: @<text>
-            <button class="edit-user display-mode btn btn-default">Ändra</button>
-            <button class="save-user edit-mode btn btn-default">Spara</button>
-            <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-        </text>, style: "col3Width", canSort: false)))
-
+                 grid.Column("Action", format: @<text>
+                        <button class="edit-user display-mode btn btn-default">Ändra</button>
+                        <button class="save-user edit-mode btn btn-default">Spara</button>
+                        <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                    </text>, style: "col3Width", canSort: false)))
         </div>
     }
 </div>

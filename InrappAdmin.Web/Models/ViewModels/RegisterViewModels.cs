@@ -29,7 +29,6 @@ namespace InrappAdmin.Web.Models.ViewModels
             public int Id { get; set; }
             public string Registernamn { get; set; }
             public string Beskrivning { get; set; }
-            public string ShortedText { get; set; }
             public string Kortnamn { get; set; }
             public bool Inrapporteringsportal { get; set; }
 

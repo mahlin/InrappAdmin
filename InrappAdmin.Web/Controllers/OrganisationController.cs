@@ -293,6 +293,7 @@ namespace InrappAdmin.Web.Controllers
                 }
                 var contactView = new OrganisationViewModels.ApplicationUserViewModel
                 {
+                    ID = contact.Id,
                     OrganisationId = contact.OrganisationId,
                     Namn = contact.Namn,
                     AktivFrom = contact.AktivFrom,

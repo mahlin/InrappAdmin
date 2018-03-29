@@ -7,7 +7,6 @@
 
     $(document).ready(function () {
 
-        $('td:nth-child(1),th:nth-child(1)').hide();
         var modalConfirm = function test(callback) {
             $("#modal-btn-si").on("click", function () {
                 callback(true);
@@ -45,6 +44,16 @@
     $(function () {
         $("#txtKommunkod").focus();
     });
+
+    //$(function () {
+    //    $('th a, tfoot a').click(function () {
+    //        alert("Klick! KOd: " + $('#SelectedCountyCode').val());
+    //        $('#SelectedCountyCode').val($('#Kommunkod').val());
+    //        alert("Klick!2 " + $('#SelectedCountyCode').val());
+    //        //$('form').attr('action', $(this).attr('href')).submit();
+    //        //return false;
+    //    });
+    //});
 
     function deleteContact(id, name) {
         $('#SelectedContactId').val(id);
@@ -133,9 +142,9 @@
             <h4>Administrera kontaktpersoner för organisation</h4>
             <br />
             <section id="orgForm">
-                @using (Html.BeginForm("GetOrganisationsContacts", "Organisation", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                @using (Html.BeginForm("GetOrganisationsContacts", "Organisation", new {ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
-                    @Html.HiddenFor(m => m.SelectedContactId)
+                    @Html.HiddenFor(m => m.SelectedCountyCode)
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="form-group">
@@ -158,87 +167,45 @@
 
     @if (Model != null)
     {
-
         <div id="gridContent" style="font-family: Arial; padding: 20px;">
 
+        @{
+        ViewBag.Title = "Administrera kontaktpersoner";
+        var grid = new WebGrid(source: Model.ContactPersons, canPage: false, rowsPerPage: 10, ajaxUpdateContainerId: "contatcsGrid");
+        }
+        @Html.HiddenFor(m => m.Kommunkod)
 
+        @grid.GetHtml(tableStyle: "webgrid-table",
+                              headerStyle: "webgrid-header",
+                              footerStyle: "webgrid-footer",
+                              alternatingRowStyle: "webgrid-alternating-row",
+                              selectedRowStyle: "webgrid-selected-row",
+                              rowStyle: "webgrid-row-style",
+                              mode: WebGridPagerModes.All,
+                              columns: grid.Columns(
+                                grid.Column(null, null, format: @<input type="hidden" name="IDHidden" value="@item.ID" />),
+                                grid.Column("Namn", format: @<text><span class="display-mode">@item.Namn</span><label id="ContactName" class="edit-mode">@item.Namn</label></text>, style: "col3Width"),
+                                grid.Column("E-post", format: @<text><span class="display-mode col3Width">@item.Email</span><label id="Epost" class="edit-mode col3Width">@item.Email</label></text>, style: "col3Width"),
 
-            @{
-                ViewBag.Title = "Administrera kontaktpersoner";
-                var grid = new WebGrid(source: Model.ContactPersons, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "contatcsGrid");
-                grid.Pager(WebGridPagerModes.All);
-            }
+                                 grid.Column("Telefon", "Telefon", format: @<text><span class="display-mode col1Width"><label id="lblPhoneNumber">@item.PhoneNumber</label></span>
+                                <input type="text" id="ContactPhoneNumber" value="@item.PhoneNumber" class="edit-mode form-control" /></text>, style: "col1Width"),
+                                 grid.Column("Aktiv fr.o.m", "Aktiv fr.o.m", format: @<text><span class="display-mode">
+                                <label id="lblAktivFrom">@( item.AktivFrom != null ? item.AktivFrom.ToString("yyyy-MM-dd") : item.AktivFrom)</label></span>
+                                <input type="text" id="ContactAktivFrom" value="@( item.AktivFrom != null ? item.AktivFrom.ToString("yyyy-MM-dd") : item.AktivFrom)" class="edit-mode form-control" /></text>, style: "col2Width"),
+                                 grid.Column("Aktiv t.o.m", "Aktiv t.o.m", format: @<text><span class="display-mode">
+                                <label id="lblAktivTom">@( item.AktivTom != null ? item.AktivTom.ToString("yyyy-MM-dd") : item.AktivTom)</label></span>
+                                <input type="text" id="ContactAktivTom" value="@( item.AktivTom != null ? item.AktivTom.ToString("yyyy-MM-dd") : item.AktivTom)" class="edit-mode form-control" /></text>, style: "col2Width"),
+                                 grid.Column("Status", "Status", format: @<text><span class="display-mode col1Width"><label id="lblStatus">@item.Status</label></span>
+                                <input type="text" id="ContactStatus" value="@item.Status" class="edit-mode form-control" /></text>, style: "col1Width"),
 
+                                 grid.Column("Action", format: @<text>
+                                    <button class="edit-user display-mode btn btn-default">Ändra</button>
+                                    @if (item.OkToDelete){<button class="display-mode btn btn-default" onclick="deleteContact('@item.Id', '@item.Namn');return false;">Ta bort</button>}
+                                    <button class="save-user edit-mode btn btn-default">Spara</button>
+                                    <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                                </text>, style: "col3Width", canSort: false)))
 
-            @grid.GetHtml(tableStyle: "webgrid-table",
-                                 headerStyle: "webgrid-header",
-                                 footerStyle: "webgrid-footer",
-                                 alternatingRowStyle: "webgrid-alternating-row",
-                                 selectedRowStyle: "webgrid-selected-row",
-                                 rowStyle: "webgrid-row-style",
-                                 mode: WebGridPagerModes.All,
-                                 columns: grid.Columns(
-                                     grid.Column("ID", format: @<text><span class="display-mode col3Width ">@item.ID</span><label id="ContactId" class="edit-mode col3Width">@item.ID</label></text>),
-                                              grid.Column("Namn", format: @<text><span class="display-mode">@item.Namn</span><label id="ContactName" class="edit-mode">@item.Namn</label></text>, style: "col3Width"),
-                                                     grid.Column("E-post", format: @<text><span class="display-mode col3Width">@item.Email</span><label id="Epost" class="edit-mode col3Width">@item.Email</label></text>, style: "col3Width"),
-
-                                                              grid.Column("Telefon", "Telefon", format: @<text><span class="display-mode col1Width"><label id="lblPhoneNumber">@item.PhoneNumber</label></span>
-                                                            <input type="text" id="ContactPhoneNumber" value="@item.PhoneNumber" class="edit-mode form-control" /></text>, style: "col1Width"),
-
-                                                                @*grid.Column("Aktiv fr.o.m", "Aktiv fr.o.m", format: @<text><span class="display-mode col1Width"><label id="lblAktivFrom">@item.AktivFrom</label></span>
-                                                                    <input type="text" id="ContactAktivFrom" value="@item.AktivFrom" class="edit-mode form-control" /></text>, style: "col1Width"),*@
-                                                                grid.Column("Aktiv fr.o.m", "Aktiv fr.o.m", format: @<text><span class="display-mode">
-                                                                        <label id="lblAktivFrom">
-                                                                            @if (item.AktivFrom != null)
-                                                                            {
-                                                                                @item.AktivFrom.ToString("yyyy-MM-dd")
-                                                                            }
-                                                                                                 else
-                                                                                                 {
-                                                                                @item.AktivFrom
-                                                                                    
-                                                                                                 }
-                                                                        </label>
-                                                                    </span>
-                                                                    <input type="text" id="ContactAktivFrom" value="@if (item.AktivFrom != null){@item.AktivFrom.ToString("yyyy-MM-dd")}else{@item.AktivFrom}" class="edit-mode form-control" /></text>, style: "col2Width"),
-
-
-
-
-
-
-                                                                        @*grid.Column("Aktiv t.o.m", "Aktiv t.o.m", format: @<text><span class="display-mode col1Width"><label id="lblAktivTom">@item.AktivTom</label></span>
-                                                                            <input type="text" id="ContactAktivTom" value="@item.AktivTom" class="edit-mode form-control" /></text>, style: "col1Width"),*@
-                                                                        grid.Column("Aktiv t.o.m", "Aktiv t.o.m", format: @<text><span class="display-mode">
-                                                                                <label id="lblAktivTom">
-                                                                                    @if (item.AktivTom != null)
-                                                                                                 {@item.AktivTom.ToString("yyyy-MM-dd")}
-                                                                                                         else
-                                                                                                         {@item.AktivTom}
-                                                                                </label>
-                                                                            </span>
-                                                                            <input type="text" id="ContactAktivTom" value="@if (item.AktivTom != null){@item.AktivTom.ToString("yyyy-MM-dd")}else{@item.AktivTom}" class="edit-mode form-control" /></text>, style: "col2Width"),
-
-
-
-
-
-
-                                                                                  grid.Column("Status", "Status", format: @<text><span class="display-mode col1Width"><label id="lblStatus">@item.Status</label></span>
-                                                                                <input type="text" id="ContactStatus" value="@item.Status" class="edit-mode form-control" /></text>, style: "col1Width"),
-
-
-                                                                                         grid.Column("Action", format: @<text>
-                                                                                            <button class="edit-user display-mode btn btn-default">Ändra</button>
-                                                                                            @if (item.OkToDelete)
-                                                                                                         {
-                                                                                                <button class="display-mode btn btn-default" onclick="deleteContact('@item.Id', '@item.Namn'); return false;">Ta bort</button>
-                                                                                                         }
-                                                                                            <button class="save-user edit-mode btn btn-default">Spara</button>
-                                                                                            <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-                                                                                        </text>, style: "col3Width", canSort: false)))
-
-        </div>
+    </div>
     }
 </div>
 

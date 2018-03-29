@@ -3,6 +3,11 @@
 @{
     ViewBag.Title = "Skapa ny FAQ-kategori";
 }
+<script>
+    $(function () {
+        $("#txtKategori").focus();
+    });
+</script>
 
 
     @using (Html.BeginForm("CreateFAQCategory", "System", FormMethod.Post))
@@ -17,7 +22,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Kategori, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Kategori, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.Kategori, new { htmlAttributes = new { @class = "form-control", id = "txtKategori" } })
                     @Html.ValidationMessageFor(model => model.Kategori, "", new { @class = "text-danger" })
                 </div>
             </div>

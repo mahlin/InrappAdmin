@@ -3,6 +3,11 @@
 @{
     ViewBag.Title = "Skapa ny FAQ";
 }
+<script>
+    $(function () {
+        $("#txtRegisterId").focus();
+    });
+</script>
 
 
     @using (Html.BeginForm("CreateFAQ", "System", FormMethod.Post))
@@ -24,7 +29,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.RegisterId, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.RegisterId, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.RegisterId, new { htmlAttributes = new { @class = "form-control", id = "txtRegisterId" } })
                     @Html.ValidationMessageFor(model => model.RegisterId, "", new { @class = "text-danger" })
                 </div>
             </div>
