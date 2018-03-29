@@ -28,7 +28,6 @@
                     @Html.TextBoxFor(model => model.RegisterShortName, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                 </div>
             </div>
-
             <div class="form-group">
                 @Html.LabelFor(model => model.Delregisternamn, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -36,7 +35,6 @@
                     @Html.ValidationMessageFor(model => model.Delregisternamn, "", new { @class = "text-danger" })
                 </div>
             </div>
-
             <div class="form-group">
                 @Html.LabelFor(model => model.Beskrivning, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -44,20 +42,11 @@
                     @Html.ValidationMessageFor(model => model.Beskrivning, "", new { @class = "text-danger" })
                 </div>
             </div>
-
             <div class="form-group">
                 @Html.LabelFor(model => model.Kortnamn, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.Kortnamn, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.Kortnamn, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Slussmapp, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => Model.Slussmapp, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Slussmapp, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">

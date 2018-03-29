@@ -29,14 +29,28 @@ namespace InrappAdmin.Web.Controllers
         public ActionResult Index()
         {
             var model = new RegisterViewModels.RegisterViewModel();
+            var registerViewList = new List<RegisterViewModels.AdmRegisterViewModel>();
             try
             {
-                model.Registers = _portalAdminService.HamtaRegister();
-                //var contacts = _portalAdminService.HamtaKontaktpersonerForOrg(model.Organisation.Id);
-                //model.ContactPersons = ConvertUsersViewModelUser(contacts);
+                 var registerList = _portalAdminService.HamtaRegister();
 
-                //model.OrgUnits = _portalAdminService.HamtaOrgEnheterForOrg(model.Organisation.Id);
-                //model.ReportObligations = _portalAdminService.HamtaUppgiftsskyldighetForOrg(model.Organisation.Id);
+                foreach (var register in registerList)
+                {
+                    var registerView = new RegisterViewModels.AdmRegisterViewModel();
+                    if (register.Beskrivning.Length > 15)
+                    {
+                        registerView.ShortedText = register.Beskrivning.Substring(0, 15) + "... ";
+                    }
+                    registerView.Id = register.Id;
+                    registerView.Beskrivning = register.Beskrivning;
+                    registerView.Kortnamn = register.Kortnamn;
+                    registerView.Registernamn = register.Registernamn;
+                    registerView.Inrapporteringsportal = register.Inrapporteringsportal;
+
+                    registerViewList.Add(registerView);
+                }
+
+                model.Registers = registerViewList;
             }
             catch (Exception e)
             {
@@ -61,6 +75,7 @@ namespace InrappAdmin.Web.Controllers
             {
                 var register = _portalAdminService.HamtaRegisterMedKortnamn(regShortName);
                 model.RegisterShortName = regShortName;
+                model.SelectedDirectoryId = register.Id;
                 model.DelRegisters = _portalAdminService.HamtaDelRegisterForRegister(register.Id);
             }
             catch (Exception e)
@@ -79,39 +94,11 @@ namespace InrappAdmin.Web.Controllers
             return View("EditSubDirectories", model);
         }
 
-        // GET: Registers
-        //public ActionResult GetDirectories()
-        //{
-        //    var model = new RegisterViewModels();
-        //    try
-        //    {
-        //        model.Registers = _portalAdminService.HamtaRegister();
-        //        //var contacts = _portalAdminService.HamtaKontaktpersonerForOrg(model.Organisation.Id);
-        //        //model.ContactPersons = ConvertUsersViewModelUser(contacts);
-
-        //        //model.OrgUnits = _portalAdminService.HamtaOrgEnheterForOrg(model.Organisation.Id);
-        //        //model.ReportObligations = _portalAdminService.HamtaUppgiftsskyldighetForOrg(model.Organisation.Id);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine(e);
-        //        ErrorManager.WriteToErrorLog("RegisterController", "GetDirectories", e.ToString(), e.HResult, "InrappAdmin");
-        //        var errorModel = new CustomErrorPageModel
-        //        {
-        //            Information = "Ett fel inträffade vid hämtning av register",
-        //            ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
-        //        };
-        //        return View("CustomError", errorModel);
-
-        //    }
-        //    return View("Index", model);
-
-        //}
-
 
         [HttpPost]
         public ActionResult UpdateDirectory(AdmRegister register)
         {
+
             if (ModelState.IsValid)
             {
                 try

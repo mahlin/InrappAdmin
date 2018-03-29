@@ -1,4 +1,5 @@
-﻿@using InrappAdmin.Web.Models.ViewModels
+﻿@using System.Configuration
+@using InrappAdmin.Web.Models.ViewModels
 @model InrappAdmin.Web.Models.ViewModels.RegisterViewModels.RegisterViewModel
 @{
     ViewBag.Title = "Register";
@@ -8,22 +9,40 @@
 
 <script type="text/javascript">
 
-    $(function () {
-        $('.edit-mode').hide();
-        $('.edit-user, .cancel-user').on('click', function () {
-            var tr = $(this).parents('tr:first');
-            tr.find('.edit-mode, .display-mode').toggle();
-        });
-        $('.save-user').on('click', function () {
-            var tr = $(this).parents('tr:first');
-            var regId = tr.find("#RegisterId").html();
-            var regName = tr.find("#RegisterName").val();
-            var regDescription = tr.find("#RegisterDecsription").val();
-            var regShortName = tr.find("#RegisterShortName").val();
-            var regForPortal = tr.find("#RegisterForPortal").val();
+    $(document).ready(function () {
 
-            //Creating AdmRegister JSON object
-            var register =
+        //Gå igenom alla rader och se om något fält behöver kortas
+        //var rows = $('#registersTable tr');
+        //rows.each(function () {
+        //    var txt = $(this).find('td:eq(2)').text();
+        //    var desc = $(this).find('td:eq(2)').find('#lblDescription').val();
+        //    var descBig = $(this).find('#RegisterDecsription').val();
+        //    if (txt.length > 20) {
+        //        var x = txt.substr(0, 20) + "... ";
+        //        //$(this).find('td:eq(2)').text(txt.substr(0, 20) + "... ");
+        //        $(this).find('#lblDescription').val(x);
+        //    }
+        //});
+    });
+
+    $(function() {
+        $('.edit-mode').hide();
+        $('.edit-user, .cancel-user').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+        $('.save-user').on('click',
+            function() {
+                var tr = $(this).parents('tr:first');
+                var regId = tr.find("#RegisterId").html();
+                var regName = tr.find("#RegisterName").val();
+                var regDescription = tr.find("#RegisterDecsription").val();
+                var regShortName = tr.find("#RegisterShortName").val();
+                var regForPortal = tr.find("#RegisterForPortal").val();
+
+                //Creating AdmRegister JSON object
+                var register =
                 {
                     "Id": regId,
                     "Registernamn": regName,
@@ -31,37 +50,38 @@
                     "Kortnamn": regShortName,
                     "Inrapporteringsportal": regForPortal
                 };
-            //Posting AdmRegister object to controller's Update action method
-            $.ajax({
-                url: '/Register/UpdateDirectory',
-                data: JSON.stringify(register),
-                type: 'POST',
-                contentType: 'application/json; charset=utf-8',
-                success: function (data) {
-                    //location.reload();
-                    $("#pageContainer").html(data);
-                    tr.find('.edit-mode, .display-mode').toggle();
-                    $('#footer').hide();
-                    //alert('Record updated Successfully!!');
-                }
+                //Posting AdmRegister object to controller's Update action method
+                $.ajax({
+                    url: '/Register/UpdateDirectory',
+                    data: JSON.stringify(register),
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(data) {
+                        //location.reload();
+                        $("#pageContainer").html(data);
+                        tr.find('.edit-mode, .display-mode').toggle();
+                        $('#footer').hide();
+                        //alert('Record updated Successfully!!');
+                    }
+                });
+
             });
 
-        });
+        $('.edit-user').on('click',
+            function() {
+                var tr = $(this).parents('tr:first');
+                var regId = tr.find("#RegisterId").html();
+                var regName = tr.find("#RegisterName").val();
+                var regDescription = tr.find("#RegisterDecsription").val();
+                var regShortName = tr.find("#RegisterShortName").val();
+                var regForPortal = tr.find("#RegisterForPortal").val();
 
-        $('.edit-user').on('click', function () {
-            var tr = $(this).parents('tr:first');
-            var regId = tr.find("#RegisterId").html();
-            var regName = tr.find("#RegisterName").val();
-            var regDescription = tr.find("#RegisterDecsription").val();
-            var regShortName = tr.find("#RegisterShortName").val();
-            var regForPortal = tr.find("#RegisterForPortal").val();
-
-            tr.find("#lblName").text(regName);
-            tr.find("#lblDescription").text(regDescription);
-            tr.find("#lblShortName").text(regShortName);
-            tr.find("#lblForPortal").text(regForPortal);
-        });
-    })
+                tr.find("#lblName").text(regName);
+                tr.find("#lblDescription").text(regDescription);
+                tr.find("#lblShortName").text(regShortName);
+                tr.find("#lblForPortal").text(regForPortal);
+            });
+    });
 </script>
 
 @if (Model != null)
@@ -82,7 +102,8 @@
                         grid.Pager(WebGridPagerModes.All);
                     }
 
-                    @grid.GetHtml(tableStyle: "webgrid-table",
+                    @grid.GetHtml(htmlAttributes: new { id = "registersTable" }, 
+                        tableStyle: "webgrid-table",
                         headerStyle: "webgrid-header",
                         footerStyle: "webgrid-footer",
                         alternatingRowStyle: "webgrid-alternating-row",
@@ -93,14 +114,15 @@
                             grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="RegisterId" class="edit-mode colMinWidth">@item.Id</label></text>, style: "colMinWidth"),
 
                             grid.Column("Registernamn", "Registernamn", format: @<text><span class="display-mode"><label id="lblName" style="width: 300px;">@item.Registernamn</label></span>
-                                                                                    <input type="text" id="RegisterName" value="@item.Registernamn" class="edit-mode form-control" /></text>, style: "col4Width"),
-                            grid.Column("Beskrivning", "Beskrivning", format: @<text><span class="display-mode"><label id="lblDescription">@item.Beskrivning</label></span>
-                                                                                  <input type="text" id="RegisterDecsription" value="@item.Beskrivning" class="edit-mode form-control" /></text>, style: "col1Width"),
+                                <input type="text" id="RegisterName" value="@item.Registernamn" class="edit-mode form-control" /></text>, style: "col4Width"),
+                            grid.Column("Beskrivning", "Beskrivning", format: @<text><span class="display-mode"><label id="lblDescription" class="longColumnText" style="width: 200px;">
+                                        @item.Beskrivning  </label></span>
+                            <textarea id="RegisterDecsription" class="edit-mode form-control" style="height: 300px; width: 300px;">@item.Beskrivning</textarea></text>, style: "col4Width"),
 
                             grid.Column("Kortnamn", "Kortnamn", format: @<text><span class="display-mode"><label id="lblShortName">@item.Kortnamn</label></span>
-                                                                            <input type="text" id="RegisterShortName" value="@item.Kortnamn" class="edit-mode form-control" /></text>, style: "colMinWidth"),
-                            grid.Column("Inrapporteringsportal", "Inrapporteringsportal", format: @<text><span class="display-mode"><label id="lblForPortal">@item.Inrapporteringsportal</label></span>
-                                                                                                      <input type="text" id="RegisterForPortal" value="@item.Inrapporteringsportal.ToString()" class="edit-mode form-control" /></text>, style: "colMinWidth"),
+                                <input type="text" id="RegisterShortName" value="@item.Kortnamn" class="edit-mode form-control" /></text>, style: "colMinWidth"),
+                            grid.Column("Inrapporteringsportal", "Inrapporteringsportal", format: @<text><span class="display-mode test"><label id="lblForPortal">@item.Inrapporteringsportal</label></span>
+                                <input type="text" id="RegisterForPortal" value="@item.Inrapporteringsportal.ToString()" class="edit-mode form-control" /></text>, style: "colMinWidth"),
 
 
                             grid.Column("Action", format: @<text>

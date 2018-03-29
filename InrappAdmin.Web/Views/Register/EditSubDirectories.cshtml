@@ -5,7 +5,7 @@
 <script type="text/javascript">
 
     $(function () {
-        $("#txtKommunkod").focus();
+        $("#txtRegisterKortNamn").focus();
     });
 
 
@@ -34,7 +34,8 @@
                     "Beskrivning": subDirDescription,
                     "Kortnamn": subDirShortName,
                     "Inrapporteringsportal": subDirForPortal,
-                    "Slussmapp": subDirFolder
+                    "Slussmapp": subDirFolder,
+                    "RegisterId": $('#SelectedDirectoryId').val()
                 };
                 //Posting Organisationsenhet object to controller's Update action method
                 $.ajax({
@@ -109,10 +110,15 @@
 
     @if (Model != null)
     {
+        @Html.HiddenFor(m => m.SelectedDirectoryId)
         <br/><br/>
         <hr/>
-
-        @Html.ActionLink("Skapa nytt delregister", "CreateSubDirectory", "Register", new { regShortName = Model.RegisterShortName }, null)
+        <div class="row">
+            <div class="col-md-8">
+                @Html.ActionLink("Skapa nytt delregister", "CreateSubDirectory", "Register", new { regShortName = Model.RegisterShortName }, null)
+            </div>
+                @Html.ActionLink("Tillbaka till register", "Index", "Register")
+         </div>
  
         <div id="gridContent" style="font-family: Arial; padding: 20px;">
             @{
@@ -123,33 +129,34 @@
 
 
             @grid.GetHtml(tableStyle: "webgrid-table",
-                    headerStyle: "webgrid-header",
-                    footerStyle: "webgrid-footer",
-                    alternatingRowStyle: "webgrid-alternating-row",
-                    selectedRowStyle: "webgrid-selected-row",
-                    rowStyle: "webgrid-row-style",
-                    mode: WebGridPagerModes.All,
-                    columns: grid.Columns(
-                        grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="SubDirectoryId" class="edit-mode colMinWidth">@item.Id</label></text>,style: "colMinWidth"),
+                 headerStyle: "webgrid-header",
+                 footerStyle: "webgrid-footer",
+                 alternatingRowStyle: "webgrid-alternating-row",
+                 selectedRowStyle: "webgrid-selected-row",
+                 rowStyle: "webgrid-row-style",
+                 mode: WebGridPagerModes.All,
+                 columns: grid.Columns(
+                     grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="SubDirectoryId" class="edit-mode colMinWidth">@item.Id</label></text>, style: "colMinWidth"),
 
-                        grid.Column("Delregisternamn", "Delregisternamn", format: @<text><span class="display-mode"><label id="lblName" style="width: 300px;">@item.Delregisternamn</label></span>
-                            <input type="text" id="SubDirectoryName" value="@item.Delregisternamn" class="edit-mode form-control" /></text>, style: "col4Width"),
-                        grid.Column("Beskrivning", "Beskrivning", format: @<text><span class="display-mode"><label id="lblDescription">@item.Beskrivning</label></span>
-                            <input type="text" id="SubDirectoryDecsription" value="@item.Beskrivning" class="edit-mode form-control" /></text>, style: "col4Width"),
-                        grid.Column("Kortnamn", "Kortnamn", format: @<text><span class="display-mode"><label id="lblShortName">@item.Kortnamn</label></span>
-                            <input type="text" id="SubDirectoryShortName" value="@item.Kortnamn" class="edit-mode form-control" /></text>, style: "colMinWidth"),
-                        grid.Column("Slussmapp", "Slussmapp", format: @<text><span class="display-mode"><label id="lblFolder">@item.Slussmapp</label></span>
-                            <input type="text" id="SubDirectoryFolder" value="@item.Slussmapp" class="edit-mode form-control" /></text>, style: "colMinWidth"),
-                        grid.Column("Inrapporteringsportal", "Inrapporteringsportal", format: @<text><span class="display-mode"><label id="lblForPortal">@item.Inrapporteringsportal</label></span>
-                            <input type="text" id="SubDirectoryForPortal" value="@item.Inrapporteringsportal.ToString()" class="edit-mode form-control" /></text>, style: "colMinWidth"),
+                 grid.Column("Delregisternamn", "Delregisternamn", format: @<text><span class="display-mode"><label id="lblName" style="width: 300px;">@item.Delregisternamn</label></span>
+                <input type="text" id="SubDirectoryName" value="@item.Delregisternamn" class="edit-mode form-control" /></text>, style: "col4Width"),
+                grid.Column("Beskrivning", "Beskrivning", format: @<text><span class="display-mode"><label id="lblDescription" class="longColumnText">@item.Beskrivning</label></span>
+                <textarea id="SubDirectoryDecsription" value="" class="edit-mode form-control" style="height: 300px; width: 300px;">@item.Beskrivning</textarea></text>, style: "col4Width"),
+
+                 grid.Column("Kortnamn", "Kortnamn", format: @<text><span class="display-mode"><label id="lblShortName">@item.Kortnamn</label></span>
+                    <input type="text" id="SubDirectoryShortName" value="@item.Kortnamn" class="edit-mode form-control" /></text>, style: "colMinWidth"),
+                 grid.Column("Slussmapp", "Slussmapp", format: @<text><span class="display-mode"><label id="lblFolder">@item.Slussmapp</label></span>
+                    <input type="text" id="SubDirectoryFolder" value="@item.Slussmapp" class="edit-mode form-control" /></text>, style: "colMinWidth"),
+                 grid.Column("Inrapporteringsportal", "Inrapporteringsportal", format: @<text><span class="display-mode"><label id="lblForPortal">@item.Inrapporteringsportal</label></span>
+                    <input type="text" id="SubDirectoryForPortal" value="@item.Inrapporteringsportal.ToString()" class="edit-mode form-control" /></text>, style: "colMinWidth"),
 
 
 
-                        grid.Column("Action", format: @<text>
-                    <button class="edit-user display-mode btn btn-default">Ändra</button>
-                    <button class="save-user edit-mode btn btn-default">Spara</button>
-                    <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-                        </text>, style: "col3Width", canSort: false)))
+     grid.Column("Action", format: @<text>
+            <button class="edit-user display-mode btn btn-default">Ändra</button>
+            <button class="save-user edit-mode btn btn-default">Spara</button>
+            <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+        </text>, style: "col3Width", canSort: false)))
 
         </div>
     }

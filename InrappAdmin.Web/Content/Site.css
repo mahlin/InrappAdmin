@@ -186,3 +186,15 @@ label {
     width: 100px;
     padding: 3px 7px 2px;
 }
+
+.longColumnText {
+    white-space: nowrap;
+    /*word-wrap: break-word;*/
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.longColumnText:hover {
+    word-wrap: break-word;
+    overflow: visible;
+}

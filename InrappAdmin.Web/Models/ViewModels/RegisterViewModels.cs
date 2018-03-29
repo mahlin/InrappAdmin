@@ -15,19 +15,21 @@ namespace InrappAdmin.Web.Models.ViewModels
             [Display(Name = "Registers kortnamn")]
             public string RegisterShortName { get; set; }
 
-            public IEnumerable<AdmRegister> Registers { get; set; }
+            public IEnumerable<AdmRegisterViewModel> Registers { get; set; }
 
             public IEnumerable<AdmDelregister> DelRegisters { get; set; }
             public int SelectedDirectoryId { get; set; }
 
             public string SelectedSubDirectoryId { get; set; }
-        }
+
+}
 
         public class AdmRegisterViewModel
         {
             public int Id { get; set; }
             public string Registernamn { get; set; }
             public string Beskrivning { get; set; }
+            public string ShortedText { get; set; }
             public string Kortnamn { get; set; }
             public bool Inrapporteringsportal { get; set; }
 
