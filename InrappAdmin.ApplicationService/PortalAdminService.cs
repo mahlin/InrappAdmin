@@ -168,6 +168,12 @@ namespace InrappAdmin.ApplicationService
             return subDirectories;
         }
 
+        public IEnumerable<AdmForvantadleverans> HamtaForvantadeLeveranser()
+        {
+            var forvlevList = _portalAdminRepository.GetExpectedDeliveries();
+            return forvlevList;
+        }
+
         public void SkapaOrganisationsenhet(Organisationsenhet orgUnit)
         {
             //Sätt datum och användare
@@ -241,6 +247,16 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.CreateSubDirectory(delReg);
         }
 
+        public void SkapaForvantadLeverans(AdmForvantadleverans forvLev)
+        {
+            //Sätt datum och användare
+            forvLev.SkapadDatum = DateTime.Now;
+            forvLev.SkapadAv = "InrappAdmin";
+            forvLev.AndradDatum = DateTime.Now;
+            forvLev.AndradAv = "InrappAdmin";
+            _portalAdminRepository.CreateExpectedDelivery(forvLev);
+        }
+
         public void UppdateraOrganisation(Organisation org)
         {
             //Sätt datum och användare
@@ -300,6 +316,11 @@ namespace InrappAdmin.ApplicationService
         public void UppdateraDelregister(AdmDelregister delregister)
         {
             _portalAdminRepository.UpdateSubDirectory(delregister);
+        }
+
+        public void UppdateraForvantadLeverans(AdmForvantadleverans forvLev)
+        {
+            _portalAdminRepository.UpdateExpectedDelivery(forvLev);
         }
 
         public void SparaOppettider(OpeningHoursInfoDTO oppetTider)

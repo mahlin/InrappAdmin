@@ -309,6 +309,7 @@ namespace InrappAdmin.DataAccess
         public DbSet<AdmDelregister> AdmDelregister { get; set; }
         public DbSet<AdmFilkrav> AdmFilkrav { get; set; }
         public DbSet<AdmForvantadfil> AdmForvantadfil { get; set; }
+        public DbSet<AdmForvantadleverans> AdmForvantadleverans { get; set; }
         public DbSet<Aterkoppling> Aterkoppling { get; set; }
         public DbSet<AdmInformation> AdmInformation { get; set; }
         public DbSet<AdmUppgiftsskyldighet> AdmUppgiftsskyldighet { get; set; }

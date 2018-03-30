@@ -1,0 +1,92 @@
+﻿@model InrappAdmin.Web.Models.ViewModels.LeveransViewModels.AdmForvantafleveransViewModel
+
+@{
+    ViewBag.Title = "Skapa ny förväntad leverans";
+}
+
+
+    @using (Html.BeginForm("CreateForvantadLeverans", "Leverans", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal padding-top-55">
+            <h4>Skapa förväntad leverans</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.FilkravId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FilkravId, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+            
+            <div class="form-group">
+                @Html.LabelFor(model => model.DelregisterId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DelregisterId, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DelregisterId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Period, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Period, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Period, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Uppgiftsstart, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Uppgiftsstart, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Uppgiftsstart, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Uppgiftsslut, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Uppgiftsslut, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Uppgiftsslut, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Rapporteringsstart, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Rapporteringsstart, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Rapporteringsstart, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Rapporteringsslut, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Rapporteringsslut, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Rapporteringsslut, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Rapporteringsenast, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Uppgiftsstart, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Uppgiftsstart, "", new { @class = "text-danger" })
+                </div>
+            </div>
+           
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Spara" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+
+    <div>
+        @Html.ActionLink("Tillbaka", "Index", "Leverans")
+
+    </div>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

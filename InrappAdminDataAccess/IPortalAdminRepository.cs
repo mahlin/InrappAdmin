@@ -58,6 +58,8 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<AdmDelregister> GetSubDirectoriesForDirectory(int dirId);
 
+        IEnumerable<AdmForvantadleverans> GetExpectedDeliveries();
+
         void CreateOrgUnit(Organisationsenhet orgUnit);
 
         void CreateFAQCategory(AdmFAQKategori faqCategory);
@@ -70,6 +72,8 @@ namespace InrappAdmin.DataAccess
         void CreateDirectory(AdmRegister dir);
 
         void CreateSubDirectory(AdmDelregister subDir);
+
+        void CreateExpectedDelivery(AdmForvantadleverans forvLev);
 
         void UpdateOrganisation(Organisation org);
 
@@ -88,6 +92,8 @@ namespace InrappAdmin.DataAccess
         void UpdateDirectory(AdmRegister directory);
 
         void UpdateSubDirectory(AdmDelregister subDirectory);
+
+        void UpdateExpectedDelivery(AdmForvantadleverans forvLev);
 
         void SaveOpeningHours(AdmKonfiguration admKonf);
 

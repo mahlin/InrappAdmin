@@ -179,6 +179,12 @@ namespace InrappAdmin.DataAccess
             return subDirectories;
         }
 
+        public IEnumerable<AdmForvantadleverans> GetExpectedDeliveries()
+        {
+            var expDeliveries = DbContext.AdmForvantadleverans.ToList();
+            return expDeliveries;
+        }
+
         public void CreateOrgUnit(Organisationsenhet orgUnit)
         {
             DbContext.Organisationsenhet.Add(orgUnit);
@@ -219,6 +225,12 @@ namespace InrappAdmin.DataAccess
         public void CreateSubDirectory(AdmDelregister subDir)
         {
             DbContext.AdmDelregister.Add(subDir);
+            DbContext.SaveChanges();
+        }
+
+        public void CreateExpectedDelivery(AdmForvantadleverans forvLev)
+        {
+            DbContext.AdmForvantadleverans.Add(forvLev);
             DbContext.SaveChanges();
         }
 
@@ -311,12 +323,29 @@ namespace InrappAdmin.DataAccess
 
         public void UpdateSubDirectory(AdmDelregister subDirectory)
         {
-            var subDirectoryToUpdate = DbContext.AdmDelregister.Where(x => x.Id == subDirectory.Id).SingleOrDefault();
+            var subDirectoryToUpdate = DbContext.AdmDelregister.SingleOrDefault(x => x.Id == subDirectory.Id);
             subDirectoryToUpdate.Delregisternamn = subDirectory.Delregisternamn;
             subDirectoryToUpdate.Beskrivning = subDirectory.Beskrivning;
             subDirectoryToUpdate.Kortnamn = subDirectory.Kortnamn;
             subDirectoryToUpdate.Inrapporteringsportal = subDirectory.Inrapporteringsportal;
             subDirectoryToUpdate.Slussmapp = subDirectory.Slussmapp;
+            DbContext.SaveChanges();
+        }
+
+        public void UpdateExpectedDelivery(AdmForvantadleverans forvLev)
+        {
+            var forvLevToUpdate = DbContext.AdmForvantadleverans.SingleOrDefault(x => x.Id == forvLev.Id);
+            forvLevToUpdate.DelregisterId = forvLev.DelregisterId;
+            forvLevToUpdate.FilkravId = forvLev.FilkravId;
+            forvLevToUpdate.Period = forvLev.Period;
+            forvLevToUpdate.Uppgiftsstart = forvLev.Uppgiftsstart;
+            forvLevToUpdate.Uppgiftsslut = forvLev.Uppgiftsslut;
+            forvLevToUpdate.Rapporteringsstart = forvLev.Rapporteringsstart;
+            forvLevToUpdate.Rapporteringsslut = forvLev.Rapporteringsslut;
+            forvLevToUpdate.Rapporteringsenast = forvLev.Rapporteringsenast;
+            //forvLevToUpdate.Paminnelse1 = forvLev.Paminnelse1;
+            //forvLevToUpdate.Paminnelse2 = forvLev.Paminnelse2;
+            //forvLevToUpdate.Paminnelse3 = forvLev.Paminnelse3;
             DbContext.SaveChanges();
         }
 

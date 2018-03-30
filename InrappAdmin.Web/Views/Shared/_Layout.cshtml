@@ -54,6 +54,13 @@
                 <li><a href="#">One more separated link</a></li>*@
                         </ul>
                     </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Leverans <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Förväntad leverans", "Index", "Leverans")</li>
+                            <li>@Html.ActionLink("Förväntad fil", "Index", "Leverans")</li>
+                        </ul>
+                    </li>
                     @*<li>@Html.ActionLink("About", "About", "Home")</li>
         <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
                 </ul>

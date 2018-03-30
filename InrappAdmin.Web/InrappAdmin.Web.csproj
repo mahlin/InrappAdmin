@@ -155,6 +155,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LeveransController.cs" />
     <Compile Include="Controllers\OrganisationController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\SystemController.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="Helpers\ErrorManager.cs" />
     <Compile Include="Helpers\FileLogWriter.cs" />
     <Compile Include="Models\CustomErrorPageModel.cs" />
+    <Compile Include="Models\ViewModels\LeveransViewModels.cs" />
     <Compile Include="Models\ViewModels\RegisterViewModels.cs" />
     <Compile Include="Models\ViewModels\SystemViewModels.cs" />
     <Compile Include="Models\ViewModels\OrganisationViewModels.cs" />
@@ -252,6 +254,8 @@
     <Content Include="Views\Register\EditSubDirectories.cshtml" />
     <Content Include="Views\Register\CreateSubDirectory.cshtml" />
     <Content Include="Views\Register\CreateDirectory.cshtml" />
+    <Content Include="Views\Leverans\Index.cshtml" />
+    <Content Include="Views\Leverans\CreateForvantadLeverans.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

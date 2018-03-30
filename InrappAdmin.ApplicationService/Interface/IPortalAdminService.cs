@@ -48,6 +48,8 @@ namespace InrappAdmin.ApplicationService.Interface
 
         IEnumerable<AdmDelregister> HamtaDelRegisterForRegister(int regId);
 
+        IEnumerable<AdmForvantadleverans> HamtaForvantadeLeveranser();
+
         void SkapaOrganisationsenhet(Organisationsenhet orgUnit);
 
         void SkapaFAQKategori(AdmFAQKategori faqKategori);
@@ -61,6 +63,8 @@ namespace InrappAdmin.ApplicationService.Interface
         void SkapaRegister(AdmRegister reg);
 
         void SkapaDelregister(AdmDelregister delReg);
+
+        void SkapaForvantadLeverans(AdmForvantadleverans forvLev);
 
         void UppdateraOrganisation(Organisation org);
 
@@ -79,6 +83,8 @@ namespace InrappAdmin.ApplicationService.Interface
         void UppdateraRegister(AdmRegister register);
 
         void UppdateraDelregister(AdmDelregister delregister);
+
+        void UppdateraForvantadLeverans(AdmForvantadleverans forvLev);
 
         void SparaOppettider(OpeningHoursInfoDTO oppetTider);
 
