@@ -48,18 +48,18 @@ namespace InrappAdmin.Web.Controllers
             return View("Index", model);
         }
 
-        // GET: FAQCategories
-        public ActionResult GetForvantadFil()
+        // GET: AdmForvantadfil
+        public ActionResult GetForvantadeFiler()
         {
             var model = new LeveransViewModels.LeveransViewModel();
             try
             {
-               // model.FAQCategories = _portalAdminService.HamtaFAQkategorier();
+                model.ForvantadeFiler = _portalAdminService.HamtaForvantadeFiler();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                ErrorManager.WriteToErrorLog("LeveransController", "GetForvantadFil", e.ToString(), e.HResult, "InrappAdmin");
+                ErrorManager.WriteToErrorLog("LeveransController", "GetForvantadeFiler", e.ToString(), e.HResult, "InrappAdmin");
                 var errorModel = new CustomErrorPageModel
                 {
                     Information = "Ett fel inträffade vid hämtning av forvantad fil",
@@ -68,7 +68,7 @@ namespace InrappAdmin.Web.Controllers
                 return View("CustomError", errorModel);
 
             }
-            return View("Index", model);
+            return View("EditForvantadFil", model);
         }
 
         [HttpPost]
@@ -97,6 +97,32 @@ namespace InrappAdmin.Web.Controllers
 
         }
 
+        [HttpPost]
+        public ActionResult UpdateForvantadFil(AdmForvantadfil forvFil)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _portalAdminService.UppdateraForvantadFil(forvFil);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("LeveransController", "UpdateForvantadFil", e.ToString(), e.HResult, "InrappAdmin");
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade vid uppadtering av förväntad fil.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+
+                }
+            }
+            return RedirectToAction("GetForvantadeFiler");
+
+        }
+
         // GET
         public ActionResult CreateForvantadLeverans()
         {
@@ -106,7 +132,7 @@ namespace InrappAdmin.Web.Controllers
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateForvantadLeverans(LeveransViewModels.AdmForvantafleveransViewModel forvantadLeverans)
+        public ActionResult CreateForvantadLeverans(LeveransViewModels.AdmForvantadleveransViewModel forvantadLeverans)
         {
             if (ModelState.IsValid)
             {
@@ -130,6 +156,46 @@ namespace InrappAdmin.Web.Controllers
                     var errorModel = new CustomErrorPageModel
                     {
                         Information = "Ett fel inträffade när ny förväntad leverans skulle sparas.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
+                return RedirectToAction("Index");
+            }
+
+            return View();
+        }
+
+        // GET
+        public ActionResult CreateForvantadFil()
+        {
+            return View();
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateForvantadFil(LeveransViewModels.AdmForvantadfilViewModel forvantadFil)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var admForvFil = new AdmForvantadfil();
+                    admForvFil.FilkravId = forvantadFil.FilkravId;
+                    admForvFil.Filmask= forvantadFil.Filmask;
+                    admForvFil.Regexp = forvantadFil.Regexp;
+                    admForvFil.Obligatorisk = forvantadFil.Obligatorisk;
+                    admForvFil.Tom = forvantadFil.Tom;
+                    _portalAdminService.SkapaForvantadFil(admForvFil);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("LeveransController", "CreateForvantadFil", e.ToString(), e.HResult, "InrappAdmin");
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade när ny förväntad fil skulle sparas.",
                         ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
                     };
                     return View("CustomError", errorModel);

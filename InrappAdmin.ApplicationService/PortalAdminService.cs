@@ -174,6 +174,12 @@ namespace InrappAdmin.ApplicationService
             return forvlevList;
         }
 
+        public IEnumerable<AdmForvantadfil> HamtaForvantadeFiler()
+        {
+            var forvFilList = _portalAdminRepository.GetExpectedFiles();
+            return forvFilList;
+        }
+
         public void SkapaOrganisationsenhet(Organisationsenhet orgUnit)
         {
             //Sätt datum och användare
@@ -257,6 +263,16 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.CreateExpectedDelivery(forvLev);
         }
 
+        public void SkapaForvantadFil(AdmForvantadfil forvFil)
+        {
+            //Sätt datum och användare
+            forvFil.SkapadDatum = DateTime.Now;
+            forvFil.SkapadAv = "InrappAdmin";
+            forvFil.AndradDatum = DateTime.Now;
+            forvFil.AndradAv = "InrappAdmin";
+            _portalAdminRepository.CreateExpectedFile(forvFil);
+        }
+
         public void UppdateraOrganisation(Organisation org)
         {
             //Sätt datum och användare
@@ -321,6 +337,11 @@ namespace InrappAdmin.ApplicationService
         public void UppdateraForvantadLeverans(AdmForvantadleverans forvLev)
         {
             _portalAdminRepository.UpdateExpectedDelivery(forvLev);
+        }
+
+        public void UppdateraForvantadFil(AdmForvantadfil forvFil)
+        {
+            _portalAdminRepository.UpdateExpectedFile(forvFil);
         }
 
         public void SparaOppettider(OpeningHoursInfoDTO oppetTider)

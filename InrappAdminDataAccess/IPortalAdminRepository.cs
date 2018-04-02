@@ -60,6 +60,8 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<AdmForvantadleverans> GetExpectedDeliveries();
 
+        IEnumerable<AdmForvantadfil> GetExpectedFiles();
+
         void CreateOrgUnit(Organisationsenhet orgUnit);
 
         void CreateFAQCategory(AdmFAQKategori faqCategory);
@@ -74,6 +76,8 @@ namespace InrappAdmin.DataAccess
         void CreateSubDirectory(AdmDelregister subDir);
 
         void CreateExpectedDelivery(AdmForvantadleverans forvLev);
+
+        void CreateExpectedFile(AdmForvantadfil forvFil);
 
         void UpdateOrganisation(Organisation org);
 
@@ -94,6 +98,8 @@ namespace InrappAdmin.DataAccess
         void UpdateSubDirectory(AdmDelregister subDirectory);
 
         void UpdateExpectedDelivery(AdmForvantadleverans forvLev);
+
+        void UpdateExpectedFile(AdmForvantadfil forvFil);
 
         void SaveOpeningHours(AdmKonfiguration admKonf);
 

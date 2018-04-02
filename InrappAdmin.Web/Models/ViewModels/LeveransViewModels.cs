@@ -15,7 +15,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public IEnumerable<AdmFilkrav> Filkrav { get; set; }
         }
 
-        public class AdmForvantafleveransViewModel
+        public class AdmForvantadleveransViewModel
         {
             public int Id { get; set; }
             public int FilkravId { get; set; }
@@ -26,6 +26,16 @@ namespace InrappAdmin.Web.Models.ViewModels
             public DateTime Rapporteringsstart { get; set; }
             public DateTime Rapporteringsslut { get; set; }
             public DateTime Rapporteringsenast { get; set; }
+        }
+
+        public class AdmForvantadfilViewModel
+        {
+            public int Id { get; set; }
+            public int FilkravId { get; set; }
+            public string Filmask { get; set; }
+            public string Regexp { get; set; }
+            public bool Obligatorisk { get; set; }
+            public bool Tom { get; set; }
         }
     }
 }

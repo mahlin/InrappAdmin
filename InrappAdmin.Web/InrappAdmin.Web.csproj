@@ -256,6 +256,8 @@
     <Content Include="Views\Register\CreateDirectory.cshtml" />
     <Content Include="Views\Leverans\Index.cshtml" />
     <Content Include="Views\Leverans\CreateForvantadLeverans.cshtml" />
+    <Content Include="Views\Leverans\EditForvantadFil.cshtml" />
+    <Content Include="Views\Leverans\CreateForvantadFil.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

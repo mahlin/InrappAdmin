@@ -185,6 +185,12 @@ namespace InrappAdmin.DataAccess
             return expDeliveries;
         }
 
+        public IEnumerable<AdmForvantadfil> GetExpectedFiles()
+        {
+            var expFiles = DbContext.AdmForvantadfil.ToList();
+            return expFiles;
+        }
+
         public void CreateOrgUnit(Organisationsenhet orgUnit)
         {
             DbContext.Organisationsenhet.Add(orgUnit);
@@ -231,6 +237,12 @@ namespace InrappAdmin.DataAccess
         public void CreateExpectedDelivery(AdmForvantadleverans forvLev)
         {
             DbContext.AdmForvantadleverans.Add(forvLev);
+            DbContext.SaveChanges();
+        }
+
+        public void CreateExpectedFile(AdmForvantadfil forvFil)
+        {
+            DbContext.AdmForvantadfil.Add(forvFil);
             DbContext.SaveChanges();
         }
 
@@ -346,6 +358,18 @@ namespace InrappAdmin.DataAccess
             //forvLevToUpdate.Paminnelse1 = forvLev.Paminnelse1;
             //forvLevToUpdate.Paminnelse2 = forvLev.Paminnelse2;
             //forvLevToUpdate.Paminnelse3 = forvLev.Paminnelse3;
+            DbContext.SaveChanges();
+        }
+
+
+        public void UpdateExpectedFile(AdmForvantadfil forvFil)
+        {
+            var forvFileToUpdate = DbContext.AdmForvantadfil.SingleOrDefault(x => x.Id == forvFil.Id);
+            forvFileToUpdate.FilkravId = forvFil.FilkravId;
+            forvFileToUpdate.Filmask = forvFil.Filmask;
+            forvFileToUpdate.Regexp = forvFil.Regexp;
+            forvFileToUpdate.Obligatorisk = forvFil.Obligatorisk;
+            forvFileToUpdate.Tom= forvFil.Tom;
             DbContext.SaveChanges();
         }
 
