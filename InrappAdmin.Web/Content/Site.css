@@ -196,5 +196,5 @@ label {
 
 .longColumnText:hover {
     word-wrap: break-word;
-    overflow: visible;
+    overflow: auto;
 }

@@ -20,11 +20,11 @@
             function() {
                 var tr = $(this).parents('tr:first');
                 var repId = tr.find("#RepId").html();
-                var repDelRegId = tr.find("#RepDelRegId").val();
+                var repDelRegId = tr.find("#RepDelRegId").html();
                 var repSkyldigFrom = tr.find("#RepSkyldigFrom").val();
                 var repSkyldigTom = tr.find("#RepSkyldigTom").val();
                 var repRapporterarPerEnhet = tr.find("#RepRapporterarPerEnhet").val();
-                var orgId = $('#Organisationsid').val();
+                var orgId = $('#Organisation_Id').val();
 
                 //Creating AdmUppgiftsskyldighet JSON object
                 var uppgiftsskyldighet =
@@ -56,8 +56,6 @@
         $('.edit-user').on('click',
             function() {
                 var tr = $(this).parents('tr:first');
-                var repId = tr.find("#RepId").html();
-                var repDelRegId = tr.find("#RepDelRegId").val();
                 var repSkyldigFrom = tr.find("#RepSkyldigFrom").val();
                 var repSkyldigTom = tr.find("#RepSkyldigTom").val();
                 var repRapporterarPerEnhet = tr.find("#RepRapporterarPerEnhet").val();
@@ -109,6 +107,7 @@
         <br /><br />
         <hr />
 
+        @Html.HiddenFor(m => m.Organisation.Id)
         @Html.ActionLink("Skapa ny uppgiftsskyldighet", "CreateReportObligation", "Organisation", new { orgId = Model.Organisation.Id }, null)
 
         <div id="gridContent" style="font-family: Arial; padding: 20px;">
@@ -128,51 +127,22 @@
                              mode: WebGridPagerModes.All,
                              columns: grid.Columns(
                                  grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="RepId" class="edit-mode colMinWidth">@item.Id</label></text>,style: "colMinWidth"),
-                                 grid.Column("Delregister", format: @<text><span class="display-mode">@item.DelregisterId</span>
-                                    <label id="lblRepDelRegId" class="edit-mode colMinWidth">@item.DelregisterId</label></text>,style: "colMinWidth"),
+                                 grid.Column("Delregister", format: @<text><span class="display-mode">@item.DelregisterId</span><label id="RepDelRegId" class="edit-mode colMinWidth">@item.DelregisterId</label></text>,style: "colMinWidth"),
 
-                                grid.Column("Fr.o.m", "Fr.o.m", format: @<text><span class="display-mode">
-                                    <label id="lblSkyldigFrom">
-                                        @if (item.SkyldigFrom != null)
-                                        {
-                                            @item.SkyldigFrom.ToString("yyyy-MM-dd")
-                                        }
-                                        else
-                                        {
-                                            @item.SkyldigFrom
-                                        }
-                                    </label></span>
-                                    <input type="text" id="RepSkyldigFrom" value="@if (item.SkyldigFrom != null){@item.SkyldigFrom.ToString("yyyy-MM-dd")}else{@item.SkyldigFrom}" class="edit-mode form-control" /></text>, style: "col2Width"),
+                                grid.Column("Fr.o.m", "Fr.o.m", format: @<text><span class="display-mode"><label id="lblSkyldigFrom">@( item.SkyldigFrom != null ? item.SkyldigFrom.ToString("yyyy-MM-dd") : item.SkyldigFrom)</label></span>
+                                <input type="text" id="RepSkyldigFrom" value="@( item.SkyldigFrom != null ? item.SkyldigFrom.ToString("yyyy-MM-dd") : item.SkyldigFrom)" class="edit-mode form-control" /></text>, style: "col2Width"),
 
-                                    grid.Column("T.o.m", "T.o.m", format: @<text><span class="display-mode">
-                                        <label id="lblSkyldigTom">
-                                            @if (item.SkyldigTom != null)
-                                            {
-                                                @item.SkyldigTom.ToString("yyyy-MM-dd")
-                                            }
-                                            else
-                                            {
-                                                @item.SkyldigTom
-                                            }
-                                        </label></span>
-                                        <input type="text" id="RepSkyldigTom" value="@if (item.SkyldigTom != null){@item.SkyldigTom.ToString("yyyy-MM-dd")}else{@item.SkyldigTom}" class="edit-mode form-control" /></text>, style: "col2Width"),
+                                grid.Column("T.o.m", "T.o.m", format: @<text><span class="display-mode"><label id="lblSkyldigTom">@( item.SkyldigTom != null ? item.SkyldigTom.ToString("yyyy-MM-dd") : item.SkyldigTom)</label></span>
+                                <input type="text" id="RepSkyldigTom" value="@( item.SkyldigTom != null ? item.SkyldigTom.ToString("yyyy-MM-dd") : item.SkyldigTom)" class="edit-mode form-control" /></text>, style: "col2Width"),
 
-                                        grid.Column("Per enhet", "Per enhet", format: @<text><span class="display-mode"><label id="lblRappPerEnhet">@item.RapporterarPerEnhet</label></span>
-                                        <input type="text" id="RepRapporterarPerEnhet" value="@item.RapporterarPerEnhet.ToString()" class="edit-mode form-control" /></text>, style: "colMinWidth"),
+                                grid.Column("Per enhet", "Per enhet", format: @<text><span class="display-mode"><label id="lblRappPerEnhet">@item.RapporterarPerEnhet</label></span>
+                                <input type="text" id="RepRapporterarPerEnhet" value="@item.RapporterarPerEnhet.ToString()" class="edit-mode form-control" /></text>, style: "colMinWidth"),
 
-
-                                        @*grid.Column("Per enhet", format: @<text> <span class="display-mode">@item.RapporterarPerEnhet</span><label id="lblRappPerEnhet" class="edit-mode col2Width">@item.RapporterarPerEnhet</label></text>,
-                                        style: "col1Width"),*@
-
-                                        @*grid.Column("Per enhet", "Per enhet", format: @<text><span class="display-mode col1Width"><label id="lblRappPerEnhet">@item.RapporterarPerEnhet</label></span>
-                                        <input type="text" id="RepRapporterarPerEnhet" value="@item.RapporterarPerEnhet" class="edit-mode form-control" /></text>, style: "col1Width"),*@
-
-
-                                        grid.Column("Action", format: @<text>
-                                        <button class="edit-user display-mode btn btn-default">Ändra</button>
-                                        <button class="save-user edit-mode btn btn-default">Spara</button>
-                                        <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-                                        </text>, style: "col3Width", canSort: false)
+                                grid.Column("Action", format: @<text>
+                                <button class="edit-user display-mode btn btn-default">Ändra</button>
+                                <button class="save-user edit-mode btn btn-default">Spara</button>
+                                <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                                </text>, style: "col3Width", canSort: false)
                                                                                                                                                                                                                                                                                            ))
 
         </div>
