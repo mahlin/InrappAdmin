@@ -10,7 +10,8 @@
     var days = @Html.Raw(Json.Encode(Model.ClosedDaysList));
 
     $(document).ready(function () {
-        //$('[id*=ClDays]').multiselect();
+        $('input.openFrom').forceNumeric();
+        $('input.openTo').forceNumeric();
         $('[id*=ClDays]').multiselect({
             onInitialized: function() {
                 $.each(days, function (index, item) {
@@ -49,6 +50,35 @@
         });
 
     });
+
+
+    // forceNumeric() plug-in implementation
+    jQuery.fn.forceNumeric = function () {
+        return this.each(function () {
+            $(this).keydown(function (e) {
+                var key = e.which || e.keyCode;
+
+                if (!e.shiftKey && !e.altKey && !e.ctrlKey &&
+                    // numbers   
+                    key >= 48 && key <= 57 ||
+                    // Numeric keypad
+                    key >= 96 && key <= 105 ||
+                    // comma and minus, . on keypad
+                    key == 190 || key == 188 || key == 109 || key == 110 ||
+                    // Backspace and Tab and Enter
+                    key == 8 || key == 9 || key == 13 ||
+                    // Home and End
+                    key == 35 || key == 36 ||
+                    // left and right arrows
+                    key == 37 || key == 39 ||
+                    // Del and Ins
+                    key == 46 || key == 45)
+                    return true;
+
+                return false;
+            });
+        });
+    };
 </script>
 
 <script type="text/javascript">
@@ -160,7 +190,7 @@
                     <div class="col-md-8">
                         @Html.Label("Öppet från", new { @class = "control-label" })
                         @*@Html.EditorFor(model => model.OpeningTime, new { @class = "form-control", style = "border-radius:40px" })*@
-                        @Html.TextBoxFor(m => m.OpeningTimeStr, new { @class = "form-control", style = "display:inline;width:170px;" })
+                        @Html.TextBoxFor(m => m.OpeningTimeStr, new { @class = "form-control openFrom", style = "display:inline;width:170px;" })
                         @Html.ValidationMessageFor(m => m.OpeningTimeStr, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -171,7 +201,7 @@
                     <div class="col-md-8">
                         @Html.Label("Öppet till", new { @class = "control-label" })
                         @*@Html.EditorFor(model => model.OpeningTime, new { @class = "form-control", style = "border-radius:40px" })*@
-                        @Html.TextBoxFor(m => m.ClosingTimeStr, new { @class = "form-control", style = "display:inline;width:170px;" })
+                        @Html.TextBoxFor(m => m.ClosingTimeStr, new { @class = "form-control openTo", style = "display:inline;width:170px;" })
                         @Html.ValidationMessageFor(m => m.ClosingTimeStr, "", new { @class = "text-danger" })
                     </div>
                 </div>
