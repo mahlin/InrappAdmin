@@ -198,7 +198,7 @@
                     grid.Column("Status", "Status", format: @<text><span class="display-mode col1Width"><label id="lblStatus">@item.Status</label></span>
                     <input type="text" id="ContactStatus" value="@item.Status" class="edit-mode form-control" /></text>, style: "col1Width"),
 
-                    grid.Column("Action", format: @<text>
+                    grid.Column(null, format: @<text>
                     <button class="edit-user display-mode btn btn-default">Ändra</button>
                     @if (item.OkToDelete)
                     {

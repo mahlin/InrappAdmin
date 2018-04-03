@@ -119,7 +119,7 @@
                                                 style: "col1Width"),
                                    grid.Column("Informationstyp", "Informationstyp", format: @<text><span class="display-mode"><label id="lblInfoTyp">@item.Informationstyp</label></span>
                                 <input type="text" id="InfoTyp" value="@item.Informationstyp" class="edit-mode form-control" /></text>, style: "col2Width"),
-                                     grid.Column("Action", format: @<text>
+                                     grid.Column(null, format: @<text>
                                         <button class="btn btn-default" onclick="showTextarea('@item.Informationstyp');">Ändra</button>
                                         <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
                                     </text>, style: "col3Width", canSort: false)))

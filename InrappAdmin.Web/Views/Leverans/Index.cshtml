@@ -151,7 +151,7 @@
                             <label id="lblRapporteringsenast">@( item.Paminnelse3 != null ? item.Paminnelse3.ToString("yyyy-MM-dd") : item.Paminnelse3)</label></span>
                             <input type="text" id="Paminnelse3" value="@( item.Paminnelse3 != null ? item.Paminnelse3.ToString("yyyy-MM-dd") : item.Paminnelse3)" class="edit-mode form-control" /></text>, style: "col2Width"),
 
-                            grid.Column("Action", format: @<text>
+                            grid.Column(null, format: @<text>
                                 <button class="edit-user display-mode btn btn-default">Ändra</button>
                                 <button class="save-user edit-mode btn btn-default">Spara</button>
                                 <button class="cancel-user edit-mode btn btn-default">Avbryt</button>

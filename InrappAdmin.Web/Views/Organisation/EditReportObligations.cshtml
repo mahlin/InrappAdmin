@@ -138,7 +138,7 @@
                                 grid.Column("Per enhet", "Per enhet", format: @<text><span class="display-mode"><label id="lblRappPerEnhet">@item.RapporterarPerEnhet</label></span>
                                 <input type="text" id="RepRapporterarPerEnhet" value="@item.RapporterarPerEnhet.ToString()" class="edit-mode form-control" /></text>, style: "colMinWidth"),
 
-                                grid.Column("Action", format: @<text>
+                                grid.Column(null, format: @<text>
                                 <button class="edit-user display-mode btn btn-default">Ändra</button>
                                 <button class="save-user edit-mode btn btn-default">Spara</button>
                                 <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
