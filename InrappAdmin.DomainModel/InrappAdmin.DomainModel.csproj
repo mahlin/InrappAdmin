@@ -57,6 +57,7 @@
     <Compile Include="AdmFAQ.cs" />
     <Compile Include="AdmFAQKategori.cs" />
     <Compile Include="AdmFilkrav.cs" />
+    <Compile Include="AdmForeskrift.cs" />
     <Compile Include="AdmForvantadfil.cs" />
     <Compile Include="AdmForvantadleverans.cs" />
     <Compile Include="AdmInformation.cs" />

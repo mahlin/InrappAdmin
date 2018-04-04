@@ -192,10 +192,15 @@ namespace InrappAdmin.DataAccess
             modelBuilder.Entity<AdmFilkrav>().ToTable("admFilkrav");
             modelBuilder.Entity<AdmFilkrav>().Property(e => e.Id).HasColumnName("filkravid");
             modelBuilder.Entity<AdmFilkrav>().Property(e => e.DelregisterId).HasColumnName("delregisterid");
+            modelBuilder.Entity<AdmFilkrav>().Property(e => e.ForeskriftsId).HasColumnName("foreskriftsId");
             modelBuilder.Entity<AdmFilkrav>()
                 .HasRequired(c => c.AdmDelregister)
                 .WithMany(d => d.AdmFilkrav)
                 .HasForeignKey(c => c.DelregisterId);
+            modelBuilder.Entity<AdmFilkrav>()
+                .HasRequired(c => c.AdmForskrift)
+                .WithMany(d => d.AdmFilkrav)
+                .HasForeignKey(c => c.ForeskriftsId);
             modelBuilder.Entity<AdmFilkrav>().Property(e => e.SkapadDatum).HasColumnName("skapaddatum");
             modelBuilder.Entity<AdmFilkrav>().Property(e => e.SkapadAv).HasColumnName("skapadav");
             modelBuilder.Entity<AdmFilkrav>().Property(e => e.AndradDatum).HasColumnName("andraddatum");
@@ -232,10 +237,15 @@ namespace InrappAdmin.DataAccess
             modelBuilder.Entity<AdmForvantadfil>().ToTable("admForvantadfil");
             modelBuilder.Entity<AdmForvantadfil>().Property(e => e.Id).HasColumnName("forvantadfilid");
             modelBuilder.Entity<AdmForvantadfil>().Property(e => e.FilkravId).HasColumnName("filkravid");
+            modelBuilder.Entity<AdmForvantadfil>().Property(e => e.ForeskriftsId).HasColumnName("foreskriftsid");
             modelBuilder.Entity<AdmForvantadfil>()
                 .HasRequired(c => c.AdmFilkrav)
                 .WithMany(d => d.AdmForvantadfil)
                 .HasForeignKey(c => c.FilkravId);
+            modelBuilder.Entity<AdmForvantadfil>()
+                .HasRequired(c => c.AdmForeskrift)
+                .WithMany(d => d.AdmForvantadfil)
+                .HasForeignKey(c => c.ForeskriftsId);
             modelBuilder.Entity<AdmForvantadfil>().Property(e => e.Filmask).HasColumnName("filmask");
             modelBuilder.Entity<AdmForvantadfil>().Property(e => e.Regexp).HasColumnName("regexp");
             modelBuilder.Entity<AdmForvantadfil>().Property(e => e.Obligatorisk).HasColumnName("obligatorisk");
@@ -298,6 +308,23 @@ namespace InrappAdmin.DataAccess
             modelBuilder.Entity<AdmFAQ>().Property(e => e.SkapadAv).HasColumnName("skapadav");
             modelBuilder.Entity<AdmFAQ>().Property(e => e.AndradDatum).HasColumnName("andraddatum");
             modelBuilder.Entity<AdmFAQ>().Property(e => e.AndradAv).HasColumnName("andradav");
+
+            //AdmForeskrift
+            modelBuilder.Entity<AdmForeskrift>().ToTable("admForeskrift");
+            modelBuilder.Entity<AdmForeskrift>().Property(e => e.Id).HasColumnName("foreskriftsid");
+            modelBuilder.Entity<AdmForeskrift>().Property(e => e.RegisterId).HasColumnName("registerid");
+            modelBuilder.Entity<AdmForeskrift>()
+                .HasRequired(c => c.AdmRegister)
+                .WithMany(d => d.AdmForeskrift)
+                .HasForeignKey(c => c.RegisterId);
+            modelBuilder.Entity<AdmForeskrift>().Property(e => e.Forfattningsnamn).HasColumnName("forfattningsnamn");
+            modelBuilder.Entity<AdmForeskrift>().Property(e => e.GiltigFrom).HasColumnName("giltigfrom");
+            modelBuilder.Entity<AdmForeskrift>().Property(e => e.GiltigTom).HasColumnName("giltigtom");
+            modelBuilder.Entity<AdmForeskrift>().Property(e => e.Beslutsdatum).HasColumnName("beslutsdatum");
+            modelBuilder.Entity<AdmForeskrift>().Property(e => e.SkapadDatum).HasColumnName("skapaddatum");
+            modelBuilder.Entity<AdmForeskrift>().Property(e => e.SkapadAv).HasColumnName("skapadav");
+            modelBuilder.Entity<AdmForeskrift>().Property(e => e.AndradDatum).HasColumnName("andraddatum");
+            modelBuilder.Entity<AdmForeskrift>().Property(e => e.AndradAv).HasColumnName("andradav");
         }
 
 
@@ -316,6 +343,7 @@ namespace InrappAdmin.DataAccess
         public DbSet<AdmFAQKategori> AdmFAQKategori { get; set; }
         public DbSet<AdmFAQ> AdmFAQ { get; set; }
         public DbSet<AdmKonfiguration> AdmKonfiguration { get; set; }
+        public DbSet<AdmForeskrift> AdmForeskrift { get; set; }
         public DbSet<Inloggning> Inloggning { get; set; }
         public DbSet<Roll> Roll { get; set; }
     }

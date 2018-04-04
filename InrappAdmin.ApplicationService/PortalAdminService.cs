@@ -174,10 +174,28 @@ namespace InrappAdmin.ApplicationService
             return forvlevList;
         }
 
-        public IEnumerable<AdmForvantadfil> HamtaForvantadeFiler()
+        public IEnumerable<AdmForvantadfil> HamtaAllaForvantadeFiler()
         {
-            var forvFilList = _portalAdminRepository.GetExpectedFiles();
+            var forvFilList = _portalAdminRepository.GetAllExpectedFiles();
             return forvFilList;
+        }
+
+        public string HamtaKortnamnForDelregister(int foreskriftsId)
+        {
+            var delRegKortnamn = _portalAdminRepository.GetSubDirectoryShortNameForExpectedFile(foreskriftsId);
+            return delRegKortnamn;
+        }
+
+        public IEnumerable<AdmForvantadfil> HamtaForvantadeFilerForRegister(int regId)
+        {
+            var forvantadeFiler = _portalAdminRepository.GetExpectedFilesForDirectory(regId);
+            return forvantadeFiler;
+        }
+
+        public IEnumerable<AdmRegister> HamtaAllaRegister()
+        {
+            var registersList = _portalAdminRepository.GetAllRegisters();
+            return registersList;
         }
 
         public void SkapaOrganisationsenhet(Organisationsenhet orgUnit)

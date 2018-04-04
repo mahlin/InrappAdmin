@@ -50,7 +50,12 @@ namespace InrappAdmin.ApplicationService.Interface
 
         IEnumerable<AdmForvantadleverans> HamtaForvantadeLeveranser();
 
-        IEnumerable<AdmForvantadfil> HamtaForvantadeFiler();
+        IEnumerable<AdmForvantadfil> HamtaAllaForvantadeFiler();
+
+        IEnumerable<AdmForvantadfil> HamtaForvantadeFilerForRegister(int regId);
+        IEnumerable<AdmRegister> HamtaAllaRegister();
+
+        string HamtaKortnamnForDelregister(int foreskriftsId);
 
         void SkapaOrganisationsenhet(Organisationsenhet orgUnit);
 

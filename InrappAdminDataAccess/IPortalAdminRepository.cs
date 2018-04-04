@@ -60,7 +60,13 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<AdmForvantadleverans> GetExpectedDeliveries();
 
-        IEnumerable<AdmForvantadfil> GetExpectedFiles();
+        IEnumerable<AdmForvantadfil> GetAllExpectedFiles();
+
+        IEnumerable<AdmForvantadfil> GetExpectedFilesForDirectory(int dirId);
+
+        IEnumerable<AdmRegister> GetAllRegisters();
+
+        string GetSubDirectoryShortNameForExpectedFile(int filKravId);
 
         void CreateOrgUnit(Organisationsenhet orgUnit);
 

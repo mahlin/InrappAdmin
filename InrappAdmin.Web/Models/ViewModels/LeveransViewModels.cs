@@ -11,8 +11,9 @@ namespace InrappAdmin.Web.Models.ViewModels
         public class LeveransViewModel
         {
             public IEnumerable<AdmForvantadleverans> ForvantadeLeveranser { get; set; }
-            public IEnumerable<AdmForvantadfil> ForvantadeFiler { get; set; }
+            public IEnumerable<AdmForvantadfilViewModel> ForvantadeFiler { get; set; }
             public IEnumerable<AdmFilkrav> Filkrav { get; set; }
+            public int SelectedRegisterId { get; set; }
         }
 
         public class AdmForvantadleveransViewModel
@@ -32,6 +33,8 @@ namespace InrappAdmin.Web.Models.ViewModels
         {
             public int Id { get; set; }
             public int FilkravId { get; set; }
+            public int? ForeskriftsId { get; set; }
+            public string DelregisterKortnamn { get; set; }
             public string Filmask { get; set; }
             public string Regexp { get; set; }
             public bool Obligatorisk { get; set; }

@@ -180,6 +180,11 @@ textarea {
     padding: 3px 7px 2px;
 }
 
+.col5Width {
+    width: 400px;
+    margin: -5px;
+    padding: 3px 7px 2px;
+}
 
 label {
     font-weight: normal;
@@ -199,6 +204,10 @@ label {
     overflow: auto;
 }
 
-#informationText  input,select,textarea {
+#informationText input,select,textarea {
     max-width: 500px !important;
+}
+
+#Filmask {
+    max-width: 400px !important;
 }

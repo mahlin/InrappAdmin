@@ -48,13 +48,60 @@ namespace InrappAdmin.Web.Controllers
             return View("Index", model);
         }
 
+        // GET
+        public ActionResult GetDirectorysExpectedFiles(LeveransViewModels.LeveransViewModel model)
+        {
+            var dirId = model.SelectedRegisterId;
+            if (dirId != 0)
+            {
+                var register = _portalAdminService.HamtaRegisterMedId(dirId);
+                var forvFilList = _portalAdminService.HamtaForvantadeFilerForRegister(register.Id);
+                //Lägg över i modellen
+                model.ForvantadeFiler = ConvertToViewModel(forvFilList.ToList());
+                // Ladda drop down lists. 
+                var registerList = _portalAdminService.HamtaAllaRegister();
+                this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
+                model.SelectedRegisterId = 0;
+            }
+            else
+            {
+                return RedirectToAction("GetForvantadeFiler");
+            }
+            return View("EditForvantadFil", model);
+        }
+
         // GET: AdmForvantadfil
         public ActionResult GetForvantadeFiler()
         {
             var model = new LeveransViewModels.LeveransViewModel();
             try
             {
-                model.ForvantadeFiler = _portalAdminService.HamtaForvantadeFiler();
+                var forvFilViewList = new List<LeveransViewModels.AdmForvantadfilViewModel>();
+                var forvFiler = _portalAdminService.HamtaAllaForvantadeFiler();
+
+                foreach (var forvFil in forvFiler)
+                {
+                    var forvFilView = new LeveransViewModels.AdmForvantadfilViewModel
+                        {
+                          Id  = forvFil.Id,
+                          FilkravId = forvFil.FilkravId,
+                          ForeskriftsId = forvFil.ForeskriftsId,
+                          DelregisterKortnamn = _portalAdminService.HamtaKortnamnForDelregister(forvFil.FilkravId),
+                          Filmask = forvFil.Filmask,
+                          Regexp = forvFil.Regexp,
+                          Obligatorisk = forvFil.Obligatorisk,
+                          Tom = forvFil.Tom
+                        };
+
+                    forvFilViewList.Add(forvFilView);
+                }
+
+                model.ForvantadeFiler = forvFilViewList;
+
+                // Ladda drop down lists. 
+                var registerList = _portalAdminService.HamtaAllaRegister();
+                this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
+                model.SelectedRegisterId = 0;
             }
             catch (Exception e)
             {
@@ -204,6 +251,49 @@ namespace InrappAdmin.Web.Controllers
             }
 
             return View();
+        }
+
+        private List<LeveransViewModels.AdmForvantadfilViewModel> ConvertToViewModel(List<AdmForvantadfil> forvFilList)
+        {
+            var forvFilViewList = new List<LeveransViewModels.AdmForvantadfilViewModel>();
+            foreach (var forvFil in forvFilList)
+            {
+                var forvFilView = new LeveransViewModels.AdmForvantadfilViewModel
+                {
+                    Id = forvFil.Id,
+                    FilkravId = forvFil.FilkravId,
+                    DelregisterKortnamn = _portalAdminService.HamtaKortnamnForDelregister(forvFil.FilkravId),
+                    Filmask = forvFil.Filmask,
+                    Regexp = forvFil.Regexp,
+                    Obligatorisk = forvFil.Obligatorisk,
+                    Tom = forvFil.Tom
+                };
+
+                forvFilViewList.Add(forvFilView);
+            }
+            return forvFilViewList;
+        }
+
+        /// <summary>  
+        /// Create list for register-dropdown  
+        /// </summary>  
+        /// <returns>Return register for drop down list.</returns>  
+        private IEnumerable<SelectListItem> CreateRegisterDropDownList(IEnumerable<AdmRegister> registerInfoList)
+        {
+            SelectList lstobj = null;
+
+            var list = registerInfoList
+                .Select(p =>
+                    new SelectListItem
+                    {
+                        Value = p.Id.ToString(),
+                        Text = p.Kortnamn
+                    });
+
+            // Setting.  
+            lstobj = new SelectList(list, "Value", "Text");
+
+            return lstobj;
         }
     }
 }

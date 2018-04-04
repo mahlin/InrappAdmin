@@ -185,10 +185,35 @@ namespace InrappAdmin.DataAccess
             return expDeliveries;
         }
 
-        public IEnumerable<AdmForvantadfil> GetExpectedFiles()
+        public IEnumerable<AdmForvantadfil> GetAllExpectedFiles()
         {
             var expFiles = DbContext.AdmForvantadfil.ToList();
             return expFiles;
+        }
+
+        public string GetSubDirectoryShortNameForExpectedFile(int filkravId)
+        {
+            var subDirId = DbContext.AdmFilkrav.Where(x => x.Id == filkravId).Select(x => x.DelregisterId).SingleOrDefault();
+            var subDirShortName = DbContext.AdmDelregister.Where(x => x.Id == subDirId).Select(x => x.Kortnamn).SingleOrDefault();
+            return subDirShortName;
+        }
+
+        public IEnumerable<AdmForvantadfil> GetExpectedFilesForDirectory(int dirId)
+        {
+            var expectedFileList = new List<AdmForvantadfil>();
+            var regulationsForDirectory = DbContext.AdmForeskrift.Where(x => x.RegisterId == dirId).ToList();
+            foreach (var regulation in regulationsForDirectory)
+            {
+                var expectedFileListForRegulation = DbContext.AdmForvantadfil.Where(x => x.ForeskriftsId == regulation.Id).ToList();
+                expectedFileList.AddRange(expectedFileListForRegulation);
+            }
+            return expectedFileList;
+        }
+
+        public IEnumerable<AdmRegister> GetAllRegisters()
+        {
+            var registersList = DbContext.AdmRegister.ToList();
+            return registersList;
         }
 
         public void CreateOrgUnit(Organisationsenhet orgUnit)

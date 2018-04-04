@@ -13,6 +13,14 @@
 
     });
 
+    $(function () {
+        $("#txtRegkortnamn").focus();
+    });
+
+    $(document).on('change','#ddlRegister',function() {
+        $("#SelectedRegisterId").val($('#ddlRegister').val());
+    });
+
     $(function() {
         $('.edit-mode').hide();
         $('.edit-user, .cancel-user').on('click',
@@ -33,12 +41,12 @@
                 //Creating AdmForvantadfil JSON object
                 var admForvantadFil =
                 {
-                        "Id": forvFilId,
-                        "FilkravId": forvFilFilkravId,
-                        "Filmask": forvFilFilmask,
-                        "Regexp": forvFilRegexp,
-                        "Obligatorisk": forvFilObligatory,
-                        "Tom": forvFilTom
+                    "Id": forvFilId,
+                    "FilkravId": forvFilFilkravId,
+                    "Filmask": forvFilFilmask,
+                    "Regexp": forvFilRegexp,
+                    "Obligatorisk": forvFilObligatory,
+                    "Tom": forvFilTom
                 };
                 //Posting AdmForvantadfil object to controller's Update action method
                 $.ajax({
@@ -73,55 +81,71 @@
             });
     });
 </script>
-
-@if (Model != null)
-{
-    <div id="pageContainer">
+<div id="pageContainer">
     <div class="row">
         <div class="col-md-8 padding-top-55">
             <h4>Administrera förväntade filer</h4>
-            <section id="registerForm">
-                <br /><br />
-                <hr />
-                @Html.ActionLink("Skapa ny förväntad fil", "CreateForvantadFil", "Leverans")
-
-                <div id="gridContent" style="font-family: Arial; padding: 20px;">
-                    @{
-                        ViewBag.Title = "Administrera förväntade filer";
-                        var grid = new WebGrid(source: Model.ForvantadeFiler, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "forvFilGrid");
-                        grid.Pager(WebGridPagerModes.All);
-                    }
-
-                    @grid.GetHtml(htmlAttributes: new { id = "forvFilTable" }, 
-                        tableStyle: "webgrid-table",
-                        headerStyle: "webgrid-header",
-                        footerStyle: "webgrid-footer",
-                        alternatingRowStyle: "webgrid-alternating-row",
-                        selectedRowStyle: "webgrid-selected-row",
-                        rowStyle: "webgrid-row-style",
-                        mode: WebGridPagerModes.All,
-                        columns: grid.Columns(
-                            grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="ForvantadfilId" class="edit-mode colMinWidth">@item.Id</label></text>, style: "colMinWidth"),
-                            grid.Column("Filkravid", "Filkravid", format: @<text><span class="display-mode"><label id="lblFilkravId" >@item.FilkravId</label></span>
-                            <input type="text" id="FilkravId" value="@item.FilkravId" class="edit-mode form-control" /></text>, style: "colMinWidth"),
-                            grid.Column("Filmask", "Filmask", format: @<text><span class="display-mode"><label id="lblFilmask" style="width:200px;">@item.Filmask </label></span>
-                            <input type="text" id="Filmask" value="@item.Filmask" class="edit-mode form-control" /></text>, style: "col4Width"),
-                            grid.Column("Regexp", "Regexp", format: @<text><span class="display-mode"><label id="lblRegexp" class="longColumnText" style="width: 200px;">@item.Regexp </label></span>
-                            <textarea type="text" id="Regexp" TextWrapping="Wrap" class="edit-mode form-control" style="height: 200px; width: 300px;">@item.Regexp</textarea></text>, style: "col3Width"),
-                            grid.Column("Obligatorisk", "Obligatorisk", format: @<text><span class="display-mode"><label id="lblObligatory">@item.Obligatorisk</label></span>
-                            <input type="text" id="Obligatory" value="@item.Obligatorisk.ToString()" class="edit-mode form-control" /></text>, style: "colMinWidth"),
-                            grid.Column("Tom", "Tom", format: @<text><span class="display-mode"><label id="lblTom">@item.Tom</label></span>
-                            <input type="text" id="Obligatory" value="@item.Tom.ToString()" class="edit-mode form-control" /></text>, style: "colMinWidth"),
-                            
-                            grid.Column(null, format: @<text>
-                                <button class="edit-user display-mode btn btn-default">Ändra</button>
-                                <button class="save-user edit-mode btn btn-default">Spara</button>
-                                <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-                            </text>, style: "col3Width", canSort: false)))
-
-                </div>
+            <br />
+            <section id="orgForm">
+                @using (Html.BeginForm("GetDirectorysExpectedFiles", "Leverans", new { ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.HiddenFor(m => m.SelectedRegisterId)
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            @Html.DropDownListFor(m => m.SelectedRegisterId, ViewBag.RegisterList as SelectList, " - Välj Register -", new {id = "ddlRegister", @class = "form-control", style = "max-width:150px !important" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <input type="submit" value="Sök förväntade filer" class="btn btn-default" />
+                        </div>
+                    </div>
+                
+                }
             </section>
         </div>
     </div>
+
+    @if (Model != null)
+    {
+        @Html.ActionLink("Skapa ny förväntad fil", "CreateForvantadFil", "Leverans")
+
+        <div id="gridContent" style="font-family: Arial; padding: 20px;">
+            @{
+                ViewBag.Title = "Administrera förväntade filer";
+                var grid = new WebGrid(source: Model.ForvantadeFiler, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "forvFilGrid");
+                grid.Pager(WebGridPagerModes.All);
+            }
+
+            @grid.GetHtml(htmlAttributes: new { id = "forvFilTable" },
+                    tableStyle: "webgrid-table",
+                    headerStyle: "webgrid-header",
+                    footerStyle: "webgrid-footer",
+                    alternatingRowStyle: "webgrid-alternating-row",
+                    selectedRowStyle: "webgrid-selected-row",
+                    rowStyle: "webgrid-row-style",
+                    mode: WebGridPagerModes.All,
+                    columns: grid.Columns(
+                        grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="ForvantadfilId" class="edit-mode colMinWidth">@item.Id</label></text>, style: "colMinWidth"),
+                        grid.Column("Filkravid", "Filkravid", format: @<text><span class="display-mode"><label id="lblFilkravId">@item.FilkravId</label></span>
+                        <input type="text" id="FilkravId" value="@item.FilkravId" class="edit-mode form-control" /></text>, style: "colMinWidth"),
+                        grid.Column("Delregister", "Delregister", format: @<text><span class="display-mode"><label id="lblDelregister">@item.DelregisterKortnamn</label></span>
+                        <input type="text" id="Delregister" value="@item.DelregisterKortnamn" class="edit-mode form-control" /></text>, style: "col1Width"),
+                        grid.Column("Filmask", "Filmask", format: @<text><span class="display-mode"><label id="lblFilmask" style="width:350px;">@item.Filmask </label></span>
+                        <input type="text" id="Filmask" value="@item.Filmask" class="edit-mode form-control" style="width: 400px !important;" /></text>, style: "col5Width"),
+                        grid.Column("Regexp", "Regexp", format: @<text><span class="display-mode"><label id="lblRegexp" class="longColumnText" style="width: 200px;">@item.Regexp </label></span>
+                        <textarea type="text" id="Regexp" TextWrapping="Wrap" class="edit-mode form-control" style="height: 200px; width: 300px;">@item.Regexp</textarea></text>, style: "col3Width"),
+                        grid.Column("Obligatorisk", "Obligatorisk", format: @<text><span class="display-mode"><label id="lblObligatory">@item.Obligatorisk</label></span>
+                        <input type="text" id="Obligatory" value="@item.Obligatorisk.ToString()" class="edit-mode form-control" /></text>, style: "colMinWidth"),
+                        grid.Column("Tom", "Tom", format: @<text><span class="display-mode"><label id="lblTom">@item.Tom</label></span>
+                        <input type="text" id="Obligatory" value="@item.Tom.ToString()" class="edit-mode form-control" /></text>, style: "colMinWidth"),
+
+                        grid.Column(null, format: @<text>
+                        <button class="edit-user display-mode btn btn-default">Ändra</button>
+                        <button class="save-user edit-mode btn btn-default">Spara</button>
+                        <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                    </text>, style: "col3Width", canSort: false)))
+
+            </div>
+    }
 </div>
-}
