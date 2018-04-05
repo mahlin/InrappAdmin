@@ -210,9 +210,27 @@ namespace InrappAdmin.DataAccess
             return expectedFileList;
         }
 
+        public IEnumerable<AdmForvantadleverans> GetExpectedDeliveriesForDirectory(int dirId)
+        {
+            var expectedDeliveriesList = new List<AdmForvantadleverans>();
+            var subDirectoriesForDirectory = DbContext.AdmDelregister.Where(x => x.RegisterId == dirId).ToList();
+            foreach (var subDir in subDirectoriesForDirectory)
+            {
+                var expectedDeliveryList = DbContext.AdmForvantadleverans.Where(x => x.DelregisterId == subDir.Id).ToList();
+                expectedDeliveriesList.AddRange(expectedDeliveryList);
+            }
+            return expectedDeliveriesList;
+        }
+
         public IEnumerable<AdmRegister> GetAllRegisters()
         {
             var registersList = DbContext.AdmRegister.ToList();
+            return registersList;
+        }
+
+        public IEnumerable<AdmRegister> GetAllRegistersForPortal()
+        {
+            var registersList = DbContext.AdmRegister.Where(x => x.Inrapporteringsportal).ToList();
             return registersList;
         }
 

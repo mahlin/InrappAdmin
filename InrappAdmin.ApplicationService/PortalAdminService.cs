@@ -198,6 +198,18 @@ namespace InrappAdmin.ApplicationService
             return registersList;
         }
 
+        public IEnumerable<AdmRegister> HamtaAllaRegisterForPortalen()
+        {
+            var registersList = _portalAdminRepository.GetAllRegistersForPortal();
+            return registersList;
+        }
+
+        public IEnumerable<AdmForvantadleverans> HamtaForvantadeLeveranserForRegister(int regId)
+        {
+            var forvLeveranser = _portalAdminRepository.GetExpectedDeliveriesForDirectory(regId);
+            return forvLeveranser;
+        }
+
         public void SkapaOrganisationsenhet(Organisationsenhet orgUnit)
         {
             //Sätt datum och användare

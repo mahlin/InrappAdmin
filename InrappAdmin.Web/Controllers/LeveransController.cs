@@ -31,7 +31,13 @@ namespace InrappAdmin.Web.Controllers
             var model = new LeveransViewModels.LeveransViewModel();
             try
             {
-                model.ForvantadeLeveranser = _portalAdminService.HamtaForvantadeLeveranser();
+                var forvLevList = _portalAdminService.HamtaForvantadeLeveranser();
+                model.ForvantadeLeveranser = ConvertForvLevToViewModel(forvLevList.ToList());
+                // Ladda drop down lists. 
+                var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
+                this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
+                model.SelectedRegisterId = 0;
+
             }
             catch (Exception e)
             {
@@ -49,6 +55,27 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // GET
+        public ActionResult GetDirectorysExpectedDeliveries(LeveransViewModels.LeveransViewModel model, int regId = 0)
+        {
+            var dirId = model.SelectedRegisterId;
+            if (dirId != 0)
+            {
+                var forvLevList = _portalAdminService.HamtaForvantadeLeveranserForRegister(dirId);
+                //Lägg över i modellen
+                model.ForvantadeLeveranser = ConvertForvLevToViewModel(forvLevList.ToList());
+                // Ladda drop down lists. 
+                var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
+                this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
+                model.SelectedRegisterId = 0;
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+            return View("Index", model);
+        }
+
+        // GET
         public ActionResult GetDirectorysExpectedFiles(LeveransViewModels.LeveransViewModel model)
         {
             var dirId = model.SelectedRegisterId;
@@ -57,9 +84,9 @@ namespace InrappAdmin.Web.Controllers
                 var register = _portalAdminService.HamtaRegisterMedId(dirId);
                 var forvFilList = _portalAdminService.HamtaForvantadeFilerForRegister(register.Id);
                 //Lägg över i modellen
-                model.ForvantadeFiler = ConvertToViewModel(forvFilList.ToList());
+                model.ForvantadeFiler = ConvertForvFilToViewModel(forvFilList.ToList());
                 // Ladda drop down lists. 
-                var registerList = _portalAdminService.HamtaAllaRegister();
+                var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
                 this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
                 model.SelectedRegisterId = 0;
             }
@@ -99,7 +126,7 @@ namespace InrappAdmin.Web.Controllers
                 model.ForvantadeFiler = forvFilViewList;
 
                 // Ladda drop down lists. 
-                var registerList = _portalAdminService.HamtaAllaRegister();
+                var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
                 this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
                 model.SelectedRegisterId = 0;
             }
@@ -119,12 +146,13 @@ namespace InrappAdmin.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateForvantadLeverans(AdmForvantadleverans forvLev)
+        public ActionResult UpdateForvantadLeverans(LeveransViewModels.AdmForvantadleveransViewModel forvLevModel)
         {
             if (ModelState.IsValid)
             {
                 try
-                { 
+                {
+                    var forvLev = ConvertViewModelToForvLev(forvLevModel);
                     _portalAdminService.UppdateraForvantadLeverans(forvLev);
                 }
                 catch (Exception e)
@@ -142,6 +170,11 @@ namespace InrappAdmin.Web.Controllers
             }
             return RedirectToAction("Index");
 
+        }
+
+        private AdmForvantadleverans ConvertViewModelToForvLev(LeveransViewModels.AdmForvantadleveransViewModel forvLevModel)
+        {
+            throw new NotImplementedException();
         }
 
         [HttpPost]
@@ -253,7 +286,7 @@ namespace InrappAdmin.Web.Controllers
             return View();
         }
 
-        private List<LeveransViewModels.AdmForvantadfilViewModel> ConvertToViewModel(List<AdmForvantadfil> forvFilList)
+        private List<LeveransViewModels.AdmForvantadfilViewModel> ConvertForvFilToViewModel(List<AdmForvantadfil> forvFilList)
         {
             var forvFilViewList = new List<LeveransViewModels.AdmForvantadfilViewModel>();
             foreach (var forvFil in forvFilList)
@@ -272,6 +305,33 @@ namespace InrappAdmin.Web.Controllers
                 forvFilViewList.Add(forvFilView);
             }
             return forvFilViewList;
+        }
+
+        private List<LeveransViewModels.AdmForvantadleveransViewModel> ConvertForvLevToViewModel(List<AdmForvantadleverans> forvLevList)
+        {
+            var forvLevViewList = new List<LeveransViewModels.AdmForvantadleveransViewModel>();
+            foreach (var forvLev in forvLevList)
+            {
+                var forvLevView = new LeveransViewModels.AdmForvantadleveransViewModel
+                {
+                    Id = forvLev.Id,
+                    FilkravId = forvLev.FilkravId,
+                    DelregisterId = forvLev.DelregisterId,
+                    DelregisterKortnamn = _portalAdminService.HamtaKortnamnForDelregister(forvLev.FilkravId),
+                    Period = forvLev.Period,
+                    Uppgiftsstart = forvLev.Uppgiftsstart,
+                    Uppgiftsslut = forvLev.Uppgiftsslut,
+                    Rapporteringsstart = forvLev.Rapporteringsstart,
+                    Rapporteringsslut = forvLev.Rapporteringsslut,
+                    Rapporteringsenast = forvLev.Rapporteringsenast,
+                    Paminnelse1 = forvLev.Paminnelse1,
+                    Paminnelse2 = forvLev.Paminnelse2,
+                    Paminnelse3 = forvLev.Paminnelse3
+                };
+
+                forvLevViewList.Add(forvLevView);
+            }
+            return forvLevViewList;
         }
 
         /// <summary>  

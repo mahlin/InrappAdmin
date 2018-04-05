@@ -10,7 +10,7 @@ namespace InrappAdmin.Web.Models.ViewModels
     {
         public class LeveransViewModel
         {
-            public IEnumerable<AdmForvantadleverans> ForvantadeLeveranser { get; set; }
+            public IEnumerable<AdmForvantadleveransViewModel> ForvantadeLeveranser { get; set; }
             public IEnumerable<AdmForvantadfilViewModel> ForvantadeFiler { get; set; }
             public IEnumerable<AdmFilkrav> Filkrav { get; set; }
             public int SelectedRegisterId { get; set; }
@@ -21,12 +21,16 @@ namespace InrappAdmin.Web.Models.ViewModels
             public int Id { get; set; }
             public int FilkravId { get; set; }
             public int DelregisterId { get; set; }
+            public string DelregisterKortnamn { get; set; }
             public string Period { get; set; }
             public DateTime Uppgiftsstart { get; set; }
             public DateTime Uppgiftsslut { get; set; }
             public DateTime Rapporteringsstart { get; set; }
             public DateTime Rapporteringsslut { get; set; }
             public DateTime Rapporteringsenast { get; set; }
+            public DateTime? Paminnelse1 { get; set; }
+            public DateTime? Paminnelse2 { get; set; }
+            public DateTime? Paminnelse3 { get; set; }
         }
 
         public class AdmForvantadfilViewModel

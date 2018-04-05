@@ -62,9 +62,13 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<AdmForvantadfil> GetAllExpectedFiles();
 
+        IEnumerable<AdmForvantadleverans> GetExpectedDeliveriesForDirectory(int dirId);
+
         IEnumerable<AdmForvantadfil> GetExpectedFilesForDirectory(int dirId);
 
         IEnumerable<AdmRegister> GetAllRegisters();
+
+        IEnumerable<AdmRegister> GetAllRegistersForPortal();
 
         string GetSubDirectoryShortNameForExpectedFile(int filKravId);
 

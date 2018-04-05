@@ -53,7 +53,9 @@ namespace InrappAdmin.ApplicationService.Interface
         IEnumerable<AdmForvantadfil> HamtaAllaForvantadeFiler();
 
         IEnumerable<AdmForvantadfil> HamtaForvantadeFilerForRegister(int regId);
+        IEnumerable<AdmForvantadleverans> HamtaForvantadeLeveranserForRegister(int regId);
         IEnumerable<AdmRegister> HamtaAllaRegister();
+        IEnumerable<AdmRegister> HamtaAllaRegisterForPortalen();
 
         string HamtaKortnamnForDelregister(int foreskriftsId);
 
