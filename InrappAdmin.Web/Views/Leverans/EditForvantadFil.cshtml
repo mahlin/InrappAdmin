@@ -35,8 +35,19 @@
                 var forvFilFilkravId = tr.find("#FilkravId").val();
                 var forvFilFilmask = tr.find("#Filmask").val();
                 var forvFilRegexp = tr.find("#Regexp").val();
-                var forvFilObligatory = tr.find("#Obligatory").val();
-                var forvFilTom = tr.find("#Tom").val();
+                var forvFilObligatory;
+                if (tr.find("#Obligatory").is(':checked')) {
+                    forvFilObligatory = true;
+                } else {
+                    forvFilObligatory = false;
+                }
+                var forvFilTom;
+                if (tr.find("#Tom").is(':checked')) {
+                    forvFilTom = true;
+                } else {
+                    forvFilTom = false;
+                }
+                //forvFilTom = tr.find("#Tom").val();
 
                 //Creating AdmForvantadfil JSON object
                 var admForvantadFil =
@@ -110,22 +121,22 @@
     {
         @Html.ActionLink("Skapa ny förväntad fil", "CreateForvantadFil", "Leverans")
 
-        <div id="gridContent" style="font-family: Arial; padding: 20px;">
-            @{
-                ViewBag.Title = "Administrera förväntade filer";
-                var grid = new WebGrid(source: Model.ForvantadeFiler, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "forvFilGrid");
-                grid.Pager(WebGridPagerModes.All);
-            }
+    <div id="gridContent" style="font-family: Arial; padding: 20px;">
+        @{
+        ViewBag.Title = "Administrera förväntade filer";
+        var grid = new WebGrid(source: Model.ForvantadeFiler, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "forvFilGrid");
+        grid.Pager(WebGridPagerModes.All);
+        }
 
-            @grid.GetHtml(htmlAttributes: new { id = "forvFilTable" },
-                    tableStyle: "webgrid-table",
-                    headerStyle: "webgrid-header",
-                    footerStyle: "webgrid-footer",
-                    alternatingRowStyle: "webgrid-alternating-row",
-                    selectedRowStyle: "webgrid-selected-row",
-                    rowStyle: "webgrid-row-style",
-                    mode: WebGridPagerModes.All,
-                    columns: grid.Columns(
+        @grid.GetHtml(htmlAttributes: new { id = "forvFilTable" },
+                  tableStyle: "webgrid-table",
+                  headerStyle: "webgrid-header",
+                  footerStyle: "webgrid-footer",
+                  alternatingRowStyle: "webgrid-alternating-row",
+                  selectedRowStyle: "webgrid-selected-row",
+                  rowStyle: "webgrid-row-style",
+                  mode: WebGridPagerModes.All,
+                  columns: grid.Columns(
                         grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="ForvantadfilId" class="edit-mode colMinWidth">@item.Id</label></text>, style: "colMinWidth"),
                         grid.Column("Filkravid", "Filkravid", format: @<text><span class="display-mode"><label id="lblFilkravId">@item.FilkravId</label></span>
                         <input type="text" id="FilkravId" value="@item.FilkravId" class="edit-mode form-control" /></text>, style: "colMinWidth"),
@@ -135,17 +146,21 @@
                         <input type="text" id="Filmask" value="@item.Filmask" class="edit-mode form-control" style="width: 400px !important;" /></text>, style: "col5Width"),
                         grid.Column("Regexp", "Regexp", format: @<text><span class="display-mode"><label id="lblRegexp" class="longColumnText" style="width: 200px;">@item.Regexp </label></span>
                         <textarea type="text" id="Regexp" TextWrapping="Wrap" class="edit-mode form-control" style="height: 200px; width: 300px;">@item.Regexp</textarea></text>, style: "col3Width"),
-                        grid.Column("Obligatorisk", "Obligatorisk", format: @<text><span class="display-mode"><label id="lblObligatory">@item.Obligatorisk</label></span>
-                        <input type="text" id="Obligatory" value="@item.Obligatorisk.ToString()" class="edit-mode form-control" /></text>, style: "colMinWidth"),
-                        grid.Column("Tom", "Tom", format: @<text><span class="display-mode"><label id="lblTom">@item.Tom</label></span>
-                        <input type="text" id="Obligatory" value="@item.Tom.ToString()" class="edit-mode form-control" /></text>, style: "colMinWidth"),
+
+                        grid.Column("Obligatorisk", "Obligatorisk", format: @<text>
+                        <span class="display-mode"><input id="lblObligatory" class="checkbox" name="select" type="checkbox" disabled @(item.Obligatorisk ? "checked='checked'" : "") value="@item.Obligatorisk" /></span>
+                        <input id="Obligatory" class="edit-mode form-control checkbox" name="select" type="checkbox" @(item.Tom ? "checked='checked'" : "") value="@item.Tom"/></text>, style: "colMinWidth centered"),
+
+                        grid.Column("Tom", "Tom", format: @<text>
+                        <span class="display-mode"><input id="lblTom" class="checkbox" name="select" type="checkbox" disabled @(item.Tom ? "checked='checked'" : "") value="@item.Tom"/></span>
+                        <input id="Tom" class="edit-mode form-control checkbox" name="select" type="checkbox" @(item.Tom ? "checked='checked'" : "") value="@item.Tom"/></text>, style: "colMinWidth centered"),
 
                         grid.Column(null, format: @<text>
-                        <button class="edit-user display-mode btn btn-default">Ändra</button>
-                        <button class="save-user edit-mode btn btn-default">Spara</button>
-                        <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-                    </text>, style: "col3Width", canSort: false)))
+                            <button class="edit-user display-mode btn btn-default">Ändra</button>
+                            <button class="save-user edit-mode btn btn-default">Spara</button>
+                            <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                        </text>, style: "col3Width", canSort: false)))
 
-            </div>
+    </div>
     }
 </div>

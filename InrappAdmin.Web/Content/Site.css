@@ -211,3 +211,15 @@ label {
 #Filmask {
     max-width: 400px !important;
 }
+
+.checkbox {
+    display: inline;
+}
+
+/*#Obligatory .checkbox{
+    display: inline !important;
+}*/
+
+.centered {
+    text-align: center;
+}
