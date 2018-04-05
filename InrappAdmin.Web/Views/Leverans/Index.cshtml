@@ -66,11 +66,15 @@
                     //"Paminnelse1": forvLevPaminnelse1,
                     //"Paminnelse2": forvLevPaminnelse2,
                     //"Paminnelse3": forvLevPaminnelse3
-                };
+                    };
+                var regId = $("#SelectedRegisterId").val();
                 //Posting AdmForvantadleverans object to controller's Update action method
                 $.ajax({
                     url: '/Leverans/UpdateForvantadLeverans',
-                    data: JSON.stringify(admForvantadLev),
+                    data: JSON.stringify({
+                        forvLevModel: admForvantadLev,
+                        regId: regId
+                    }),
                     type: 'POST',
                     contentType: 'application/json; charset=utf-8',
                     success: function(data) {
@@ -153,6 +157,8 @@
                 mode: WebGridPagerModes.All,
                 columns: grid.Columns(
                     grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="ForvantadleveransId" class="edit-mode colMinWidth">@item.Id</label></text>, style: "colMinWidth"),
+                    grid.Column(null, null, format: @<text><input type="hidden" id="DelregisterId" value="@item.DelregisterId" class="edit-mode form-control"/></text>, style: "colMinWidth"),
+
                     grid.Column("Delregister", "Delregister", format: @<text><span class="display-mode"><label id="lblDelregister">@item.DelregisterKortnamn</label></span>
                     <input type="text" id="Delregister" value="@item.DelregisterKortnamn" class="edit-mode form-control"/></text>, style: "colMinWidth"),
                     grid.Column("Filkravid", "Filkravid", format: @<text><span class="display-mode"><label id="lblFilkravId">@item.FilkravId</label></span>

@@ -58,6 +58,10 @@ namespace InrappAdmin.Web.Controllers
         public ActionResult GetDirectorysExpectedDeliveries(LeveransViewModels.LeveransViewModel model, int regId = 0)
         {
             var dirId = model.SelectedRegisterId;
+            if (dirId == 0 && regId != 0)
+            {
+                dirId = regId;
+            }
             if (dirId != 0)
             {
                 var forvLevList = _portalAdminService.HamtaForvantadeLeveranserForRegister(dirId);
@@ -66,7 +70,7 @@ namespace InrappAdmin.Web.Controllers
                 // Ladda drop down lists. 
                 var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
                 this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
-                model.SelectedRegisterId = 0;
+                model.SelectedRegisterId = dirId;
             }
             else
             {
@@ -150,7 +154,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateForvantadLeverans(LeveransViewModels.AdmForvantadleveransViewModel forvLevModel)
+        public ActionResult UpdateForvantadLeverans(LeveransViewModels.AdmForvantadleveransViewModel forvLevModel, string regId = "0")
         {
             if (ModelState.IsValid)
             {
@@ -165,20 +169,36 @@ namespace InrappAdmin.Web.Controllers
                     ErrorManager.WriteToErrorLog("LeveransController", "UpdateForvantadLeverans", e.ToString(), e.HResult, "InrappAdmin");
                     var errorModel = new CustomErrorPageModel
                     {
-                        Information = "Ett fel inträffade vid uppadtering av förväntad leverans.",
+                        Information = "Ett fel inträffade vid uppdatering av förväntad leverans.",
                         ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
                     };
                     return View("CustomError", errorModel);
 
                 }
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("GetDirectorysExpectedDeliveries", new { regId = regId});
 
         }
 
         private AdmForvantadleverans ConvertViewModelToForvLev(LeveransViewModels.AdmForvantadleveransViewModel forvLevModel)
         {
-            throw new NotImplementedException();
+            var forvLev = new AdmForvantadleverans
+            {
+                Id = forvLevModel.Id,
+                FilkravId = forvLevModel.FilkravId,
+                DelregisterId = forvLevModel.DelregisterId,
+                Period = forvLevModel.Period,
+                Uppgiftsstart = forvLevModel.Uppgiftsstart,
+                Uppgiftsslut = forvLevModel.Uppgiftsslut,
+                Rapporteringsstart = forvLevModel.Rapporteringsstart,
+                Rapporteringsslut = forvLevModel.Rapporteringsslut,
+                Rapporteringsenast = forvLevModel.Rapporteringsenast,
+                Paminnelse1 = forvLevModel.Paminnelse1,
+                Paminnelse2 = forvLevModel.Paminnelse2,
+                Paminnelse3 = forvLevModel.Paminnelse3
+            };
+
+            return forvLev;
         }
 
         [HttpPost]
