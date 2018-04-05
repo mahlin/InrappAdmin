@@ -180,9 +180,15 @@ namespace InrappAdmin.ApplicationService
             return forvFilList;
         }
 
-        public string HamtaKortnamnForDelregister(int foreskriftsId)
+        public string HamtaKortnamnForDelregisterMedForeskriftsId(int foreskriftsId)
         {
             var delRegKortnamn = _portalAdminRepository.GetSubDirectoryShortNameForExpectedFile(foreskriftsId);
+            return delRegKortnamn;
+        }
+
+        public string HamtaKortnamnForDelregister(int delregId)
+        {
+            var delRegKortnamn = _portalAdminRepository.GetSubDirectoryShortName(delregId);
             return delRegKortnamn;
         }
 

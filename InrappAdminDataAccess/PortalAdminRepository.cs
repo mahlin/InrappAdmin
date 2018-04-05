@@ -198,6 +198,12 @@ namespace InrappAdmin.DataAccess
             return subDirShortName;
         }
 
+        public string GetSubDirectoryShortName(int subDirId)
+        {
+            var subDirShortName = DbContext.AdmDelregister.Where(x => x.Id == subDirId).Select(x => x.Kortnamn).SingleOrDefault();
+            return subDirShortName;
+        }
+
         public IEnumerable<AdmForvantadfil> GetExpectedFilesForDirectory(int dirId)
         {
             var expectedFileList = new List<AdmForvantadfil>();
@@ -469,7 +475,6 @@ namespace InrappAdmin.DataAccess
                 DbContext.SaveChanges();
             }
         }
-
 
     }
 }

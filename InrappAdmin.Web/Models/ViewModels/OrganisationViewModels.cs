@@ -25,7 +25,7 @@ namespace InrappAdmin.Web.Models.ViewModels
 
             public IEnumerable<Organisationsenhet> OrgUnits { get; set; }
 
-            public  IEnumerable<AdmUppgiftsskyldighet> ReportObligations { get; set; }
+            public  IEnumerable<ReportObligationsViewModel> ReportObligations { get; set; }
 
         }
 
@@ -41,8 +41,10 @@ namespace InrappAdmin.Web.Models.ViewModels
 
         public class ReportObligationsViewModel
         {
-            public int Organisationsid { get; set; }
+            public int Id { get; set; }
+            public int OrganisationId { get; set; }
             public int DelregisterId { get; set; }
+            public string DelregisterKortnamn { get; set; }
             public DateTime? SkyldigFrom { get; set; }
             public DateTime? SkyldigTom { get; set; }
             public bool RapporterarPerEnhet { get; set; }

@@ -72,6 +72,8 @@ namespace InrappAdmin.DataAccess
 
         string GetSubDirectoryShortNameForExpectedFile(int filKravId);
 
+        string GetSubDirectoryShortName(int subDirId);
+
         void CreateOrgUnit(Organisationsenhet orgUnit);
 
         void CreateFAQCategory(AdmFAQKategori faqCategory);

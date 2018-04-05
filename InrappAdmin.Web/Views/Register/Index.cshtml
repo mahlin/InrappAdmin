@@ -39,7 +39,12 @@
                 var regName = tr.find("#RegisterName").val();
                 var regDescription = tr.find("#RegisterDecsription").val();
                 var regShortName = tr.find("#RegisterShortName").val();
-                var regForPortal = tr.find("#RegisterForPortal").val();
+                var regForPortal;
+                if (tr.find("#RegisterForPortal").is(':checked')) {
+                    regForPortal = true;
+                } else {
+                    regForPortal = false;
+                }
 
                 //Creating AdmRegister JSON object
                 var register =
@@ -121,8 +126,10 @@
 
                             grid.Column("Kortnamn", "Kortnamn", format: @<text><span class="display-mode"><label id="lblShortName">@item.Kortnamn</label></span>
                                 <input type="text" id="RegisterShortName" value="@item.Kortnamn" class="edit-mode form-control" /></text>, style: "colMinWidth"),
-                            grid.Column("Inrapporteringsportal", "Inrapporteringsportal", format: @<text><span class="display-mode test"><label id="lblForPortal">@item.Inrapporteringsportal</label></span>
-                                <input type="text" id="RegisterForPortal" value="@item.Inrapporteringsportal.ToString()" class="edit-mode form-control" /></text>, style: "colMinWidth"),
+                            grid.Column("Inrapporteringsportal", "Inrapporteringsportal", format: @<text>
+                                <span class="display-mode"><input id="lblForPortal" class="checkbox" name="select" type="checkbox" disabled @(item.Inrapporteringsportal ? "checked='checked'" : "") value="@item.Inrapporteringsportal"/></span>
+                                <input id="RegisterForPortal" class="edit-mode form-control checkbox" name="select" type="checkbox" @(item.Inrapporteringsportal ? "checked='checked'" : "") value="@item.Inrapporteringsportal"/></text>, style: "colMinWidth centered"),
+
 
 
                             grid.Column(null, format: @<text>

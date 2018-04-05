@@ -23,8 +23,13 @@
                 var repDelRegId = tr.find("#RepDelRegId").html();
                 var repSkyldigFrom = tr.find("#RepSkyldigFrom").val();
                 var repSkyldigTom = tr.find("#RepSkyldigTom").val();
-                var repRapporterarPerEnhet = tr.find("#RepRapporterarPerEnhet").val();
                 var orgId = $('#Organisation_Id').val();
+                var repRapporterarPerEnhet;
+                if (tr.find("#RepRapporterarPerEnhet").is(':checked')) {
+                    repRapporterarPerEnhet = true;
+                } else {
+                    repRapporterarPerEnhet = false;
+                }
 
                 //Creating AdmUppgiftsskyldighet JSON object
                 var uppgiftsskyldighet =
@@ -126,17 +131,21 @@
                              rowStyle: "webgrid-row-style",
                              mode: WebGridPagerModes.All,
                              columns: grid.Columns(
-                                 grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="RepId" class="edit-mode colMinWidth">@item.Id</label></text>,style: "colMinWidth"),
-                                 grid.Column("Delregister", format: @<text><span class="display-mode">@item.DelregisterId</span><label id="RepDelRegId" class="edit-mode colMinWidth">@item.DelregisterId</label></text>,style: "colMinWidth"),
+                                grid.Column(null, null, format: @<text><input type="hidden" id="DelregisterId" value="@item.DelregisterId" class="edit-mode form-control"/></text>, style: "colMiniminiWidth"),
 
+                                grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="RepId" class="edit-mode colMinWidth">@item.Id</label></text>,style: "colMinWidth"),
+                                grid.Column("Delregister", "Delregister", format: @<text><span class="display-mode"><label id="lblDelregister">@item.DelregisterKortnamn</label></span>
+                                <input type="text" id="Delregister" value="@item.DelregisterKortnamn" class="edit-mode form-control"/></text>, style: "colMinWidth"),
                                 grid.Column("Fr.o.m", "Fr.o.m", format: @<text><span class="display-mode"><label id="lblSkyldigFrom">@( item.SkyldigFrom != null ? item.SkyldigFrom.ToString("yyyy-MM-dd") : item.SkyldigFrom)</label></span>
                                 <input type="text" id="RepSkyldigFrom" value="@( item.SkyldigFrom != null ? item.SkyldigFrom.ToString("yyyy-MM-dd") : item.SkyldigFrom)" class="edit-mode form-control" /></text>, style: "col2Width"),
 
                                 grid.Column("T.o.m", "T.o.m", format: @<text><span class="display-mode"><label id="lblSkyldigTom">@( item.SkyldigTom != null ? item.SkyldigTom.ToString("yyyy-MM-dd") : item.SkyldigTom)</label></span>
                                 <input type="text" id="RepSkyldigTom" value="@( item.SkyldigTom != null ? item.SkyldigTom.ToString("yyyy-MM-dd") : item.SkyldigTom)" class="edit-mode form-control" /></text>, style: "col2Width"),
 
-                                grid.Column("Per enhet", "Per enhet", format: @<text><span class="display-mode"><label id="lblRappPerEnhet">@item.RapporterarPerEnhet</label></span>
-                                <input type="text" id="RepRapporterarPerEnhet" value="@item.RapporterarPerEnhet.ToString()" class="edit-mode form-control" /></text>, style: "colMinWidth"),
+                                grid.Column("Per enhet", "Per enhet", format: @<text>
+                                <span class="display-mode"><input id="lblRappPerEnhet" class="checkbox" name="select" type="checkbox" disabled @(item.RapporterarPerEnhet ? "checked='checked'" : "") value="@item.RapporterarPerEnhet"/></span>
+                                <input id="RepRapporterarPerEnhet" class="edit-mode form-control checkbox" name="select" type="checkbox" @(item.RapporterarPerEnhet ? "checked='checked'" : "") value="@item.RapporterarPerEnhet"/></text>, style: "colMinWidth centered"),
+
 
                                 grid.Column(null, format: @<text>
                                 <button class="edit-user display-mode btn btn-default">Ändra</button>

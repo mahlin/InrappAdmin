@@ -57,7 +57,9 @@ namespace InrappAdmin.ApplicationService.Interface
         IEnumerable<AdmRegister> HamtaAllaRegister();
         IEnumerable<AdmRegister> HamtaAllaRegisterForPortalen();
 
-        string HamtaKortnamnForDelregister(int foreskriftsId);
+        string HamtaKortnamnForDelregisterMedForeskriftsId(int foreskriftsId);
+
+        string HamtaKortnamnForDelregister(int delregId);
 
         void SkapaOrganisationsenhet(Organisationsenhet orgUnit);
 

@@ -23,8 +23,13 @@
                 var subDirName = tr.find("#SubDirectoryName").val();
                 var subDirDescription = tr.find("#SubDirectoryDecsription").val();
                 var subDirShortName = tr.find("#SubDirectoryShortName").val();
-                var subDirForPortal = tr.find("#SubDirectoryForPortal").val();
                 var subDirFolder = tr.find("#SubDirectoryFolder").val();
+                var subDirForPortal;
+                if (tr.find("#SubDirectoryForPortal").is(':checked')) {
+                    subDirForPortal = true;
+                } else {
+                    subDirForPortal = false;
+                }
 
                 //Creating AdmDelregister JSON object
                 var subDir =
@@ -138,19 +143,18 @@
                  columns: grid.Columns(
                      grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="SubDirectoryId" class="edit-mode colMinWidth">@item.Id</label></text>, style: "colMinWidth"),
 
-                 grid.Column("Delregisternamn", "Delregisternamn", format: @<text><span class="display-mode"><label id="lblName" style="width: 300px;">@item.Delregisternamn</label></span>
+                grid.Column("Delregisternamn", "Delregisternamn", format: @<text><span class="display-mode"><label id="lblName" style="width: 300px;">@item.Delregisternamn</label></span>
                 <input type="text" id="SubDirectoryName" value="@item.Delregisternamn" class="edit-mode form-control" /></text>, style: "col4Width"),
                 grid.Column("Beskrivning", "Beskrivning", format: @<text><span class="display-mode"><label id="lblDescription" class="longColumnText">@item.Beskrivning</label></span>
                 <textarea id="SubDirectoryDecsription" value="" class="edit-mode form-control" style="height: 300px; width: 300px;">@item.Beskrivning</textarea></text>, style: "col4Width"),
 
-                 grid.Column("Kortnamn", "Kortnamn", format: @<text><span class="display-mode"><label id="lblShortName">@item.Kortnamn</label></span>
-                    <input type="text" id="SubDirectoryShortName" value="@item.Kortnamn" class="edit-mode form-control" /></text>, style: "colMinWidth"),
-                 grid.Column("Slussmapp", "Slussmapp", format: @<text><span class="display-mode"><label id="lblFolder">@item.Slussmapp</label></span>
-                    <input type="text" id="SubDirectoryFolder" value="@item.Slussmapp" class="edit-mode form-control" /></text>, style: "colMinWidth"),
-                 grid.Column("Inrapporteringsportal", "Inrapporteringsportal", format: @<text><span class="display-mode"><label id="lblForPortal">@item.Inrapporteringsportal</label></span>
-                    <input type="text" id="SubDirectoryForPortal" value="@item.Inrapporteringsportal.ToString()" class="edit-mode form-control" /></text>, style: "colMinWidth"),
-
-
+                grid.Column("Kortnamn", "Kortnamn", format: @<text><span class="display-mode"><label id="lblShortName">@item.Kortnamn</label></span>
+                <input type="text" id="SubDirectoryShortName" value="@item.Kortnamn" class="edit-mode form-control" /></text>, style: "colMinWidth"),
+                grid.Column("Slussmapp", "Slussmapp", format: @<text><span class="display-mode"><label id="lblFolder">@item.Slussmapp</label></span>
+                <input type="text" id="SubDirectoryFolder" value="@item.Slussmapp" class="edit-mode form-control" /></text>, style: "colMinWidth"),
+                grid.Column("Inrapporteringsportal", "Inrapporteringsportal", format: @<text>
+                <span class="display-mode"><input id="lblForPortal" class="checkbox" name="select" type="checkbox" disabled @(item.Inrapporteringsportal ? "checked='checked'" : "") value="@item.Inrapporteringsportal"/></span>
+                <input id="SubDirectoryForPortal" class="edit-mode form-control checkbox" name="select" type="checkbox" @(item.Inrapporteringsportal ? "checked='checked'" : "") value="@item.Inrapporteringsportal"/></text>, style: "colMinWidth centered"),
 
                  grid.Column(null, format: @<text>
                         <button class="edit-user display-mode btn btn-default">Ändra</button>

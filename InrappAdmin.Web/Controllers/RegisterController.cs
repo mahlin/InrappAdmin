@@ -90,6 +90,30 @@ namespace InrappAdmin.Web.Controllers
             return View("EditSubDirectories", model);
         }
 
+        // GET
+        public ActionResult GetAllSubDirectories()
+        {
+            var model = new RegisterViewModels.RegisterViewModel();
+            try
+            {
+                model.DelRegisters = _portalAdminService.HamtaDelRegister();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("RegisterController", "GetAllSubDirectories", e.ToString(), e.HResult,
+                    "InrappAdmin");
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid hämtning av delregister",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+
+            }
+            return View("EditSubDirectories", model);
+        }
+
 
         [HttpPost]
         public ActionResult UpdateDirectory(AdmRegister register)

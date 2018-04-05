@@ -43,7 +43,8 @@ namespace InrappAdmin.Web.Controllers
                 model.ContactPersons = ConvertUsersViewModelUser(contacts);
 
                 model.OrgUnits = _portalAdminService.HamtaOrgEnheterForOrg(model.Organisation.Id);
-                model.ReportObligations = _portalAdminService.HamtaUppgiftsskyldighetForOrg(model.Organisation.Id);
+                var reportObligationsDb = _portalAdminService.HamtaUppgiftsskyldighetForOrg(model.Organisation.Id);
+                model.ReportObligations = ConvertAdmUppgiftsskyldighetToViewModel(reportObligationsDb.ToList());
             }
             catch (Exception e)
             {
@@ -123,7 +124,8 @@ namespace InrappAdmin.Web.Controllers
                 model.Organisation = _portalAdminService.HamtaOrganisation(orgId);
                 model.Kommunkod = _portalAdminService.HamtaKommunkodForOrg(orgId);
             }
-            model.ReportObligations = _portalAdminService.HamtaUppgiftsskyldighetForOrg(model.Organisation.Id);
+            var admUppgSkyldighetList = _portalAdminService.HamtaUppgiftsskyldighetForOrg(model.Organisation.Id);
+            model.ReportObligations = ConvertAdmUppgiftsskyldighetToViewModel(admUppgSkyldighetList.ToList());
 
             return View("EditReportObligations", model);
         }
@@ -166,13 +168,14 @@ namespace InrappAdmin.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateOrganisationsReportObligation(AdmUppgiftsskyldighet admUppgSkyldighet)
+        public ActionResult UpdateOrganisationsReportObligation(OrganisationViewModels.ReportObligationsViewModel admUppgSkyldighet)
         {
             var org = _portalAdminService.HamtaOrgForUppgiftsskyldighet(admUppgSkyldighet.Id);
             var kommunkod = _portalAdminService.HamtaKommunkodForOrg(org.Id);
             if (ModelState.IsValid)
             {
-                _portalAdminService.UppdateraUppgiftsskyldighet(admUppgSkyldighet);
+                var admUppgiftsskyldighetToDb = ConvertViewModelToAdmUppgiftsskyldighet(admUppgSkyldighet);
+                _portalAdminService.UppdateraUppgiftsskyldighet(admUppgiftsskyldighetToDb);
             }
             return RedirectToAction("GetOrganisationsReportObligations", new { kommunkod = kommunkod });
 
@@ -220,7 +223,7 @@ namespace InrappAdmin.Web.Controllers
         public ActionResult CreateReportObligation(int orgId = 0)
         {
             var model = new OrganisationViewModels.ReportObligationsViewModel();
-            model.Organisationsid = orgId;
+            model.OrganisationId = orgId;
             return View(model);
         }
 
@@ -314,6 +317,44 @@ namespace InrappAdmin.Web.Controllers
             return contactPersonsView;
 
 
+        }
+
+        private AdmUppgiftsskyldighet ConvertViewModelToAdmUppgiftsskyldighet(OrganisationViewModels.ReportObligationsViewModel admUppgskylldighetView)
+        {
+            var uppgSkyldighet = new AdmUppgiftsskyldighet()
+            {
+                Id = admUppgskylldighetView.Id,
+                OrganisationId = admUppgskylldighetView.OrganisationId,
+                DelregisterId = admUppgskylldighetView.DelregisterId,
+                SkyldigFrom = admUppgskylldighetView.SkyldigFrom,
+                SkyldigTom = admUppgskylldighetView.SkyldigTom,
+                RapporterarPerEnhet = admUppgskylldighetView.RapporterarPerEnhet
+            };
+
+            return uppgSkyldighet;
+        }
+
+        private List<OrganisationViewModels.ReportObligationsViewModel> ConvertAdmUppgiftsskyldighetToViewModel(List<AdmUppgiftsskyldighet> admUppgskyldighetList)
+        {
+            var uppgSkyldigheter = new List<OrganisationViewModels.ReportObligationsViewModel>();
+            foreach (var admUppgskyldighet in admUppgskyldighetList)
+            {
+                var uppgSkyldighetView = new OrganisationViewModels.ReportObligationsViewModel()
+                {
+                    Id = admUppgskyldighet.Id,
+                    OrganisationId = admUppgskyldighet.OrganisationId,
+                    DelregisterId = admUppgskyldighet.DelregisterId,
+                    DelregisterKortnamn = _portalAdminService.HamtaKortnamnForDelregister(admUppgskyldighet.DelregisterId),
+                    SkyldigFrom = admUppgskyldighet.SkyldigFrom,
+                    SkyldigTom = admUppgskyldighet.SkyldigTom,
+                    RapporterarPerEnhet = admUppgskyldighet.RapporterarPerEnhet
+                };
+
+                uppgSkyldigheter.Add(uppgSkyldighetView);
+            }
+            
+
+            return uppgSkyldigheter;
         }
 
         //// GET: Organisation/Details/5

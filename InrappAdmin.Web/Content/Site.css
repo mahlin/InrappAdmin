@@ -150,6 +150,12 @@ textarea {
     padding: 3px 7px 2px;
 }
 
+.colMiniminiWidth {
+    width: 5px;
+    margin: -5px;
+    padding: 3px 7px 2px;
+}
+
 .colMinWidth {
     width: 50px;
     margin: -5px;
