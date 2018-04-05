@@ -47,9 +47,9 @@
                 var forvLevRapporteringsstart = tr.find("#Rapporteringsstart").val();
                 var forvLevRapporteringsslut = tr.find("#Rapporteringsslut").val();
                 var forvLevRapporteringsenast = tr.find("#Rapporteringsenast").val();
-                //var forvLevPaminnelse1 = tr.find("#Paminnelse1").val();
-                //var forvLevPaminnelse2 = tr.find("#Paminnelse2").val();
-                //var forvLevPaminnelse3 = tr.find("#Paminnelse3").val();
+                var forvLevPaminnelse1 = tr.find("#Paminnelse1").val();
+                var forvLevPaminnelse2 = tr.find("#Paminnelse2").val();
+                var forvLevPaminnelse3 = tr.find("#Paminnelse3").val();
 
                 //Creating AdmForvantadLeverans JSON object
                 var admForvantadLev =
@@ -63,9 +63,9 @@
                     "Rapporteringsstart": forvLevRapporteringsstart,
                     "Rapporteringsslut": forvLevRapporteringsslut,
                     "Rapporteringsenast": forvLevRapporteringsenast,
-                    //"Paminnelse1": forvLevPaminnelse1,
-                    //"Paminnelse2": forvLevPaminnelse2,
-                    //"Paminnelse3": forvLevPaminnelse3
+                    "Paminnelse1": forvLevPaminnelse1,
+                    "Paminnelse2": forvLevPaminnelse2,
+                    "Paminnelse3": forvLevPaminnelse3
                     };
                 var regId = $("#SelectedRegisterId").val();
                 //Posting AdmForvantadleverans object to controller's Update action method
@@ -183,11 +183,15 @@
                     <input type="text" id="Rapporteringsenast" value="@( item.Rapporteringsenast != null ? item.Rapporteringsenast.ToString("yyyy-MM-dd") : item.Rapporteringsenast)" class="edit-mode form-control"/></text>, style: "col2Width"),
 
                     grid.Column("Paminnelse1", "Paminnelse1", format: @<text><span class="display-mode">
-                    <label id="lblPaminnelse1">@( item.Paminnelse1 != null ? item.Paminnelse1.ToString("yyyy-MM-dd") : item.Paminnelse1)</label></span></text>, style: "col2Width"),
+                    <label id="lblPaminnelse1">@( item.Paminnelse1 != null ? item.Paminnelse1.ToString("yyyy-MM-dd") : item.Paminnelse1)</label></span>
+                    <input type="text" id="Paminnelse1" value="@( item.Paminnelse1 != null ? item.Paminnelse1.ToString("yyyy-MM-dd") : item.Paminnelse1)" class="edit-mode form-control"/></text>, style: "col2Width"),
                     grid.Column("Paminnelse2", "Paminnelse2", format: @<text><span class="display-mode">
-                    <label id="lblPaminnelse2">@( item.Paminnelse2 != null ? item.Paminnelse2.ToString("yyyy-MM-dd") : item.Paminnelse2)</label></span></text>, style: "col2Width"),
+                    <label id="lblPaminnelse2">@( item.Paminnelse2 != null ? item.Paminnelse2.ToString("yyyy-MM-dd") : item.Paminnelse2)</label></span>
+                    <input type="text" id="Paminnelse2" value="@( item.Paminnelse2 != null ? item.Paminnelse2.ToString("yyyy-MM-dd") : item.Paminnelse2)" class="edit-mode form-control"/></text>, style: "col2Width"),
+
                     grid.Column("Paminnelse3", "Paminnelse3", format: @<text><span class="display-mode">
-                    <label id="lblPaminnelse3">@( item.Paminnelse3 != null ? item.Paminnelse3.ToString("yyyy-MM-dd") : item.Paminnelse3)</label></span></text>, style: "col2Width"),
+                    <label id="lblPaminnelse3">@( item.Paminnelse3 != null ? item.Paminnelse3.ToString("yyyy-MM-dd") : item.Paminnelse3)</label></span>
+                    <input type="text" id="Paminnelse3" value="@( item.Paminnelse3 != null ? item.Paminnelse3.ToString("yyyy-MM-dd") : item.Paminnelse3)" class="edit-mode form-control"/></text>, style: "col2Width"),
 
                     grid.Column(null, format: @<text>
                         <button class="edit-user display-mode btn btn-default">Ändra</button>

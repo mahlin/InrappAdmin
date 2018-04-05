@@ -398,9 +398,9 @@ namespace InrappAdmin.DataAccess
             forvLevToUpdate.Rapporteringsstart = forvLev.Rapporteringsstart;
             forvLevToUpdate.Rapporteringsslut = forvLev.Rapporteringsslut;
             forvLevToUpdate.Rapporteringsenast = forvLev.Rapporteringsenast;
-            //forvLevToUpdate.Paminnelse1 = forvLev.Paminnelse1;
-            //forvLevToUpdate.Paminnelse2 = forvLev.Paminnelse2;
-            //forvLevToUpdate.Paminnelse3 = forvLev.Paminnelse3;
+            forvLevToUpdate.Paminnelse1 = forvLev.Paminnelse1;
+            forvLevToUpdate.Paminnelse2 = forvLev.Paminnelse2;
+            forvLevToUpdate.Paminnelse3 = forvLev.Paminnelse3;
             DbContext.SaveChanges();
         }
 
