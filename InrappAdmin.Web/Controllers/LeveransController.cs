@@ -76,9 +76,13 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // GET
-        public ActionResult GetDirectorysExpectedFiles(LeveransViewModels.LeveransViewModel model)
+        public ActionResult GetDirectorysExpectedFiles(LeveransViewModels.LeveransViewModel model, int regId = 0)
         {
             var dirId = model.SelectedRegisterId;
+            if (dirId == 0 && regId != 0)
+            {
+                dirId = regId;
+            }
             if (dirId != 0)
             {
                 var register = _portalAdminService.HamtaRegisterMedId(dirId);
@@ -88,7 +92,7 @@ namespace InrappAdmin.Web.Controllers
                 // Ladda drop down lists. 
                 var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
                 this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
-                model.SelectedRegisterId = 0;
+                model.SelectedRegisterId = dirId;
             }
             else
             {
@@ -178,8 +182,9 @@ namespace InrappAdmin.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateForvantadFil(AdmForvantadfil forvFil)
+        public ActionResult UpdateForvantadFil(AdmForvantadfil forvFil, string regId = "0")
         {
+
             if (ModelState.IsValid)
             {
                 try
@@ -199,7 +204,7 @@ namespace InrappAdmin.Web.Controllers
 
                 }
             }
-            return RedirectToAction("GetForvantadeFiler");
+            return RedirectToAction("GetDirectorysExpectedFiles", new {regId = regId});
 
         }
 

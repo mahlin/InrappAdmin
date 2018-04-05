@@ -59,10 +59,14 @@
                     "Obligatorisk": forvFilObligatory,
                     "Tom": forvFilTom
                 };
+                var regId = $("#SelectedRegisterId").val();
                 //Posting AdmForvantadfil object to controller's Update action method
                 $.ajax({
                     url: '/Leverans/UpdateForvantadFil',
-                    data: JSON.stringify(admForvantadFil),
+                    data: JSON.stringify({
+                        forvFil: admForvantadFil,
+                        regId: "7"})
+                    ,
                     type: 'POST',
                     contentType: 'application/json; charset=utf-8',
                     success: function(data) {
@@ -149,7 +153,7 @@
 
                         grid.Column("Obligatorisk", "Obligatorisk", format: @<text>
                         <span class="display-mode"><input id="lblObligatory" class="checkbox" name="select" type="checkbox" disabled @(item.Obligatorisk ? "checked='checked'" : "") value="@item.Obligatorisk" /></span>
-                        <input id="Obligatory" class="edit-mode form-control checkbox" name="select" type="checkbox" @(item.Tom ? "checked='checked'" : "") value="@item.Tom"/></text>, style: "colMinWidth centered"),
+                        <input id="Obligatory" class="edit-mode form-control checkbox" name="select" type="checkbox" @(item.Obligatorisk ? "checked='checked'" : "") value="@item.Obligatorisk"/></text>, style: "colMinWidth centered"),
 
                         grid.Column("Tom", "Tom", format: @<text>
                         <span class="display-mode"><input id="lblTom" class="checkbox" name="select" type="checkbox" disabled @(item.Tom ? "checked='checked'" : "") value="@item.Tom"/></span>
