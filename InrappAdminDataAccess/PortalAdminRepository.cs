@@ -336,6 +336,8 @@ namespace InrappAdmin.DataAccess
             var orgU = DbContext.Organisationsenhet.Where(u => u.Id == orgUnit.Id).Select(u => u).SingleOrDefault();
             orgU.Enhetsnamn = orgUnit.Enhetsnamn;
             orgU.Enhetskod = orgUnit.Enhetskod;
+            orgU.AktivFrom = orgUnit.AktivFrom;
+            orgU.AktivTom = orgUnit.AktivTom;
             DbContext.SaveChanges(); 
         }
 
