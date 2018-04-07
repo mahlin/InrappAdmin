@@ -40,6 +40,8 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<AdmFAQ> GetFAQs(int faqCatId);
 
+        AdmFAQ GetFAQ(int faqId);
+
         IEnumerable<AdmInformation> GetInformationTexts();
 
         IEnumerable<AdmKonfiguration> GetAdmConfiguration();

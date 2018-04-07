@@ -216,6 +216,12 @@ namespace InrappAdmin.ApplicationService
             return forvLeveranser;
         }
 
+        public AdmFAQ HamtaFAQ(int faqId)
+        {
+            var faq = _portalAdminRepository.GetFAQ(faqId);
+            return faq;
+        }
+
         public void SkapaOrganisationsenhet(Organisationsenhet orgUnit)
         {
             //Sätt datum och användare

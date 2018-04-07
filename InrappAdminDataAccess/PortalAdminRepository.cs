@@ -115,7 +115,8 @@ namespace InrappAdmin.DataAccess
 
         public IEnumerable<AdmFAQKategori> GetFAQCategories()
         {
-            var faqCats = DbContext.AdmFAQKategori.Include(x => x.AdmFAQ).ToList();
+            //var faqCats = DbContext.AdmFAQKategori.Include(x => x.AdmFAQ).ToList();
+            var faqCats = DbContext.AdmFAQKategori.ToList();
             return faqCats;
         }
 
@@ -238,6 +239,12 @@ namespace InrappAdmin.DataAccess
         {
             var registersList = DbContext.AdmRegister.Where(x => x.Inrapporteringsportal).ToList();
             return registersList;
+        }
+
+        public AdmFAQ GetFAQ(int faqId)
+        {
+            var faq = DbContext.AdmFAQ.SingleOrDefault(x => x.Id == faqId);
+            return faq;
         }
 
         public void CreateOrgUnit(Organisationsenhet orgUnit)
@@ -477,6 +484,7 @@ namespace InrappAdmin.DataAccess
                 DbContext.SaveChanges();
             }
         }
+
 
     }
 }

@@ -17,6 +17,7 @@ namespace InrappAdmin.DataAccess
 #if DEBUG
             Database.Log = s => Debug.WriteLine(s);
 #endif
+            Configuration.ProxyCreationEnabled = false;
         }
 
         public InrappAdminDbContext(string connString) : base(connString)
@@ -24,6 +25,7 @@ namespace InrappAdmin.DataAccess
 #if DEBUG
             Database.Log = s => Debug.WriteLine(s);
 #endif
+            Configuration.ProxyCreationEnabled = false;
         }
 
         public static InrappAdminDbContext Create()
@@ -346,5 +348,6 @@ namespace InrappAdmin.DataAccess
         public DbSet<AdmForeskrift> AdmForeskrift { get; set; }
         public DbSet<Inloggning> Inloggning { get; set; }
         public DbSet<Roll> Roll { get; set; }
+
     }
 }

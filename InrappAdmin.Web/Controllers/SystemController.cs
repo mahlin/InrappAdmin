@@ -288,6 +288,59 @@ namespace InrappAdmin.Web.Controllers
             return View();
         }
 
+
+        // GET
+        public ActionResult EditSelectedFAQ(int faqId = 0)
+        {
+            var model = new SystemViewModels.SystemViewModel();
+            model.SelectedFAQ = new SystemViewModels.FAQViewModel();
+            var selectedFAQDb = _portalAdminService.HamtaFAQ(faqId);
+            model.SelectedFAQ.FAQkategoriId = selectedFAQDb.FAQkategoriId;
+            model.SelectedFAQ.Id = selectedFAQDb.Id;
+            model.SelectedFAQ.Fraga = selectedFAQDb.Fraga;
+            model.SelectedFAQ.Svar = selectedFAQDb.Svar;
+            return View("_EditSelectedFAQ", model);
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditSelectedFAQ(SystemViewModels.SystemViewModel model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    AdmFAQ faq = new AdmFAQ
+                    {
+                        Id = model.SelectedFAQ.Id,
+                        FAQkategoriId = model.SelectedFAQ.FAQkategoriId,
+                        RegisterId = model.SelectedFAQ.RegisterId,
+                        Fraga = model.SelectedFAQ.Fraga,
+                        Svar = model.SelectedFAQ.Svar
+
+                    };
+                    _portalAdminService.UppdateraFAQ(faq);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("SystemController", "EditSelectedFAQ", e.ToString(), e.HResult, "InrappAdmin");
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade när faq skulle sparas.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
+                return RedirectToAction("GetFAQs", new { faqCatId = model.SelectedFAQ.FAQkategoriId });
+            }
+
+            return RedirectToAction("GetFAQs", new {faqCatId = model.SelectedFAQ.FAQkategoriId });
+        }
+
+
         // GET
         public ActionResult CreateInformationText()
         {

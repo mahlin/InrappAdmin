@@ -34,9 +34,18 @@
 
     $(function () {
         $('.edit-mode').hide();
-        $('.edit-user, .cancel-user').on('click', function () {
+        $('.edit-user').on('click', function () {
             var tr = $(this).parents('tr:first');
             tr.find('.edit-mode, .display-mode').toggle();
+        });
+
+        $('.cancel-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            tr.find('.edit-mode, .display-mode').toggle();
+            var x = $('#textArea').html();
+            var y = $('#textArea').text();
+            var z = $('#textArea').val();
+            $('#textArea').html("");
         });
         $('.save-user').on('click', function () {
             var tr = $(this).parents('tr:first');
@@ -66,13 +75,13 @@
 
         });
 
-        $('.edit-user').on('click', function () {
-            var tr = $(this).parents('tr:first');
-            var infoId = tr.find("#InfoId").html();
-            var informationsTyp = tr.find("#InfoTyp").val();
+        //$('.edit-user').on('click', function () {
+        //    var tr = $(this).parents('tr:first');
+        //    var infoId = tr.find("#InfoId").html();
+        //    var informationsTyp = tr.find("#InfoTyp").val();
 
-            tr.find("#lblInfoTyp").text(informationsTyp);
-        });
+        //    tr.find("#lblInfoTyp").text(informationsTyp);
+        //});
     })
 </script>
 
@@ -100,29 +109,27 @@
 
         <div id="gridContent" style="font-family: Arial; padding: 20px;">
             @{
-                ViewBag.Title = "Administrera informationstexter";
-                var grid = new WebGrid(source: Model.InfoPages, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "infoTextsGrid");
-                grid.Pager(WebGridPagerModes.All);
+        ViewBag.Title = "Administrera informationstexter";
+        var grid = new WebGrid(source: Model.InfoPages, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "infoTextsGrid");
+        grid.Pager(WebGridPagerModes.All);
             }
 
 
             @grid.GetHtml(htmlAttributes: new { id = "infoTextsTable" },
-                               tableStyle: "webgrid-table",
-                               headerStyle: "webgrid-header",
-                               footerStyle: "webgrid-footer",
-                               alternatingRowStyle: "webgrid-alternating-row",
-                               selectedRowStyle: "webgrid-selected-row",
-                               rowStyle: "webgrid-row-style",
-                               mode: WebGridPagerModes.All,
-                               columns: grid.Columns(
-                                   grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="InfoId" class="edit-mode col2Width">@item.Id</label></text>,
-                                                style: "col1Width"),
-                                   grid.Column("Informationstyp", "Informationstyp", format: @<text><span class="display-mode"><label id="lblInfoTyp">@item.Informationstyp</label></span>
-                                <input type="text" id="InfoTyp" value="@item.Informationstyp" class="edit-mode form-control" /></text>, style: "col2Width"),
-                                     grid.Column(null, format: @<text>
-                                        <button class="btn btn-default" onclick="showTextarea('@item.Informationstyp');">Ändra</button>
-                                        <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-                                    </text>, style: "col3Width", canSort: false)))
+                            tableStyle: "webgrid-table",
+                            headerStyle: "webgrid-header",
+                            footerStyle: "webgrid-footer",
+                            alternatingRowStyle: "webgrid-alternating-row",
+                            selectedRowStyle: "webgrid-selected-row",
+                            rowStyle: "webgrid-row-style",
+                            mode: WebGridPagerModes.All,
+                            columns: grid.Columns(
+                                grid.Column("ID", format: @<text><label id="InfoId">@item.Id</label></text>, style: "colMiniminiWidth"),
+                                grid.Column("Informationstyp", format: @<text><label id="lblInfoTyp">@item.Informationstyp</label></text>, style: "col2Width"),
+                                grid.Column(null, format: @<text>
+                                    <button class="edit-user display-mode btn btn-default" onclick="showTextarea('@item.Informationstyp');">Ändra</button>
+                                    <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                                        </text>, style: "col3Width", canSort: false)))
         </div>
 
         <div id="editInfoText">
