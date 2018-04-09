@@ -22,12 +22,6 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository = portalRepository;
         }
 
-        public string HamtaHistorikForOrganisation(int orgId)
-        {
-            var test  = _portalAdminRepository.GetLeveranserForOrganisation(orgId);
-            return test;
-        }
-
         public Organisation HamtaOrganisation(int orgId)
         {
             var org = _portalAdminRepository.GetOrganisation(orgId);
@@ -220,6 +214,55 @@ namespace InrappAdmin.ApplicationService
         {
             var faq = _portalAdminRepository.GetFAQ(faqId);
             return faq;
+        }
+
+        public IEnumerable<FilloggDetaljDTO> HamtaHistorikForOrganisation(int orgId)
+        {
+            var historikLista = new List<FilloggDetaljDTO>();
+            //TODO - tidsintervall?
+            //var leveransIdList = _portalRepository.GetLeveransIdnForOrganisation(orgId).OrderByDescending(x => x);
+            var leveransList = _portalAdminRepository.GetLeveranserForOrganisation(orgId);
+            foreach (var leverans in leveransList)
+            {
+                var filloggDetalj = new FilloggDetaljDTO();
+                //Kolla om återkopplingsfil finns för aktuell leverans
+                var aterkoppling = _portalAdminRepository.GetAterkopplingForLeverans(leverans.Id);
+
+                //Kolla om enhetskod finns för aktuell leverans (stadsdelsleverans)
+                var enhetskod = String.Empty;
+                if (leverans.OrganisationsenhetsId != null)
+                {
+                    var orgenhetid = Convert.ToInt32(leverans.OrganisationsenhetsId);
+                    enhetskod = _portalAdminRepository.GetEnhetskodForLeverans(orgenhetid);
+                }
+
+                //Hämta period för aktuell leverans
+                var period = _portalAdminRepository.GetPeriodForAktuellLeverans(leverans.ForvantadleveransId);
+
+
+                var filer = _portalAdminRepository.GetFilerForLeveransId(leverans.Id);
+                var registerKortnamn = _portalAdminRepository.GetSubDirectoryShortName(leverans.DelregisterId);
+                foreach (var fil in filer)
+                {
+                    filloggDetalj = (FilloggDetaljDTO.FromFillogg(fil));
+                    filloggDetalj.Kontaktperson = leverans.ApplicationUserId;
+                    filloggDetalj.Leveransstatus = leverans.Leveransstatus;
+                    filloggDetalj.Leveranstidpunkt = leverans.Leveranstidpunkt;
+                    filloggDetalj.RegisterKortnamn = registerKortnamn;
+                    filloggDetalj.Resultatfil = "Ej kontrollerad";
+                    filloggDetalj.Enhetskod = enhetskod;
+                    filloggDetalj.Period = period;
+                    if (aterkoppling != null)
+                    {
+                        filloggDetalj.Leveransstatus = aterkoppling.Leveransstatus;
+                        filloggDetalj.Resultatfil = aterkoppling.Resultatfil;
+                    }
+                    historikLista.Add(filloggDetalj);
+                }
+            }
+            var sorteradHistorikLista = historikLista.OrderByDescending(x => x.Leveranstidpunkt).ToList();
+
+            return sorteradHistorikLista;
         }
 
         public void SkapaOrganisationsenhet(Organisationsenhet orgUnit)

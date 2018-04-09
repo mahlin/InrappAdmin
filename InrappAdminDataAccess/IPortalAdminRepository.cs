@@ -10,7 +10,9 @@ namespace InrappAdmin.DataAccess
     public interface IPortalAdminRepository
     {
 
-        string GetLeveranserForOrganisation(int orgId);
+        IEnumerable<Leverans> GetLeveranserForOrganisation(int orgId);
+
+        Aterkoppling GetAterkopplingForLeverans(int levId);
 
         Organisation GetOrganisation(int orgId);
 
@@ -75,6 +77,12 @@ namespace InrappAdmin.DataAccess
         string GetSubDirectoryShortNameForExpectedFile(int filKravId);
 
         string GetSubDirectoryShortName(int subDirId);
+
+        string GetEnhetskodForLeverans(int orgenhetsid);
+
+        string GetPeriodForAktuellLeverans(int forvLevid);
+
+        IEnumerable<LevereradFil> GetFilerForLeveransId(int leveransId);
 
         void CreateOrgUnit(Organisationsenhet orgUnit);
 

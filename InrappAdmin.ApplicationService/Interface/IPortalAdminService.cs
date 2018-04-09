@@ -11,8 +11,6 @@ namespace InrappAdmin.ApplicationService.Interface
     public interface IPortalAdminService
     {
 
-        string HamtaHistorikForOrganisation(int orgId);
-
         Organisation HamtaOrganisation(int orgId);
 
         Organisation HamtaOrganisationForKommunkod(string kommunkod);
@@ -62,6 +60,8 @@ namespace InrappAdmin.ApplicationService.Interface
         string HamtaKortnamnForDelregisterMedForeskriftsId(int foreskriftsId);
 
         string HamtaKortnamnForDelregister(int delregId);
+
+        IEnumerable<FilloggDetaljDTO> HamtaHistorikForOrganisation(int orgId);
 
         void SkapaOrganisationsenhet(Organisationsenhet orgUnit);
 

@@ -25,12 +25,38 @@ namespace InrappAdmin.DataAccess
             return DbContext.Leverans;
         }
 
-        public string GetLeveranserForOrganisation(int orgId)
+        public IEnumerable<Leverans> GetLeveranserForOrganisation(int orgId)
         {
             var levIdnForOrg = AllaLeveranser().Where(a => a.OrganisationId == orgId).ToList();
-
-            return "Hejsan";
+            return levIdnForOrg;
         }
+
+        public Aterkoppling GetAterkopplingForLeverans(int levId)
+        {
+            var aterkoppling = DbContext.Aterkoppling.FirstOrDefault(x => x.LeveransId == levId);
+            return aterkoppling;
+        }
+
+        public string GetEnhetskodForLeverans(int orgenhetsid)
+        {
+            var enhetskod = DbContext.Organisationsenhet.Where(x => x.Id == orgenhetsid).Select(x => x.Enhetskod).SingleOrDefault();
+            return enhetskod;
+        }
+
+        public string GetPeriodForAktuellLeverans(int forvLevid)
+        {
+            var period = DbContext.AdmForvantadleverans.Where(x => x.Id == forvLevid).Select(x => x.Period).SingleOrDefault();
+            return period;
+        }
+
+        public IEnumerable<LevereradFil> GetFilerForLeveransId(int leveransId)
+        {
+            
+            var filInfo = DbContext.LevereradFil.Where(a => a.LeveransId == leveransId).OrderByDescending(x => x.LeveransId); ;
+
+            return filInfo;
+        }
+
 
         public Organisation GetOrganisationFromKommunkod(string kommunkod)
         {

@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOModel\FilloggDetaljDTO.cs" />
     <Compile Include="DTOModel\OpeningHoursInfoDTO.cs" />
     <Compile Include="Helpers\ExtensionMethods.cs" />
     <Compile Include="Interface\IPortalAdminService.cs" />

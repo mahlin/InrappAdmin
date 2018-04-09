@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using InrappAdmin.ApplicationService;
+using InrappAdmin.ApplicationService.DTOModel;
 using InrappAdmin.ApplicationService.Interface;
 using InrappAdmin.DataAccess;
 using InrappAdmin.DomainModel;
@@ -152,6 +153,28 @@ namespace InrappAdmin.Web.Controllers
             }
             return View("EditForvantadFil", model);
         }
+
+
+        // GET
+        public ActionResult GetDeliveries()
+        {
+            return View("EditLeverans");
+        }
+
+
+        // GET
+        public ActionResult GetOrganisationsDeliveries(string kommunkod)
+        {
+
+            var model = new LeveransViewModels.LeveransViewModel();
+            var org = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+            IEnumerable<FilloggDetaljDTO> historyFileList = _portalAdminService.HamtaHistorikForOrganisation(org.Id);
+
+            model.Leveranser = historyFileList;
+
+            return View("EditLeverans", model);
+        }
+
 
         [HttpPost]
         public ActionResult UpdateForvantadLeverans(LeveransViewModels.AdmForvantadleveransViewModel forvLevModel, string regId = "0")

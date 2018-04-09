@@ -259,6 +259,7 @@
     <Content Include="Views\Leverans\EditForvantadFil.cshtml" />
     <Content Include="Views\Leverans\CreateForvantadFil.cshtml" />
     <Content Include="Views\System\_EditSelectedFAQ.cshtml" />
+    <Content Include="Views\Leverans\EditLeverans.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
