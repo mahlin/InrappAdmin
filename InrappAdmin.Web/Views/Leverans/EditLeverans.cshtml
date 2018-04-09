@@ -75,6 +75,8 @@
                  grid.Column("Leveransstatus", format: @<text><label class="col1Width">@item.Leveransstatus</label></text>),
                  grid.Column("Filnamn", format: @<text><label class="col5Width">@item.Filnamn</label></text>),
                  grid.Column("Filstatus", format: @<text><label class="col1Width">@item.Filstatus</label></text>),
+                 //grid.Column("Test", format: (item) => (item.Resultatfil == "Ej kontrollerad") ? item.Resultatfil :
+                 //    Html.ActionLink("Visa återkopplingsfil", "DownloadFile", "FileUpload", new { fileName = item.Resultatfil }, null)),
                  grid.Column("Återkoppling", format: @<text><label class="col3Width">@item.Resultatfil</label></text>)))
 
     </div>
