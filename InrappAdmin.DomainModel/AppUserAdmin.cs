@@ -11,6 +11,10 @@ namespace InrappAdmin.DomainModel
 {
     public class AppUserAdmin : IdentityUser
     {
+        public DateTime SkapadDatum { get; set; }
+        public string SkapadAv { get; set; }
+        public DateTime AndradDatum { get; set; }
+        public string AndradAv { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AppUserAdmin> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

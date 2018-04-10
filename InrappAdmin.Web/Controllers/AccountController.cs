@@ -131,11 +131,11 @@ namespace InrappAdmin.Web.Controllers
                try
                {
                     var user = new AppUserAdmin { UserName = model.Email, Email = model.Email };
-               //user.SkapadAv = model.Email;
-               //user.SkapadDatum = DateTime.Now;
-               //user.AndradAv = model.Email;
-               //user.AndradDatum = DateTime.Now;
-                var result = await UserManager.CreateAsync(user, model.Password);
+                    user.SkapadAv = model.Email;
+                    user.SkapadDatum = DateTime.Now;
+                    user.AndradAv = model.Email;
+                    user.AndradDatum = DateTime.Now;
+                    var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     //  Comment the following line to prevent log in until the user is confirmed.
