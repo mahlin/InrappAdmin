@@ -18,7 +18,7 @@ namespace InrappAdmin.Web.Controllers
    [Authorize]
    public class AccountController : Controller
    {
-      private ApplicationUserManager _userManager;
+        private ApplicationUserManager _userManager;
 
       public AccountController()
       {
@@ -128,34 +128,46 @@ namespace InrappAdmin.Web.Controllers
         {
            if (ModelState.IsValid)
            {
-              var user = new AppUserAdmin { UserName = model.Email, Email = model.Email };
-               user.SkapadAv = model.Email;
-               user.SkapadDatum = DateTime.Now;
-               user.AndradAv = model.Email;
-               user.AndradDatum = DateTime.Now;
+               try
+               {
+                    var user = new AppUserAdmin { UserName = model.Email, Email = model.Email };
+               //user.SkapadAv = model.Email;
+               //user.SkapadDatum = DateTime.Now;
+               //user.AndradAv = model.Email;
+               //user.AndradDatum = DateTime.Now;
                 var result = await UserManager.CreateAsync(user, model.Password);
-              if (result.Succeeded)
-              {
-                 //  Comment the following line to prevent log in until the user is confirmed.
-                 //  await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                if (result.Succeeded)
+                {
+                    //  Comment the following line to prevent log in until the user is confirmed.
+                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
-                 //string callbackUrl = await SendEmailConfirmationTokenAsync(user.Id, "Confirm your account");
+                    //string callbackUrl = await SendEmailConfirmationTokenAsync(user.Id, "Confirm your account");
 
+                    //ViewBag.Message = "Check your email and confirm your account, you must be confirmed "
+                    //             + "before you can log in.";
 
-                 ViewBag.Message = "Check your email and confirm your account, you must be confirmed "
-                                 + "before you can log in.";
+                    // For local debug only
+                    //ViewBag.Link = callbackUrl;
 
-                 // For local debug only
-                 //ViewBag.Link = callbackUrl;
-
-                 //return View("Info");
-                 return RedirectToAction("Index", "Home");
-              }
-              AddErrors(result);
-           }
-
-           // If we got this far, something failed, redisplay form
-           return View(model);
+                     //return View("Info");
+                     return RedirectToAction("Index", "Home");
+                  }
+                  AddErrors(result);
+               }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("AccountController", "Register", e.ToString(), e.HResult, model.Email);
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade vid registreringen.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
+            }
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
 
         
@@ -259,10 +271,29 @@ namespace InrappAdmin.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+       protected override void Dispose(bool disposing)
+       {
+           if (disposing)
+           {
+               if (_userManager != null)
+               {
+                   _userManager.Dispose();
+                   _userManager = null;
+               }
 
-              #region Helpers
-              // Used for XSRF protection when adding external logins
-              private const string XsrfKey = "XsrfId";
+               if (_signInManager != null)
+               {
+                   _signInManager.Dispose();
+                   _signInManager = null;
+               }
+           }
+
+           base.Dispose(disposing);
+       }
+
+        #region Helpers
+        // Used for XSRF protection when adding external logins
+        private const string XsrfKey = "XsrfId";
 
               private IAuthenticationManager AuthenticationManager
               {

@@ -43,12 +43,12 @@ namespace InrappAdmin.DataAccess
 
         private void MapEntities(DbModelBuilder modelBuilder)
         {
-            //AspNetUsers
-            modelBuilder.Entity<AppUserAdmin>().ToTable("AspNetUsers");
-            modelBuilder.Entity<AppUserAdmin>().Property(e => e.SkapadDatum).HasColumnName("skapaddatum");
-            modelBuilder.Entity<AppUserAdmin>().Property(e => e.SkapadAv).HasColumnName("skapadav");
-            modelBuilder.Entity<AppUserAdmin>().Property(e => e.AndradDatum).HasColumnName("andraddatum");
-            modelBuilder.Entity<AppUserAdmin>().Property(e => e.AndradAv).HasColumnName("andradav");
+            ////AspNetUsers
+            //modelBuilder.Entity<AppUserAdmin>().ToTable("AspNetUsers");
+            //modelBuilder.Entity<AppUserAdmin>().Property(e => e.SkapadDatum).HasColumnName("skapaddatum");
+            //modelBuilder.Entity<AppUserAdmin>().Property(e => e.SkapadAv).HasColumnName("skapadav");
+            //modelBuilder.Entity<AppUserAdmin>().Property(e => e.AndradDatum).HasColumnName("andraddatum");
+            //modelBuilder.Entity<AppUserAdmin>().Property(e => e.AndradAv).HasColumnName("andradav");
         }
 
         //public DbSet<AppUserAdmin> AppUserAdmin { get; set; }
