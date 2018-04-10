@@ -26,12 +26,14 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // GET: System
+        [Authorize]
         public ActionResult Index()
         {
             return View();
         }
 
         // GET: FAQCategories
+        [Authorize]
         public ActionResult GetFAQCategories()
         {
             var model = new SystemViewModels.SystemViewModel();
@@ -81,6 +83,7 @@ namespace InrappAdmin.Web.Controllers
 
 
         // GET: InformationTexts
+        [Authorize]
         [ValidateInput(false)]
         public ActionResult GetInformationTexts(string selectedInfoType = "", string selectedText = "")
         {
@@ -136,6 +139,7 @@ namespace InrappAdmin.Web.Controllers
         //}
 
         // GET: OpeningHours (AdmKonfiguration)
+        [Authorize]
         public ActionResult GetOpeningHours()
         {
             var model = new SystemViewModels.OpeningHours();

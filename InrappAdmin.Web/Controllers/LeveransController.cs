@@ -26,6 +26,7 @@ namespace InrappAdmin.Web.Controllers
                 new PortalAdminService(new PortalAdminRepository(new InrappAdminDbContext(), new InrappAdminIdentityDbContext()));
         }
 
+        [Authorize]
         // GET: Leverans
         public ActionResult Index()
         {
@@ -107,6 +108,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // GET: AdmForvantadfil
+        [Authorize]
         public ActionResult GetForvantadeFiler()
         {
             var model = new LeveransViewModels.LeveransViewModel();
@@ -156,6 +158,7 @@ namespace InrappAdmin.Web.Controllers
 
 
         // GET
+        [Authorize]
         public ActionResult GetDeliveries()
         {
             return View("EditLeverans");

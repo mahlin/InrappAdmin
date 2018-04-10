@@ -26,11 +26,13 @@ namespace InrappAdmin.Web.Controllers
                 new PortalAdminService(new PortalAdminRepository(new InrappAdminDbContext(), new InrappAdminIdentityDbContext()));
         }
 
+        [Authorize]
         public ActionResult Index()
         {
             return View();
         }
 
+        [Authorize]
         // GET: Organisation
         public ActionResult GetOrganisation(string kommunkod)
         {
@@ -63,6 +65,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // GET
+        [Authorize]
         public ActionResult GetContacts()
         {
             return View("EditContacts");
@@ -81,6 +84,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         //GET
+        [Authorize]
         public ActionResult GetOrgUnits()
         {
             return View("EditOrgUnits");
@@ -106,6 +110,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         //GET
+        [Authorize]
         public ActionResult GetReportObligations()
         {
             return View("EditReportObligations");

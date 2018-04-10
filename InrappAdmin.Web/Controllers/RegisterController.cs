@@ -25,7 +25,9 @@ namespace InrappAdmin.Web.Controllers
                 new PortalAdminService(new PortalAdminRepository(new InrappAdminDbContext(), new InrappAdminIdentityDbContext()));
         }
 
+
         // GET: Register
+        [Authorize]
         public ActionResult Index()
         {
             var model = new RegisterViewModels.RegisterViewModel();
@@ -91,6 +93,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // GET
+        [Authorize]
         public ActionResult GetAllSubDirectories()
         {
             var model = new RegisterViewModels.RegisterViewModel();
