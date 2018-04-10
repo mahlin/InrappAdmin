@@ -65,6 +65,8 @@
     <Compile Include="AdmRegister.cs" />
     <Compile Include="AdmUppgiftsskyldighet.cs" />
     <Compile Include="ApplicationUser.cs" />
+    <Compile Include="AppRoleAdmin.cs" />
+    <Compile Include="AppUserAdmin.cs" />
     <Compile Include="Aterkoppling.cs" />
     <Compile Include="Inloggning.cs" />
     <Compile Include="Leverans.cs" />

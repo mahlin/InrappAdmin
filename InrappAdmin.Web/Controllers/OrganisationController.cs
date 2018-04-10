@@ -23,7 +23,7 @@ namespace InrappAdmin.Web.Controllers
         public OrganisationController()
         {
             _portalAdminService =
-                new PortalAdminService(new PortalAdminRepository(new InrappAdminDbContext()));
+                new PortalAdminService(new PortalAdminRepository(new InrappAdminDbContext(), new InrappAdminIdentityDbContext()));
         }
 
         public ActionResult Index()

@@ -22,7 +22,7 @@ namespace InrappAdmin.Web.Controllers
         public RegisterController()
         {
             _portalAdminService =
-                new PortalAdminService(new PortalAdminRepository(new InrappAdminDbContext()));
+                new PortalAdminService(new PortalAdminRepository(new InrappAdminDbContext(), new InrappAdminIdentityDbContext()));
         }
 
         // GET: Register

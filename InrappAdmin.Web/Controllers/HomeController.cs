@@ -19,7 +19,7 @@ namespace InrappAdmin.Web.Controllers
         public HomeController()
         {
             _portalService =
-                new PortalAdminService(new PortalAdminRepository(new InrappAdminDbContext()));
+                new PortalAdminService(new PortalAdminRepository(new InrappAdminDbContext(), new InrappAdminIdentityDbContext()));
 
         }
 
@@ -32,8 +32,8 @@ namespace InrappAdmin.Web.Controllers
         public ActionResult About(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
-            message == ManageMessageId.ChangePasswordSuccess ? "Din pinkod har ändrats."
-            : message == ManageMessageId.SetPasswordSuccess ? "Din pinkod är sparad."
+            message == ManageMessageId.ChangePasswordSuccess ? "Ditt lösenord har ändrats."
+            : message == ManageMessageId.SetPasswordSuccess ? "Ditt lösenord är sparat."
             : message == ManageMessageId.SetTwoFactorSuccess ? "Din två-faktor-autentiseringsleverantör är sparad."
             : message == ManageMessageId.Error ? "Ett fel har uppstått."
             : message == ManageMessageId.AddPhoneSuccess ? "Ditt mobilnummer har sparats."

@@ -15,9 +15,12 @@ namespace InrappAdmin.DataAccess
 
         private InrappAdminDbContext DbContext { get; }
 
-        public PortalAdminRepository(InrappAdminDbContext dbContext)
+        private InrappAdminIdentityDbContext IdentityDbContext { get; }
+
+        public PortalAdminRepository(InrappAdminDbContext dbContext, InrappAdminIdentityDbContext identityDbContext)
         {
             DbContext = dbContext;
+            IdentityDbContext = identityDbContext;
         }
 
         private IEnumerable<Leverans> AllaLeveranser()
@@ -98,7 +101,7 @@ namespace InrappAdmin.DataAccess
 
         public int GetUserOrganisationId(string userId)
         {
-            var orgId = DbContext.Users.Where(u => u.Id == userId).Select(o => o.OrganisationId).SingleOrDefault();
+            var orgId = DbContext.ApplicationUser.Where(u => u.Id == userId).Select(o => o.OrganisationId).SingleOrDefault();
             return orgId;
         }
 
@@ -117,7 +120,7 @@ namespace InrappAdmin.DataAccess
 
         public IEnumerable<ApplicationUser> GetContactPersonsForOrg(int orgId)
         {
-            var contacts = DbContext.Users.Where(x => x.OrganisationId == orgId).ToList();
+            var contacts = DbContext.ApplicationUser.Where(x => x.OrganisationId == orgId).ToList();
             return contacts;
         }
 
@@ -354,7 +357,7 @@ namespace InrappAdmin.DataAccess
 
         public void UpdateContactPerson(ApplicationUser user)
         {
-            var usrDb = DbContext.Users.Where(u => u.Id == user.Id).Select(u => u).SingleOrDefault();
+            var usrDb = DbContext.ApplicationUser.Where(u => u.Id == user.Id).Select(u => u).SingleOrDefault();
             usrDb.PhoneNumber= user.PhoneNumber;
             usrDb.AktivFrom = user.AktivFrom;
             usrDb.AktivTom = user.AktivTom;

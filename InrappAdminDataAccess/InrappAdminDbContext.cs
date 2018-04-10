@@ -10,7 +10,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace InrappAdmin.DataAccess
 {
-    public class InrappAdminDbContext : IdentityDbContext<ApplicationUser>
+    public class InrappAdminDbContext : IdentityDbContext<AppUserAdmin>
     {
         public InrappAdminDbContext() : base("name=DefaultConnection")
         {
@@ -348,6 +348,7 @@ namespace InrappAdmin.DataAccess
         public DbSet<AdmForeskrift> AdmForeskrift { get; set; }
         public DbSet<Inloggning> Inloggning { get; set; }
         public DbSet<Roll> Roll { get; set; }
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
     }
 }

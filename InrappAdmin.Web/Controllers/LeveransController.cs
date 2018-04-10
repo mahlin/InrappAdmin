@@ -23,7 +23,7 @@ namespace InrappAdmin.Web.Controllers
         public LeveransController()
         {
             _portalAdminService =
-                new PortalAdminService(new PortalAdminRepository(new InrappAdminDbContext()));
+                new PortalAdminService(new PortalAdminRepository(new InrappAdminDbContext(), new InrappAdminIdentityDbContext()));
         }
 
         // GET: Leverans
