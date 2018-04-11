@@ -349,8 +349,8 @@ namespace InrappAdmin.DataAccess
             orgDb.Epostdoman = org.Epostdoman;
             orgDb.AktivFrom = org.AktivFrom;
             orgDb.AktivTom = org.AktivTom;
-            orgDb.AndradDatum = DateTime.Now;
-            orgDb.AndradAv = "InrappAdmin";
+            orgDb.AndradDatum = org.AndradDatum;
+            orgDb.AndradAv = org.AndradAv;
 
             DbContext.SaveChanges();
         }
@@ -361,9 +361,8 @@ namespace InrappAdmin.DataAccess
             usrDb.PhoneNumber= user.PhoneNumber;
             usrDb.AktivFrom = user.AktivFrom;
             usrDb.AktivTom = user.AktivTom;
-            //Sätt datum och användare (kräver referens till Identity, därför här istf i svc(?))
-            usrDb.AndradDatum = DateTime.Now;
-            usrDb.AndradAv = "InrappAdmin";
+            usrDb.AndradDatum = user.AndradDatum;
+            usrDb.AndradAv = user.AndradAv;
             DbContext.SaveChanges(); 
         }
 
@@ -458,6 +457,14 @@ namespace InrappAdmin.DataAccess
             forvFileToUpdate.Obligatorisk = forvFil.Obligatorisk;
             forvFileToUpdate.Tom= forvFil.Tom;
             DbContext.SaveChanges();
+        }
+
+        public void UpdateUserInfo(AppUserAdmin user)
+        {
+            var userDb = IdentityDbContext.Users.SingleOrDefault(x => x.Id == user.Id);
+            userDb.AndradAv = user.AndradAv;
+            userDb.AndradDatum = user.AndradDatum;
+            IdentityDbContext.SaveChanges();
         }
 
         public void SaveOpeningHours(AdmKonfiguration admKonf)

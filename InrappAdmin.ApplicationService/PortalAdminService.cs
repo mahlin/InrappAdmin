@@ -265,175 +265,188 @@ namespace InrappAdmin.ApplicationService
             return sorteradHistorikLista;
         }
 
-        public void SkapaOrganisationsenhet(Organisationsenhet orgUnit)
+        public void SkapaOrganisationsenhet(Organisationsenhet orgUnit, string userName)
         {
             //Sätt datum och användare
             orgUnit.SkapadDatum = DateTime.Now;
-            orgUnit.SkapadAv = "InrappAdmin";
+            orgUnit.SkapadAv = userName;
             orgUnit.AndradDatum = DateTime.Now;
-            orgUnit.AndradAv = "InrappAdmin";
+            orgUnit.AndradAv = userName;
 
             _portalAdminRepository.CreateOrgUnit(orgUnit);
         }
 
-        public void SkapaFAQKategori(AdmFAQKategori faqKategori)
+        public void SkapaFAQKategori(AdmFAQKategori faqKategori, string userName)
         {
             //Sätt datum och användare
             faqKategori.SkapadDatum = DateTime.Now;
-            faqKategori.SkapadAv = "InrappAdmin";
+            faqKategori.SkapadAv = userName;
             faqKategori.AndradDatum = DateTime.Now;
-            faqKategori.AndradAv = "InrappAdmin";
+            faqKategori.AndradAv = userName;
 
             _portalAdminRepository.CreateFAQCategory(faqKategori);
         }
 
-        public void SkapaFAQ(AdmFAQ faq)
+        public void SkapaFAQ(AdmFAQ faq, string userName)
         {
             //Sätt datum och användare
             faq.SkapadDatum = DateTime.Now;
-            faq.SkapadAv = "InrappAdmin";
+            faq.SkapadAv = userName;
             faq.AndradDatum = DateTime.Now;
-            faq.AndradAv = "InrappAdmin";
+            faq.AndradAv = userName;
 
             _portalAdminRepository.CreateFAQ(faq);
         }
 
-        public void SkapaInformationsText(AdmInformation infoText)
+        public void SkapaInformationsText(AdmInformation infoText, string userName)
         {
             //Sätt datum och användare
             infoText.SkapadDatum = DateTime.Now;
-            infoText.SkapadAv = "InrappAdmin";
+            infoText.SkapadAv = userName;
             infoText.AndradDatum = DateTime.Now;
-            infoText.AndradAv = "InrappAdmin";
+            infoText.AndradAv = userName;
             _portalAdminRepository.CreateInformationText(infoText);
         }
 
-        public void SkapaUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSk)
+        public void SkapaUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSk, string userName)
         {
             //Sätt datum och användare
             uppgSk.SkapadDatum = DateTime.Now;
-            uppgSk.SkapadAv = "InrappAdmin";
+            uppgSk.SkapadAv = userName;
             uppgSk.AndradDatum = DateTime.Now;
-            uppgSk.AndradAv = "InrappAdmin";
+            uppgSk.AndradAv = userName;
             _portalAdminRepository.CreateReportObligation(uppgSk);
         }
 
-        public void SkapaRegister(AdmRegister reg)
+        public void SkapaRegister(AdmRegister reg, string userName)
         {
             //Sätt datum och användare
             reg.SkapadDatum = DateTime.Now;
-            reg.SkapadAv = "InrappAdmin";
+            reg.SkapadAv = userName;
             reg.AndradDatum = DateTime.Now;
-            reg.AndradAv = "InrappAdmin"; 
+            reg.AndradAv = userName; 
             _portalAdminRepository.CreateDirectory(reg);
         }
 
-        public void SkapaDelregister(AdmDelregister delReg)
+        public void SkapaDelregister(AdmDelregister delReg, string userName)
         {
             //Sätt datum och användare
             delReg.SkapadDatum = DateTime.Now;
-            delReg.SkapadAv = "InrappAdmin";
+            delReg.SkapadAv = userName;
             delReg.AndradDatum = DateTime.Now;
-            delReg.AndradAv = "InrappAdmin";
+            delReg.AndradAv = userName;
             _portalAdminRepository.CreateSubDirectory(delReg);
         }
 
-        public void SkapaForvantadLeverans(AdmForvantadleverans forvLev)
+        public void SkapaForvantadLeverans(AdmForvantadleverans forvLev, string userName)
         {
             //Sätt datum och användare
             forvLev.SkapadDatum = DateTime.Now;
-            forvLev.SkapadAv = "InrappAdmin";
+            forvLev.SkapadAv = userName;
             forvLev.AndradDatum = DateTime.Now;
-            forvLev.AndradAv = "InrappAdmin";
+            forvLev.AndradAv = userName;
             _portalAdminRepository.CreateExpectedDelivery(forvLev);
         }
 
-        public void SkapaForvantadFil(AdmForvantadfil forvFil)
+        public void SkapaForvantadFil(AdmForvantadfil forvFil, string userName)
         {
             //Sätt datum och användare
             forvFil.SkapadDatum = DateTime.Now;
-            forvFil.SkapadAv = "InrappAdmin";
+            forvFil.SkapadAv = userName;
             forvFil.AndradDatum = DateTime.Now;
-            forvFil.AndradAv = "InrappAdmin";
+            forvFil.AndradAv = userName;
             _portalAdminRepository.CreateExpectedFile(forvFil);
         }
 
-        public void UppdateraOrganisation(Organisation org)
+        public void UppdateraOrganisation(Organisation org, string userName)
         {
             //Sätt datum och användare
             org.AndradDatum = DateTime.Now;
-            org.AndradAv = "InrappAdmin";
+            org.AndradAv = userName;
             _portalAdminRepository.UpdateOrganisation(org);
         }
 
-        public void UppdateraKontaktperson(ApplicationUser user)
+        public void UppdateraKontaktperson(ApplicationUser user, string userName)
         {
+            user.AndradDatum = DateTime.Now;
+            user.AndradAv = userName;
             _portalAdminRepository.UpdateContactPerson(user);
         }
 
-        public void UppdateraOrganisationsenhet(Organisationsenhet orgUnit)
+        public void UppdateraOrganisationsenhet(Organisationsenhet orgUnit, string userName)
         {
             //Sätt datum och användare
             orgUnit.AndradDatum = DateTime.Now;
-            orgUnit.AndradAv = "InrappAdmin";
+            orgUnit.AndradAv = userName;
             _portalAdminRepository.UpdateOrgUnit(orgUnit);
         }
 
-        public void UppdateraUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSkyldighet)
+        public void UppdateraUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSkyldighet, string userName)
         {
             //Sätt datum och användare
             uppgSkyldighet.AndradDatum = DateTime.Now;
-            uppgSkyldighet.AndradAv = "InrappAdmin";
+            uppgSkyldighet.AndradAv = userName;
             _portalAdminRepository.UpdateReportObligation(uppgSkyldighet);
         }
 
-        public void UppdateraFAQKategori(AdmFAQKategori faqKategori)
+        public void UppdateraFAQKategori(AdmFAQKategori faqKategori, string userName)
         {
             faqKategori.AndradDatum = DateTime.Now;
-            faqKategori.AndradAv = "InrappAdmin";
+            faqKategori.AndradAv = userName;
             _portalAdminRepository.UpdateFAQCategory(faqKategori);
         }
 
-        public void UppdateraFAQ(AdmFAQ faq)
+        public void UppdateraFAQ(AdmFAQ faq, string userName)
         {
             faq.AndradDatum = DateTime.Now;
-            faq.AndradAv = "InrappAdmin";
+            faq.AndradAv = userName;
             _portalAdminRepository.UpdateFAQ(faq);
         }
 
-        public void UppdateraInformationstext(AdmInformation infoText)
+        public void UppdateraInformationstext(AdmInformation infoText, string userName)
         {
             infoText.Id = _portalAdminRepository.GetPageInfoTextId(infoText.Informationstyp);
             infoText.AndradDatum = DateTime.Now;
-            infoText.AndradAv = "InrappAdmin";
+            infoText.AndradAv = userName;
             _portalAdminRepository.UpdateInfoText(infoText);
         }
 
-        public void UppdateraRegister(AdmRegister register)
+        public void UppdateraRegister(AdmRegister register, string userName)
         {
+            register.AndradAv = userName;
+            register.AndradDatum = DateTime.Now;
             _portalAdminRepository.UpdateDirectory(register);
         }
 
-        public void UppdateraDelregister(AdmDelregister delregister)
+        public void UppdateraDelregister(AdmDelregister delregister, string userName)
         {
+            delregister.AndradAv = userName;
+            delregister.AndradDatum = DateTime.Now;
             _portalAdminRepository.UpdateSubDirectory(delregister);
         }
 
-        public void UppdateraForvantadLeverans(AdmForvantadleverans forvLev)
+        public void UppdateraForvantadLeverans(AdmForvantadleverans forvLev, string userName)
         {
+            forvLev.AndradAv = userName;
+            forvLev.AndradDatum = DateTime.Now;
             _portalAdminRepository.UpdateExpectedDelivery(forvLev);
         }
 
-        public void UppdateraForvantadFil(AdmForvantadfil forvFil)
+        public void UppdateraForvantadFil(AdmForvantadfil forvFil, string userName)
         {
             _portalAdminRepository.UpdateExpectedFile(forvFil);
         }
 
-        public void SparaOppettider(OpeningHoursInfoDTO oppetTider)
+        public void UppdateraAnvandarInfo(AppUserAdmin user)
+        {
+            _portalAdminRepository.UpdateUserInfo(user);
+        }
+
+        public void SparaOppettider(OpeningHoursInfoDTO oppetTider, string userName)
         {
             //Dela upp informationen i konf-objekt och spara till databasen
             AdmKonfiguration admKonfClosedAnayway = new AdmKonfiguration();
-            admKonfClosedAnayway.AndradAv = "InrappAdmin";
+            admKonfClosedAnayway.AndradAv = userName;
             admKonfClosedAnayway.AndradDatum = DateTime.Now;
             admKonfClosedAnayway.Typ = "ClosedAnyway";
 
@@ -455,7 +468,7 @@ namespace InrappAdmin.ApplicationService
                 Typ = "ClosedDays",
                 Varde = daysJoined
             };
-            admKonfClosedDays.AndradAv = "InrappAdmin";
+            admKonfClosedDays.AndradAv = userName;
             admKonfClosedDays.AndradDatum = DateTime.Now;
             _portalAdminRepository.SaveOpeningHours(admKonfClosedDays);
 
@@ -465,7 +478,7 @@ namespace InrappAdmin.ApplicationService
                 Typ = "ClosedFromHour",
                 Varde = oppetTider.ClosedFromHour.ToString()
             };
-            admKonfClosedFromHour.AndradAv = "InrappAdmin";
+            admKonfClosedFromHour.AndradAv = userName;
             admKonfClosedFromHour.AndradDatum = DateTime.Now;
             _portalAdminRepository.SaveOpeningHours(admKonfClosedFromHour);
 
@@ -475,7 +488,7 @@ namespace InrappAdmin.ApplicationService
                 Typ = "ClosedFromMin",
                 Varde = oppetTider.ClosedFromMin.ToString()
             };
-            admKonfClosedFromMin.AndradAv = "InrappAdmin";
+            admKonfClosedFromMin.AndradAv = userName;
             admKonfClosedFromMin.AndradDatum = DateTime.Now;
             _portalAdminRepository.SaveOpeningHours(admKonfClosedFromMin);
 
@@ -485,7 +498,7 @@ namespace InrappAdmin.ApplicationService
                 Typ = "ClosedToHour",
                 Varde = oppetTider.ClosedToHour.ToString()
             };
-            admKonfClosedToHour.AndradAv = "InrappAdmin";
+            admKonfClosedToHour.AndradAv = userName;
             admKonfClosedToHour.AndradDatum = DateTime.Now;
             _portalAdminRepository.SaveOpeningHours(admKonfClosedToHour);
 
@@ -495,7 +508,7 @@ namespace InrappAdmin.ApplicationService
                 Typ = "ClosedFromMin",
                 Varde = oppetTider.ClosedToMin.ToString()
             };
-            admKonfClosedToMin.AndradAv = "InrappAdmin";
+            admKonfClosedToMin.AndradAv = userName;
             admKonfClosedToMin.AndradDatum = DateTime.Now;
             _portalAdminRepository.SaveOpeningHours(admKonfClosedToMin);
 
@@ -507,7 +520,7 @@ namespace InrappAdmin.ApplicationService
                 Informationstyp = "Stangtsida",
                 Text = oppetTider.InfoTextForClosedPage
             };
-            infoTextClosedpage.AndradAv = "InrappAdmin";
+            infoTextClosedpage.AndradAv = userName;
             infoTextClosedpage.AndradDatum = DateTime.Now;
             _portalAdminRepository.UpdateInfoText(infoTextClosedpage);
         }

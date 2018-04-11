@@ -6,6 +6,9 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using InrappAdmin.ApplicationService;
+using InrappAdmin.ApplicationService.Interface;
+using InrappAdmin.DataAccess;
 using InrappAdmin.DomainModel;
 using InrappAdmin.Web.Helpers;
 using Microsoft.AspNet.Identity;
@@ -19,14 +22,20 @@ namespace InrappAdmin.Web.Controllers
    public class AccountController : Controller
    {
         private ApplicationUserManager _userManager;
+        private CustomIdentityResultErrorDescriber _errorDecsriber;
+        private readonly IPortalAdminService _portalAdminService;
 
-      public AccountController()
-      {
-      }
+
+        public AccountController()
+        {
+          _portalAdminService =
+              new PortalAdminService(new PortalAdminRepository(new InrappAdminDbContext(), new InrappAdminIdentityDbContext()));
+        }
 
       public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
       {
-         UserManager = userManager;
+          _errorDecsriber = new CustomIdentityResultErrorDescriber();
+            UserManager = userManager;
          SignInManager = signInManager;
       }
 
@@ -188,19 +197,18 @@ namespace InrappAdmin.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-            var user = await UserManager.FindByNameAsync(model.Email);
-            if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
-            {
-                // Don't reveal that the user does not exist or is not confirmed
-                return View("ForgotPasswordConfirmation");
-            }
+                var user = await UserManager.FindByNameAsync(model.Email);
+                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                {
+                    // Don't reveal that the user does not exist or is not confirmed
+                    return View("ForgotPasswordConfirmation");
+                }
 
-            string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-            var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-            await UserManager.SendEmailAsync(user.Id, "Reset Password", 
-                "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-            TempData["ViewBagLink"] = callbackUrl;
-            return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                await UserManager.SendEmailAsync(user.Id, "Återställ pinkod", "Vänligen återställ ditt lösenord genom att klicka <a href=\"" + callbackUrl + "\">här</a>");
+
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
             // If we got this far, something failed, redisplay form
@@ -233,19 +241,22 @@ namespace InrappAdmin.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-            return View(model);
+                return View(model);
             }
 
             var user = await UserManager.FindByNameAsync(model.Email);
             if (user == null)
             {
-            // Don't reveal that the user does not exist
-            return RedirectToAction("ResetPasswordConfirmation", "Account");
+                // Don't reveal that the user does not exist
+                return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
             {
-            return RedirectToAction("ResetPasswordConfirmation", "Account");
+                user.AndradAv = user.Email;
+                user.AndradDatum = DateTime.Now;
+                _portalAdminService.UppdateraAnvandarInfo(user);
+                return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
             AddErrors(result);
             return View();

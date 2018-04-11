@@ -123,6 +123,8 @@ namespace InrappAdmin.DataAccess
 
         void UpdateExpectedFile(AdmForvantadfil forvFil);
 
+        void UpdateUserInfo(AppUserAdmin user);
+
         void SaveOpeningHours(AdmKonfiguration admKonf);
 
         void DeleteFAQCategory(int faqCategoryId);

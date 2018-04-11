@@ -12,6 +12,7 @@ using InrappAdmin.DomainModel;
 using InrappAdmin.Web.Helpers;
 using InrappAdmin.Web.Models;
 using InrappAdmin.Web.Models.ViewModels;
+using Microsoft.AspNet.Identity;
 
 namespace InrappAdmin.Web.Controllers
 {
@@ -44,7 +45,7 @@ namespace InrappAdmin.Web.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                ErrorManager.WriteToErrorLog("LeveransController", "Index", e.ToString(), e.HResult, "InrappAdmin");
+                ErrorManager.WriteToErrorLog("LeveransController", "Index", e.ToString(), e.HResult, User.Identity.Name);
                 var errorModel = new CustomErrorPageModel
                 {
                     Information = "Ett fel inträffade vid hämtning av förväntade leveranser",
@@ -59,24 +60,39 @@ namespace InrappAdmin.Web.Controllers
         // GET
         public ActionResult GetDirectorysExpectedDeliveries(LeveransViewModels.LeveransViewModel model, int regId = 0)
         {
-            var dirId = model.SelectedRegisterId;
-            if (dirId == 0 && regId != 0)
+            try
             {
-                dirId = regId;
+                var dirId = model.SelectedRegisterId;
+                if (dirId == 0 && regId != 0)
+                {
+                    dirId = regId;
+                }
+                if (dirId != 0)
+                {
+                    var forvLevList = _portalAdminService.HamtaForvantadeLeveranserForRegister(dirId);
+                    //Lägg över i modellen
+                    model.ForvantadeLeveranser = ConvertForvLevToViewModel(forvLevList.ToList());
+                    // Ladda drop down lists. 
+                    var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
+                    this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
+                    model.SelectedRegisterId = dirId;
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
             }
-            if (dirId != 0)
+            catch (Exception e)
             {
-                var forvLevList = _portalAdminService.HamtaForvantadeLeveranserForRegister(dirId);
-                //Lägg över i modellen
-                model.ForvantadeLeveranser = ConvertForvLevToViewModel(forvLevList.ToList());
-                // Ladda drop down lists. 
-                var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
-                this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
-                model.SelectedRegisterId = dirId;
-            }
-            else
-            {
-                return RedirectToAction("Index");
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("LeveransController", "GetDirectorysExpectedDeliveries", e.ToString(), e.HResult, User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid hämtning av förväntade leveranser för register",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+
             }
             return View("Index", model);
         }
@@ -84,25 +100,39 @@ namespace InrappAdmin.Web.Controllers
         // GET
         public ActionResult GetDirectorysExpectedFiles(LeveransViewModels.LeveransViewModel model, int regId = 0)
         {
-            var dirId = model.SelectedRegisterId;
-            if (dirId == 0 && regId != 0)
+            try
             {
-                dirId = regId;
+                var dirId = model.SelectedRegisterId;
+                if (dirId == 0 && regId != 0)
+                {
+                    dirId = regId;
+                }
+                if (dirId != 0)
+                {
+                    var register = _portalAdminService.HamtaRegisterMedId(dirId);
+                    var forvFilList = _portalAdminService.HamtaForvantadeFilerForRegister(register.Id);
+                    //Lägg över i modellen
+                    model.ForvantadeFiler = ConvertForvFilToViewModel(forvFilList.ToList());
+                    // Ladda drop down lists. 
+                    var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
+                    this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
+                    model.SelectedRegisterId = dirId;
+                }
+                else
+                {
+                    return RedirectToAction("GetForvantadeFiler");
+                }
             }
-            if (dirId != 0)
+            catch (Exception e)
             {
-                var register = _portalAdminService.HamtaRegisterMedId(dirId);
-                var forvFilList = _portalAdminService.HamtaForvantadeFilerForRegister(register.Id);
-                //Lägg över i modellen
-                model.ForvantadeFiler = ConvertForvFilToViewModel(forvFilList.ToList());
-                // Ladda drop down lists. 
-                var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
-                this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
-                model.SelectedRegisterId = dirId;
-            }
-            else
-            {
-                return RedirectToAction("GetForvantadeFiler");
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("LeveransController", "GetDirectorysExpectedFiles", e.ToString(), e.HResult, User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid hämtning av förväntade filer för register",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
             }
             return View("EditForvantadFil", model);
         }
@@ -144,7 +174,7 @@ namespace InrappAdmin.Web.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                ErrorManager.WriteToErrorLog("LeveransController", "GetForvantadeFiler", e.ToString(), e.HResult, "InrappAdmin");
+                ErrorManager.WriteToErrorLog("LeveransController", "GetForvantadeFiler", e.ToString(), e.HResult, User.Identity.Name);
                 var errorModel = new CustomErrorPageModel
                 {
                     Information = "Ett fel inträffade vid hämtning av forvantad fil",
@@ -168,13 +198,27 @@ namespace InrappAdmin.Web.Controllers
         // GET
         public ActionResult GetOrganisationsDeliveries(string kommunkod)
         {
-
             var model = new LeveransViewModels.LeveransViewModel();
-            var org = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
-            IEnumerable<FilloggDetaljDTO> historyFileList = _portalAdminService.HamtaHistorikForOrganisation(org.Id);
 
-            model.Leveranser = historyFileList;
+            try
+            {
+                var org = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+                IEnumerable<FilloggDetaljDTO>
+                    historyFileList = _portalAdminService.HamtaHistorikForOrganisation(org.Id);
 
+                model.Leveranser = historyFileList;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("LeveransController", "GetOrganisationsDeliveries", e.ToString(), e.HResult, User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid hämtning av leveranser för kommun.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+            }
             return View("EditLeverans", model);
         }
 
@@ -186,13 +230,14 @@ namespace InrappAdmin.Web.Controllers
             {
                 try
                 {
+                    var userName = User.Identity.GetUserName();
                     var forvLev = ConvertViewModelToForvLev(forvLevModel);
-                    _portalAdminService.UppdateraForvantadLeverans(forvLev);
+                    _portalAdminService.UppdateraForvantadLeverans(forvLev, userName);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    ErrorManager.WriteToErrorLog("LeveransController", "UpdateForvantadLeverans", e.ToString(), e.HResult, "InrappAdmin");
+                    ErrorManager.WriteToErrorLog("LeveransController", "UpdateForvantadLeverans", e.ToString(), e.HResult, User.Identity.Name);
                     var errorModel = new CustomErrorPageModel
                     {
                         Information = "Ett fel inträffade vid uppdatering av förväntad leverans.",
@@ -235,12 +280,13 @@ namespace InrappAdmin.Web.Controllers
             {
                 try
                 {
-                    _portalAdminService.UppdateraForvantadFil(forvFil);
+                    var userName = User.Identity.GetUserName();
+                    _portalAdminService.UppdateraForvantadFil(forvFil, userName);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    ErrorManager.WriteToErrorLog("LeveransController", "UpdateForvantadFil", e.ToString(), e.HResult, "InrappAdmin");
+                    ErrorManager.WriteToErrorLog("LeveransController", "UpdateForvantadFil", e.ToString(), e.HResult, User.Identity.Name);
                     var errorModel = new CustomErrorPageModel
                     {
                         Information = "Ett fel inträffade vid uppadtering av förväntad fil.",
@@ -269,6 +315,8 @@ namespace InrappAdmin.Web.Controllers
             {
                 try
                 {
+                    var userName = User.Identity.GetUserName();
+
                     var admForvlev = new AdmForvantadleverans();
                     admForvlev.DelregisterId = forvantadLeverans.DelregisterId;
                     admForvlev.FilkravId = forvantadLeverans.FilkravId;
@@ -278,12 +326,12 @@ namespace InrappAdmin.Web.Controllers
                     admForvlev.Rapporteringsstart = forvantadLeverans.Rapporteringsstart;
                     admForvlev.Rapporteringsslut = forvantadLeverans.Rapporteringsslut;
                     admForvlev.Rapporteringsenast = forvantadLeverans.Rapporteringsenast;
-                    _portalAdminService.SkapaForvantadLeverans(admForvlev);
+                    _portalAdminService.SkapaForvantadLeverans(admForvlev, userName);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    ErrorManager.WriteToErrorLog("LeveransController", "CreateForvantadLeverans", e.ToString(), e.HResult, "InrappAdmin");
+                    ErrorManager.WriteToErrorLog("LeveransController", "CreateForvantadLeverans", e.ToString(), e.HResult, User.Identity.Name);
                     var errorModel = new CustomErrorPageModel
                     {
                         Information = "Ett fel inträffade när ny förväntad leverans skulle sparas.",
@@ -312,18 +360,20 @@ namespace InrappAdmin.Web.Controllers
             {
                 try
                 {
+                    var userName = User.Identity.GetUserName();
+
                     var admForvFil = new AdmForvantadfil();
                     admForvFil.FilkravId = forvantadFil.FilkravId;
                     admForvFil.Filmask= forvantadFil.Filmask;
                     admForvFil.Regexp = forvantadFil.Regexp;
                     admForvFil.Obligatorisk = forvantadFil.Obligatorisk;
                     admForvFil.Tom = forvantadFil.Tom;
-                    _portalAdminService.SkapaForvantadFil(admForvFil);
+                    _portalAdminService.SkapaForvantadFil(admForvFil, userName);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    ErrorManager.WriteToErrorLog("LeveransController", "CreateForvantadFil", e.ToString(), e.HResult, "InrappAdmin");
+                    ErrorManager.WriteToErrorLog("LeveransController", "CreateForvantadFil", e.ToString(), e.HResult, User.Identity.Name);
                     var errorModel = new CustomErrorPageModel
                     {
                         Information = "Ett fel inträffade när ny förväntad fil skulle sparas.",

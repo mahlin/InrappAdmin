@@ -63,47 +63,48 @@ namespace InrappAdmin.ApplicationService.Interface
 
         IEnumerable<FilloggDetaljDTO> HamtaHistorikForOrganisation(int orgId);
 
-        void SkapaOrganisationsenhet(Organisationsenhet orgUnit);
+        void SkapaOrganisationsenhet(Organisationsenhet orgUnit, string userName);
 
-        void SkapaFAQKategori(AdmFAQKategori faqKategori);
+        void SkapaFAQKategori(AdmFAQKategori faqKategori, string userName);
 
-        void SkapaFAQ(AdmFAQ faq);
+        void SkapaFAQ(AdmFAQ faq, string userName);
 
-        void SkapaInformationsText(AdmInformation infoText);
+        void SkapaInformationsText(AdmInformation infoText, string userName);
 
-        void SkapaUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSk);
+        void SkapaUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSk, string userName);
 
-        void SkapaRegister(AdmRegister reg);
+        void SkapaRegister(AdmRegister reg, string userName);
 
-        void SkapaDelregister(AdmDelregister delReg);
+        void SkapaDelregister(AdmDelregister delReg, string userName);
 
-        void SkapaForvantadLeverans(AdmForvantadleverans forvLev);
+        void SkapaForvantadLeverans(AdmForvantadleverans forvLev, string userName);
 
-        void SkapaForvantadFil(AdmForvantadfil forvFil);
+        void SkapaForvantadFil(AdmForvantadfil forvFil, string userName);
 
-        void UppdateraOrganisation(Organisation org);
+        void UppdateraOrganisation(Organisation org, string userName);
 
-        void UppdateraKontaktperson(ApplicationUser user);
+        void UppdateraKontaktperson(ApplicationUser user, string userName);
 
-        void UppdateraOrganisationsenhet(Organisationsenhet orgUnit);
+        void UppdateraOrganisationsenhet(Organisationsenhet orgUnit, string userName);
 
-        void UppdateraUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSkyldighet);
+        void UppdateraUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSkyldighet, string userName);
 
-        void UppdateraFAQKategori(AdmFAQKategori faqKategori);
+        void UppdateraFAQKategori(AdmFAQKategori faqKategori, string userName);
 
-        void UppdateraFAQ(AdmFAQ faq);
+        void UppdateraFAQ(AdmFAQ faq, string userName);
 
-        void UppdateraInformationstext(AdmInformation infoText);
+        void UppdateraInformationstext(AdmInformation infoText, string userName);
 
-        void UppdateraRegister(AdmRegister register);
+        void UppdateraRegister(AdmRegister register, string userName);
 
-        void UppdateraDelregister(AdmDelregister delregister);
+        void UppdateraDelregister(AdmDelregister delregister, string userName);
 
-        void UppdateraForvantadLeverans(AdmForvantadleverans forvLev);
+        void UppdateraForvantadLeverans(AdmForvantadleverans forvLev, string userName);
 
-        void UppdateraForvantadFil(AdmForvantadfil forvFil);
+        void UppdateraForvantadFil(AdmForvantadfil forvFil, string userName);
+        void UppdateraAnvandarInfo(AppUserAdmin user);
 
-        void SparaOppettider(OpeningHoursInfoDTO oppetTider);
+        void SparaOppettider(OpeningHoursInfoDTO oppetTider, string userName);
 
         void TaBortFAQKategori(int faqKategoriId);
 

@@ -51,7 +51,7 @@ namespace InrappAdmin.Web.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                ErrorManager.WriteToErrorLog("OrganisationController", "GetOrganisation", e.ToString(), e.HResult, "InrappAdmin");
+                ErrorManager.WriteToErrorLog("OrganisationController", "GetOrganisation", e.ToString(), e.HResult, User.Identity.Name);
                 var errorModel = new CustomErrorPageModel
                 {
                     Information = "Ett fel inträffade vid hämtning av organisation",
@@ -76,10 +76,24 @@ namespace InrappAdmin.Web.Controllers
         public ActionResult GetOrganisationsContacts(string kommunkod)
         {
             var model = new OrganisationViewModels.OrganisationViewModel();
-            model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
-            var contacts = _portalAdminService.HamtaKontaktpersonerForOrg(model.Organisation.Id);
-            model.ContactPersons = ConvertUsersViewModelUser(contacts);
-
+            try
+            {
+                model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+                var contacts = _portalAdminService.HamtaKontaktpersonerForOrg(model.Organisation.Id);
+                model.ContactPersons = ConvertUsersViewModelUser(contacts);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("OrganisationController", "GetOrganisationsContacts", e.ToString(), e.HResult,
+                    User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid hämtning av kontakter för organisation.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+            }
             return View("EditContacts", model);
         }
 
@@ -94,17 +108,32 @@ namespace InrappAdmin.Web.Controllers
         public ActionResult GetOrganisationsOrgUnits(string kommunkod = "", int orgId = 0)
         {
             var model = new OrganisationViewModels.OrganisationViewModel();
-            if (kommunkod != "")
+            try
             {
-                model.Kommunkod = kommunkod;
-                model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+                if (kommunkod != "")
+                {
+                    model.Kommunkod = kommunkod;
+                    model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+                }
+                else if (orgId != 0)
+                {
+                    model.Organisation = _portalAdminService.HamtaOrganisation(orgId);
+                    model.Kommunkod = _portalAdminService.HamtaKommunkodForOrg(orgId);
+                }
+                model.OrgUnits = _portalAdminService.HamtaOrgEnheterForOrg(model.Organisation.Id);
             }
-            else if (orgId != 0)
+            catch (Exception e)
             {
-                model.Organisation = _portalAdminService.HamtaOrganisation(orgId);
-                model.Kommunkod = _portalAdminService.HamtaKommunkodForOrg(orgId);
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("OrganisationController", "GetOrganisationsOrgUnits", e.ToString(), e.HResult,
+                    User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid hämtning av organisationsenheter för organisation.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
             }
-            model.OrgUnits = _portalAdminService.HamtaOrgEnheterForOrg(model.Organisation.Id);
 
             return View("EditOrgUnits", model);
         }
@@ -119,18 +148,33 @@ namespace InrappAdmin.Web.Controllers
         public ActionResult GetOrganisationsReportObligations(string kommunkod = "", int orgId = 0)
         {
             var model = new OrganisationViewModels.OrganisationViewModel();
-            if (kommunkod != "")
+            try
             {
-                model.Kommunkod = kommunkod;
-                model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+                if (kommunkod != "")
+                {
+                    model.Kommunkod = kommunkod;
+                    model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+                }
+                else if (orgId != 0)
+                {
+                    model.Organisation = _portalAdminService.HamtaOrganisation(orgId);
+                    model.Kommunkod = _portalAdminService.HamtaKommunkodForOrg(orgId);
+                }
+                var admUppgSkyldighetList = _portalAdminService.HamtaUppgiftsskyldighetForOrg(model.Organisation.Id);
+                model.ReportObligations = ConvertAdmUppgiftsskyldighetToViewModel(admUppgSkyldighetList.ToList());
             }
-            else if (orgId != 0)
+            catch (Exception e)
             {
-                model.Organisation = _portalAdminService.HamtaOrganisation(orgId);
-                model.Kommunkod = _portalAdminService.HamtaKommunkodForOrg(orgId);
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("OrganisationController", "GetOrganisationsReportObligations", e.ToString(), e.HResult,
+                    User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid hämtning av uppgiftsskyldighet för organisation.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
             }
-            var admUppgSkyldighetList = _portalAdminService.HamtaUppgiftsskyldighetForOrg(model.Organisation.Id);
-            model.ReportObligations = ConvertAdmUppgiftsskyldighetToViewModel(admUppgSkyldighetList.ToList());
 
             return View("EditReportObligations", model);
         }
@@ -138,22 +182,54 @@ namespace InrappAdmin.Web.Controllers
         [HttpPost]
         public ActionResult UpdateOrganisation(OrganisationViewModels.OrganisationViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _portalAdminService.UppdateraOrganisation(model.Organisation);
+                if (ModelState.IsValid)
+                {
+                    var userName = User.Identity.GetUserName();
+                    _portalAdminService.UppdateraOrganisation(model.Organisation, userName);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("OrganisationController", "UpdateOrganisation", e.ToString(), e.HResult,
+                    User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid uppdatering av organisation.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
             }
             return RedirectToAction("GetOrganisation", new { kommunkod = model.Organisation.Kommunkod });
-
         }
 
         [HttpPost]
         public ActionResult UpdateOrganisationsContact(ApplicationUser user)
         {
-            var org = _portalAdminService.HamtaOrgForAnvandare(user.Id);
-            var kommunkod = _portalAdminService.HamtaKommunkodForOrg(org.Id);
-            if (ModelState.IsValid)
+            var kommunkod = String.Empty;
+            try
             {
-                _portalAdminService.UppdateraKontaktperson(user);
+                var org = _portalAdminService.HamtaOrgForAnvandare(user.Id);
+                kommunkod = _portalAdminService.HamtaKommunkodForOrg(org.Id);
+                if (ModelState.IsValid)
+                {
+                    var userName = User.Identity.GetUserName();
+                    _portalAdminService.UppdateraKontaktperson(user, userName);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("OrganisationController", "UpdateOrganisationsContact", e.ToString(), e.HResult,
+                    User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid uppdatering av kontaktperson.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
             }
             return RedirectToAction("GetOrganisationsContacts", new { kommunkod = kommunkod });
 
@@ -162,11 +238,29 @@ namespace InrappAdmin.Web.Controllers
         [HttpPost]
         public ActionResult UpdateOrganisationsOrgUnit(Organisationsenhet orgUnit)
         {
-            var org = _portalAdminService.HamtaOrgForOrganisationsenhet(orgUnit.Id);
-            var kommunkod = _portalAdminService.HamtaKommunkodForOrg(org.Id);
-            if (ModelState.IsValid)
+            var kommunkod = String.Empty;
+            try
             {
-                _portalAdminService.UppdateraOrganisationsenhet(orgUnit);
+
+                var org = _portalAdminService.HamtaOrgForOrganisationsenhet(orgUnit.Id);
+                kommunkod = _portalAdminService.HamtaKommunkodForOrg(org.Id);
+                if (ModelState.IsValid)
+                {
+                    var userName = User.Identity.GetUserName();
+                    _portalAdminService.UppdateraOrganisationsenhet(orgUnit, userName);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("OrganisationController", "UpdateOrganisationsOrgUnit", e.ToString(), e.HResult,
+                    User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid uppdatering av organisationsenhet.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
             }
             return RedirectToAction("GetOrganisationsOrgUnits", new { kommunkod = kommunkod });
 
@@ -175,12 +269,30 @@ namespace InrappAdmin.Web.Controllers
         [HttpPost]
         public ActionResult UpdateOrganisationsReportObligation(OrganisationViewModels.ReportObligationsViewModel admUppgSkyldighet)
         {
-            var org = _portalAdminService.HamtaOrgForUppgiftsskyldighet(admUppgSkyldighet.Id);
-            var kommunkod = _portalAdminService.HamtaKommunkodForOrg(org.Id);
-            if (ModelState.IsValid)
+            var kommunkod = String.Empty;
+            try
             {
-                var admUppgiftsskyldighetToDb = ConvertViewModelToAdmUppgiftsskyldighet(admUppgSkyldighet);
-                _portalAdminService.UppdateraUppgiftsskyldighet(admUppgiftsskyldighetToDb);
+
+                var org = _portalAdminService.HamtaOrgForUppgiftsskyldighet(admUppgSkyldighet.Id);
+                kommunkod = _portalAdminService.HamtaKommunkodForOrg(org.Id);
+                if (ModelState.IsValid)
+                {
+                    var userName = User.Identity.GetUserName();
+                    var admUppgiftsskyldighetToDb = ConvertViewModelToAdmUppgiftsskyldighet(admUppgSkyldighet);
+                    _portalAdminService.UppdateraUppgiftsskyldighet(admUppgiftsskyldighetToDb, userName);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("OrganisationController", "UpdateOrganisationsReportObligation", e.ToString(), e.HResult,
+                    User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid uppdatering av uppgiftsskyldighet.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
             }
             return RedirectToAction("GetOrganisationsReportObligations", new { kommunkod = kommunkod });
 
@@ -204,13 +316,14 @@ namespace InrappAdmin.Web.Controllers
             {
                 try
                 {
-                    _portalAdminService.SkapaOrganisationsenhet(orgenhet);
+                    var userName = User.Identity.GetUserName();
+                    _portalAdminService.SkapaOrganisationsenhet(orgenhet, userName);
                     kommunkod = _portalAdminService.HamtaKommunkodForOrg(orgenhet.OrganisationsId);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    ErrorManager.WriteToErrorLog("OrganisationController", "CreateOrganisationUnit", e.ToString(), e.HResult, "InrappAdmin");
+                    ErrorManager.WriteToErrorLog("OrganisationController", "CreateOrganisationUnit", e.ToString(), e.HResult, User.Identity.Name);
                     var errorModel = new CustomErrorPageModel
                     {
                         Information = "Ett fel inträffade när ny organisationsenhet skulle sparas.",
@@ -242,13 +355,14 @@ namespace InrappAdmin.Web.Controllers
             {
                 try
                 {
-                    _portalAdminService.SkapaUppgiftsskyldighet(uppgSk);
+                    var userName = User.Identity.GetUserName();
+                    _portalAdminService.SkapaUppgiftsskyldighet(uppgSk, userName);
                     kommunkod = _portalAdminService.HamtaKommunkodForOrg(uppgSk.OrganisationId);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    ErrorManager.WriteToErrorLog("OrganisationController", "CreateReportObligation", e.ToString(), e.HResult, "InrappAdmin");
+                    ErrorManager.WriteToErrorLog("OrganisationController", "CreateReportObligation", e.ToString(), e.HResult, User.Identity.Name);
                     var errorModel = new CustomErrorPageModel
                     {
                         Information = "Ett fel inträffade när ny uppgiftsskyldighet skulle sparas.",
@@ -272,7 +386,7 @@ namespace InrappAdmin.Web.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                ErrorManager.WriteToErrorLog("OrganisationController", "DeleteContact", e.ToString(), e.HResult, "InrappAdmin");
+                ErrorManager.WriteToErrorLog("OrganisationController", "DeleteContact", e.ToString(), e.HResult, User.Identity.Name);
                 var errorModel = new CustomErrorPageModel
                 {
                     Information = "Ett fel inträffade när kontaktperson skulle tas bort.",

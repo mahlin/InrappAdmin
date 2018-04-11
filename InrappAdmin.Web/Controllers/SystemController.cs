@@ -12,6 +12,7 @@ using InrappAdmin.DomainModel;
 using InrappAdmin.Web.Helpers;
 using InrappAdmin.Web.Models;
 using InrappAdmin.Web.Models.ViewModels;
+using Microsoft.AspNet.Identity;
 
 namespace InrappAdmin.Web.Controllers
 {
@@ -44,7 +45,7 @@ namespace InrappAdmin.Web.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                ErrorManager.WriteToErrorLog("SystemController", "GetFAQCategories", e.ToString(), e.HResult, "InrappAdmin");
+                ErrorManager.WriteToErrorLog("SystemController", "GetFAQCategories", e.ToString(), e.HResult, User.Identity.Name);
                 var errorModel = new CustomErrorPageModel
                 {
                     Information = "Ett fel inträffade vid hämtning av FAQ-kategorier",
@@ -69,7 +70,7 @@ namespace InrappAdmin.Web.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                ErrorManager.WriteToErrorLog("SystemController", "GetFAQs", e.ToString(), e.HResult, "InrappAdmin");
+                ErrorManager.WriteToErrorLog("SystemController", "GetFAQs", e.ToString(), e.HResult, User.Identity.Name);
                 var errorModel = new CustomErrorPageModel
                 {
                     Information = "Ett fel inträffade vid hämtning av FAQs",
@@ -97,7 +98,7 @@ namespace InrappAdmin.Web.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                ErrorManager.WriteToErrorLog("SystemController", "GetInformationTexts", e.ToString(), e.HResult, "InrappAdmin");
+                ErrorManager.WriteToErrorLog("SystemController", "GetInformationTexts", e.ToString(), e.HResult, User.Identity.Name);
                 var errorModel = new CustomErrorPageModel
                 {
                     Information = "Ett fel inträffade vid hämtning av informationstexter.",
@@ -161,7 +162,7 @@ namespace InrappAdmin.Web.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                ErrorManager.WriteToErrorLog("SystemController", "GetOpeningHours", e.ToString(), e.HResult, "InrappAdmin");
+                ErrorManager.WriteToErrorLog("SystemController", "GetOpeningHours", e.ToString(), e.HResult, User.Identity.Name);
                 var errorModel = new CustomErrorPageModel
                 {
                     Information = "Ett fel inträffade vid hämtning av öppettider.",
@@ -179,10 +180,26 @@ namespace InrappAdmin.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _portalAdminService.UppdateraFAQKategori(faqCategory);
+                try
+                {
+                    var userName = User.Identity.GetUserName();
+                    _portalAdminService.UppdateraFAQKategori(faqCategory, userName);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("SystemController", "UpdateFAQCategory", e.ToString(), e.HResult,
+                        User.Identity.Name);
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade vid uppdatering av FAQ-kategori.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+
+                }
             }
             return RedirectToAction("GetFAQCategories");
-
         }
 
         [HttpPost]
@@ -190,10 +207,25 @@ namespace InrappAdmin.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _portalAdminService.UppdateraFAQ(faq);
+                try
+                {
+                    var userName = User.Identity.GetUserName();
+                    _portalAdminService.UppdateraFAQ(faq, userName);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("SystemController", "UpdateFAQ", e.ToString(), e.HResult,
+                        User.Identity.Name);
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade vid uppdatering av FAQ.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
             }
             return RedirectToAction("GetFAQs", new { faqCatId = faq.FAQkategoriId });
-
         }
 
         [HttpPost]
@@ -201,16 +233,30 @@ namespace InrappAdmin.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                try
+                {
+                    var userName = User.Identity.GetUserName();
                     AdmInformation info = new AdmInformation
                     {
                         Informationstyp = model.SelectedInfo,
                         Text = model.SelectedInfoText
                     };
-                    _portalAdminService.UppdateraInformationstext(info);
+                    _portalAdminService.UppdateraInformationstext(info, userName);
                 }
-                
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("SystemController", "UpdateInfoText", e.ToString(), e.HResult,
+                        User.Identity.Name);
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade vid uppdatering av informationstext.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
+            }
             return RedirectToAction("GetInformationTexts");
-
         }
 
         // GET
@@ -228,12 +274,13 @@ namespace InrappAdmin.Web.Controllers
             {
                 try
                 {
-                    _portalAdminService.SkapaFAQKategori(faqCategory);
+                    var userName = User.Identity.GetUserName();
+                    _portalAdminService.SkapaFAQKategori(faqCategory, userName);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    ErrorManager.WriteToErrorLog("SystemController", "CreateFAQCategory", e.ToString(), e.HResult, "InrappAdmin");
+                    ErrorManager.WriteToErrorLog("SystemController", "CreateFAQCategory", e.ToString(), e.HResult, User.Identity.Name);
                     var errorModel = new CustomErrorPageModel
                     {
                         Information = "Ett fel inträffade när ny FAQ-kategori skulle sparas.",
@@ -266,6 +313,8 @@ namespace InrappAdmin.Web.Controllers
             {
                 try
                 {
+                    var userName = User.Identity.GetUserName();
+
                     AdmFAQ faq = new AdmFAQ
                     {
                         FAQkategoriId = model.FAQkategoriId,
@@ -273,12 +322,12 @@ namespace InrappAdmin.Web.Controllers
                         Fraga = model.Fraga,
                         Svar = model.Svar
                     };
-                    _portalAdminService.SkapaFAQ(faq);
+                    _portalAdminService.SkapaFAQ(faq, userName);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    ErrorManager.WriteToErrorLog("SystemController", "CreateFAQ", e.ToString(), e.HResult, "InrappAdmin");
+                    ErrorManager.WriteToErrorLog("SystemController", "CreateFAQ", e.ToString(), e.HResult, User.Identity.Name);
                     var errorModel = new CustomErrorPageModel
                     {
                         Information = "Ett fel inträffade när ny faq skulle sparas.",
@@ -316,6 +365,8 @@ namespace InrappAdmin.Web.Controllers
             {
                 try
                 {
+                    var userName = User.Identity.GetUserName();
+
                     AdmFAQ faq = new AdmFAQ
                     {
                         Id = model.SelectedFAQ.Id,
@@ -325,12 +376,12 @@ namespace InrappAdmin.Web.Controllers
                         Svar = model.SelectedFAQ.Svar
 
                     };
-                    _portalAdminService.UppdateraFAQ(faq);
+                    _portalAdminService.UppdateraFAQ(faq, userName);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    ErrorManager.WriteToErrorLog("SystemController", "EditSelectedFAQ", e.ToString(), e.HResult, "InrappAdmin");
+                    ErrorManager.WriteToErrorLog("SystemController", "EditSelectedFAQ", e.ToString(), e.HResult, User.Identity.Name);
                     var errorModel = new CustomErrorPageModel
                     {
                         Information = "Ett fel inträffade när faq skulle sparas.",
@@ -360,12 +411,13 @@ namespace InrappAdmin.Web.Controllers
             {
                 try
                 {
-                    _portalAdminService.SkapaInformationsText(infoText);
+                    var userName = User.Identity.GetUserName();
+                    _portalAdminService.SkapaInformationsText(infoText, userName);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    ErrorManager.WriteToErrorLog("SystemController", "CreateInfoText", e.ToString(), e.HResult, "InrappAdmin");
+                    ErrorManager.WriteToErrorLog("SystemController", "CreateInfoText", e.ToString(), e.HResult, User.Identity.Name);
                     var errorModel = new CustomErrorPageModel
                     {
                         Information = "Ett fel inträffade när ny informationstext skulle sparas.",
@@ -388,6 +440,7 @@ namespace InrappAdmin.Web.Controllers
             {
                 try
                 {
+                    var userName = User.Identity.GetUserName();
 
                     OpeningHoursInfoDTO openHoursDTO = new OpeningHoursInfoDTO();
 
@@ -404,12 +457,12 @@ namespace InrappAdmin.Web.Controllers
                     }
                     openHoursDTO.ClosedDays = daysListDTO;
 
-                    _portalAdminService.SparaOppettider(openHoursDTO);
+                    _portalAdminService.SparaOppettider(openHoursDTO, userName);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    ErrorManager.WriteToErrorLog("SystemController", "SaveOpeningHoursInfo", e.ToString(), e.HResult, "InrappAdmin");
+                    ErrorManager.WriteToErrorLog("SystemController", "SaveOpeningHoursInfo", e.ToString(), e.HResult, User.Identity.Name);
                     var errorModel = new CustomErrorPageModel
                     {
                         Information = "Ett fel inträffade när information om öppettider skulle sparas.",
@@ -434,7 +487,7 @@ namespace InrappAdmin.Web.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                ErrorManager.WriteToErrorLog("SystemController", "DeleteFAQCategory", e.ToString(), e.HResult, "InrappAdmin");
+                ErrorManager.WriteToErrorLog("SystemController", "DeleteFAQCategory", e.ToString(), e.HResult, User.Identity.Name);
                 var errorModel = new CustomErrorPageModel
                 {
                     Information = "Ett fel inträffade när FAQ-kategori skulle tas bort.",
@@ -455,7 +508,7 @@ namespace InrappAdmin.Web.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                ErrorManager.WriteToErrorLog("SystemController", "DeleteFAQ", e.ToString(), e.HResult, "InrappAdmin");
+                ErrorManager.WriteToErrorLog("SystemController", "DeleteFAQ", e.ToString(), e.HResult, User.Identity.Name);
                 var errorModel = new CustomErrorPageModel
                 {
                     Information = "Ett fel inträffade när FAQ skulle tas bort.",

@@ -11,6 +11,7 @@ using InrappAdmin.DomainModel;
 using InrappAdmin.Web.Helpers;
 using InrappAdmin.Web.Models;
 using InrappAdmin.Web.Models.ViewModels;
+using Microsoft.AspNet.Identity;
 
 namespace InrappAdmin.Web.Controllers
 {
@@ -53,7 +54,7 @@ namespace InrappAdmin.Web.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                ErrorManager.WriteToErrorLog("RegisterController", "GetDirectories", e.ToString(), e.HResult, "InrappAdmin");
+                ErrorManager.WriteToErrorLog("RegisterController", "GetDirectories", e.ToString(), e.HResult, User.Identity.Name);
                 var errorModel = new CustomErrorPageModel
                 {
                     Information = "Ett fel inträffade vid hämtning av register",
@@ -80,7 +81,7 @@ namespace InrappAdmin.Web.Controllers
             {
                 Console.WriteLine(e);
                 ErrorManager.WriteToErrorLog("RegisterController", "GetSubDirectoriesForDirectory", e.ToString(), e.HResult,
-                    "InrappAdmin");
+                    User.Identity.Name);
                 var errorModel = new CustomErrorPageModel
                 {
                     Information = "Ett fel inträffade vid hämtning av delregister",
@@ -105,7 +106,7 @@ namespace InrappAdmin.Web.Controllers
             {
                 Console.WriteLine(e);
                 ErrorManager.WriteToErrorLog("RegisterController", "GetAllSubDirectories", e.ToString(), e.HResult,
-                    "InrappAdmin");
+                    User.Identity.Name);
                 var errorModel = new CustomErrorPageModel
                 {
                     Information = "Ett fel inträffade vid hämtning av delregister",
@@ -126,12 +127,13 @@ namespace InrappAdmin.Web.Controllers
             {
                 try
                 {
-                    _portalAdminService.UppdateraRegister(register);
+                    var userName = User.Identity.GetUserName();
+                    _portalAdminService.UppdateraRegister(register, userName);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    ErrorManager.WriteToErrorLog("RegisterController", "UpdateDirectory", e.ToString(), e.HResult, "InrappAdmin");
+                    ErrorManager.WriteToErrorLog("RegisterController", "UpdateDirectory", e.ToString(), e.HResult, User.Identity.Name);
                     var errorModel = new CustomErrorPageModel
                     {
                         Information = "Ett fel inträffade vid uppadtering av register.",
@@ -153,14 +155,15 @@ namespace InrappAdmin.Web.Controllers
             {
                 try
                 {
-                    var register= _portalAdminService.HamtaRegisterMedId(delRegister.RegisterId);
+                    var userName = User.Identity.GetUserName();
+                    var register = _portalAdminService.HamtaRegisterMedId(delRegister.RegisterId);
                     regShortName = register.Kortnamn;
-                    _portalAdminService.UppdateraDelregister(delRegister);
+                    _portalAdminService.UppdateraDelregister(delRegister, userName);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    ErrorManager.WriteToErrorLog("RegisterController", "UpdateSubDirectory", e.ToString(), e.HResult, "InrappAdmin");
+                    ErrorManager.WriteToErrorLog("RegisterController", "UpdateSubDirectory", e.ToString(), e.HResult, User.Identity.Name);
                     var errorModel = new CustomErrorPageModel
                     {
                         Information = "Ett fel inträffade vid uppadtering av delregister.",
@@ -189,6 +192,8 @@ namespace InrappAdmin.Web.Controllers
             {
                 try
                 {
+                    var userName = User.Identity.GetUserName();
+
                     AdmRegister register = new AdmRegister
                     {
                         Registernamn = model.Registernamn,
@@ -196,12 +201,12 @@ namespace InrappAdmin.Web.Controllers
                         Kortnamn = model.Kortnamn,
                         Inrapporteringsportal = model.Inrapporteringsportal
                     };
-                    _portalAdminService.SkapaRegister(register);
+                    _portalAdminService.SkapaRegister(register, userName);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    ErrorManager.WriteToErrorLog("RegisterController", "CreateDirectory", e.ToString(), e.HResult, "InrappAdmin");
+                    ErrorManager.WriteToErrorLog("RegisterController", "CreateDirectory", e.ToString(), e.HResult, User.Identity.Name);
                     var errorModel = new CustomErrorPageModel
                     {
                         Information = "Ett fel inträffade när nytt register skulle sparas.",
@@ -236,14 +241,16 @@ namespace InrappAdmin.Web.Controllers
             {
                 try
                 {
-                    _portalAdminService.SkapaDelregister(subDir);
+                    var userName = User.Identity.GetUserName();
+
+                    _portalAdminService.SkapaDelregister(subDir, userName);
                     var register = _portalAdminService.HamtaRegisterMedId(subDir.RegisterId);
                     regShortName = register.Kortnamn;
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    ErrorManager.WriteToErrorLog("RegisterController", "CreateSubDirectory", e.ToString(), e.HResult, "InrappAdmin");
+                    ErrorManager.WriteToErrorLog("RegisterController", "CreateSubDirectory", e.ToString(), e.HResult, User.Identity.Name);
                     var errorModel = new CustomErrorPageModel
                     {
                         Information = "Ett fel inträffade när nytt delregister skulle sparas.",
