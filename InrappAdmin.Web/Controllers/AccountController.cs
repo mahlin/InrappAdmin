@@ -156,7 +156,12 @@ namespace InrappAdmin.Web.Controllers
                     var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    UserManager.AddToRole(user.Id, "Admin");
+                    //var _roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new IdentityDbContext()));
+
+                    //    var role = new IdentityRole();
+                    //role.Name = "Admin";
+                    //await _roleManager.CreateAsync(role);
+                    //    UserManager.AddToRole(user.Id, "Admin");
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
                      return RedirectToAction("Index", "Home");

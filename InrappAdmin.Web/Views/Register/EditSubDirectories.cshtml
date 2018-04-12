@@ -8,6 +8,11 @@
         $("#txtRegisterKortNamn").focus();
     });
 
+    $(document).on('blur','input.regShortName',function() {
+            var tmp = $('input.regShortName').val();
+            $('#RegisterShortName').val($('input.regShortName').val());
+    });
+
 
     $(function() {
         $('.edit-mode').hide();
@@ -94,17 +99,18 @@
                 @using (Html.BeginForm("GetSubDirectoriesForDirectory", "Register", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
                     @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.RegisterShortName)
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="form-group">
                         @Html.LabelFor(m => m.RegisterShortName, new { @class = "col-md-2 control-label" })
                         <div class="col-md-10">
-                            @Html.TextBoxFor(m => m.RegisterShortName, new { @class = "form-control", id = "txtRegisterKortNamn" })
+                            @Html.TextBoxFor(m => m.RegisterShortName, new { @class = "form-control regShortName", id = "txtRegisterKortNamn" })
                             @Html.ValidationMessageFor(m => m.RegisterShortName, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Sök delregister" class="btn btn-default" />
+                            <input type="submit" value="Sök delregister" id="searchBtn" class="btn btn-default" />
                         </div>
                     </div>
                 }

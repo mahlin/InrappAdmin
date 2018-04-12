@@ -18,7 +18,7 @@ namespace InrappAdmin.Web.Controllers
 
             }
 
-            return PartialView("_Loginpartial");
+            return PartialView("_LoginPartial");
         }
     }
 }

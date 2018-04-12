@@ -11,6 +11,7 @@ using InrappAdmin.DomainModel;
 using InrappAdmin.Web.Helpers;
 using InrappAdmin.Web.Models;
 using InrappAdmin.Web.Models.ViewModels;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 
 namespace InrappAdmin.Web.Controllers
@@ -67,12 +68,23 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // GET
-        public ActionResult GetSubDirectoriesForDirectory(string regShortName = "")
+        public ActionResult GetSubDirectoriesForDirectory( RegisterViewModels.RegisterViewModel model, string regShortName = "")
         {
-            var model = new RegisterViewModels.RegisterViewModel();
             try
             {
-                var register = _portalAdminService.HamtaRegisterMedKortnamn(regShortName);
+                var register = new AdmRegister();
+                if (!model.RegisterShortName.IsNullOrWhiteSpace())
+                {
+                    register = _portalAdminService.HamtaRegisterMedKortnamn(model.RegisterShortName);
+                }
+                else if(regShortName != "")
+                {
+                    register = _portalAdminService.HamtaRegisterMedKortnamn(regShortName);
+                }
+                else
+                {
+                    RedirectToAction("GetAllSubDirectories");
+                }
                 model.RegisterShortName = regShortName;
                 model.SelectedDirectoryId = register.Id;
                 model.DelRegisters = _portalAdminService.HamtaDelRegisterForRegister(register.Id);
@@ -101,6 +113,7 @@ namespace InrappAdmin.Web.Controllers
             try
             {
                 model.DelRegisters = _portalAdminService.HamtaDelRegister();
+                model.RegisterShortName = "";
             }
             catch (Exception e)
             {
