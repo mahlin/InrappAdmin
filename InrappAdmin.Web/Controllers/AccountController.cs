@@ -15,6 +15,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using InrappAdmin.Web.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace InrappAdmin.Web.Controllers
 {
@@ -91,12 +92,20 @@ namespace InrappAdmin.Web.Controllers
                 {
                     // This doesn't count login failures towards account lockout
                     // To enable password failures to trigger account lockout, change to shouldLockout: true
-                    var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe,
-                        shouldLockout: false);
+                    var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe,shouldLockout: false);
+
+                    if (UserManager.IsInRole(user.Id, "Admin"))
+                    {
+                        ViewBag.displayRegister = "Yes";
+                    }
+
+                    var x = User.Identity.Name;
+                    var y = User.Identity.GetUserName();
+
                     switch (result)
                     {
                         case SignInStatus.Success:
-                            return RedirectToLocal(returnUrl);
+                            return RedirectToLocal(returnUrl, true );
                         case SignInStatus.LockedOut:
                             return View("Lockout");
                         case SignInStatus.Failure:
@@ -147,18 +156,9 @@ namespace InrappAdmin.Web.Controllers
                     var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    //  Comment the following line to prevent log in until the user is confirmed.
+                    UserManager.AddToRole(user.Id, "Admin");
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
-                    //string callbackUrl = await SendEmailConfirmationTokenAsync(user.Id, "Confirm your account");
-
-                    //ViewBag.Message = "Check your email and confirm your account, you must be confirmed "
-                    //             + "before you can log in.";
-
-                    // For local debug only
-                    //ViewBag.Link = callbackUrl;
-
-                     //return View("Info");
                      return RedirectToAction("Index", "Home");
                   }
                   AddErrors(result);
@@ -322,13 +322,17 @@ namespace InrappAdmin.Web.Controllers
                  }
               }
 
-              private ActionResult RedirectToLocal(string returnUrl)
+              private ActionResult RedirectToLocal(string returnUrl, bool admin)
               {
-                 if (Url.IsLocalUrl(returnUrl))
-                 {
-                    return Redirect(returnUrl);
-                 }
-                 return RedirectToAction("Index", "Home");
+                  if (admin)
+                  {
+                      ViewBag.displayRegister = "Yes";
+                  }
+                  if (Url.IsLocalUrl(returnUrl))
+                  {
+                        return Redirect(returnUrl);
+                  }
+                  return RedirectToAction("Index", "Home");
               }
 
               internal class ChallengeResult : HttpUnauthorizedResult

@@ -7,11 +7,12 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace InrappAdmin.DomainModel
 {
-    public class AppRoleAdmin : IdentityRole
-    {
-        public AppRoleAdmin() : base() { }
+    //public class AppRoleAdmin : IdentityRole
+    //{
+    //    public AppRoleAdmin() : base() { }
 
-        public AppRoleAdmin(string name) : base(name) { }
+    //    public AppRoleAdmin(string name) : base(name) { }
+    //    //public string Discriminator { get; set; }
 
-    }
+    //}
 }

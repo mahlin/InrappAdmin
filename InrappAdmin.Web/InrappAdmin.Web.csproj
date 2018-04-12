@@ -181,6 +181,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LeveransController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\NavigationController.cs" />
     <Compile Include="Controllers\OrganisationController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\SystemController.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CustomErrorPageModel.cs" />
     <Compile Include="Models\CustomIdentityResultErrorDescriber.cs" />
+    <Compile Include="Models\CustomNavBarViewModel.cs" />
     <Compile Include="Models\ViewModels\LeveransViewModels.cs" />
     <Compile Include="Models\ViewModels\ManageViewModels.cs" />
     <Compile Include="Models\ViewModels\RegisterViewModels.cs" />
@@ -305,9 +307,11 @@
     <Content Include="Views\Manage\Index.cshtml" />
     <Content Include="Views\Manage\ManageLogins.cshtml" />
     <Content Include="Views\Manage\SetPassword.cshtml" />
+    <Content Include="Views\Shared\_LoginAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Navigation\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

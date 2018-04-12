@@ -1,16 +1,16 @@
 ﻿@using Microsoft.Ajax.Utilities
 
+
 @if (Request.IsAuthenticated)
 {
-   
+
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
         @Html.AntiForgeryToken()
 
         <ul class="nav navbar-nav navbar-right" style="margin-top: 20px">
-            <li>
-                @Html.ActionLink("Min sida", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-            </li>
+            <li>@Html.ActionLink("Reg anv", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+            <li>@Html.ActionLink("Min sida", "Index", "Manage", routeValues: null, htmlAttributes: new {title = "Manage"})</li>
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Logga ut</a></li>
         </ul>
     }
