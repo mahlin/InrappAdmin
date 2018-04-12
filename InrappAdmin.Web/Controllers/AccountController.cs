@@ -94,13 +94,13 @@ namespace InrappAdmin.Web.Controllers
                     // To enable password failures to trigger account lockout, change to shouldLockout: true
                     var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe,shouldLockout: false);
 
-                    if (UserManager.IsInRole(user.Id, "Admin"))
-                    {
-                        ViewBag.displayRegister = "Yes";
-                    }
+                    //if (UserManager.IsInRole(user.Id, "Admin"))
+                    //{
+                    //    ViewBag.displayRegister = "Yes";
+                    //}
 
-                    var x = User.Identity.Name;
-                    var y = User.Identity.GetUserName();
+                    //var x = User.Identity.Name;
+                    //var y = User.Identity.GetUserName();
 
                     switch (result)
                     {
@@ -110,7 +110,7 @@ namespace InrappAdmin.Web.Controllers
                             return View("Lockout");
                         case SignInStatus.Failure:
                         default:
-                            ModelState.AddModelError("", "Invalid login attempt.");
+                            ModelState.AddModelError("", "Felaktigt användarnamn eller lösenord.");
                             return View(model);
                     }
                 }

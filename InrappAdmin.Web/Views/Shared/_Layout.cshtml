@@ -9,74 +9,8 @@
     @Scripts.Render("~/bundles/jquery")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" rel="home" href='@Url.Action("Index", "Home")' title="Socialstyrelsen">
-                    <img  src="~/Content/Images/LoggaNew200px.PNG"></a>
-                @Html.ActionLink("Astrid", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", style = "margin-top: 17px; font-size:2em;padding-left:30px;" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav" style="margin-top: 20px">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">System <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("FAQ", "GetFAQCategories", "System")</li>
-                            <li>@Html.ActionLink("Informationssidor", "GetInformationTexts", "System")</li>
-                            <li>@Html.ActionLink("Öppettider", "GetOpeningHours", "System")</li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Register och delregister <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Register", "Index", "Register")</li>
-                            <li>@Html.ActionLink("Delregister", "GetAllSubDirectories", "Register")</li>
-                        </ul>
-                    </li>
-                    @*<li class="dropdown">
-                <ul class="nav navbar-nav">
-                    <li><a data-toggle="collapse" data-target=".navbar-collapse">Sites<i class="glyphicon glyphicon-tree-conifer pull-left pull-left"></i></a></li>
-                    <li><a data-toggle="collapse" data-target=".navbar-collapse">Models<i class="glyphicon glyphicon-tower pull-left"></i></a></li>
-                </ul>
-            </li>*@
-                    @*<li>@Html.ActionLink("Register och delregister", "Index", "Home")</li>*@
+@Html.Action("Menu", "Navigation")
 
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Organisation <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Organisation", "Index", "Organisation")</li>
-                            <li>@Html.ActionLink("Kontaktpersoner", "GetContacts", "Organisation")</li>
-                            <li>@Html.ActionLink("Organisationsenheter", "GetOrgUnits", "Organisation")</li>
-                            <li>@Html.ActionLink("Uppgiftsskyldighet", "GetReportObligations", "Organisation")</li>
-                            @*<li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">One more separated link</a></li>*@
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Leverans <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Förväntad leverans", "Index", "Leverans")</li>
-                            <li>@Html.ActionLink("Förväntad fil", "GetForvantadeFiler", "Leverans")</li>
-                            <li>@Html.ActionLink("Leveranser", "GetDeliveries", "Leverans")</li>
-                        </ul>
-                    </li>
-                    @*<li>@Html.ActionLink("About", "About", "Home")</li>
-            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
-                </ul>
-                @Html.Action("Menu", "Navigation")
-                @*@Html.Partial("_LoginPartial")*@
-            </div>
-        </div>
-    </div>
     <div class="container body-content">
         @RenderBody()
         <hr />
