@@ -25,6 +25,7 @@ namespace InrappAdmin.Web.Controllers
         private ApplicationUserManager _userManager;
         private CustomIdentityResultErrorDescriber _errorDecsriber;
         private readonly IPortalAdminService _portalAdminService;
+        private ApplicationRoleManager _roleManager;
 
 
         public AccountController()
@@ -33,15 +34,18 @@ namespace InrappAdmin.Web.Controllers
               new PortalAdminService(new PortalAdminRepository(new InrappAdminDbContext(), new InrappAdminIdentityDbContext()));
         }
 
-      public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+      public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager roleManager)
       {
           _errorDecsriber = new CustomIdentityResultErrorDescriber();
-            UserManager = userManager;
-         SignInManager = signInManager;
+          UserManager = userManager;
+          SignInManager = signInManager;
+          RoleManager = roleManager;
+          _portalAdminService =
+              new PortalAdminService(new PortalAdminRepository(new InrappAdminDbContext(), new InrappAdminIdentityDbContext()));
       }
 
-      public ApplicationUserManager UserManager
-      {
+       public ApplicationUserManager UserManager
+       {
          get
          {
             return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
@@ -50,8 +54,7 @@ namespace InrappAdmin.Web.Controllers
          {
             _userManager = value;
          }
-      }
-
+       }
 
       private ApplicationSignInManager _signInManager;
 
@@ -64,10 +67,18 @@ namespace InrappAdmin.Web.Controllers
          private set { _signInManager = value; }
       }
 
+       public ApplicationRoleManager RoleManager
+       {
+           get
+           {
+               return _roleManager ?? Request.GetOwinContext().GetUserManager<ApplicationRoleManager>();
+           }
+           private set { _roleManager = value; }
+       }
 
        //
        // GET: /Account/Login
-       [AllowAnonymous]
+        [AllowAnonymous]
        public ActionResult Login(string returnUrl)
        {
            ViewBag.ReturnUrl = returnUrl;
@@ -153,6 +164,7 @@ namespace InrappAdmin.Web.Controllers
                     user.SkapadDatum = DateTime.Now;
                     user.AndradAv = model.Email;
                     user.AndradDatum = DateTime.Now;
+                    user.EmailConfirmed = true;
                     var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

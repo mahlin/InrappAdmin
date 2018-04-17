@@ -93,10 +93,6 @@ namespace InrappAdmin.Web.Models
 
     public class RegisterViewModel
     {
-        [Required(ErrorMessage = "Fältet Namn är obligatoriskt.")]
-        [StringLength(60, ErrorMessage = "Namnet kan inte vara längre än 60 tecken.")]
-        [Display(Name = "Namn")]
-        public string Namn { get; set; }
 
         [Required (ErrorMessage = "Fältet E-postadress är obligatoriskt.")]
         [StringLength(60, ErrorMessage = "E-postadressen kan inte vara längre än 60 tecken.")]

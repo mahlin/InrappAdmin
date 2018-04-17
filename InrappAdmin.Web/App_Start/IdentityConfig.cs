@@ -28,7 +28,9 @@ namespace InrappAdmin.Web
         private void SendMail(IdentityMessage message)
         {
             #region formatter
-            string text = string.Format("Vänligen klicka på den här länken för att bekäfta ditt konto:  {1}", message.Subject, message.Body);
+
+            string text = string.Format("Vänligen klicka på den här länken för att bekäfta ditt konto:  {1}",
+                message.Subject, message.Body);
             //string html = "Vänligen bekräfta ditt konto i Socialstyrelsens InrappAdmin genom att klicka på den här länken: <a href=" + message.Body + ">Bekräfta e-postadress</a><br/>";
             string html = message.Body;
 
@@ -75,7 +77,10 @@ namespace InrappAdmin.Web
             var sender = WebConfigurationManager.AppSettings["SMSSender"];
             var proxy = WebConfigurationManager.AppSettings["Proxy"];
 
-            HttpWebRequest request = WebRequest.Create("https://api.smsteknik.se/send/?id=Socialstyrelsen&user=" + usr + "&pass=" + pwd + "&nr=" + message.Destination + "&sender=" + sender + "&msg=" + message.Body) as HttpWebRequest;
+            HttpWebRequest request =
+                WebRequest.Create("https://api.smsteknik.se/send/?id=Socialstyrelsen&user=" + usr + "&pass=" + pwd +
+                                  "&nr=" + message.Destination + "&sender=" + sender + "&msg=" +
+                                  message.Body) as HttpWebRequest;
 
             //TODO
             WebProxy proxyObject = new WebProxy(proxy);
@@ -95,9 +100,11 @@ namespace InrappAdmin.Web
         {
         }
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
+        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options,
+            IOwinContext context)
         {
-            var manager = new ApplicationUserManager(new UserStore<AppUserAdmin>(context.Get<InrappAdminIdentityDbContext>()));
+            var manager =
+                new ApplicationUserManager(new UserStore<AppUserAdmin>(context.Get<InrappAdminIdentityDbContext>()));
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<AppUserAdmin>(manager)
             {
@@ -125,7 +132,8 @@ namespace InrappAdmin.Web
             // You can write your own provider and plug it in here.
             manager.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<AppUserAdmin>
             {
-                MessageFormat = "Välkommen till Socialstyrelsens InrappAdmin. För att logga in ange följande verifieringskod på webbsidan: {0}"
+                MessageFormat =
+                    "Välkommen till Socialstyrelsens InrappAdmin. För att logga in ange följande verifieringskod på webbsidan: {0}"
             });
             manager.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<AppUserAdmin>
             {
@@ -137,7 +145,7 @@ namespace InrappAdmin.Web
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider = 
+                manager.UserTokenProvider =
                     new DataProtectorTokenProvider<AppUserAdmin>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
             return manager;
@@ -147,19 +155,36 @@ namespace InrappAdmin.Web
     // Configure the application sign-in manager which is used in this application.
     public class ApplicationSignInManager : SignInManager<AppUserAdmin, string>
     {
-        public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager)
+        public ApplicationSignInManager(ApplicationUserManager userManager,
+            IAuthenticationManager authenticationManager)
             : base(userManager, authenticationManager)
         {
         }
 
         public override Task<ClaimsIdentity> CreateUserIdentityAsync(AppUserAdmin user)
         {
-            return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
+            return user.GenerateUserIdentityAsync((ApplicationUserManager) UserManager);
         }
 
-        public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
+        public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options,
+            IOwinContext context)
         {
-            return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
+            return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(),
+                context.Authentication);
+        }
+    }
+
+    public class ApplicationRoleManager : RoleManager<IdentityRole>
+    {
+        public ApplicationRoleManager(IRoleStore<IdentityRole, string> roleStore) : base(roleStore)
+        {
+        }
+
+        public static ApplicationRoleManager Create(IdentityFactoryOptions<ApplicationRoleManager> options,
+            IOwinContext context)
+        {
+            var appRoleManager = new ApplicationRoleManager(new RoleStore<IdentityRole>(context.Get<InrappAdminIdentityDbContext>()));
+            return appRoleManager;
         }
     }
 }

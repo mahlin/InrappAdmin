@@ -19,6 +19,7 @@ namespace InrappAdmin.Web
             app.CreatePerOwinContext(InrappAdminIdentityDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
+            app.CreatePerOwinContext<ApplicationRoleManager>(ApplicationRoleManager.Create);
 
             // Enable the application to use a cookie to store information for the signed in user
             // and to use a cookie to temporarily store information about a user logging in with a third party login provider
@@ -47,56 +48,56 @@ namespace InrappAdmin.Web
             // This is similar to the RememberMe option when you log in.
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
-            createRolesandUsers();
+            //createRolesandUsers();
         }
 
         // In this method we will create default User roles and Admin user for login   
-        private void createRolesandUsers()
-        {
-            IdentityDbContext context = new IdentityDbContext();
+        //private void createRolesandUsers()
+        //{
+        //    IdentityDbContext context = new IdentityDbContext();
 
-            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
-            var UserManager = new UserManager<AppUserAdmin>(new UserStore<AppUserAdmin>(context));
+        //    var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+        //    var UserManager = new UserManager<AppUserAdmin>(new UserStore<AppUserAdmin>(context));
 
 
-            // In Startup iam creating first Admin Role and creating a default Admin User    
-            if (!roleManager.RoleExists("Admin"))
-            {
-                // first we create Admin role   
-                var role = new IdentityRole();
-                role.Name = "Admin";
-                roleManager.Create(role);
+        //    // In Startup iam creating first Admin Role and creating a default Admin User    
+        //    if (!roleManager.RoleExists("Admin"))
+        //    {
+        //        // first we create Admin role   
+        //        var role = new IdentityRole();
+        //        role.Name = "Admin";
+        //        roleManager.Create(role);
 
-                //Here we create a Admin super user who will maintain the website              
-                //var user = new AppUserAdmin();
-                //user.UserName = "findus";
-                //user.Email = "findus@gmail.com";
-                //string userPWD = "Findus2018!";
-                //var chkUser = UserManager.Create(user, userPWD);
+        //        //Here we create a Admin super user who will maintain the website              
+        //        //var user = new AppUserAdmin();
+        //        //user.UserName = "findus";
+        //        //user.Email = "findus@gmail.com";
+        //        //string userPWD = "Findus2018!";
+        //        //var chkUser = UserManager.Create(user, userPWD);
 
-                var user = UserManager.FindByEmail("marie.ahlin@knivsta.se");
-                //Add default User to Role Admin  
-                var result1 = UserManager.AddToRole(user.Id, "Admin");
+        //        var user = UserManager.FindByEmail("marie.ahlin@knivsta.se");
+        //        //Add default User to Role Admin  
+        //        var result1 = UserManager.AddToRole(user.Id, "Admin");
 
-            }
+        //    }
 
-            // creating Creating Manager role    
-            if (!roleManager.RoleExists("Manager"))
-            {
-                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-                role.Name = "Manager";
-                roleManager.Create(role);
+        //    // creating Creating Manager role    
+        //    if (!roleManager.RoleExists("Manager"))
+        //    {
+        //        var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+        //        role.Name = "Manager";
+        //        roleManager.Create(role);
 
-            }
+        //    }
 
-            // creating Creating Employee role    
-            if (!roleManager.RoleExists("Employee"))
-            {
-                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-                role.Name = "Employee";
-                roleManager.Create(role);
+        //    // creating Creating Employee role    
+        //    if (!roleManager.RoleExists("Employee"))
+        //    {
+        //        var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+        //        role.Name = "Employee";
+        //        roleManager.Create(role);
 
-            }
-        }
+        //    }
+        //}
     }
 }
