@@ -20,9 +20,11 @@ namespace InrappAdmin.Web.Models
                     var str2 = errorMessage.Substring(0, 4);
                     if (str2 == "Name")
                         return "";
+                    else
+                    {
+                        return "E-postadressen är redan registrerad.";
+                    }
                 }
-                return "E-postadressen är redan registrerad.";
-
             }
 
             switch (errorMessage)
