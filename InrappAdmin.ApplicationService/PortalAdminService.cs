@@ -405,7 +405,6 @@ namespace InrappAdmin.ApplicationService
 
         public void UppdateraInformationstext(AdmInformation infoText, string userName)
         {
-            infoText.Id = _portalAdminRepository.GetPageInfoTextId(infoText.Informationstyp);
             infoText.AndradDatum = DateTime.Now;
             infoText.AndradAv = userName;
             _portalAdminRepository.UpdateInfoText(infoText);

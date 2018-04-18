@@ -236,9 +236,10 @@ namespace InrappAdmin.Web.Controllers
                 try
                 {
                     var userName = User.Identity.GetUserName();
+
                     AdmInformation info = new AdmInformation
                     {
-                        Informationstyp = model.SelectedInfo,
+                        Id = model.SelectedInfoId,
                         Text = model.SelectedInfoText
                     };
                     _portalAdminService.UppdateraInformationstext(info, userName);

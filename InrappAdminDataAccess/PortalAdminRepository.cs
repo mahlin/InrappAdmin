@@ -404,7 +404,6 @@ namespace InrappAdmin.DataAccess
         public void UpdateInfoText(AdmInformation infoText)
         {
             var infoTextDb = DbContext.AdmInformation.Where(x => x.Id == infoText.Id).Select(x => x).SingleOrDefault();
-            infoTextDb.Informationstyp = infoText.Informationstyp;
             infoTextDb.Text = infoText.Text;
             DbContext.SaveChanges();
         }

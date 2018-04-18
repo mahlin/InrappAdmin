@@ -20,7 +20,7 @@
             function() {
                 var tr = $(this).parents('tr:first');
                 var repId = tr.find("#RepId").html();
-                var repDelRegId = tr.find("#RepDelRegId").html();
+                var repDelRegId = tr.find("#RepDelRegId").val();
                 var repSkyldigFrom = tr.find("#RepSkyldigFrom").val();
                 var repSkyldigTom = tr.find("#RepSkyldigTom").val();
                 var orgId = $('#Organisation_Id').val();
@@ -112,7 +112,6 @@
         <br /><br />
         <hr />
 
-        @Html.HiddenFor(m => m.Organisation.Id)
         @Html.ActionLink("Skapa ny uppgiftsskyldighet", "CreateReportObligation", "Organisation", new { orgId = Model.Organisation.Id }, null)
 
         <div id="gridContent" style="font-family: Arial; padding: 20px;">
@@ -131,7 +130,7 @@
                              rowStyle: "webgrid-row-style",
                              mode: WebGridPagerModes.All,
                              columns: grid.Columns(
-                                grid.Column(null, null, format: @<text><input type="hidden" id="DelregisterId" value="@item.DelregisterId" class="edit-mode form-control"/></text>, style: "colMiniminiWidth"),
+                                grid.Column(null, null, format: @<text><input type="hidden" id="RepDelRegId" value="@item.DelregisterId" class="edit-mode form-control"/></text>, style: "colMiniminiWidth"),
 
                                 grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="RepId" class="edit-mode colMinWidth">@item.Id</label></text>,style: "colMinWidth"),
                                 grid.Column("Delregister", "Delregister", format: @<text><span class="display-mode"><label id="lblDelregister">@item.DelregisterKortnamn</label></span>
