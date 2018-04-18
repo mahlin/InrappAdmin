@@ -504,7 +504,7 @@ namespace InrappAdmin.DataAccess
 
         public void DeleteContact(string contactId)
         {
-            var contactToDelete = DbContext.Users.SingleOrDefault(x => x.Id == contactId);
+            var contactToDelete = DbContext.ApplicationUser.SingleOrDefault(x => x.Id == contactId);
 
             var contactRoles = DbContext.Roll.Where(x => x.ApplicationUserId == contactId).ToList();
 
@@ -514,8 +514,9 @@ namespace InrappAdmin.DataAccess
                 foreach (var role in contactRoles)
                 {
                     DbContext.Roll.Remove(role);
+                    DbContext.SaveChanges();
                 }
-                DbContext.Users.Remove(contactToDelete);
+                DbContext.ApplicationUser.Remove(contactToDelete);
                 DbContext.SaveChanges();
             }
         }
