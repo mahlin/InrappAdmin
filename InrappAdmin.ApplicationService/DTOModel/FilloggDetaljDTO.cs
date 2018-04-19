@@ -19,6 +19,8 @@ namespace InrappAdmin.ApplicationService.DTOModel
         public string Kontaktperson { get; set; }
         public string Filstatus { get; set; }
         public string Resultatfil { get; set; }
+        public bool Pagaende { get; set; }
+        public bool Sen { get; set; }
 
 
         internal static FilloggDetaljDTO FromFillogg(LevereradFil fillogg)

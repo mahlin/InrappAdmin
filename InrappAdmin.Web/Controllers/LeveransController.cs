@@ -13,6 +13,7 @@ using InrappAdmin.Web.Helpers;
 using InrappAdmin.Web.Models;
 using InrappAdmin.Web.Models.ViewModels;
 using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security.Provider;
 
 namespace InrappAdmin.Web.Controllers
 {
@@ -427,12 +428,47 @@ namespace InrappAdmin.Web.Controllers
                     Rapporteringsenast = forvLev.Rapporteringsenast,
                     Paminnelse1 = forvLev.Paminnelse1,
                     Paminnelse2 = forvLev.Paminnelse2,
-                    Paminnelse3 = forvLev.Paminnelse3
+                    Paminnelse3 = forvLev.Paminnelse3,
+                    Pagaende = IsOngoing(forvLev),
+                    Sen = IsLate(forvLev)
+
                 };
 
                 forvLevViewList.Add(forvLevView);
             }
             return forvLevViewList;
+        }
+
+
+        private bool IsOngoing(AdmForvantadleverans forvLev)
+        {
+            var result = false;
+            DateTime dagensDatum = DateTime.Now.Date;
+            DateTime startDate;
+            DateTime endDate;
+
+            startDate = forvLev.Rapporteringsstart;
+            endDate = forvLev.Rapporteringsslut;
+            if (dagensDatum >= startDate && dagensDatum <= endDate)
+            {
+                result = true;
+            }
+            return result;
+
+        }
+
+        private bool IsLate(AdmForvantadleverans forvLev)
+        {
+            var result = false;
+            DateTime omTvaVeckor = DateTime.Now.Date.AddDays(14);
+            DateTime endDate;
+
+            endDate = forvLev.Rapporteringsslut;
+            if (omTvaVeckor >= endDate)
+            {
+                result = true;
+            }
+            return result;
         }
 
         /// <summary>  

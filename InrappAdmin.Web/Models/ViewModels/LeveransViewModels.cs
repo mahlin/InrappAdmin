@@ -38,6 +38,8 @@ namespace InrappAdmin.Web.Models.ViewModels
             public DateTime? Paminnelse1 { get; set; }
             public DateTime? Paminnelse2 { get; set; }
             public DateTime? Paminnelse3 { get; set; }
+            public bool Pagaende { get; set; }
+            public bool Sen { get; set; }
         }
 
         public class AdmForvantadfilViewModel
