@@ -23,9 +23,12 @@ namespace InrappAdmin.Web.Controllers
 
         }
 
-        public ActionResult Index()
+        public ActionResult Index(AccountController.AccountMessageId? message)
         {
-            
+            ViewBag.StatusMessage =
+                message == AccountController.AccountMessageId.AddUserSuccess ? "Användaren har registrerats."
+                : "";
+
             return View();
         }
 

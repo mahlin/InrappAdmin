@@ -174,10 +174,11 @@ namespace InrappAdmin.Web.Controllers
                     //role.Name = "Admin";
                     //await _roleManager.CreateAsync(role);
                     //    UserManager.AddToRole(user.Id, "Admin");
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
-                     return RedirectToAction("Index", "Home");
-                  }
+                     //return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Home", new { Message = AccountMessageId.AddUserSuccess });
+                    }
                   AddErrors(result);
                }
                 catch (Exception e)
@@ -323,63 +324,69 @@ namespace InrappAdmin.Web.Controllers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
-              private IAuthenticationManager AuthenticationManager
-              {
-                 get
-                 {
-                    return HttpContext.GetOwinContext().Authentication;
-                 }
-              }
+        private IAuthenticationManager AuthenticationManager
+        {
+            get
+            {
+            return HttpContext.GetOwinContext().Authentication;
+            }
+        }
 
-              private void AddErrors(IdentityResult result)
-              {
-                 foreach (var error in result.Errors)
-                 {
-                    ModelState.AddModelError("", error);
-                 }
-              }
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+            ModelState.AddModelError("", error);
+            }
+        }
 
-              private ActionResult RedirectToLocal(string returnUrl, bool admin)
-              {
-                  if (admin)
-                  {
-                      ViewBag.displayRegister = "Yes";
-                  }
-                  if (Url.IsLocalUrl(returnUrl))
-                  {
-                        return Redirect(returnUrl);
-                  }
-                  return RedirectToAction("Index", "Home");
-              }
+        private ActionResult RedirectToLocal(string returnUrl, bool admin)
+        {
+            if (admin)
+            {
+                ViewBag.displayRegister = "Yes";
+            }
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            return RedirectToAction("Index", "Home");
+        }
 
-              internal class ChallengeResult : HttpUnauthorizedResult
-              {
-                 public ChallengeResult(string provider, string redirectUri)
-                    : this(provider, redirectUri, null)
-                 {
-                 }
+        internal class ChallengeResult : HttpUnauthorizedResult
+        {
+            public ChallengeResult(string provider, string redirectUri)
+            : this(provider, redirectUri, null)
+            {
+            }
 
-                 public ChallengeResult(string provider, string redirectUri, string userId)
-                 {
-                    LoginProvider = provider;
-                    RedirectUri = redirectUri;
-                    UserId = userId;
-                 }
+            public ChallengeResult(string provider, string redirectUri, string userId)
+            {
+            LoginProvider = provider;
+            RedirectUri = redirectUri;
+            UserId = userId;
+            }
 
-                 public string LoginProvider { get; set; }
-                 public string RedirectUri { get; set; }
-                 public string UserId { get; set; }
+            public string LoginProvider { get; set; }
+            public string RedirectUri { get; set; }
+            public string UserId { get; set; }
 
-                 public override void ExecuteResult(ControllerContext context)
-                 {
-                    var properties = new AuthenticationProperties { RedirectUri = RedirectUri };
-                    if (UserId != null)
-                    {
-                       properties.Dictionary[XsrfKey] = UserId;
-                    }
-                    context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
-                 }
-              }
+            public override void ExecuteResult(ControllerContext context)
+            {
+            var properties = new AuthenticationProperties { RedirectUri = RedirectUri };
+            if (UserId != null)
+            {
+                properties.Dictionary[XsrfKey] = UserId;
+            }
+            context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
+            }
+        }
+
+       public enum AccountMessageId
+       {
+           AddUserSuccess,
+           Error
+       }
 
         //private async Task<string> SendEmailConfirmationTokenAsync(string userID, string subject)
         //{
@@ -391,6 +398,8 @@ namespace InrappAdmin.Web.Controllers
 
         //   return callbackUrl;
         //}
-              #endregion
-           }
-        }
+        #endregion
+
+
+    }
+}
