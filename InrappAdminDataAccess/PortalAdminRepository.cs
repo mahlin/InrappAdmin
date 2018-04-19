@@ -211,7 +211,7 @@ namespace InrappAdmin.DataAccess
 
         public IEnumerable<AdmForvantadleverans> GetExpectedDeliveries()
         {
-            var expDeliveries = DbContext.AdmForvantadleverans.ToList();
+            var expDeliveries = DbContext.AdmForvantadleverans.OrderBy(x => x.Uppgiftsstart).ToList();
             return expDeliveries;
         }
 
@@ -252,7 +252,7 @@ namespace InrappAdmin.DataAccess
             var subDirectoriesForDirectory = DbContext.AdmDelregister.Where(x => x.RegisterId == dirId).ToList();
             foreach (var subDir in subDirectoriesForDirectory)
             {
-                var expectedDeliveryList = DbContext.AdmForvantadleverans.Where(x => x.DelregisterId == subDir.Id).ToList();
+                var expectedDeliveryList = DbContext.AdmForvantadleverans.Where(x => x.DelregisterId == subDir.Id).OrderBy(x => x.Uppgiftsstart).ToList();
                 expectedDeliveriesList.AddRange(expectedDeliveryList);
             }
             return expectedDeliveriesList;
