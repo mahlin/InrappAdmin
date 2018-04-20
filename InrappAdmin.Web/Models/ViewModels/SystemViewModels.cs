@@ -48,6 +48,7 @@ namespace InrappAdmin.Web.Models.ViewModels
         {
             public int Id { get; set; }
             public int? RegisterId { get; set; }
+            public int? SelectedRegisterId { get; set; }
             public int FAQkategoriId { get; set; }
             public string Fraga { get; set; }
             [AllowHtml]

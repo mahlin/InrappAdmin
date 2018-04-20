@@ -301,6 +301,10 @@ namespace InrappAdmin.Web.Controllers
         {
             var model = new SystemViewModels.FAQViewModel();
             model.FAQkategoriId = catId;
+            // Ladda drop down lists. 
+            var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
+            this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
+            model.SelectedRegisterId = 0;
             return View(model);
         }
 
@@ -309,7 +313,6 @@ namespace InrappAdmin.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateFAQ(SystemViewModels.FAQViewModel model)
         {
-            
             if (ModelState.IsValid)
             {
                 try
@@ -319,7 +322,7 @@ namespace InrappAdmin.Web.Controllers
                     AdmFAQ faq = new AdmFAQ
                     {
                         FAQkategoriId = model.FAQkategoriId,
-                        RegisterId = model.RegisterId,
+                        RegisterId = model.SelectedRegisterId,
                         Fraga = model.Fraga,
                         Svar = model.Svar
                     };
@@ -543,8 +546,28 @@ namespace InrappAdmin.Web.Controllers
             openingHoursDTO.ClosedFromMin = openToSplit[1];
 
             return openingHoursDTO;
+        }
 
+        /// <summary>  
+        /// Create list for register-dropdown  
+        /// </summary>  
+        /// <returns>Return register for drop down list.</returns>  
+        private IEnumerable<SelectListItem> CreateRegisterDropDownList(IEnumerable<AdmRegister> registerInfoList)
+        {
+            SelectList lstobj = null;
 
+            var list = registerInfoList
+                .Select(p =>
+                    new SelectListItem
+                    {
+                        Value = p.Id.ToString(),
+                        Text = p.Kortnamn
+                    });
+
+            // Setting.  
+            lstobj = new SelectList(list, "Value", "Text");
+
+            return lstobj;
         }
     }
 }
