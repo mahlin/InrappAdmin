@@ -74,6 +74,8 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<AdmRegister> GetAllRegistersForPortal();
 
+        string GetDirectoryShortName(int dirId);
+
         string GetSubDirectoryShortNameForExpectedFile(int filKravId);
 
         string GetSubDirectoryShortName(int subDirId);

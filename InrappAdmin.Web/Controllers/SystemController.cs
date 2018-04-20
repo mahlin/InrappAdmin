@@ -64,8 +64,13 @@ namespace InrappAdmin.Web.Controllers
             var model = new SystemViewModels.SystemViewModel();
             try
             {
-                model.FAQs = _portalAdminService.HamtaFAQs(faqCatId);
+                var faqs = _portalAdminService.HamtaFAQs(faqCatId);
+                model.FAQs = ConvertAdmFAQToViewModel(faqs.ToList());
                 model.SelectedFAQCategory = faqCatId;
+                // Ladda drop down lists. 
+                var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
+                this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
+                //model.SelectedFAQ.SelectedRegisterId = 0;
             }
             catch (Exception e)
             {
@@ -203,14 +208,15 @@ namespace InrappAdmin.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateFAQ(AdmFAQ faq)
+        public ActionResult UpdateFAQ(SystemViewModels.SystemViewModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     var userName = User.Identity.GetUserName();
-                    _portalAdminService.UppdateraFAQ(faq, userName);
+                    var faqDb = ConvertViewModelToAdmFAQ(model.SelectedFAQ);
+                    _portalAdminService.UppdateraFAQ(faqDb, userName);
                 }
                 catch (Exception e)
                 {
@@ -225,7 +231,7 @@ namespace InrappAdmin.Web.Controllers
                     return View("CustomError", errorModel);
                 }
             }
-            return RedirectToAction("GetFAQs", new { faqCatId = faq.FAQkategoriId });
+            return RedirectToAction("GetFAQs", new { faqCatId = model.SelectedFAQ.FAQkategoriId });
         }
 
         [HttpPost]
@@ -356,6 +362,25 @@ namespace InrappAdmin.Web.Controllers
             model.SelectedFAQ.Id = selectedFAQDb.Id;
             model.SelectedFAQ.Fraga = selectedFAQDb.Fraga;
             model.SelectedFAQ.Svar = selectedFAQDb.Svar;
+
+            if (selectedFAQDb.RegisterId != null)
+            {
+                model.SelectedFAQ.RegisterId = selectedFAQDb.RegisterId;
+            }
+
+            if (model.SelectedFAQ.RegisterId != null)
+            {
+                model.SelectedFAQ.SelectedRegisterId = model.SelectedFAQ.RegisterId;
+            }
+            else
+            {
+                model.SelectedFAQ.SelectedRegisterId = 0;
+            }
+            // Ladda drop down lists. 
+            var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
+            this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
+
+            
             return View("_EditSelectedFAQ", model);
         }
 
@@ -568,6 +593,54 @@ namespace InrappAdmin.Web.Controllers
             lstobj = new SelectList(list, "Value", "Text");
 
             return lstobj;
+        }
+
+        private List<SystemViewModels.FAQViewModel> ConvertAdmFAQToViewModel(List<AdmFAQ> faqList)
+        {
+            var faqViewList = new List<SystemViewModels.FAQViewModel>();
+            foreach (var faq in faqList)
+            {
+                var faqView = new SystemViewModels.FAQViewModel
+                {
+                    Id = faq.Id,
+                    RegisterId = faq.RegisterId,
+                    SelectedRegisterId = faq.RegisterId,
+                    FAQkategoriId = faq.FAQkategoriId,
+                    Fraga = faq.Fraga,
+                    Svar = faq.Svar
+                };
+
+                if (faq.RegisterId != null )
+                {
+                    var id = Convert.ToInt32(faq.RegisterId);
+                    faqView.RegisterKortNamn = _portalAdminService.HamtaKortnamnForRegister(id);
+                }
+
+                faqViewList.Add(faqView);
+            }
+            return faqViewList;
+        }
+
+        private AdmFAQ ConvertViewModelToAdmFAQ(SystemViewModels.FAQViewModel faq)
+        {
+            var faqDb = new AdmFAQ
+            {
+                Id = faq.Id,
+                FAQkategoriId = faq.FAQkategoriId,
+                Fraga = faq.Fraga,
+                Svar = faq.Svar
+            };
+
+            if (faq.SelectedRegisterId == 0)
+            {
+                faqDb.RegisterId = null;
+            }
+            else
+            {
+                faqDb.RegisterId = faq.SelectedRegisterId;
+            }
+
+            return faqDb;
         }
     }
 }

@@ -61,6 +61,8 @@ namespace InrappAdmin.ApplicationService.Interface
 
         string HamtaKortnamnForDelregister(int delregId);
 
+        string HamtaKortnamnForRegister(int regId);
+
         IEnumerable<FilloggDetaljDTO> HamtaHistorikForOrganisation(int orgId);
 
         void SkapaOrganisationsenhet(Organisationsenhet orgUnit, string userName);

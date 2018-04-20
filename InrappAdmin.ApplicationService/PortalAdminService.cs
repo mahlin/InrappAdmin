@@ -180,6 +180,12 @@ namespace InrappAdmin.ApplicationService
             return delRegKortnamn;
         }
 
+        public string HamtaKortnamnForRegister(int regId)
+        {
+            var regKortnamn = _portalAdminRepository.GetDirectoryShortName(regId);
+            return regKortnamn;
+        }
+
         public string HamtaKortnamnForDelregister(int delregId)
         {
             var delRegKortnamn = _portalAdminRepository.GetSubDirectoryShortName(delregId);

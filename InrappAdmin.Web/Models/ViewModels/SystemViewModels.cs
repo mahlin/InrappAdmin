@@ -17,7 +17,7 @@ namespace InrappAdmin.Web.Models.ViewModels
         {
             public IEnumerable<AdmFAQKategori> FAQCategories { get; set; }
 
-            public IEnumerable<AdmFAQ> FAQs { get; set; }
+            public IEnumerable<FAQViewModel> FAQs { get; set; }
 
             public int SelectedFAQCategory { get; set; }
 
@@ -49,6 +49,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public int Id { get; set; }
             public int? RegisterId { get; set; }
             public int? SelectedRegisterId { get; set; }
+            public string RegisterKortNamn { get; set; }
             public int FAQkategoriId { get; set; }
             public string Fraga { get; set; }
             [AllowHtml]

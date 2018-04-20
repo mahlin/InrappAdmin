@@ -215,6 +215,12 @@ namespace InrappAdmin.DataAccess
             return expDeliveries;
         }
 
+        public string GetDirectoryShortName(int dirId)
+        {
+            var dirShortName = DbContext.AdmRegister.Where(x => x.Id == dirId).Select(x => x.Kortnamn).SingleOrDefault();
+            return dirShortName;
+        }
+
         public IEnumerable<AdmForvantadfil> GetAllExpectedFiles()
         {
             var expFiles = DbContext.AdmForvantadfil.ToList();
@@ -398,6 +404,7 @@ namespace InrappAdmin.DataAccess
             var faqDb = DbContext.AdmFAQ.Where(x => x.Id == faq.Id).Select(x => x).SingleOrDefault();
             faqDb.Fraga = faq.Fraga;
             faqDb.Svar = faq.Svar;
+            faqDb.RegisterId = faq.RegisterId;
             DbContext.SaveChanges();
         }
 
