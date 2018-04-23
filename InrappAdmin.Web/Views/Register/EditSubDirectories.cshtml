@@ -47,7 +47,7 @@
                     "Slussmapp": subDirFolder,
                     "RegisterId": $('#SelectedDirectoryId').val()
                 };
-                //Posting Organisationsenhet object to controller's Update action method
+                //Posting AdmDelregister object to controller's Update action method
                 $.ajax({
                     url: '/Register/UpdateSubDirectory',
                     data: JSON.stringify(subDir),
