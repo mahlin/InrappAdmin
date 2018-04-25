@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
@@ -17,6 +18,8 @@ namespace InrappAdmin.Web.Models.ViewModels
             public IEnumerable<AdmFilkrav> Filkrav { get; set; }
             public IEnumerable<FilloggDetaljDTO> Leveranser { get; set; }
             public int SelectedRegisterId { get; set; }
+            [DisplayName("Visa endast pågående")]
+            public bool FilterPagaende{ get; set; }
             public string SelectedCountyCode { get; set; }
 
             [Display(Name = "Kommunkod")]

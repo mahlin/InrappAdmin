@@ -30,17 +30,32 @@ namespace InrappAdmin.Web.Controllers
 
         [Authorize]
         // GET: Leverans
-        public ActionResult Index()
+        public ActionResult Index(bool filterPgnde = false)
         {
+
             var model = new LeveransViewModels.LeveransViewModel();
             try
             {
+                var tmpPagaende = Request.QueryString["filterPagaende"];
+                var filterPagaende = false;
+
+                if (tmpPagaende != null)
+                {
+                    Char delimiter = ',';
+                    String[] substrings = tmpPagaende.Split(delimiter);
+                    filterPagaende = Convert.ToBoolean(substrings.Last());
+                }
+                else
+                {
+                    filterPagaende = filterPgnde;
+                }
                 var forvLevList = _portalAdminService.HamtaForvantadeLeveranser();
                 model.ForvantadeLeveranser = ConvertForvLevToViewModel(forvLevList.ToList());
                 // Ladda drop down lists. 
                 var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
                 this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
                 model.SelectedRegisterId = 0;
+                model.FilterPagaende = filterPagaende;
 
             }
             catch (Exception e)
@@ -59,10 +74,24 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // GET
+
         public ActionResult GetDirectorysExpectedDeliveries(LeveransViewModels.LeveransViewModel model, int regId = 0)
         {
             try
             {
+                var tmpPagaende = Request.QueryString["filterPagaende"];
+                var filterPagaende = false;
+
+                if (tmpPagaende != null)
+                {
+                    Char delimiter = ',';
+                    String[] substrings = tmpPagaende.Split(delimiter);
+                    filterPagaende = Convert.ToBoolean(substrings.Last());
+                }
+                else
+                {
+                    filterPagaende = model.FilterPagaende;
+                }
                 var dirId = model.SelectedRegisterId;
                 if (dirId == 0 && regId != 0)
                 {
@@ -77,10 +106,11 @@ namespace InrappAdmin.Web.Controllers
                     var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
                     this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
                     model.SelectedRegisterId = dirId;
+                    model.FilterPagaende = filterPagaende;
                 }
                 else
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", new { filterPgnde = filterPagaende });
                 }
             }
             catch (Exception e)
