@@ -57,6 +57,11 @@ namespace InrappAdmin.Web.Controllers
                     Information = "Ett fel inträffade vid hämtning av organisation",
                     ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
                 };
+                if (e.Message == "Sequence contains no elements")
+                {
+                    errorModel.Information = "Felaktig kommunkod";
+                }
+
                 return View("CustomError", errorModel);
 
             }
@@ -92,6 +97,10 @@ namespace InrappAdmin.Web.Controllers
                     Information = "Ett fel inträffade vid hämtning av kontakter för organisation.",
                     ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
                 };
+                if (e.Message == "Sequence contains no elements")
+                {
+                    errorModel.Information = "Felaktig kommunkod";
+                }
                 return View("CustomError", errorModel);
             }
             return View("EditContacts", model);
@@ -132,6 +141,10 @@ namespace InrappAdmin.Web.Controllers
                     Information = "Ett fel inträffade vid hämtning av organisationsenheter för organisation.",
                     ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
                 };
+                if (e.Message == "Sequence contains no elements")
+                {
+                    errorModel.Information = "Felaktig kommunkod";
+                }
                 return View("CustomError", errorModel);
             }
 
@@ -173,6 +186,10 @@ namespace InrappAdmin.Web.Controllers
                     Information = "Ett fel inträffade vid hämtning av uppgiftsskyldighet för organisation.",
                     ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
                 };
+                if (e.Message == "Sequence contains no elements")
+                {
+                    errorModel.Information = "Felaktig kommunkod";
+                }
                 return View("CustomError", errorModel);
             }
 

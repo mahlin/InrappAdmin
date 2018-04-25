@@ -14,6 +14,8 @@ namespace InrappAdmin.Web.Models.ViewModels
         public class OrganisationViewModel
         {
             [Display(Name = "Kommunkod")]
+            [StringLength(4, ErrorMessage = "{0} måste vara {2} tecken långt.", MinimumLength = 4)]
+            [RegularExpression("([0-9]+)", ErrorMessage = "Kommunkoden måste vara numerisk.")]
             public string Kommunkod { get; set; }
             public Organisation Organisation { get; set; }
 
