@@ -320,7 +320,7 @@ namespace InrappAdmin.Web.Controllers
                     ErrorManager.WriteToErrorLog("LeveransController", "UpdateForvantadFil", e.ToString(), e.HResult, User.Identity.Name);
                     var errorModel = new CustomErrorPageModel
                     {
-                        Information = "Ett fel inträffade vid uppadtering av förväntad fil.",
+                        Information = "Ett fel inträffade vid uppdatering av förväntad fil.",
                         ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
                     };
                     return View("CustomError", errorModel);
