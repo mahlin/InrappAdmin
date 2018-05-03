@@ -9,7 +9,7 @@
     }
 
     .navbar-inverse .navbar-text {
-        color: #cccccc;
+        color: #E8E8E8;
     }
 
     .navbar-inverse .navbar-nav > .open > a,
@@ -20,8 +20,8 @@
     }
 
     .navbar-inverse .navbar-nav > .dropdown > a .caret {
-        border-top-color: #cccccc;
-        border-bottom-color: #cccccc;
+        border-top-color: #E8E8E8;
+        border-bottom-color: #E8E8E8;
     }
 
 @media (max-width: 767px) {
@@ -41,5 +41,9 @@
 }
 
 .navbar-inverse .navbar-link {
-    color: #cccccc;
+    color: #E8E8E8;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #E8E8E8;
 }
