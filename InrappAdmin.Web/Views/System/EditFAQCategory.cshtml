@@ -1,10 +1,22 @@
 ﻿@using InrappAdmin.Web.Models.ViewModels
+@using System.Configuration
+
 @model InrappAdmin.Web.Models.ViewModels.SystemViewModels.SystemViewModel
 @{
     ViewBag.Title = "FAQ";
+
+    //if (ConfigurationManager.AppSettings["Env"] == "Utv")
+    //{
+    //    Layout = "~/Views/Shared/_LayoutUtv.cshtml";
+    //}
+    //else
+    //{
+    //    Layout = "~/Views/Shared/_Layout.cshtml";
+    //}
+
 }
 
-<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+
 
 
 <script type="text/javascript">
