@@ -365,6 +365,7 @@ namespace InrappAdmin.DataAccess
         {
             var usrDb = DbContext.ApplicationUser.Where(u => u.Id == user.Id).Select(u => u).SingleOrDefault();
             usrDb.PhoneNumber= user.PhoneNumber;
+            usrDb.PhoneNumberConfirmed = user.PhoneNumberConfirmed;
             usrDb.AktivFrom = user.AktivFrom;
             usrDb.AktivTom = user.AktivTom;
             usrDb.AndradDatum = user.AndradDatum;
