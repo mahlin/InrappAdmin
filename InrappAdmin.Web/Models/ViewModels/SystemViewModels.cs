@@ -63,6 +63,7 @@ namespace InrappAdmin.Web.Models.ViewModels
         {
             public int Id { get; set; }
             public string Informationstyp { get; set; }
+            [AllowHtml]
             public string Text { get; set; }
 
         }

@@ -434,13 +434,19 @@ namespace InrappAdmin.Web.Controllers
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateInformationText(AdmInformation infoText)
+        public ActionResult CreateInformationText(SystemViewModels.InfoTextViewModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     var userName = User.Identity.GetUserName();
+                    var infoText = new AdmInformation
+                    {
+                       Informationstyp = model.Informationstyp,
+                       Text =  model.Text,
+                    };
+                    infoText.Text = model.Text;
                     _portalAdminService.SkapaInformationsText(infoText, userName);
                 }
                 catch (Exception e)
