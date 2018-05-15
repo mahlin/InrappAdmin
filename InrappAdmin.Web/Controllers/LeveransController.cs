@@ -74,7 +74,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // GET
-
+        [Authorize]
         public ActionResult GetDirectorysExpectedDeliveries(LeveransViewModels.LeveransViewModel model, int regId = 0)
         {
             try
@@ -129,6 +129,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // GET
+        [Authorize]
         public ActionResult GetDirectorysExpectedFiles(LeveransViewModels.LeveransViewModel model, int regId = 0)
         {
             try
@@ -168,6 +169,49 @@ namespace InrappAdmin.Web.Controllers
             return View("EditForvantadFil", model);
         }
 
+        // GET
+        [Authorize]
+        public ActionResult GetDirectorysFilerequirements(LeveransViewModels.LeveransViewModel model, int regId = 0)
+        {
+            try
+            {
+                var dirId = model.SelectedRegisterId;
+                if (dirId == 0 && regId != 0)
+                {
+                    dirId = regId;
+                }
+                if (dirId != 0)
+                {
+                    var register = _portalAdminService.HamtaRegisterMedId(dirId);
+                    var filkravList = _portalAdminService.HamtaFilkravForRegister(register.Id);
+                    //Lägg över i modellen
+                    model.Filkrav = ConvertFilkravToViewModel(filkravList.ToList());
+                    // Ladda drop down lists. 
+                    var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
+                    this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
+                    model.SelectedRegisterId = dirId;
+                }
+                else
+                {
+                    return RedirectToAction("GetFilkrav");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("LeveransController", "GetDirectorysFilerequirements", e.ToString(), e.HResult, User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid hämtning av filkrav för register",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+            }
+            return View("EditFilkrav", model);
+        }
+
+        
+
         // GET: AdmForvantadfil
         [Authorize]
         public ActionResult GetForvantadeFiler()
@@ -185,7 +229,7 @@ namespace InrappAdmin.Web.Controllers
                           Id  = forvFil.Id,
                           FilkravId = forvFil.FilkravId,
                           ForeskriftsId = forvFil.ForeskriftsId,
-                          DelregisterKortnamn = _portalAdminService.HamtaKortnamnForDelregisterMedForeskriftsId(forvFil.FilkravId),
+                          DelregisterKortnamn = _portalAdminService.HamtaKortnamnForDelregisterMedFilkravsId(forvFil.FilkravId),
                           Filmask = forvFil.Filmask,
                           Regexp = forvFil.Regexp,
                           Obligatorisk = forvFil.Obligatorisk,
@@ -215,6 +259,51 @@ namespace InrappAdmin.Web.Controllers
 
             }
             return View("EditForvantadFil", model);
+        }
+
+        // GET: AdmFilkrav
+        [Authorize]
+        public ActionResult GetFilkrav()
+        {
+            var model = new LeveransViewModels.LeveransViewModel();
+            try
+            {
+                var filkravViewList = new List<LeveransViewModels.AdmFilkravViewModel>();
+                var filkravList = _portalAdminService.HamtaAllaFilkrav();
+
+                foreach (var filkrav in filkravList)
+                {
+                    var forvFilView = new LeveransViewModels.AdmFilkravViewModel
+                    {
+                        Id = filkrav.Id,
+                        DelregisterKortnamn = _portalAdminService.HamtaKortnamnForDelregister(filkrav.DelregisterId),
+                        ForeskriftsId = filkrav.ForeskriftsId,
+                        Namn = filkrav.Namn
+                    };
+
+                    filkravViewList.Add(forvFilView);
+                }
+
+                model.Filkrav = filkravViewList;
+
+                // Ladda drop down lists. 
+                var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
+                this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
+                model.SelectedRegisterId = 0;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("LeveransController", "GetForvantadeFiler", e.ToString(), e.HResult, User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid hämtning av forvantad fil",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+
+            }
+            return View("EditFilkrav", model);
         }
 
 
@@ -255,6 +344,7 @@ namespace InrappAdmin.Web.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public ActionResult UpdateForvantadLeverans(LeveransViewModels.AdmForvantadleveransViewModel forvLevModel, string regId = "0")
         {
             if (ModelState.IsValid)
@@ -304,6 +394,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult UpdateForvantadFil(AdmForvantadfil forvFil, string regId = "0")
         {
 
@@ -331,15 +422,51 @@ namespace InrappAdmin.Web.Controllers
 
         }
 
+        [HttpPost]
+        [Authorize]
+        public ActionResult UpdateFilkrav(AdmFilkrav filkrav, string regId = "0")
+        {
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var userName = User.Identity.GetUserName();
+                    _portalAdminService.UppdateraFilkrav(filkrav, userName);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("LeveransController", "UpdateFilkrav", e.ToString(), e.HResult, User.Identity.Name);
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade vid uppdatering av filkrav.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+
+                }
+            }
+            return RedirectToAction("GetDirectorysFileRequirements", new { regId = regId });
+
+        }
+
         // GET
+        [Authorize]
         public ActionResult CreateForvantadLeverans()
         {
-            return View();
+            // Ladda drop down lists
+            var model = new LeveransViewModels.AdmForvantadleveransViewModel(); 
+            var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
+            this.ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
+            model.SelectedDelregisterId = 0;
+            return View(model);
         }
 
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult CreateForvantadLeverans(LeveransViewModels.AdmForvantadleveransViewModel forvantadLeverans)
         {
             if (ModelState.IsValid)
@@ -349,7 +476,7 @@ namespace InrappAdmin.Web.Controllers
                     var userName = User.Identity.GetUserName();
 
                     var admForvlev = new AdmForvantadleverans();
-                    admForvlev.DelregisterId = forvantadLeverans.DelregisterId;
+                    admForvlev.DelregisterId = forvantadLeverans.SelectedDelregisterId;
                     admForvlev.FilkravId = forvantadLeverans.FilkravId;
                     admForvlev.Period = forvantadLeverans.Period;
                     admForvlev.Uppgiftsstart = forvantadLeverans.Uppgiftsstart;
@@ -377,6 +504,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // GET
+        [Authorize]
         public ActionResult CreateForvantadFil()
         {
             return View();
@@ -385,6 +513,7 @@ namespace InrappAdmin.Web.Controllers
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult CreateForvantadFil(LeveransViewModels.AdmForvantadfilViewModel forvantadFil)
         {
             if (ModelState.IsValid)
@@ -412,7 +541,53 @@ namespace InrappAdmin.Web.Controllers
                     };
                     return View("CustomError", errorModel);
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("GetForvantadeFiler");
+            }
+
+            return View();
+        }
+
+        // GET
+        [Authorize]
+        public ActionResult CreateFilkrav()
+        {
+            // Ladda drop down lists
+            var model = new LeveransViewModels.AdmFilkravViewModel();
+            var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
+            this.ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
+            model.SelectedDelregisterId = 0;
+            return View(model);
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public ActionResult CreateFilkrav(LeveransViewModels.AdmFilkravViewModel filkrav)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var userName = User.Identity.GetUserName();
+
+                    var admFilkrav = new AdmFilkrav();
+                    admFilkrav.Namn = filkrav.Namn;
+                    admFilkrav.DelregisterId = filkrav.SelectedDelregisterId;
+                    _portalAdminService.SkapaFilkrav(admFilkrav, userName);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("LeveransController", "CreateFilkrav", e.ToString(), e.HResult, User.Identity.Name);
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade när nytt filkrav skulle sparas.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
+                return RedirectToAction("GetFilkrav");
             }
 
             return View();
@@ -427,7 +602,7 @@ namespace InrappAdmin.Web.Controllers
                 {
                     Id = forvFil.Id,
                     FilkravId = forvFil.FilkravId,
-                    DelregisterKortnamn = _portalAdminService.HamtaKortnamnForDelregisterMedForeskriftsId(forvFil.FilkravId),
+                    DelregisterKortnamn = _portalAdminService.HamtaKortnamnForDelregisterMedFilkravsId(forvFil.FilkravId),
                     Filmask = forvFil.Filmask,
                     Regexp = forvFil.Regexp,
                     Obligatorisk = forvFil.Obligatorisk,
@@ -449,7 +624,7 @@ namespace InrappAdmin.Web.Controllers
                     Id = forvLev.Id,
                     FilkravId = forvLev.FilkravId,
                     DelregisterId = forvLev.DelregisterId,
-                    DelregisterKortnamn = _portalAdminService.HamtaKortnamnForDelregisterMedForeskriftsId(forvLev.FilkravId),
+                    DelregisterKortnamn = _portalAdminService.HamtaKortnamnForDelregisterMedFilkravsId(forvLev.FilkravId),
                     Period = forvLev.Period,
                     Uppgiftsstart = forvLev.Uppgiftsstart,
                     Uppgiftsslut = forvLev.Uppgiftsslut,
@@ -467,6 +642,25 @@ namespace InrappAdmin.Web.Controllers
                 forvLevViewList.Add(forvLevView);
             }
             return forvLevViewList;
+        }
+
+        private List<LeveransViewModels.AdmFilkravViewModel> ConvertFilkravToViewModel(List<AdmFilkrav> filkravList)
+        {
+            var filkravViewList = new List<LeveransViewModels.AdmFilkravViewModel>();
+            foreach (var filkrav in filkravList)
+            {
+                var filkravView = new LeveransViewModels.AdmFilkravViewModel
+                {
+                    Id = filkrav.Id,
+                    DelregisterId = filkrav.DelregisterId,
+                    DelregisterKortnamn = _portalAdminService.HamtaKortnamnForDelregister(filkrav.DelregisterId),
+                    ForeskriftsId = filkrav.ForeskriftsId,
+                    Namn = filkrav.Namn
+                };
+
+                filkravViewList.Add(filkravView);
+            }
+            return filkravViewList;
         }
 
 
@@ -510,6 +704,28 @@ namespace InrappAdmin.Web.Controllers
             SelectList lstobj = null;
 
             var list = registerInfoList
+                .Select(p =>
+                    new SelectListItem
+                    {
+                        Value = p.Id.ToString(),
+                        Text = p.Kortnamn
+                    });
+
+            // Setting.  
+            lstobj = new SelectList(list, "Value", "Text");
+
+            return lstobj;
+        }
+
+        /// <summary>  
+        /// Create list for delregister-dropdown  
+        /// </summary>  
+        /// <returns>Return delregister for drop down list.</returns>  
+        private IEnumerable<SelectListItem> CreateDelRegisterDropDownList(IEnumerable<AdmDelregister> delregisterList)
+        {
+            SelectList lstobj = null;
+
+            var list = delregisterList
                 .Select(p =>
                     new SelectListItem
                     {

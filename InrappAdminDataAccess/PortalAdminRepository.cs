@@ -227,6 +227,12 @@ namespace InrappAdmin.DataAccess
             return expFiles;
         }
 
+        public IEnumerable<AdmFilkrav> GetAllFileRequirements()
+        {
+            var fileReqs = DbContext.AdmFilkrav.ToList();
+            return fileReqs;
+        }
+
         public string GetSubDirectoryShortNameForExpectedFile(int filkravId)
         {
             var subDirId = DbContext.AdmFilkrav.Where(x => x.Id == filkravId).Select(x => x.DelregisterId).SingleOrDefault();
@@ -264,6 +270,18 @@ namespace InrappAdmin.DataAccess
             return expectedDeliveriesList;
         }
 
+        public IEnumerable<AdmFilkrav> GetFileRequirementsForDirectory(int dirId)
+        {
+            var fileRequirementsList = new List<AdmFilkrav>();
+            var subDirectoriesForDirectory = DbContext.AdmDelregister.Where(x => x.RegisterId == dirId).ToList();
+            foreach (var subDir in subDirectoriesForDirectory)
+            {
+                var fileRequirementList = DbContext.AdmFilkrav.Where(x => x.DelregisterId == subDir.Id).ToList();
+                fileRequirementsList.AddRange(fileRequirementList);
+            }
+            return fileRequirementsList;
+        }
+
         public IEnumerable<AdmRegister> GetAllRegisters()
         {
             var registersList = DbContext.AdmRegister.ToList();
@@ -274,6 +292,12 @@ namespace InrappAdmin.DataAccess
         {
             var registersList = DbContext.AdmRegister.Where(x => x.Inrapporteringsportal).ToList();
             return registersList;
+        }
+
+        public IEnumerable<AdmDelregister> GetAllSubDirectoriesForPortal()
+        {
+            var delregistersList = DbContext.AdmDelregister.Where(x => x.Inrapporteringsportal).ToList();
+            return delregistersList;
         }
 
         public AdmFAQ GetFAQ(int faqId)
@@ -334,6 +358,12 @@ namespace InrappAdmin.DataAccess
         public void CreateExpectedFile(AdmForvantadfil forvFil)
         {
             DbContext.AdmForvantadfil.Add(forvFil);
+            DbContext.SaveChanges();
+        }
+
+        public void CreateFileRequirement(AdmFilkrav filkrav)
+        {
+            DbContext.AdmFilkrav.Add(filkrav);
             DbContext.SaveChanges();
         }
 
@@ -463,6 +493,13 @@ namespace InrappAdmin.DataAccess
             forvFileToUpdate.Regexp = forvFil.Regexp;
             forvFileToUpdate.Obligatorisk = forvFil.Obligatorisk;
             forvFileToUpdate.Tom= forvFil.Tom;
+            DbContext.SaveChanges();
+        }
+
+        public void UpdateFileRequirement(AdmFilkrav filkrav)
+        {
+            var filereqToUpdate = DbContext.AdmFilkrav.SingleOrDefault(x => x.Id == filkrav.Id);
+            filereqToUpdate.Namn = filkrav.Namn;
             DbContext.SaveChanges();
         }
 

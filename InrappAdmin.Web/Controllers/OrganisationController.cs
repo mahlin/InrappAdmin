@@ -78,6 +78,7 @@ namespace InrappAdmin.Web.Controllers
 
 
         // GET
+        [Authorize]
         public ActionResult GetOrganisationsContacts(string kommunkod)
         {
             var model = new OrganisationViewModels.OrganisationViewModel();
@@ -114,6 +115,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // GET
+        [Authorize]
         public ActionResult GetOrganisationsOrgUnits(string kommunkod = "", int orgId = 0)
         {
             var model = new OrganisationViewModels.OrganisationViewModel();
@@ -158,6 +160,7 @@ namespace InrappAdmin.Web.Controllers
             return View("EditReportObligations");
         }
 
+        [Authorize]
         public ActionResult GetOrganisationsReportObligations(string kommunkod = "", int orgId = 0)
         {
             var model = new OrganisationViewModels.OrganisationViewModel();
@@ -197,6 +200,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult UpdateOrganisation(OrganisationViewModels.OrganisationViewModel model)
         {
             try
@@ -223,6 +227,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult UpdateOrganisationsContact(ApplicationUser user)
         {
             var kommunkod = String.Empty;
@@ -253,6 +258,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult UpdateOrganisationsOrgUnit(Organisationsenhet orgUnit)
         {
             var kommunkod = String.Empty;
@@ -284,6 +290,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult UpdateOrganisationsReportObligation(OrganisationViewModels.ReportObligationsViewModel admUppgSkyldighet)
         {
             var kommunkod = String.Empty;
@@ -315,7 +322,7 @@ namespace InrappAdmin.Web.Controllers
 
         }
 
-        // GET
+        [Authorize]
         public ActionResult CreateOrganisationUnit(int orgId = 0)
         {
             var model = new OrganisationViewModels.OrganisationsenhetViewModel();
@@ -326,6 +333,7 @@ namespace InrappAdmin.Web.Controllers
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult CreateOrganisationUnit(Organisationsenhet orgenhet)
         {
             var kommunkod = String.Empty;
@@ -354,7 +362,7 @@ namespace InrappAdmin.Web.Controllers
             return View();
         }
 
-        // GET
+        [Authorize]
         public ActionResult CreateReportObligation(int orgId = 0)
         {
             var model = new OrganisationViewModels.ReportObligationsViewModel();
@@ -365,6 +373,7 @@ namespace InrappAdmin.Web.Controllers
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult CreateReportObligation(AdmUppgiftsskyldighet uppgSk, int orgId = 0)
         {
             var kommunkod = String.Empty;
@@ -394,6 +403,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult DeleteContact(string contactId, string kommunkod)
         {
             try
@@ -492,77 +502,6 @@ namespace InrappAdmin.Web.Controllers
 
             return uppgSkyldigheter;
         }
-
-        //// GET: Organisation/Details/5
-        //public ActionResult Details(int id)
-        //{
-        //    return View();
-        //}
-
-        //// GET: Organisation/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
-
-        //// POST: Organisation/Create
-        //[HttpPost]
-        //public ActionResult Create(FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add insert logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        //// GET: Organisation/Edit/5
-        //public ActionResult Edit(int id)
-        //{
-        //    return View();
-        //}
-
-        //// POST: Organisation/Edit/5
-        //[HttpPost]
-        //public ActionResult Edit(int id, FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add update logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        //// GET: Organisation/Delete/5
-        //public ActionResult Delete(int id)
-        //{
-        //    return View();
-        //}
-
-        //// POST: Organisation/Delete/5
-        //[HttpPost]
-        //public ActionResult Delete(int id, FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add delete logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+        
     }
 }

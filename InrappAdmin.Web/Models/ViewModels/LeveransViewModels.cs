@@ -15,7 +15,7 @@ namespace InrappAdmin.Web.Models.ViewModels
         {
             public IEnumerable<AdmForvantadleveransViewModel> ForvantadeLeveranser { get; set; }
             public IEnumerable<AdmForvantadfilViewModel> ForvantadeFiler { get; set; }
-            public IEnumerable<AdmFilkrav> Filkrav { get; set; }
+            public IEnumerable<AdmFilkravViewModel> Filkrav { get; set; }
             public IEnumerable<FilloggDetaljDTO> Leveranser { get; set; }
             public int SelectedRegisterId { get; set; }
             [DisplayName("Visa endast pågående")]
@@ -31,6 +31,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public int Id { get; set; }
             public int FilkravId { get; set; }
             public int DelregisterId { get; set; }
+            public int SelectedDelregisterId { get; set; }
             public string DelregisterKortnamn { get; set; }
             public string Period { get; set; }
             public DateTime Uppgiftsstart { get; set; }
@@ -55,6 +56,20 @@ namespace InrappAdmin.Web.Models.ViewModels
             public string Regexp { get; set; }
             public bool Obligatorisk { get; set; }
             public bool Tom { get; set; }
+        }
+
+        public class AdmFilkravViewModel
+        {
+            public int Id { get; set; }
+            public int DelregisterId { get; set; }
+            public int SelectedDelregisterId { get; set; }
+            public string DelregisterKortnamn { get; set; }
+            public int? ForeskriftsId { get; set; }
+            public string Namn { get; set; }
+            public DateTime SkapadDatum { get; set; }
+            public string SkapadAv { get; set; }
+            public DateTime AndradDatum { get; set; }
+            public string AndradAv { get; set; }
         }
     }
 }

@@ -174,9 +174,15 @@ namespace InrappAdmin.ApplicationService
             return forvFilList;
         }
 
-        public string HamtaKortnamnForDelregisterMedForeskriftsId(int foreskriftsId)
+        public IEnumerable<AdmFilkrav> HamtaAllaFilkrav()
         {
-            var delRegKortnamn = _portalAdminRepository.GetSubDirectoryShortNameForExpectedFile(foreskriftsId);
+            var filkravList = _portalAdminRepository.GetAllFileRequirements();
+            return filkravList;
+        }
+
+        public string HamtaKortnamnForDelregisterMedFilkravsId(int filkravId)
+        {
+            var delRegKortnamn = _portalAdminRepository.GetSubDirectoryShortNameForExpectedFile(filkravId);
             return delRegKortnamn;
         }
 
@@ -210,10 +216,22 @@ namespace InrappAdmin.ApplicationService
             return registersList;
         }
 
+        public IEnumerable<AdmDelregister> HamtaAllaDelregisterForPortalen()
+        {
+            var delregistersList = _portalAdminRepository.GetAllSubDirectoriesForPortal();
+            return delregistersList;
+        }
+
         public IEnumerable<AdmForvantadleverans> HamtaForvantadeLeveranserForRegister(int regId)
         {
             var forvLeveranser = _portalAdminRepository.GetExpectedDeliveriesForDirectory(regId);
             return forvLeveranser;
+        }
+
+        public IEnumerable<AdmFilkrav> HamtaFilkravForRegister(int regId)
+        {
+            var filkrav= _portalAdminRepository.GetFileRequirementsForDirectory(regId); 
+            return filkrav;
         }
 
         public AdmFAQ HamtaFAQ(int faqId)
@@ -364,6 +382,16 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.CreateExpectedFile(forvFil);
         }
 
+        public void SkapaFilkrav(AdmFilkrav filkrav, string userName)
+        {
+            //Sätt datum och användare
+            filkrav.SkapadDatum = DateTime.Now;
+            filkrav.SkapadAv = userName;
+            filkrav.AndradDatum = DateTime.Now;
+            filkrav.AndradAv = userName;
+            _portalAdminRepository.CreateFileRequirement(filkrav);
+        }
+
         public void UppdateraOrganisation(Organisation org, string userName)
         {
             //Sätt datum och användare
@@ -439,7 +467,16 @@ namespace InrappAdmin.ApplicationService
 
         public void UppdateraForvantadFil(AdmForvantadfil forvFil, string userName)
         {
+            forvFil.AndradAv = userName;
+            forvFil.AndradDatum = DateTime.Now;
             _portalAdminRepository.UpdateExpectedFile(forvFil);
+        }
+
+        public void UppdateraFilkrav(AdmFilkrav filkrav, string userName)
+        {
+            filkrav.AndradAv = userName;
+            filkrav.AndradDatum = DateTime.Now;
+            _portalAdminRepository.UpdateFileRequirement(filkrav);
         }
 
         public void UppdateraAnvandarInfo(AppUserAdmin user)

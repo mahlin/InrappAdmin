@@ -195,6 +195,7 @@ namespace InrappAdmin.DataAccess
             modelBuilder.Entity<AdmFilkrav>().Property(e => e.Id).HasColumnName("filkravid");
             modelBuilder.Entity<AdmFilkrav>().Property(e => e.DelregisterId).HasColumnName("delregisterid");
             modelBuilder.Entity<AdmFilkrav>().Property(e => e.ForeskriftsId).HasColumnName("foreskriftsId");
+            modelBuilder.Entity<AdmFilkrav>().Property(e => e.Namn).HasColumnName("namn");
             modelBuilder.Entity<AdmFilkrav>()
                 .HasRequired(c => c.AdmDelregister)
                 .WithMany(d => d.AdmFilkrav)

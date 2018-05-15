@@ -311,6 +311,8 @@
     <Content Include="Views\Shared\_LoginAdmin.cshtml" />
     <Content Include="Views\Shared\FileNotFound.cshtml" />
     <Content Include="Views\Shared\_LayoutUtv.cshtml" />
+    <Content Include="Views\Leverans\EditFilkrav.cshtml" />
+    <Content Include="Views\Leverans\CreateFilkrav.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

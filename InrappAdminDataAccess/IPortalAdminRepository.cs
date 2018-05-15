@@ -66,13 +66,18 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<AdmForvantadfil> GetAllExpectedFiles();
 
+        IEnumerable<AdmFilkrav> GetAllFileRequirements();
+
         IEnumerable<AdmForvantadleverans> GetExpectedDeliveriesForDirectory(int dirId);
+        IEnumerable<AdmFilkrav> GetFileRequirementsForDirectory(int dirId);
 
         IEnumerable<AdmForvantadfil> GetExpectedFilesForDirectory(int dirId);
 
         IEnumerable<AdmRegister> GetAllRegisters();
 
         IEnumerable<AdmRegister> GetAllRegistersForPortal();
+
+        IEnumerable<AdmDelregister> GetAllSubDirectoriesForPortal();
 
         string GetDirectoryShortName(int dirId);
 
@@ -103,6 +108,8 @@ namespace InrappAdmin.DataAccess
 
         void CreateExpectedFile(AdmForvantadfil forvFil);
 
+        void CreateFileRequirement(AdmFilkrav filkrav);
+
         void UpdateOrganisation(Organisation org);
 
         void UpdateContactPerson(ApplicationUser user);
@@ -124,6 +131,8 @@ namespace InrappAdmin.DataAccess
         void UpdateExpectedDelivery(AdmForvantadleverans forvLev);
 
         void UpdateExpectedFile(AdmForvantadfil forvFil);
+
+        void UpdateFileRequirement(AdmFilkrav filkrav);
 
         void UpdateUserInfo(AppUserAdmin user);
 

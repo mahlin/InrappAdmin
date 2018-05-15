@@ -52,12 +52,18 @@ namespace InrappAdmin.ApplicationService.Interface
 
         IEnumerable<AdmForvantadfil> HamtaAllaForvantadeFiler();
 
+        IEnumerable<AdmFilkrav> HamtaAllaFilkrav();
+
         IEnumerable<AdmForvantadfil> HamtaForvantadeFilerForRegister(int regId);
         IEnumerable<AdmForvantadleverans> HamtaForvantadeLeveranserForRegister(int regId);
+
+        IEnumerable<AdmFilkrav> HamtaFilkravForRegister(int regId);
         IEnumerable<AdmRegister> HamtaAllaRegister();
         IEnumerable<AdmRegister> HamtaAllaRegisterForPortalen();
 
-        string HamtaKortnamnForDelregisterMedForeskriftsId(int foreskriftsId);
+        IEnumerable<AdmDelregister> HamtaAllaDelregisterForPortalen();
+
+        string HamtaKortnamnForDelregisterMedFilkravsId(int filkravsId);
 
         string HamtaKortnamnForDelregister(int delregId);
 
@@ -83,6 +89,8 @@ namespace InrappAdmin.ApplicationService.Interface
 
         void SkapaForvantadFil(AdmForvantadfil forvFil, string userName);
 
+        void SkapaFilkrav(AdmFilkrav filkrav, string userName);
+
         void UppdateraOrganisation(Organisation org, string userName);
 
         void UppdateraKontaktperson(ApplicationUser user, string userName);
@@ -104,6 +112,9 @@ namespace InrappAdmin.ApplicationService.Interface
         void UppdateraForvantadLeverans(AdmForvantadleverans forvLev, string userName);
 
         void UppdateraForvantadFil(AdmForvantadfil forvFil, string userName);
+
+        void UppdateraFilkrav(AdmFilkrav filkrav, string userName);
+
         void UppdateraAnvandarInfo(AppUserAdmin user);
 
         void SparaOppettider(OpeningHoursInfoDTO oppetTider, string userName);

@@ -68,6 +68,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // GET
+        [Authorize]
         public ActionResult GetSubDirectoriesForDirectory( RegisterViewModels.RegisterViewModel model, string regShortName = "")
         {
             try
@@ -133,6 +134,7 @@ namespace InrappAdmin.Web.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public ActionResult UpdateDirectory(AdmRegister register)
         {
 
@@ -161,6 +163,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult UpdateSubDirectory(AdmDelregister delRegister)
         {
             var regShortName = "";
@@ -191,6 +194,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // GET
+        [Authorize]
         public ActionResult CreateDirectory()
         {
             return View();
@@ -199,6 +203,7 @@ namespace InrappAdmin.Web.Controllers
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult CreateDirectory(RegisterViewModels.AdmRegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -235,6 +240,7 @@ namespace InrappAdmin.Web.Controllers
 
 
         // GET
+        [Authorize]
         public ActionResult CreateSubDirectory(string regShortName)
         {
             var model = new RegisterViewModels.AdmDelregisterViewModel();
@@ -247,6 +253,7 @@ namespace InrappAdmin.Web.Controllers
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult CreateSubDirectory(AdmDelregister subDir)
         {
             var regShortName = String.Empty;

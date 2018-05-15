@@ -1,0 +1,131 @@
+﻿@using System.Configuration
+@using InrappAdmin.Web.Models.ViewModels
+@model InrappAdmin.Web.Models.ViewModels.LeveransViewModels.LeveransViewModel
+@{
+    ViewBag.Title = "Leverans";
+}
+
+@*<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />*@
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+    });
+
+    $(function () {
+        $("#txtRegkortnamn").focus();
+    });
+
+    $(document).on('change','#ddlRegister',function() {
+        $("#SelectedRegisterId").val($('#ddlRegister').val());
+    });
+
+    $(function() {
+        $('.edit-mode').hide();
+        $('.edit-user, .cancel-user').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+        $('.save-user').on('click',
+            function() {
+                var tr = $(this).parents('tr:first');
+                var x = tr.find("#FilkravId").html();
+                var filkravId = tr.find("#FilkravId").html();
+                var namn = tr.find("#Namn").val();
+
+                //Creating AdmFilkrav JSON object
+                var admFilkrav =
+                {
+                    "Id": filkravId,
+                    "Namn": namn
+                };
+                var regId = $("#SelectedRegisterId").val();
+                //Posting AdmFilkrav object to controller's Update action method
+                $.ajax({
+                    url: '/Leverans/UpdateFilkrav',
+                    data: JSON.stringify({
+                        filkrav: admFilkrav,
+                        regId: regId})
+                    ,
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(data) {
+                        //location.reload();
+                        $("#pageContainer").html(data);
+                        tr.find('.edit-mode, .display-mode').toggle();
+                        $('#footer').hide();
+                        //alert('Record updated Successfully!!');
+                    }
+                });
+
+            });
+
+        $('.edit-user').on('click',
+            function() {
+                var tr = $(this).parents('tr:first');
+                var namn = tr.find("#Namn").val();
+
+                tr.find("#lblNamn").text(namn);
+            });
+    });
+</script>
+<div id="pageContainer">
+    <div class="row">
+        <div class="col-md-8 padding-top-55">
+            <h4>Administrera filkrav</h4>
+            <br />
+            <section id="orgForm">
+            @using (Html.BeginForm("GetDirectorysFilerequirements", "Leverans", new { ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+            @Html.HiddenFor(m => m.SelectedRegisterId)
+                <div class="row">
+                    <div class="col-md-8 form-group" style="width: 225px !important; margin-left: 5px;">
+                        @Html.DropDownListFor(m => m.SelectedRegisterId, ViewBag.RegisterList as SelectList, " - Välj Register -", new { id = "ddlRegister", @class = "form-control", style = "max-width:150px !important" })
+                    </div>
+                    <div class="col-md-8" style="padding-left: 0px; margin-left: -10px;"> 
+                        <div><input type="submit" value="Visa" class="btn btn-default" /></div>
+                    </div>
+                </div>
+            }
+            </section>
+        </div>
+    </div>
+
+    @if (Model != null)
+    {
+        @Html.ActionLink("Skapa nytt filkrav", "CreateFilkrav", "Leverans")
+
+    <div id="gridContent" style="font-family: Arial; padding: 20px;">
+        @{
+        ViewBag.Title = "Administrera filkrav";
+        var grid = new WebGrid(source: Model.Filkrav, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "filkravGrid");
+        grid.Pager(WebGridPagerModes.All);
+        }
+
+        @grid.GetHtml(htmlAttributes: new { id = "filkravTable" },
+                  tableStyle: "webgrid-table",
+                  headerStyle: "webgrid-header",
+                  footerStyle: "webgrid-footer",
+                  alternatingRowStyle: "webgrid-alternating-row",
+                  selectedRowStyle: "webgrid-selected-row",
+                  rowStyle: "webgrid-row-style",
+                  mode: WebGridPagerModes.All,
+                  columns: grid.Columns(
+                        grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="FilkravId" class="edit-mode colMinWidth">@item.Id</label></text>, style: "colMinWidth"),
+                        grid.Column("Delregister", "Delregister", format: @<text><span class="display-mode"><label id="lblDelregister">@item.DelregisterKortnamn</label></span>
+                        <input type="text" id="Delregister" value="@item.DelregisterKortnamn" class="edit-mode form-control" /></text>, style: "col1Width"),
+                        grid.Column("Namn", "Namn", format: @<text><span class="display-mode"><label id="lblNamn" style="width:350px;">@item.Namn </label></span>
+                        <input type="text" id="Namn" value="@item.Namn" class="edit-mode form-control" style="width: 400px !important;" /></text>, style: "col5Width"),
+                        
+
+                        grid.Column(null, format: @<text>
+                            <button class="edit-user display-mode btn btn-default">Ändra</button>
+                            <button class="save-user edit-mode btn btn-default">Spara</button>
+                            <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                        </text>, style: "col3Width", canSort: false)))
+
+    </div>
+    }
+</div>

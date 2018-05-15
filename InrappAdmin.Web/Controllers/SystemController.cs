@@ -59,6 +59,7 @@ namespace InrappAdmin.Web.Controllers
 
 
         // GET: FAQs
+        [Authorize]
         public ActionResult GetFAQs(int faqCatId = 0)
         {
             var model = new SystemViewModels.SystemViewModel();
@@ -116,34 +117,6 @@ namespace InrappAdmin.Web.Controllers
         }
 
 
-        ////// GET: InformationText för vald typ
-        //public ActionResult GetInfoText(string typ)
-        //{
-        //    SystemViewModels.SystemViewModel model = new SystemViewModels.SystemViewModel();
-        //    try
-        //    {
-        //        var infoText = _portalAdminService.HamtaInfoText(typ);
-        //        AdmInformation admInfo = new AdmInformation
-        //        {
-
-        //        };
-        //        model.InfoPages.Add(infoText);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine(e);
-        //        ErrorManager.WriteToErrorLog("SystemController", "GetInformationsText", e.ToString(), e.HResult, "InrappAdmin");
-        //        var errorModel = new CustomErrorPageModel
-        //        {
-        //            Information = "Ett fel inträffade vid hämtning av specifik informationstext.",
-        //            ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
-        //        };
-        //        return View("CustomError", errorModel);
-
-        //    }
-        //    return RedirectToAction("GetInformationTexts");
-        //}
-
         // GET: OpeningHours (AdmKonfiguration)
         [Authorize]
         public ActionResult GetOpeningHours()
@@ -181,6 +154,7 @@ namespace InrappAdmin.Web.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public ActionResult UpdateFAQCategory(AdmFAQKategori faqCategory)
         {
             if (ModelState.IsValid)
@@ -208,6 +182,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult UpdateFAQ(SystemViewModels.SystemViewModel model)
         {
             if (ModelState.IsValid)
@@ -235,6 +210,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult UpdateInfoText(SystemViewModels.SystemViewModel model)
         {
             if (ModelState.IsValid)
@@ -267,6 +243,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // GET
+        [Authorize]
         public ActionResult CreateFAQCategory()
         {
             return View();
@@ -275,6 +252,7 @@ namespace InrappAdmin.Web.Controllers
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult CreateFAQCategory(AdmFAQKategori faqCategory)
         {
             if (ModelState.IsValid)
@@ -303,6 +281,7 @@ namespace InrappAdmin.Web.Controllers
 
 
         // GET
+        [Authorize]
         public ActionResult CreateFAQ(int catId = 0)
         {
             var model = new SystemViewModels.FAQViewModel();
@@ -317,6 +296,7 @@ namespace InrappAdmin.Web.Controllers
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult CreateFAQ(SystemViewModels.FAQViewModel model)
         {
             if (ModelState.IsValid)
@@ -353,6 +333,7 @@ namespace InrappAdmin.Web.Controllers
 
 
         // GET
+        [Authorize]
         public ActionResult EditSelectedFAQ(int faqId = 0)
         {
             var model = new SystemViewModels.SystemViewModel();
@@ -387,6 +368,7 @@ namespace InrappAdmin.Web.Controllers
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult EditSelectedFAQ(SystemViewModels.SystemViewModel model)
         {
 
@@ -426,6 +408,7 @@ namespace InrappAdmin.Web.Controllers
 
 
         // GET
+        [Authorize]
         public ActionResult CreateInformationText()
         {
             return View();
@@ -434,6 +417,7 @@ namespace InrappAdmin.Web.Controllers
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult CreateInformationText(SystemViewModels.InfoTextViewModel model)
         {
             if (ModelState.IsValid)
@@ -469,6 +453,7 @@ namespace InrappAdmin.Web.Controllers
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult SaveOpeningHoursInfo(SystemViewModels.OpeningHours openHours )
         {
             if (ModelState.IsValid)
@@ -513,6 +498,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult DeleteFAQCategory(int faqCatId)
         {
             try
@@ -534,6 +520,7 @@ namespace InrappAdmin.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult DeleteFAQ(int faqId, int faqCatId)
         {
             try
