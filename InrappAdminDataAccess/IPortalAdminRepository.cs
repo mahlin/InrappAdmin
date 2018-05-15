@@ -62,6 +62,8 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<AdmDelregister> GetSubDirectoriesForDirectory(int dirId);
 
+        AdmDelregister GetSubDirectoryByShortName(string shortName);
+
         IEnumerable<AdmForvantadleverans> GetExpectedDeliveries();
 
         IEnumerable<AdmForvantadfil> GetAllExpectedFiles();
@@ -84,6 +86,8 @@ namespace InrappAdmin.DataAccess
         string GetSubDirectoryShortNameForExpectedFile(int filKravId);
 
         string GetSubDirectoryShortName(int subDirId);
+
+        string GetFileRequirementName(int filereqId);
 
         string GetEnhetskodForLeverans(int orgenhetsid);
 

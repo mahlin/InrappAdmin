@@ -162,6 +162,12 @@ namespace InrappAdmin.ApplicationService
             return subDirectories;
         }
 
+        public AdmDelregister HamtaDelRegisterForKortnamn(string shortName)
+        {
+            var subDirectory = _portalAdminRepository.GetSubDirectoryByShortName(shortName);
+            return subDirectory;
+        }
+
         public IEnumerable<AdmForvantadleverans> HamtaForvantadeLeveranser()
         {
             var forvlevList = _portalAdminRepository.GetExpectedDeliveries();
@@ -190,6 +196,12 @@ namespace InrappAdmin.ApplicationService
         {
             var regKortnamn = _portalAdminRepository.GetDirectoryShortName(regId);
             return regKortnamn;
+        }
+
+        public string HamtaNamnForFilkrav(int filkravId)
+        {
+            var filkravNamn = _portalAdminRepository.GetFileRequirementName(filkravId);
+            return filkravNamn;
         }
 
         public string HamtaKortnamnForDelregister(int delregId)

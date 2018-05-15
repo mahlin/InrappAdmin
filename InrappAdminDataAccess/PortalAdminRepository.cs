@@ -209,6 +209,12 @@ namespace InrappAdmin.DataAccess
             return subDirectories;
         }
 
+        public AdmDelregister GetSubDirectoryByShortName(string shortName)
+        {
+            var subDirectory = DbContext.AdmDelregister.Where(x => x.Kortnamn == shortName).FirstOrDefault();
+            return subDirectory;
+        }
+
         public IEnumerable<AdmForvantadleverans> GetExpectedDeliveries()
         {
             var expDeliveries = DbContext.AdmForvantadleverans.OrderBy(x => x.Uppgiftsstart).ToList();
@@ -244,6 +250,12 @@ namespace InrappAdmin.DataAccess
         {
             var subDirShortName = DbContext.AdmDelregister.Where(x => x.Id == subDirId).Select(x => x.Kortnamn).SingleOrDefault();
             return subDirShortName;
+        }
+
+        public string GetFileRequirementName(int fileReqId)
+        {
+            var fileReqName = DbContext.AdmFilkrav.Where(x => x.Id == fileReqId).Select(x => x.Namn).SingleOrDefault();
+            return fileReqName;
         }
 
         public IEnumerable<AdmForvantadfil> GetExpectedFilesForDirectory(int dirId)

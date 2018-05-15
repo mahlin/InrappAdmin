@@ -96,8 +96,8 @@
             function() {
                 var tr = $(this).parents('tr:first');
                 var forvLevId = tr.find("#ForvantadleveransId").html();
-                var forvLevDelRegId = tr.find("#DelregisterId").val();
-                var forvLevDelFilkravId = tr.find("#FilkravId").val();
+                var forvLevDelRegKortnamn = tr.find("#lblDelregister").html();
+                var forvLevDelFilkravId = tr.find("#lblFilkravId").html();
                 var forvLevPeriod = tr.find("#Period").val();
                 var forvLevUppgiftsstart = tr.find("#Uppgiftsstart").val();
                 var forvLevUppgiftsslut = tr.find("#Uppgiftsslut").val();
@@ -113,7 +113,7 @@
                 {
                     "Id": forvLevId,
                     "FilkravId": forvLevDelFilkravId,
-                    "DelregisterId": forvLevDelRegId,
+                    "DelregisterKortnamn": forvLevDelRegKortnamn,
                     "Period": forvLevPeriod,
                     "Uppgiftsstart": forvLevUppgiftsstart,
                     "Uppgiftsslut": forvLevUppgiftsslut,
@@ -223,74 +223,75 @@
 
         <div id="gridContent" style="font-family: Arial; padding-top: 20px;">
             @{
-                ViewBag.Title = "Administrera förväntade leveranser";
-                var grid = new WebGrid(source: Model.ForvantadeLeveranser, canPage: true, rowsPerPage: 10, ajaxUpdateCallback: "webGridUpdated");
-                grid.Pager(WebGridPagerModes.All);
+        ViewBag.Title = "Administrera förväntade leveranser";
+        var grid = new WebGrid(source: Model.ForvantadeLeveranser, canPage: true, rowsPerPage: 10, ajaxUpdateCallback: "webGridUpdated");
+        grid.Pager(WebGridPagerModes.All);
             }
 
             @Html.HiddenFor(m => m.SelectedRegisterId)
             @Html.HiddenFor(m => m.FilterPagaende)
 
             @grid.GetHtml(htmlAttributes: new { id = "forvLevTable" },
-                tableStyle: "webgrid-table",
-                headerStyle: "webgrid-header",
-                footerStyle: "webgrid-footer",
-                alternatingRowStyle: "webgrid-alternating-row",
-                selectedRowStyle: "webgrid-selected-row",
-                rowStyle: "webgrid-row-style",
-                mode: WebGridPagerModes.All,
-                columns: grid.Columns(
-                    grid.Column(null, null, format: @<text><input type="hidden" id="Pagaende" value="@item.Pagaende.ToString()" class="edit-mode form-control hide" /></text>, style: "colZeroWidth"),
-                    grid.Column(null, null, format: @<text><input type="hidden" id="Sen" value="@item.Sen.ToString()" class="edit-mode form-control hide" /></text>, style: "colZeroWidth"),
-                    grid.Column(null, null, format: @<text><input type="hidden" id="DelregisterId" value="@item.DelregisterId" class="edit-mode form-control" /></text>, style: "colZeroWidth"),
-                    grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="ForvantadleveransId" class="edit-mode colMinWidth">@item.Id</label></text>, style: "colMinWidth"),
-                    grid.Column("Delregister", "Delregister", format: @<text><span class="display-mode"><label id="lblDelregister">@item.DelregisterKortnamn</label></span>
-                                                                          <input type="text" id="Delregister" value="@item.DelregisterKortnamn" class="edit-mode form-control" /></text>, style: "colMinWidth"),
-                    grid.Column("Filkravid", "Filkravid", format: @<text><span class="display-mode"><label id="lblFilkravId">@item.FilkravId</label></span>
-                                                                      <input type="text" id="FilkravId" value="@item.FilkravId" class="edit-mode form-control" /></text>, style: "colMinWidth"),
-                    grid.Column("Period", "Period", format: @<text><span class="display-mode"><label id="lblPeriod">@item.Period </label></span>
-                                                                <input type="text" id="Period" value="@item.Period" class="edit-mode form-control" /></text>, style: "col1Width"),
+             tableStyle: "webgrid-table",
+             headerStyle: "webgrid-header",
+             footerStyle: "webgrid-footer",
+             alternatingRowStyle: "webgrid-alternating-row",
+             selectedRowStyle: "webgrid-selected-row",
+             rowStyle: "webgrid-row-style",
+             mode: WebGridPagerModes.All,
+             columns: grid.Columns(
+                 grid.Column(null, null, format: @<text><input type="hidden" id="Pagaende" value="@item.Pagaende.ToString()" class="edit-mode form-control hide" /></text>, style: "colZeroWidth"),
+                grid.Column(null, null, format: @<text><input type="hidden" id="Sen" value="@item.Sen.ToString()" class="edit-mode form-control hide" /></text>, style: "colZeroWidth"),
+                grid.Column(null, null, format: @<text><input type="hidden" id="DelregisterId" value="@item.DelregisterId" class="edit-mode form-control" /></text>, style: "colZeroWidth"),
+                grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="ForvantadleveransId" class="edit-mode colMinWidth">@item.Id</label></text>, style: "colMinWidth"),
+                grid.Column("Delregister", format: @<text><span class="display-mode">@item.DelregisterKortnamn</span><label id="lblDelregister" class="edit-mode colMinWidth">@item.DelregisterKortnamn</label></text>, style: "colMinWidth"),
+                grid.Column("Filkravid", format: @<text><span class="display-mode">@item.Filkravid</span><label id="lblFilkravId" class="edit-mode colMinWidth">@item.FilkravId</label></text>, style: "colMinWidth"),
+                grid.Column("Filkravnamn", format: @<text><span class="display-mode">@item.FilkravNamn</span><label id="lblFilkravNamn" class="edit-mode colMinWidth">@item.FilkravNamn</label></text>, style: "colMinWidth"),
 
-                    grid.Column("Uppgiftsstart", "Uppgiftsstart", format: @<text><span class="display-mode">
-                                                                                  <label id="lblUppgiftsstart">@( item.Uppgiftsstart != null ? item.Uppgiftsstart.ToString("yyyy-MM-dd") : item.Uppgiftsstart)</label>
-                                                                              </span>
-                                                                              <input type="text" id="Uppgiftsstart" value="@( item.Uppgiftsstart != null ? item.Uppgiftsstart.ToString("yyyy-MM-dd") : item.Uppgiftsstart)" class="edit-mode form-control" /></text>, style: "col2Width"),
-                    grid.Column("Uppgiftsslut", "Uppgiftsslut", format: @<text><span class="display-mode">
-                                                                                <label id="lblUppgiftsslut">@( item.Uppgiftsslut != null ? item.Uppgiftsslut.ToString("yyyy-MM-dd") : item.Uppgiftsslut)</label>
-                                                                            </span>
-                                                                            <input type="text" id="Uppgiftsslut" value="@( item.Uppgiftsslut != null ? item.Uppgiftsslut.ToString("yyyy-MM-dd") : item.Uppgiftsslut)" class="edit-mode form-control" /></text>, style: "col2Width"),
-                    grid.Column("Rapporteringsstart", "Rapporteringsstart", format: @<text><span class="display-mode">
-                                                                                            <label id="lblRapporteringsstart">@( item.Rapporteringsstart != null ? item.Rapporteringsstart.ToString("yyyy-MM-dd") : item.Rapporteringsstart)</label>
-                                                                                        </span>
-                                                                                        <input type="text" id="Rapporteringsstart" value="@( item.Rapporteringsstart != null ? item.Rapporteringsstart.ToString("yyyy-MM-dd") : item.Rapporteringsstart)" class="edit-mode form-control" /></text>, style: "col2Width"),
-                    grid.Column("Rapporteringsslut", "Rapporteringsslut", format: @<text><span class="display-mode">
-                                                                                          <label id="lblRapporteringsslut">@( item.Rapporteringsslut != null ? item.Rapporteringsslut.ToString("yyyy-MM-dd") : item.Rapporteringsslut)</label>
-                                                                                      </span>
-                                                                                      <input type="text" id="Rapporteringsslut" value="@( item.Rapporteringsslut != null ? item.Rapporteringsslut.ToString("yyyy-MM-dd") : item.Rapporteringsslut)" class="edit-mode form-control" /></text>, style: "col2Width"),
-                    grid.Column("Rapporteringsenast", "Rapporteringsenast", format: @<text><span class="display-mode">
-                                                                                            <label id="lblRapporteringsenast">@( item.Rapporteringsenast != null ? item.Rapporteringsenast.ToString("yyyy-MM-dd") : item.Rapporteringsenast)</label>
-                                                                                        </span>
-                                                                                        <input type="text" id="Rapporteringsenast" value="@( item.Rapporteringsenast != null ? item.Rapporteringsenast.ToString("yyyy-MM-dd") : item.Rapporteringsenast)" class="edit-mode form-control" /></text>, style: "col2Width"),
 
-                    grid.Column("Paminnelse1", "Paminnelse1", format: @<text><span class="display-mode">
-                                                                              <label id="lblPaminnelse1">@( item.Paminnelse1 != null ? item.Paminnelse1.ToString("yyyy-MM-dd") : item.Paminnelse1)</label>
-                                                                          </span>
-                                                                          <input type="text" id="Paminnelse1" value="@( item.Paminnelse1 != null ? item.Paminnelse1.ToString("yyyy-MM-dd") : item.Paminnelse1)" class="edit-mode form-control" /></text>, style: "col2Width"),
-                    grid.Column("Paminnelse2", "Paminnelse2", format: @<text><span class="display-mode">
-                                                                              <label id="lblPaminnelse2">@( item.Paminnelse2 != null ? item.Paminnelse2.ToString("yyyy-MM-dd") : item.Paminnelse2)</label>
-                                                                          </span>
-                                                                          <input type="text" id="Paminnelse2" value="@( item.Paminnelse2 != null ? item.Paminnelse2.ToString("yyyy-MM-dd") : item.Paminnelse2)" class="edit-mode form-control" /></text>, style: "col2Width"),
+     grid.Column("Period", "Period", format: @<text><span class="display-mode"><label id="lblPeriod">@item.Period </label></span>
+        <input type="text" id="Period" value="@item.Period" class="edit-mode form-control" /></text>, style: "col1Width"),
 
-                    grid.Column("Paminnelse3", "Paminnelse3", format: @<text><span class="display-mode">
-                                                                              <label id="lblPaminnelse3">@( item.Paminnelse3 != null ? item.Paminnelse3.ToString("yyyy-MM-dd") : item.Paminnelse3)</label>
-                                                                          </span>
-                                                                          <input type="text" id="Paminnelse3" value="@( item.Paminnelse3 != null ? item.Paminnelse3.ToString("yyyy-MM-dd") : item.Paminnelse3)" class="edit-mode form-control" /></text>, style: "col2Width"),
+     grid.Column("Uppgiftsstart", "Uppgiftsstart", format: @<text><span class="display-mode">
+                <label id="lblUppgiftsstart">@( item.Uppgiftsstart != null ? item.Uppgiftsstart.ToString("yyyy-MM-dd") : item.Uppgiftsstart)</label>
+            </span>
+            <input type="text" id="Uppgiftsstart" value="@( item.Uppgiftsstart != null ? item.Uppgiftsstart.ToString("yyyy-MM-dd") : item.Uppgiftsstart)" class="edit-mode form-control" /></text>, style: "col2Width"),
+     grid.Column("Uppgiftsslut", "Uppgiftsslut", format: @<text><span class="display-mode">
+                <label id="lblUppgiftsslut">@( item.Uppgiftsslut != null ? item.Uppgiftsslut.ToString("yyyy-MM-dd") : item.Uppgiftsslut)</label>
+            </span>
+            <input type="text" id="Uppgiftsslut" value="@( item.Uppgiftsslut != null ? item.Uppgiftsslut.ToString("yyyy-MM-dd") : item.Uppgiftsslut)" class="edit-mode form-control" /></text>, style: "col2Width"),
+     grid.Column("Rapporteringsstart", "Rapporteringsstart", format: @<text><span class="display-mode">
+                <label id="lblRapporteringsstart">@( item.Rapporteringsstart != null ? item.Rapporteringsstart.ToString("yyyy-MM-dd") : item.Rapporteringsstart)</label>
+            </span>
+            <input type="text" id="Rapporteringsstart" value="@( item.Rapporteringsstart != null ? item.Rapporteringsstart.ToString("yyyy-MM-dd") : item.Rapporteringsstart)" class="edit-mode form-control" /></text>, style: "col2Width"),
+     grid.Column("Rapporteringsslut", "Rapporteringsslut", format: @<text><span class="display-mode">
+                <label id="lblRapporteringsslut">@( item.Rapporteringsslut != null ? item.Rapporteringsslut.ToString("yyyy-MM-dd") : item.Rapporteringsslut)</label>
+            </span>
+            <input type="text" id="Rapporteringsslut" value="@( item.Rapporteringsslut != null ? item.Rapporteringsslut.ToString("yyyy-MM-dd") : item.Rapporteringsslut)" class="edit-mode form-control" /></text>, style: "col2Width"),
+     grid.Column("Rapporteringsenast", "Rapporteringsenast", format: @<text><span class="display-mode">
+                <label id="lblRapporteringsenast">@( item.Rapporteringsenast != null ? item.Rapporteringsenast.ToString("yyyy-MM-dd") : item.Rapporteringsenast)</label>
+            </span>
+            <input type="text" id="Rapporteringsenast" value="@( item.Rapporteringsenast != null ? item.Rapporteringsenast.ToString("yyyy-MM-dd") : item.Rapporteringsenast)" class="edit-mode form-control" /></text>, style: "col2Width"),
 
-                    grid.Column(null, format: @<text>
-                                                  <button class="edit-user display-mode btn btn-default">Ändra</button>
-                                                  <button class="save-user edit-mode btn btn-default">Spara</button>
-                                                  <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-                                               </text>, style: "col3Width", canSort: false)))
+     grid.Column("Paminnelse1", "Paminnelse1", format: @<text><span class="display-mode">
+                <label id="lblPaminnelse1">@( item.Paminnelse1 != null ? item.Paminnelse1.ToString("yyyy-MM-dd") : item.Paminnelse1)</label>
+            </span>
+            <input type="text" id="Paminnelse1" value="@( item.Paminnelse1 != null ? item.Paminnelse1.ToString("yyyy-MM-dd") : item.Paminnelse1)" class="edit-mode form-control" /></text>, style: "col2Width"),
+     grid.Column("Paminnelse2", "Paminnelse2", format: @<text><span class="display-mode">
+                <label id="lblPaminnelse2">@( item.Paminnelse2 != null ? item.Paminnelse2.ToString("yyyy-MM-dd") : item.Paminnelse2)</label>
+            </span>
+            <input type="text" id="Paminnelse2" value="@( item.Paminnelse2 != null ? item.Paminnelse2.ToString("yyyy-MM-dd") : item.Paminnelse2)" class="edit-mode form-control" /></text>, style: "col2Width"),
+
+     grid.Column("Paminnelse3", "Paminnelse3", format: @<text><span class="display-mode">
+                <label id="lblPaminnelse3">@( item.Paminnelse3 != null ? item.Paminnelse3.ToString("yyyy-MM-dd") : item.Paminnelse3)</label>
+            </span>
+            <input type="text" id="Paminnelse3" value="@( item.Paminnelse3 != null ? item.Paminnelse3.ToString("yyyy-MM-dd") : item.Paminnelse3)" class="edit-mode form-control" /></text>, style: "col2Width"),
+
+     grid.Column(null, format: @<text>
+            <button class="edit-user display-mode btn btn-default">Ändra</button>
+            <button class="save-user edit-mode btn btn-default">Spara</button>
+            <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+        </text>, style: "col3Width", canSort: false)))
         </div>
 
     }

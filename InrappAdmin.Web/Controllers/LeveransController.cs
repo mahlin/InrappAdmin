@@ -378,7 +378,7 @@ namespace InrappAdmin.Web.Controllers
             {
                 Id = forvLevModel.Id,
                 FilkravId = forvLevModel.FilkravId,
-                DelregisterId = forvLevModel.DelregisterId,
+                DelregisterId = _portalAdminService.HamtaDelRegisterForKortnamn(forvLevModel.DelregisterKortnamn).Id,
                 Period = forvLevModel.Period,
                 Uppgiftsstart = forvLevModel.Uppgiftsstart,
                 Uppgiftsslut = forvLevModel.Uppgiftsslut,
@@ -623,6 +623,7 @@ namespace InrappAdmin.Web.Controllers
                 {
                     Id = forvLev.Id,
                     FilkravId = forvLev.FilkravId,
+                    FilkravNamn = _portalAdminService.HamtaNamnForFilkrav(forvLev.FilkravId),
                     DelregisterId = forvLev.DelregisterId,
                     DelregisterKortnamn = _portalAdminService.HamtaKortnamnForDelregisterMedFilkravsId(forvLev.FilkravId),
                     Period = forvLev.Period,
