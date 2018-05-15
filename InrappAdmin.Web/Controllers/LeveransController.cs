@@ -228,6 +228,7 @@ namespace InrappAdmin.Web.Controllers
                         {
                           Id  = forvFil.Id,
                           FilkravId = forvFil.FilkravId,
+                          FilkravNamn = _portalAdminService.HamtaNamnForFilkrav(forvFil.FilkravId),
                           ForeskriftsId = forvFil.ForeskriftsId,
                           DelregisterKortnamn = _portalAdminService.HamtaKortnamnForDelregisterMedFilkravsId(forvFil.FilkravId),
                           Filmask = forvFil.Filmask,
@@ -393,9 +394,23 @@ namespace InrappAdmin.Web.Controllers
             return forvLev;
         }
 
+        private AdmForvantadfil ConvertViewModelToForvFil(LeveransViewModels.AdmForvantadfilViewModel forvFilModel)
+        {
+            var forvFil = new AdmForvantadfil
+            {
+                Id = forvFilModel.Id,
+                Filmask = forvFilModel.Filmask,
+                Regexp = forvFilModel.Regexp,
+                Obligatorisk = forvFilModel.Obligatorisk,
+                Tom = forvFilModel.Tom
+            };
+
+            return forvFil;
+        }
+
         [HttpPost]
         [Authorize]
-        public ActionResult UpdateForvantadFil(AdmForvantadfil forvFil, string regId = "0")
+        public ActionResult UpdateForvantadFil(LeveransViewModels.AdmForvantadfilViewModel forvFilModel, string regId = "0")
         {
 
             if (ModelState.IsValid)
@@ -403,6 +418,7 @@ namespace InrappAdmin.Web.Controllers
                 try
                 {
                     var userName = User.Identity.GetUserName();
+                    var forvFil = ConvertViewModelToForvFil(forvFilModel);
                     _portalAdminService.UppdateraForvantadFil(forvFil, userName);
                 }
                 catch (Exception e)

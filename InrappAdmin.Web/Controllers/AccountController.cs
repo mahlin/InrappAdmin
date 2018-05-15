@@ -273,7 +273,7 @@ namespace InrappAdmin.Web.Controllers
             {
                 user.AndradAv = user.Email;
                 user.AndradDatum = DateTime.Now;
-                _portalAdminService.UppdateraAnvandarInfo(user);
+                _portalAdminService.UppdateraAnvandarInfo(user, User.Identity.GetUserName());
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
             AddErrors(result);

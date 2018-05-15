@@ -175,7 +175,7 @@ namespace InrappAdmin.Web.Controllers
                 {
                     user.AndradAv = user.Email;
                     user.AndradDatum = DateTime.Now;
-                    _portalAdminService.UppdateraAnvandarInfo(user);
+                    _portalAdminService.UppdateraAnvandarInfo(user, User.Identity.GetUserName());
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
                 return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
@@ -207,7 +207,7 @@ namespace InrappAdmin.Web.Controllers
                     {
                         user.AndradAv = user.Email;
                         user.AndradDatum = DateTime.Now;
-                        _portalAdminService.UppdateraAnvandarInfo(user);
+                        _portalAdminService.UppdateraAnvandarInfo(user, User.Identity.GetUserName());
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     }
                     return RedirectToAction("Index", new { Message = ManageMessageId.SetPasswordSuccess });

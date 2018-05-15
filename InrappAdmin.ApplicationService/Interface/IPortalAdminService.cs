@@ -117,7 +117,7 @@ namespace InrappAdmin.ApplicationService.Interface
 
         void UppdateraFilkrav(AdmFilkrav filkrav, string userName);
 
-        void UppdateraAnvandarInfo(AppUserAdmin user);
+        void UppdateraAnvandarInfo(AppUserAdmin user, string userName);
 
         void SparaOppettider(OpeningHoursInfoDTO oppetTider, string userName);
 

@@ -491,8 +491,10 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.UpdateFileRequirement(filkrav);
         }
 
-        public void UppdateraAnvandarInfo(AppUserAdmin user)
+        public void UppdateraAnvandarInfo(AppUserAdmin user, string userName)
         {
+            user.AndradAv = userName;
+            user.AndradDatum = DateTime.Now;
             _portalAdminRepository.UpdateUserInfo(user);
         }
 

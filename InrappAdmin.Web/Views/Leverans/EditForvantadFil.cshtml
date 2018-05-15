@@ -32,7 +32,6 @@
             function() {
                 var tr = $(this).parents('tr:first');
                 var forvFilId = tr.find("#ForvantadfilId").html();
-                var forvFilFilkravId = tr.find("#FilkravId").val();
                 var forvFilFilmask = tr.find("#Filmask").val();
                 var forvFilRegexp = tr.find("#Regexp").val();
                 var forvFilObligatory;
@@ -53,7 +52,6 @@
                 var admForvantadFil =
                 {
                     "Id": forvFilId,
-                    "FilkravId": forvFilFilkravId,
                     "Filmask": forvFilFilmask,
                     "Regexp": forvFilRegexp,
                     "Obligatorisk": forvFilObligatory,
@@ -64,7 +62,7 @@
                 $.ajax({
                     url: '/Leverans/UpdateForvantadFil',
                     data: JSON.stringify({
-                        forvFil: admForvantadFil,
+                        forvFilModel: admForvantadFil,
                         regId: regId})
                     ,
                     type: 'POST',
@@ -139,10 +137,9 @@
                   mode: WebGridPagerModes.All,
                   columns: grid.Columns(
                         grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="ForvantadfilId" class="edit-mode colMinWidth">@item.Id</label></text>, style: "colMinWidth"),
-                        grid.Column("Filkravid", "Filkravid", format: @<text><span class="display-mode"><label id="lblFilkravId">@item.FilkravId</label></span>
-                        <input type="text" id="FilkravId" value="@item.FilkravId" class="edit-mode form-control" /></text>, style: "colMinWidth"),
-                        grid.Column("Delregister", "Delregister", format: @<text><span class="display-mode"><label id="lblDelregister">@item.DelregisterKortnamn</label></span>
-                        <input type="text" id="Delregister" value="@item.DelregisterKortnamn" class="edit-mode form-control" /></text>, style: "col1Width"),
+                        grid.Column("Delregister", format: @<text><span class="display-mode">@item.DelregisterKortnamn</span><label id="lblDelregister" class="edit-mode colMinWidth">@item.DelregisterKortnamn</label></text>, style: "colMinWidth"),
+                        grid.Column("Filkravnamn", format: @<text><span class="display-mode">@item.Filkravnamn</span><label id="lblFilkravnamn" class="edit-mode colMinWidth">@item.Filkravnamn</label></text>, style: "colMinWidth"),
+
                         grid.Column("Filmask", "Filmask", format: @<text><span class="display-mode"><label id="lblFilmask" style="width:350px;">@item.Filmask </label></span>
                         <input type="text" id="Filmask" value="@item.Filmask" class="edit-mode form-control" style="width: 400px !important;" /></text>, style: "col5Width"),
                         grid.Column("Regexp", "Regexp", format: @<text><span class="display-mode"><label id="lblRegexp" class="longColumnText" style="width: 200px;">@item.Regexp </label></span>

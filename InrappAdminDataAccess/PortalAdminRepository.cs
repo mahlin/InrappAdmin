@@ -500,7 +500,6 @@ namespace InrappAdmin.DataAccess
         public void UpdateExpectedFile(AdmForvantadfil forvFil)
         {
             var forvFileToUpdate = DbContext.AdmForvantadfil.SingleOrDefault(x => x.Id == forvFil.Id);
-            forvFileToUpdate.FilkravId = forvFil.FilkravId;
             forvFileToUpdate.Filmask = forvFil.Filmask;
             forvFileToUpdate.Regexp = forvFil.Regexp;
             forvFileToUpdate.Obligatorisk = forvFil.Obligatorisk;

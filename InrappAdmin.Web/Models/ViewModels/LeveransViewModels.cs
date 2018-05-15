@@ -51,6 +51,7 @@ namespace InrappAdmin.Web.Models.ViewModels
         {
             public int Id { get; set; }
             public int FilkravId { get; set; }
+            public string FilkravNamn { get; set; }
             public int? ForeskriftsId { get; set; }
             public string DelregisterKortnamn { get; set; }
             public string Filmask { get; set; }
