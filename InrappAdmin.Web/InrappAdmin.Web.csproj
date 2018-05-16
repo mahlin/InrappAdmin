@@ -313,6 +313,10 @@
     <Content Include="Views\Shared\_LayoutUtv.cshtml" />
     <Content Include="Views\Leverans\EditFilkrav.cshtml" />
     <Content Include="Views\Leverans\CreateFilkrav.cshtml" />
+    <Content Include="Views\System\EditHolidays.cshtml" />
+    <Content Include="Views\System\CreateHoliday.cshtml" />
+    <Content Include="Views\System\EditSpecialDays.cshtml" />
+    <Content Include="Views\System\CreateSpecialDay.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

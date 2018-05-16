@@ -164,8 +164,8 @@
             @Html.AntiForgeryToken()
             <div class="form-group">
                 <div class="row">
-                    <div class="col-md-8 padding-top-55">
-                        @Html.LabelFor(m => m.ClosedAnyway)
+                    <div class="col-md-12 padding-top-55">
+                        @Html.LabelFor(m => m.ClosedAnyway, new { @class = "control-label-medium" })
                         @Html.CheckBoxFor(m => m.ClosedAnyway)
                     </div>
                 </div>
@@ -173,8 +173,8 @@
 
             <div class="form-group">
                 <div class="row">
-                    <div class="col-md-8">
-                        @Html.Label("Dagar då portalen är stängd: ", new { @class = "control-label" })
+                    <div class="col-md-12">
+                        @Html.Label("Dagar då portalen är stängd: ", new { @class = "control-label-medium" })
                         <select id="ClDays" multiple="multiple">
                             @for (var i = 0; i < Model.ClosedDaysList.Count; i++)
                             {
@@ -188,9 +188,9 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-8">
-                        @Html.Label("Öppet från", new { @class = "control-label" })
+                        @Html.Label("Öppet från", new { @class = "control-label-medium" })
                         @*@Html.EditorFor(model => model.OpeningTime, new { @class = "form-control", style = "border-radius:40px" })*@
-                        @Html.TextBoxFor(m => m.OpeningTimeStr, new { @class = "form-control openFrom", style = "display:inline;width:170px;" })
+                        @Html.TextBoxFor(m => m.OpeningTimeStr, new { @class = "form-control openFrom", style = "display:inline;width:80px;" })
                         @Html.ValidationMessageFor(m => m.OpeningTimeStr, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -199,9 +199,9 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-8">
-                        @Html.Label("Öppet till", new { @class = "control-label" })
+                        @Html.Label("Öppet till", new { @class = "control-label-medium" })
                         @*@Html.EditorFor(model => model.OpeningTime, new { @class = "form-control", style = "border-radius:40px" })*@
-                        @Html.TextBoxFor(m => m.ClosingTimeStr, new { @class = "form-control openTo", style = "display:inline;width:170px;" })
+                        @Html.TextBoxFor(m => m.ClosingTimeStr, new { @class = "form-control openTo", style = "display:inline;width:80px;" })
                         @Html.ValidationMessageFor(m => m.ClosingTimeStr, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -223,7 +223,7 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-8">
-                        @Html.Label("Informationstext: ", new { @class = "control-label" })
+                        @Html.Label("Informationstext då portalen är stängd: ", new { @class = "control-label-wide" })
                         @Html.TextAreaFor(m => m.InfoTextForClosedPage, 5, 40, new { @class = "form-control required", style = "max-width:75% !important;" })
                     </div>
                 </div>
@@ -231,7 +231,7 @@
             <br />
 
             <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
+                <div class="col-md-offset-2 col-md-10" style="margin-left: 475px;">
                     <input type="submit" value="Spara" class="btn btn-default" />
                 </div>
             </div>

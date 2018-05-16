@@ -41,6 +41,9 @@ namespace InrappAdmin.DataAccess
         IEnumerable<AdmFAQKategori> GetFAQCategories();
 
         IEnumerable<AdmFAQ> GetFAQs(int faqCatId);
+        IEnumerable<AdmHelgdag> GetAllHolidays();
+
+        IEnumerable<AdmSpecialdag> GetAllSpecialDays();
 
         AdmFAQ GetFAQ(int faqId);
 
@@ -49,7 +52,9 @@ namespace InrappAdmin.DataAccess
         IEnumerable<AdmKonfiguration> GetAdmConfiguration();
 
         AdmInformation GetInfoText(string infoType);
-        
+
+        AdmInformation GetInfoText(int infoId);
+
         int GetPageInfoTextId(string pageType);
 
         AdmRegister GetDirectoryByShortName(string shortName);
@@ -100,7 +105,8 @@ namespace InrappAdmin.DataAccess
         void CreateFAQCategory(AdmFAQKategori faqCategory);
 
         void CreateFAQ(AdmFAQ faq);
-
+        void CreateHoliday(AdmHelgdag holiday);
+        void CreateSpecialDay(AdmSpecialdag specialDay);
         void CreateInformationText(AdmInformation infoText);
         void CreateReportObligation(AdmUppgiftsskyldighet uppgSk);
 
@@ -126,6 +132,10 @@ namespace InrappAdmin.DataAccess
 
         void UpdateFAQ(AdmFAQ faq);
 
+        void UpdateHoliday(AdmHelgdag holiday);
+
+        void UpdateSpecialDay(AdmSpecialdag specialDay);
+
         void UpdateInfoText(AdmInformation infoText);
 
         void UpdateDirectory(AdmRegister directory);
@@ -145,6 +155,10 @@ namespace InrappAdmin.DataAccess
         void DeleteFAQCategory(int faqCategoryId);
 
         void DeleteFAQ(int faqId);
+
+        void DeleteHoliday(int holidayId);
+
+        void DeleteSpecialDay(int specialDayId);
 
         void DeleteContact(string contactId);
     }

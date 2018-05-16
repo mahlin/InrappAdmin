@@ -16,8 +16,7 @@
 
     $(function() {
         $('.edit-mode').hide();
-        $('.edit-user, .cancel-user').on('click',
-            function() {
+        $('.edit-user, .cancel-user').on('click', function() {
                 var tr = $(this).parents('tr:first');
                 tr.find('.edit-mode, .display-mode').toggle();
             });

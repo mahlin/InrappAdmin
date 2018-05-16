@@ -1,5 +1,27 @@
 ﻿@using Microsoft.Ajax.Utilities
+<style>
+    .dropdown-submenu {
+        position: relative;
+    }
 
+    .dropdown-submenu .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -1px;
+    }
+</style>
+<script>
+    (function($){
+        $(document).ready(function(){
+            $('ul.dropdown-menu [data-toggle=dropdown]').on('click', function(event) {
+                event.preventDefault(); 
+                event.stopPropagation(); 
+                $(this).parent().siblings().removeClass('open');
+                $(this).parent().toggleClass('open');
+            });
+        });
+    })(jQuery);
+</script>
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -22,8 +44,73 @@
                         <li>@Html.ActionLink("FAQ", "GetFAQCategories", "System")</li>
                         <li>@Html.ActionLink("Informationssidor", "GetInformationTexts", "System")</li>
                         <li>@Html.ActionLink("Öppettider", "GetOpeningHours", "System")</li>
+                        <li class="dropdown-submenu">
+                            <a class="test" tabindex="-1" href="#">New dropdown <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a tabindex="-1" href="#">2nd level dropdown</a></li>
+                                <li><a tabindex="-1" href="#">2nd level dropdown</a></li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" href="#">Another dropdown <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">3rd level dropdown</a></li>
+                                        <li><a href="#">3rd level dropdown</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink("FAQ", "GetFAQCategories", "System")</li>
+                        <li>@Html.ActionLink("Informationssidor", "GetInformationTexts", "System")</li>
+                        <li class="dropdown dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Öppettider</a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Ordinarie öppettider", "GetOpeningHours", "System")</li>
+                                <li>@Html.ActionLink("Helgdagar", "GetHolidays", "System")</li>
+                                <li>@Html.ActionLink("Specialdagar", "GetSpecialDays", "System")</li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown Link 5</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Dropdown Submenu Link 5.1</a></li>
+                                <li><a href="#">Dropdown Submenu Link 5.2</a></li>
+                                <li><a href="#">Dropdown Submenu Link 5.3</a></li>
+                                <li class="divider"></li>
+                                <li class="dropdown dropdown-submenu">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown Submenu Link 5.4</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">Dropdown Submenu Link 5.4.1</a></li>
+                                        <li><a href="#">Dropdown Submenu Link 5.4.2</a></li>
+                                        <li class="divider"></li>
+                                        <li class="dropdown dropdown-submenu">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown Submenu Link 5.4.3</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">Dropdown Submenu Link 5.4.3.1</a></li>
+                                                <li><a href="#">Dropdown Submenu Link 5.4.3.2</a></li>
+                                                <li><a href="#">Dropdown Submenu Link 5.4.3.3</a></li>
+                                                <li><a href="#">Dropdown Submenu Link 5.4.3.4</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown dropdown-submenu">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown Submenu Link 5.4.4</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">Dropdown Submenu Link 5.4.4.1</a></li>
+                                                <li><a href="#">Dropdown Submenu Link 5.4.4.2</a></li>
+                                                <li><a href="#">Dropdown Submenu Link 5.4.4.3</a></li>
+                                                <li><a href="#">Dropdown Submenu Link 5.4.4.4</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Register och delregister <span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -32,11 +119,11 @@
                     </ul>
                 </li>
                 @*<li class="dropdown">
-                        <ul class="nav navbar-nav">
-                            <li><a data-toggle="collapse" data-target=".navbar-collapse">Sites<i class="glyphicon glyphicon-tree-conifer pull-left pull-left"></i></a></li>
-                            <li><a data-toggle="collapse" data-target=".navbar-collapse">Models<i class="glyphicon glyphicon-tower pull-left"></i></a></li>
-                        </ul>
-                    </li>*@
+            <ul class="nav navbar-nav">
+                <li><a data-toggle="collapse" data-target=".navbar-collapse">Sites<i class="glyphicon glyphicon-tree-conifer pull-left pull-left"></i></a></li>
+                <li><a data-toggle="collapse" data-target=".navbar-collapse">Models<i class="glyphicon glyphicon-tower pull-left"></i></a></li>
+            </ul>
+        </li>*@
                 @*<li>@Html.ActionLink("Register och delregister", "Index", "Home")</li>*@
 
                 <li class="dropdown">
@@ -47,10 +134,10 @@
                         <li>@Html.ActionLink("Organisationsenheter", "GetOrgUnits", "Organisation")</li>
                         <li>@Html.ActionLink("Uppgiftsskyldighet", "GetReportObligations", "Organisation")</li>
                         @*<li><a href="#">Something else here</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="#">Separated link</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="#">One more separated link</a></li>*@
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">One more separated link</a></li>*@
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -63,27 +150,27 @@
                     </ul>
                 </li>
                 @*<li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
             </ul>
             @if (Request.IsAuthenticated)
-            {
+        {
 
-                using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-                {
-                    @Html.AntiForgeryToken()
-
-                    <ul class="nav navbar-nav navbar-right" style="margin-top: 20px">
-                        <li>@Html.ActionLink("Min sida", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
-                        <li><a href="javascript:document.getElementById('logoutForm').submit()">Logga ut</a></li>
-                    </ul>
-                }
-            }
-            else
+            using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
             {
+                @Html.AntiForgeryToken()
+
                 <ul class="nav navbar-nav navbar-right" style="margin-top: 20px">
-                    <li>@Html.ActionLink("Logga in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+                    <li>@Html.ActionLink("Min sida", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
+                    <li><a href="javascript:document.getElementById('logoutForm').submit()">Logga ut</a></li>
                 </ul>
-            }
+        }
+    }
+    else
+    {
+        <ul class="nav navbar-nav navbar-right" style="margin-top: 20px">
+            <li>@Html.ActionLink("Logga in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        </ul>
+}
         </div>
     </div>
 </div>

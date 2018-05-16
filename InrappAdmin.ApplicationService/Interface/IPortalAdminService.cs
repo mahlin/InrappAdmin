@@ -30,13 +30,19 @@ namespace InrappAdmin.ApplicationService.Interface
 
         IEnumerable<AdmFAQ> HamtaFAQs(int faqCatId);
 
+        IEnumerable<AdmHelgdag> HamtaAllaHelgdagar();
+
+        IEnumerable<AdmSpecialdag> HamtaAllaSpecialdagar();
+
         AdmFAQ HamtaFAQ(int faqId);
 
         IEnumerable<AdmInformation> HamtaInformationstexter();
 
         OpeningHoursInfoDTO HamtaOppettider();
 
-        string HamtaInfoText(string infoTyp);
+        AdmInformation HamtaInfoText(string infoTyp);
+
+        AdmInformation HamtaInfo(int infoId);
 
         IEnumerable<AdmRegister> HamtaRegister();
 
@@ -79,6 +85,10 @@ namespace InrappAdmin.ApplicationService.Interface
 
         void SkapaFAQ(AdmFAQ faq, string userName);
 
+        void SkapaHelgdag(AdmHelgdag helgdag, string userName);
+
+        void SkapaSpecialdag(AdmSpecialdag specialdag, string userName);
+
         void SkapaInformationsText(AdmInformation infoText, string userName);
 
         void SkapaUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSk, string userName);
@@ -105,6 +115,10 @@ namespace InrappAdmin.ApplicationService.Interface
 
         void UppdateraFAQ(AdmFAQ faq, string userName);
 
+        void UppdateraHelgdag(AdmHelgdag holiday, string userName);
+
+        void UppdateraSpecialdag(AdmSpecialdag specialDay, string userName);
+
         void UppdateraInformationstext(AdmInformation infoText, string userName);
 
         void UppdateraRegister(AdmRegister register, string userName);
@@ -124,6 +138,10 @@ namespace InrappAdmin.ApplicationService.Interface
         void TaBortFAQKategori(int faqKategoriId);
 
         void TaBortFAQ(int faqId);
+
+        void TaBortHelgdag(int holidayId);
+
+        void TaBortSpecialdag(int specialDayId);
 
         void TaBortKontaktperson(string contactId);
 

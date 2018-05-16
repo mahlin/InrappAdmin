@@ -135,7 +135,7 @@ namespace InrappAdmin.Web.Controllers
                 model.OpeningTimeStr = admKonf.ClosedToHour.ToString() + ":" + admKonf.ClosedToMin.ToString();
                 //model.ClosingTime = SetTime(admKonf.ClosedFromHour, admKonf.ClosedFromMin);
                 model.ClosingTimeStr = admKonf.ClosedFromHour.ToString() + ":" + admKonf.ClosedFromMin.ToString();
-                model.InfoTextForClosedPage = _portalAdminService.HamtaInfoText("Stangtsida");
+                model.InfoTextForClosedPage = _portalAdminService.HamtaInfoText("Stangtsida").Text;
             }
             catch (Exception e)
             {
@@ -152,6 +152,56 @@ namespace InrappAdmin.Web.Controllers
             return View("EditOpeningHours", model);
         }
 
+
+        // GET: Helgdagar
+        [Authorize]
+        public ActionResult GetHolidays()
+        {
+            var model = new SystemViewModels.SystemViewModel();
+            try
+            {
+                var holidayList = _portalAdminService.HamtaAllaHelgdagar();
+                model.Holidays = ConvertAdmHelgdagToViewModel(holidayList.ToList());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("SystemController", "GetHolidays", e.ToString(), e.HResult, User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid hämtning av helgdagar.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+
+            }
+            return View("EditHolidays", model);
+        }
+
+        // GET: Specialdagar
+        [Authorize]
+        public ActionResult GetSpecialDays()
+        {
+            var model = new SystemViewModels.SystemViewModel();
+            try
+            {
+                var specialdaysList = _portalAdminService.HamtaAllaSpecialdagar();
+                model.SpecialDays = ConvertAdmSpecialdagToViewModel(specialdaysList.ToList());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("SystemController", "GetSpecialDays", e.ToString(), e.HResult, User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid hämtning av specialdagar.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+
+            }
+            return View("EditSpecialDays", model);
+        }
 
         [HttpPost]
         [Authorize]
@@ -207,6 +257,62 @@ namespace InrappAdmin.Web.Controllers
                 }
             }
             return RedirectToAction("GetFAQs", new { faqCatId = model.SelectedFAQ.FAQkategoriId });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult UpdateHoliday(SystemViewModels.AdmHelgdagViewModel holiday)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var userName = User.Identity.GetUserName();
+                    var holidayDb = ConvertViewModelToAdmHelgdag(holiday);
+                    _portalAdminService.UppdateraHelgdag(holidayDb, userName);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("SystemController", "UpdateHoliday", e.ToString(), e.HResult,
+                        User.Identity.Name);
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade vid uppdatering av helgdagsinformation.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
+            }
+            return RedirectToAction("GetHolidays");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult UpdateSpecialDay(SystemViewModels.AdmSpecialdagViewModel specialDay)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var userName = User.Identity.GetUserName();
+                    var specialDayDb = ConvertViewModelToAdmSpecialdag(specialDay);
+                    _portalAdminService.UppdateraSpecialdag(specialDayDb, userName);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("SystemController", "UpdateSpecialDay", e.ToString(), e.HResult,
+                        User.Identity.Name);
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade vid uppdatering av specialdagsinformation.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
+            }
+            return RedirectToAction("GetSpecialDays");
         }
 
         [HttpPost]
@@ -326,6 +432,106 @@ namespace InrappAdmin.Web.Controllers
                     return View("CustomError", errorModel);
                 }
                 return RedirectToAction("GetFAQs", new { faqCatId = model.FAQkategoriId });
+            }
+
+            return View();
+        }
+
+        // GET
+        [Authorize]
+        public ActionResult CreateHoliday()
+        {
+            var model = new SystemViewModels.AdmHelgdagViewModel();
+            // Ladda drop down lists. 
+            var informationList = _portalAdminService.HamtaInformationstexter();
+            this.ViewBag.InformationTextList = CreateInformationTextDropDownList(informationList);
+            model.SelectedInformationId = 0;
+            return View(model);
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public ActionResult CreateHoliday(SystemViewModels.AdmHelgdagViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var userName = User.Identity.GetUserName();
+
+                    AdmHelgdag holiday = new AdmHelgdag()
+                    {
+                        InformationsId = model.SelectedInformationId,
+                        Helgdatum = model.Helgdatum,
+                        Helgdag = model.Helgdag
+                    };
+                    _portalAdminService.SkapaHelgdag(holiday, userName);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("SystemController", "CreateHoliday", e.ToString(), e.HResult, User.Identity.Name);
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade när ny helgdag skulle läggas till.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
+                return RedirectToAction("GetHolidays");
+            }
+
+            return View();
+        }
+
+        // GET
+        [Authorize]
+        public ActionResult CreateSpecialDay()
+        {
+            var model = new SystemViewModels.AdmSpecialdagViewModel();
+            // Ladda drop down lists. 
+            var informationList = _portalAdminService.HamtaInformationstexter();
+            this.ViewBag.InformationTextList = CreateInformationTextDropDownList(informationList);
+            model.SelectedInformationId = 0;
+            return View(model);
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public ActionResult CreateSpecialDay(SystemViewModels.AdmSpecialdagViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var userName = User.Identity.GetUserName();
+
+                    AdmSpecialdag specialDay = new AdmSpecialdag()
+                    {
+                        InformationsId = model.SelectedInformationId,
+                        Specialdagdatum = model.Specialdagdatum,
+                        Oppna = model.Oppna,
+                        Stang = model.Stang,
+                        Anledning = model.Anledning
+                    };
+                    _portalAdminService.SkapaSpecialdag(specialDay, userName);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("SystemController", "CreateSpecialDay", e.ToString(), e.HResult, User.Identity.Name);
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade när ny specialdag skulle läggas till.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
+                return RedirectToAction("GetSpecialDays");
             }
 
             return View();
@@ -541,6 +747,50 @@ namespace InrappAdmin.Web.Controllers
             return RedirectToAction("GetFAQs", new { faqCatId = faqCatId });
         }
 
+        [HttpPost]
+        [Authorize]
+        public ActionResult DeleteHoliday(int holidayId)
+        {
+            try
+            {
+                _portalAdminService.TaBortHelgdag(holidayId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("SystemController", "DeleteHoliday", e.ToString(), e.HResult, User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade när helgdagsinformation skulle tas bort.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+            }
+            return RedirectToAction("GetHolidays");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult DeleteSpecialDay(int specialDayId)
+        {
+            try
+            {
+                _portalAdminService.TaBortSpecialdag(specialDayId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("SystemController", "DeleteSpecialDay", e.ToString(), e.HResult, User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade när information om specialdag skulle tas bort.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+            }
+            return RedirectToAction("GetSpecialDays");
+        }
+
 
         private DateTime SetTime(int hour, int minute)
         {
@@ -586,6 +836,66 @@ namespace InrappAdmin.Web.Controllers
             lstobj = new SelectList(list, "Value", "Text");
 
             return lstobj;
+        }
+
+        /// <summary>  
+        /// Create list for infotext-dropdown  
+        /// </summary>  
+        /// <returns>Return infotext-types for drop down list.</returns>  
+        private IEnumerable<SelectListItem> CreateInformationTextDropDownList(IEnumerable<AdmInformation> informationList)
+        {
+            SelectList lstobj = null;
+
+            var list = informationList
+                .Select(p =>
+                    new SelectListItem
+                    {
+                        Value = p.Id.ToString(),
+                        Text = p.Informationstyp
+                    });
+
+            // Setting.  
+            lstobj = new SelectList(list, "Value", "Text");
+
+            return lstobj;
+        }
+
+        private List<SystemViewModels.AdmHelgdagViewModel> ConvertAdmHelgdagToViewModel(List<AdmHelgdag> holidayList)
+        {
+            var holidayViewList = new List<SystemViewModels.AdmHelgdagViewModel>();
+            foreach (var holiday in holidayList)
+            {
+                var holidayView = new SystemViewModels.AdmHelgdagViewModel()
+                {
+                    Id = holiday.Id,
+                    Helgdatum = holiday.Helgdatum,
+                    Helgdag = holiday.Helgdag,
+                    Informationstyp = _portalAdminService.HamtaInfo(holiday.InformationsId).Informationstyp
+                };
+
+                holidayViewList.Add(holidayView);
+            }
+            return holidayViewList;
+        }
+
+        private List<SystemViewModels.AdmSpecialdagViewModel> ConvertAdmSpecialdagToViewModel(List<AdmSpecialdag> specialdagList)
+        {
+            var specialdayViewList = new List<SystemViewModels.AdmSpecialdagViewModel>();
+            foreach (var specialdag in specialdagList)
+            {
+                var specialdayView = new SystemViewModels.AdmSpecialdagViewModel()
+                {
+                    Id = specialdag.Id,
+                    Specialdagdatum = specialdag.Specialdagdatum,
+                    Oppna = specialdag.Oppna,
+                    Stang = specialdag.Stang,
+                    Anledning = specialdag.Anledning,
+                    Informationstyp = _portalAdminService.HamtaInfo(specialdag.InformationsId).Informationstyp
+                };
+
+                specialdayViewList.Add(specialdayView);
+            }
+            return specialdayViewList;
         }
 
         private List<SystemViewModels.FAQViewModel> ConvertAdmFAQToViewModel(List<AdmFAQ> faqList)
@@ -634,6 +944,32 @@ namespace InrappAdmin.Web.Controllers
             }
 
             return faqDb;
+        }
+
+        private AdmHelgdag ConvertViewModelToAdmHelgdag(SystemViewModels.AdmHelgdagViewModel holiday)
+        {
+            var holidayDb = new AdmHelgdag()
+            {
+                Id = holiday.Id,
+                InformationsId = _portalAdminService.HamtaInfoText(holiday.Informationstyp).Id,
+                Helgdatum = holiday.Helgdatum,
+                Helgdag = holiday.Helgdag
+            };
+            return holidayDb;
+        }
+
+        private AdmSpecialdag ConvertViewModelToAdmSpecialdag(SystemViewModels.AdmSpecialdagViewModel specialDay)
+        {
+            var specialDayDb = new AdmSpecialdag()
+            {
+                Id = specialDay.Id,
+                InformationsId = _portalAdminService.HamtaInfoText(specialDay.Informationstyp).Id,
+                Specialdagdatum = specialDay.Specialdagdatum,
+                Oppna = specialDay.Oppna,
+                Stang = specialDay.Stang,
+                Anledning = specialDay.Anledning,
+            };
+            return specialDayDb;
         }
     }
 }

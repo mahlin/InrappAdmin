@@ -27,10 +27,17 @@ namespace InrappAdmin.Web.Models.ViewModels
             [AllowHtml]
             public string SelectedInfoText { get; set; }
             public int SelectedInfoId { get; set; }
+            public int SelectedHolidayId { get; set; }
+
+            public int SelectedSpecialDayId { get; set; }
 
             public FAQViewModel SelectedFAQ { get; set; }
 
             public IEnumerable<AdmInformation> InfoPages { get; set; }
+
+            public IEnumerable<AdmHelgdagViewModel> Holidays { get; set; }
+
+            public IEnumerable<AdmSpecialdagViewModel> SpecialDays { get; set; }
 
             public  AdmKonfiguration AdmConfig { get; set; }
 
@@ -65,7 +72,28 @@ namespace InrappAdmin.Web.Models.ViewModels
             public string Informationstyp { get; set; }
             [AllowHtml]
             public string Text { get; set; }
+        }
 
+        public class AdmHelgdagViewModel
+        {
+            public int Id { get; set; }
+            public string Informationstyp { get; set; }
+            public int SelectedInformationId { get; set; }
+            public DateTime Helgdatum { get; set; }
+            public string Helgdag { get; set; }
+
+        }
+
+        public class AdmSpecialdagViewModel
+        {
+            public int Id { get; set; }
+            public string Informationstyp { get; set; }
+            public int SelectedInformationId { get; set; }
+            public DateTime Specialdagdatum { get; set; }
+            public TimeSpan Oppna { get; set; }
+            public TimeSpan Stang { get; set; }
+            public string Anledning { get; set; }
+           
         }
 
         public class OpeningHours

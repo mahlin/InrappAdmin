@@ -5,16 +5,16 @@ using System.Web;
 
 namespace InrappAdmin.DomainModel
 {
-    public class AdmInformation
+    public class AdmHelgdag
     {
         public int Id { get; set; }
-        public string Informationstyp{ get; set; }
-        public string Text { get; set; }
+        public int InformationsId { get; set; }
+        public DateTime Helgdatum { get; set; }
+        public string Helgdag { get; set; }
         public DateTime SkapadDatum { get; set; }
         public string SkapadAv { get; set; }
         public DateTime AndradDatum { get; set; }
         public string AndradAv { get; set; }
-        public virtual ICollection<AdmHelgdag> AdmHelgdag { get; set; }
-        public virtual ICollection<AdmSpecialdag> AdmSpecialdag { get; set; }
+        public virtual AdmInformation AdmInformation { get; set; }
     }
 }

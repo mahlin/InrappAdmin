@@ -87,6 +87,18 @@ namespace InrappAdmin.ApplicationService
             return faqs;
         }
 
+        public IEnumerable<AdmHelgdag> HamtaAllaHelgdagar()
+        {
+            var helgdagar = _portalAdminRepository.GetAllHolidays();
+            return helgdagar;
+        }
+
+        public IEnumerable<AdmSpecialdag> HamtaAllaSpecialdagar()
+        {
+            var specialdagar = _portalAdminRepository.GetAllSpecialDays();
+            return specialdagar;
+        }
+
         public IEnumerable<AdmInformation> HamtaInformationstexter()
         {
             var infoTexts = _portalAdminRepository.GetInformationTexts();
@@ -126,10 +138,16 @@ namespace InrappAdmin.ApplicationService
             return oppettiderObj;
         }
 
-        public string HamtaInfoText(string infoTyp)
+        public AdmInformation HamtaInfoText(string infoTyp)
         {
             var info = _portalAdminRepository.GetInfoText(infoTyp);
-            return info.Text;
+            return info;
+        }
+
+        public AdmInformation HamtaInfo(int infoId)
+        {
+            var info = _portalAdminRepository.GetInfoText(infoId);
+            return info;
         }
 
         public IEnumerable<AdmRegister> HamtaRegister()
@@ -334,6 +352,28 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.CreateFAQ(faq);
         }
 
+        public void SkapaHelgdag(AdmHelgdag helgdag, string userName)
+        {
+            //Sätt datum och användare
+            helgdag.SkapadDatum = DateTime.Now;
+            helgdag.SkapadAv = userName;
+            helgdag.AndradDatum = DateTime.Now;
+            helgdag.AndradAv = userName;
+
+            _portalAdminRepository.CreateHoliday(helgdag);
+        }
+
+        public void SkapaSpecialdag(AdmSpecialdag specialdag, string userName)
+        {
+            //Sätt datum och användare
+            specialdag.SkapadDatum = DateTime.Now;
+            specialdag.SkapadAv = userName;
+            specialdag.AndradDatum = DateTime.Now;
+            specialdag.AndradAv = userName;
+
+            _portalAdminRepository.CreateSpecialDay(specialdag);
+        }
+
         public void SkapaInformationsText(AdmInformation infoText, string userName)
         {
             //Sätt datum och användare
@@ -448,6 +488,21 @@ namespace InrappAdmin.ApplicationService
             faq.AndradAv = userName;
             _portalAdminRepository.UpdateFAQ(faq);
         }
+
+        public void UppdateraHelgdag(AdmHelgdag holiday, string userName)
+        {
+            holiday.AndradDatum = DateTime.Now;
+            holiday.AndradAv = userName;
+            _portalAdminRepository.UpdateHoliday(holiday);
+        }
+
+        public void UppdateraSpecialdag(AdmSpecialdag specialday, string userName)
+        {
+            specialday.AndradDatum = DateTime.Now;
+            specialday.AndradAv = userName;
+            _portalAdminRepository.UpdateSpecialDay(specialday);
+        }
+
 
         public void UppdateraInformationstext(AdmInformation infoText, string userName)
         {
@@ -604,7 +659,18 @@ namespace InrappAdmin.ApplicationService
 
         public void TaBortFAQ(int faqId)
         {
-            _portalAdminRepository.DeleteFAQ(faqId);}
+            _portalAdminRepository.DeleteFAQ(faqId);
+        }
+
+        public void TaBortHelgdag(int holidayId)
+        {
+            _portalAdminRepository.DeleteHoliday(holidayId);
+        }
+
+        public void TaBortSpecialdag(int specialDayId)
+        {
+            _portalAdminRepository.DeleteSpecialDay(specialDayId);
+        }
 
         public void TaBortKontaktperson(string contactId)
         {

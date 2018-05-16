@@ -155,6 +155,18 @@ namespace InrappAdmin.DataAccess
             return faqs;
         }
 
+        public IEnumerable<AdmHelgdag> GetAllHolidays()
+        {
+            var holidays = DbContext.AdmHelgdag.ToList();
+            return holidays;
+        }
+
+        public IEnumerable<AdmSpecialdag> GetAllSpecialDays()
+        {
+            var specialDays = DbContext.AdmSpecialdag.ToList();
+            return specialDays;
+        }
+
         public IEnumerable<AdmInformation> GetInformationTexts()
         {
             var infoTexts = DbContext.AdmInformation.ToList();
@@ -170,6 +182,12 @@ namespace InrappAdmin.DataAccess
         public AdmInformation GetInfoText(string infoType)
         {
             var infoText = DbContext.AdmInformation.SingleOrDefault(x => x.Informationstyp == infoType);
+            return infoText;
+        }
+
+        public AdmInformation GetInfoText(int infoId)
+        {
+            var infoText = DbContext.AdmInformation.SingleOrDefault(x => x.Id == infoId);
             return infoText;
         }
 
@@ -337,6 +355,17 @@ namespace InrappAdmin.DataAccess
             DbContext.SaveChanges();
         }
 
+        public void CreateHoliday(AdmHelgdag holiday)
+        {
+            DbContext.AdmHelgdag.Add(holiday);
+            DbContext.SaveChanges();
+        }
+
+        public void CreateSpecialDay(AdmSpecialdag specialDay)
+        {
+            DbContext.AdmSpecialdag.Add(specialDay);
+            DbContext.SaveChanges();
+        }
         public void CreateInformationText(AdmInformation infoText)
         {
             DbContext.AdmInformation.Add(infoText);
@@ -422,6 +451,8 @@ namespace InrappAdmin.DataAccess
             orgU.Enhetskod = orgUnit.Enhetskod;
             orgU.AktivFrom = orgUnit.AktivFrom;
             orgU.AktivTom = orgUnit.AktivTom;
+            orgU.AndradDatum = orgUnit.AndradDatum;
+            orgU.AndradAv = orgUnit.AndradAv;
             DbContext.SaveChanges(); 
         }
 
@@ -432,6 +463,9 @@ namespace InrappAdmin.DataAccess
             repObl.RapporterarPerEnhet = repObligation.RapporterarPerEnhet;
             repObl.SkyldigFrom = repObligation.SkyldigFrom;
             repObl.SkyldigTom = repObligation.SkyldigTom;
+            repObl.AndradDatum = repObligation.AndradDatum;
+            repObl.AndradAv = repObligation.AndradAv;
+
             DbContext.SaveChanges();
         }
 
@@ -439,6 +473,9 @@ namespace InrappAdmin.DataAccess
         {
             var faqCatDb = DbContext.AdmFAQKategori.Where(x => x.Id == faqCategory.Id).Select(x => x).SingleOrDefault();
             faqCatDb.Kategori = faqCategory.Kategori;
+            faqCatDb.AndradDatum = faqCategory.AndradDatum;
+            faqCatDb.AndradAv = faqCategory.AndradAv;
+
             DbContext.SaveChanges();
         }
 
@@ -448,6 +485,32 @@ namespace InrappAdmin.DataAccess
             faqDb.Fraga = faq.Fraga;
             faqDb.Svar = faq.Svar;
             faqDb.RegisterId = faq.RegisterId;
+            faqDb.AndradDatum = faq.AndradDatum;
+            faqDb.AndradAv = faq.AndradAv;
+
+            DbContext.SaveChanges();
+        }
+
+        public void UpdateHoliday(AdmHelgdag holiday)
+        {
+            var holidayDb = DbContext.AdmHelgdag.Where(x => x.Id == holiday.Id).Select(x => x).SingleOrDefault();
+            holidayDb.Helgdatum = holiday.Helgdatum;
+            holidayDb.Helgdag = holiday.Helgdag;
+            holidayDb.AndradDatum = holiday.AndradDatum;
+            holidayDb.AndradAv = holiday.AndradAv;
+
+            DbContext.SaveChanges();
+        }
+
+        public void UpdateSpecialDay(AdmSpecialdag specialDay)
+        {
+            var specialDayDb = DbContext.AdmSpecialdag.Where(x => x.Id == specialDay.Id).Select(x => x).SingleOrDefault();
+            specialDayDb.Specialdagdatum = specialDay.Specialdagdatum;
+            specialDayDb.Oppna = specialDay.Oppna;
+            specialDayDb.Stang = specialDay.Stang;
+            specialDayDb.Anledning = specialDay.Anledning;
+            specialDayDb.AndradAv = specialDay.AndradAv;
+            specialDayDb.AndradDatum = specialDay.AndradDatum;
             DbContext.SaveChanges();
         }
 
@@ -455,6 +518,9 @@ namespace InrappAdmin.DataAccess
         {
             var infoTextDb = DbContext.AdmInformation.Where(x => x.Id == infoText.Id).Select(x => x).SingleOrDefault();
             infoTextDb.Text = infoText.Text;
+            infoTextDb.AndradAv = infoText.AndradAv;
+            infoTextDb.AndradDatum = infoText.AndradDatum;
+
             DbContext.SaveChanges();
         }
 
@@ -465,6 +531,9 @@ namespace InrappAdmin.DataAccess
             registerToUpdate.Beskrivning = directory.Beskrivning;
             registerToUpdate.Kortnamn = directory.Kortnamn;
             registerToUpdate.Inrapporteringsportal = directory.Inrapporteringsportal;
+            registerToUpdate.AndradAv = directory.AndradAv;
+            registerToUpdate.AndradDatum = directory.AndradDatum;
+
             DbContext.SaveChanges();
         }
 
@@ -476,6 +545,9 @@ namespace InrappAdmin.DataAccess
             subDirectoryToUpdate.Kortnamn = subDirectory.Kortnamn;
             subDirectoryToUpdate.Inrapporteringsportal = subDirectory.Inrapporteringsportal;
             subDirectoryToUpdate.Slussmapp = subDirectory.Slussmapp;
+            subDirectoryToUpdate.AndradAv = subDirectory.AndradAv;
+            subDirectoryToUpdate.AndradDatum = subDirectory.AndradDatum;
+
             DbContext.SaveChanges();
         }
 
@@ -493,6 +565,9 @@ namespace InrappAdmin.DataAccess
             forvLevToUpdate.Paminnelse1 = forvLev.Paminnelse1;
             forvLevToUpdate.Paminnelse2 = forvLev.Paminnelse2;
             forvLevToUpdate.Paminnelse3 = forvLev.Paminnelse3;
+            forvLevToUpdate.AndradAv = forvLev.AndradAv;
+            forvLevToUpdate.AndradDatum = forvLev.AndradDatum;
+
             DbContext.SaveChanges();
         }
 
@@ -504,6 +579,9 @@ namespace InrappAdmin.DataAccess
             forvFileToUpdate.Regexp = forvFil.Regexp;
             forvFileToUpdate.Obligatorisk = forvFil.Obligatorisk;
             forvFileToUpdate.Tom= forvFil.Tom;
+            forvFileToUpdate.AndradAv = forvFil.AndradAv;
+            forvFileToUpdate.AndradDatum = forvFil.AndradDatum;
+
             DbContext.SaveChanges();
         }
 
@@ -511,6 +589,9 @@ namespace InrappAdmin.DataAccess
         {
             var filereqToUpdate = DbContext.AdmFilkrav.SingleOrDefault(x => x.Id == filkrav.Id);
             filereqToUpdate.Namn = filkrav.Namn;
+            filereqToUpdate.AndradAv = filkrav.AndradAv;
+            filereqToUpdate.AndradDatum = filkrav.AndradDatum;
+
             DbContext.SaveChanges();
         }
 
@@ -526,6 +607,9 @@ namespace InrappAdmin.DataAccess
         {
             var konfDb = DbContext.AdmKonfiguration.Where(x => x.Typ == admKonf.Typ).Select(x => x).FirstOrDefault();
             konfDb.Varde = admKonf.Varde;
+            konfDb.AndradAv = admKonf.AndradAv;
+            konfDb.AndradDatum = admKonf.AndradDatum;
+
             DbContext.SaveChanges();
         }
 
@@ -554,6 +638,26 @@ namespace InrappAdmin.DataAccess
             if (faqToDelete != null)
             {
                 DbContext.AdmFAQ.Remove(faqToDelete);
+                DbContext.SaveChanges();
+            }
+        }
+
+        public void DeleteHoliday(int holidayId)
+        {
+            var holidayToDelete = DbContext.AdmHelgdag.SingleOrDefault(x => x.Id == holidayId);
+            if (holidayToDelete != null)
+            {
+                DbContext.AdmHelgdag.Remove(holidayToDelete);
+                DbContext.SaveChanges();
+            }
+        }
+
+        public void DeleteSpecialDay(int specialDayId)
+        {
+            var specialDayToDelete = DbContext.AdmSpecialdag.SingleOrDefault(x => x.Id == specialDayId);
+            if (specialDayToDelete != null)
+            {
+                DbContext.AdmSpecialdag.Remove(specialDayToDelete);
                 DbContext.SaveChanges();
             }
         }
