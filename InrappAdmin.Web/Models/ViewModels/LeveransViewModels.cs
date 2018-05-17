@@ -34,11 +34,18 @@ namespace InrappAdmin.Web.Models.ViewModels
             public int DelregisterId { get; set; }
             public int SelectedDelregisterId { get; set; }
             public string DelregisterKortnamn { get; set; }
+            public IEnumerable<RegisterInfo> RegisterList { get; set; }
+            public IEnumerable<FilloggDetaljDTO> Leveranser { get; set; }
             public string Period { get; set; }
+            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public DateTime Uppgiftsstart { get; set; }
+            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public DateTime Uppgiftsslut { get; set; }
+            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public DateTime Rapporteringsstart { get; set; }
+            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public DateTime Rapporteringsslut { get; set; }
+            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public DateTime Rapporteringsenast { get; set; }
             public DateTime? Paminnelse1 { get; set; }
             public DateTime? Paminnelse2 { get; set; }
@@ -68,10 +75,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public string DelregisterKortnamn { get; set; }
             public int? ForeskriftsId { get; set; }
             public string Namn { get; set; }
-            public DateTime SkapadDatum { get; set; }
-            public string SkapadAv { get; set; }
-            public DateTime AndradDatum { get; set; }
-            public string AndradAv { get; set; }
+
         }
     }
 }

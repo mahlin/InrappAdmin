@@ -186,6 +186,44 @@ namespace InrappAdmin.ApplicationService
             return subDirectory;
         }
 
+        public IEnumerable<RegisterInfo> HamtaDelregisterOchFilkrav()
+        {
+            var delregMedFilkravList = new List<RegisterInfo>();
+
+            var delregList = _portalAdminRepository.GetAllSubDirectoriesForPortal();
+            foreach (var delreg in delregList)
+            {
+                var regFilkravList = new List<RegisterFilkrav>();
+                var regInfo = new RegisterInfo
+                {
+                    Id = delreg.Id,
+                    Kortnamn = delreg.Kortnamn
+                };
+
+                //Hämta varje delregisters filkrav
+                var filkravList = _portalAdminRepository.GetFileRequirementsForSubDirectory(delreg.Id).ToList();
+                foreach (var filkrav in filkravList)
+                {
+                    var regFilkrav = new RegisterFilkrav
+                    {
+                        Id = filkrav.Id
+                    };
+                    var namn = delreg.Kortnamn;
+                    if (filkrav.Namn != null)
+                    {
+                        namn = namn + " - " + filkrav.Namn;
+                    }
+                    regFilkrav.Namn = namn;
+                    regFilkravList.Add(regFilkrav);
+                }
+
+                regInfo.Filkrav = regFilkravList;
+                delregMedFilkravList.Add(regInfo);
+            }
+            return delregMedFilkravList;
+        }
+
+
         public IEnumerable<AdmForvantadleverans> HamtaForvantadeLeveranser()
         {
             var forvlevList = _portalAdminRepository.GetExpectedDeliveries();

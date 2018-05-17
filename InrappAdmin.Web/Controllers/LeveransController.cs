@@ -472,7 +472,8 @@ namespace InrappAdmin.Web.Controllers
         public ActionResult CreateForvantadLeverans()
         {
             // Ladda drop down lists
-            var model = new LeveransViewModels.AdmForvantadleveransViewModel(); 
+            var model = new LeveransViewModels.AdmForvantadleveransViewModel();
+            model.RegisterList = _portalAdminService.HamtaDelregisterOchFilkrav();
             var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
             this.ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
             model.SelectedDelregisterId = 0;

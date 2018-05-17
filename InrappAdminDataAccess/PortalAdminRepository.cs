@@ -312,6 +312,12 @@ namespace InrappAdmin.DataAccess
             return fileRequirementsList;
         }
 
+        public IEnumerable<AdmFilkrav> GetFileRequirementsForSubDirectory(int subdirId)
+        {
+            var fileRequirementList = DbContext.AdmFilkrav.Where(x => x.DelregisterId == subdirId).ToList();
+            return fileRequirementList;
+        }
+
         public IEnumerable<AdmRegister> GetAllRegisters()
         {
             var registersList = DbContext.AdmRegister.ToList();

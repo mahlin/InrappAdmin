@@ -5,9 +5,35 @@
 }
 
 <script type="text/javascript">
+
+    var registerLista = @Html.Raw(Json.Encode(Model.RegisterList));
+
     $(document).on('change', '#ddlDelregister', function () {
         $("#SelectedDelregisterId").val($('#ddlDelregister').val());
+        registerLista.forEach(function (register, index) {
+            if ($('#ddlDelregister').val() === register.Id.toString()) {
+                if ($('#ddlDelregister').val() !== 0) {
+                    //populera dropdown för filkrav
+                    addSelectFilkrav("FileRequirementsSelect-container", register.Filkrav);
+                    $('#filkravDropDown').show();
+                }
+            }
+        });
     });
+
+    function addSelectFilkrav(divname, filkrav) {
+        //$('#IngetAttRapporteraForPeriod').val(namn[0]);
+        var newDiv = document.createElement('div');
+        var html = ' <span style="white-space: nowrap; width: 360px;display: inline-block;">Filkrav: &nbsp;&nbsp<select id="ddlFilkrav" class="form-control ddl" style="width:175px;display:inline-block;padding-left:10px;">', i;
+        html += "<option value='0'> - Välj - </option>";
+        for (i = 0; i < filkrav.length; i++) {
+            html += "<option value='" + filkrav[i].Id + "'>" + filkrav[i].Namn + "</option>";
+        }
+        html += '</select></span>';
+        newDiv.innerHTML = html;
+        document.getElementById(divname).innerHTML = newDiv.innerHTML;
+        //document.getElementById(divname).appendChild(newDiv);
+    }
 
 </script>
 
@@ -33,6 +59,11 @@
         @Html.LabelFor(model => model.FilkravId, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.EditorFor(model => model.FilkravId, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    
+    <div hidden id="filkravDropDown" class="row col-md-12" style="margin-bottom: 5px;width: 350px;">
+        <div class="form-group" style="width: 320px !important;" id="FileRequirementsSelect-container">
         </div>
     </div>
 
