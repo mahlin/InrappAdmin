@@ -74,6 +74,10 @@ namespace InrappAdmin.Web.Controllers
             try
             {
                 var register = new AdmRegister();
+                if (model.RegisterShortName.IsNullOrWhiteSpace() && regShortName.IsNullOrWhiteSpace())
+                {
+                    return RedirectToAction("GetAllSubDirectories");
+                }
                 if (!model.RegisterShortName.IsNullOrWhiteSpace())
                 {
                     register = _portalAdminService.HamtaRegisterMedKortnamn(model.RegisterShortName);
@@ -82,10 +86,7 @@ namespace InrappAdmin.Web.Controllers
                 {
                     register = _portalAdminService.HamtaRegisterMedKortnamn(regShortName);
                 }
-                else
-                {
-                    RedirectToAction("GetAllSubDirectories");
-                }
+
                 model.RegisterShortName = regShortName;
                 model.SelectedDirectoryId = register.Id;
                 model.DelRegisters = _portalAdminService.HamtaDelRegisterForRegister(register.Id);
@@ -172,8 +173,11 @@ namespace InrappAdmin.Web.Controllers
                 try
                 {
                     var userName = User.Identity.GetUserName();
-                    var register = _portalAdminService.HamtaRegisterMedId(delRegister.RegisterId);
-                    regShortName = register.Kortnamn;
+                    if (delRegister.RegisterId != 0)
+                    {
+                        var register = _portalAdminService.HamtaRegisterMedId(delRegister.RegisterId);
+                        regShortName = register.Kortnamn;
+                    }
                     _portalAdminService.UppdateraDelregister(delRegister, userName);
                 }
                 catch (Exception e)
