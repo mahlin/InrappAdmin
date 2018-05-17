@@ -1,5 +1,18 @@
 ﻿@using Microsoft.Ajax.Utilities
 
+<script>
+    (function($){
+        $(document).ready(function(){
+            $('ul.dropdown-menu [data-toggle=dropdown]').on('click', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                $(this).parent().siblings().removeClass('open');
+                $(this).parent().toggleClass('open');
+            });
+        });
+    })(jQuery);
+</script>
+
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -17,17 +30,16 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav" style="margin-top: 20px">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">System <span class="caret"></span></a>
-                <li class="dropdown-submenu">
-                    <a class="test" tabindex="-1" href="#">New dropdown <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">System <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a tabindex="-1" href="#">2nd level dropdown</a></li>
-                        <li><a tabindex="-1" href="#">2nd level dropdown</a></li>
-                        <li class="dropdown-submenu">
-                            <a class="test" href="#">Another dropdown <span class="caret"></span></a>
+                        <li>@Html.ActionLink("FAQ", "GetFAQCategories", "System")</li>
+                        <li>@Html.ActionLink("Informationssidor", "GetInformationTexts", "System")</li>
+                        <li class="dropdown dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Öppettider</a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">3rd level dropdown</a></li>
-                                <li><a href="#">3rd level dropdown</a></li>
+                                <li>@Html.ActionLink("Ordinarie öppettider", "GetOpeningHours", "System")</li>
+                                <li>@Html.ActionLink("Helgdagar", "GetHolidays", "System")</li>
+                                <li>@Html.ActionLink("Specialdagar", "GetSpecialDays", "System")</li>
                             </ul>
                         </li>
                     </ul>
@@ -39,13 +51,6 @@
                         <li>@Html.ActionLink("Delregister", "GetAllSubDirectories", "Register")</li>
                     </ul>
                 </li>
-                @*<li class="dropdown">
-                        <ul class="nav navbar-nav">
-                            <li><a data-toggle="collapse" data-target=".navbar-collapse">Sites<i class="glyphicon glyphicon-tree-conifer pull-left pull-left"></i></a></li>
-                            <li><a data-toggle="collapse" data-target=".navbar-collapse">Models<i class="glyphicon glyphicon-tower pull-left"></i></a></li>
-                        </ul>
-                    </li>*@
-                @*<li>@Html.ActionLink("Register och delregister", "Index", "Home")</li>*@
 
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Organisation <span class="caret"></span></a>
@@ -70,8 +75,6 @@
                         <li>@Html.ActionLink("Leveranser", "GetDeliveries", "Leverans")</li>
                     </ul>
                 </li>
-                @*<li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
             </ul>
             @if (Request.IsAuthenticated)
             {

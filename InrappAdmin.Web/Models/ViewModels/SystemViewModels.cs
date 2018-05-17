@@ -79,6 +79,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public int Id { get; set; }
             public string Informationstyp { get; set; }
             public int SelectedInformationId { get; set; }
+            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public DateTime Helgdatum { get; set; }
             public string Helgdag { get; set; }
 
@@ -89,6 +90,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public int Id { get; set; }
             public string Informationstyp { get; set; }
             public int SelectedInformationId { get; set; }
+            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public DateTime Specialdagdatum { get; set; }
             public TimeSpan Oppna { get; set; }
             public TimeSpan Stang { get; set; }
