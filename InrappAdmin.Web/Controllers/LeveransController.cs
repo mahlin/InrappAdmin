@@ -476,7 +476,9 @@ namespace InrappAdmin.Web.Controllers
             model.RegisterList = _portalAdminService.HamtaDelregisterOchFilkrav();
             var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
             this.ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
+            ViewBag.FilkravList = CreateDummyFilkravDropDownList();
             model.SelectedDelregisterId = 0;
+            model.SelectedFilkravId = 0;
             return View(model);
         }
 
@@ -494,7 +496,7 @@ namespace InrappAdmin.Web.Controllers
 
                     var admForvlev = new AdmForvantadleverans();
                     admForvlev.DelregisterId = forvantadLeverans.SelectedDelregisterId;
-                    admForvlev.FilkravId = forvantadLeverans.FilkravId;
+                    admForvlev.FilkravId = forvantadLeverans.SelectedFilkravId;
                     admForvlev.Period = forvantadLeverans.Period;
                     admForvlev.Uppgiftsstart = forvantadLeverans.Uppgiftsstart;
                     admForvlev.Uppgiftsslut = forvantadLeverans.Uppgiftsslut;
@@ -753,6 +755,21 @@ namespace InrappAdmin.Web.Controllers
 
             // Setting.  
             lstobj = new SelectList(list, "Value", "Text");
+
+            return lstobj;
+        }
+
+        /// <summary>  
+        /// Create dummt-list for filkrav-dropdown  
+        /// </summary>  
+        /// <returns>Return dummy for drop down list.</returns>  
+        private IEnumerable<SelectListItem> CreateDummyFilkravDropDownList()
+        {
+            SelectList lstobj = null;
+
+            var list = new List<SelectListItem>();
+
+            lstobj = new SelectList(list,"Value", "Text");
 
             return lstobj;
         }

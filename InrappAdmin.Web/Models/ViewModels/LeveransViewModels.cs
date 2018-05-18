@@ -33,6 +33,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public string FilkravNamn { get; set; }
             public int DelregisterId { get; set; }
             public int SelectedDelregisterId { get; set; }
+            public int SelectedFilkravId { get; set; }
             public string DelregisterKortnamn { get; set; }
             public IEnumerable<RegisterInfo> RegisterList { get; set; }
             public IEnumerable<FilloggDetaljDTO> Leveranser { get; set; }
