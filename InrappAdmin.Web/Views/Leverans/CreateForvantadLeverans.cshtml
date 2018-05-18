@@ -56,7 +56,8 @@
 <div class="form-horizontal padding-top-55">
     <h4>Skapa förväntad leverans</h4>
     <hr />
-
+    
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
         @Html.Label("Delregister", new { @class = "control-label col-md-2" })
         <div class="col-md-10" style="width: 225px !important;">

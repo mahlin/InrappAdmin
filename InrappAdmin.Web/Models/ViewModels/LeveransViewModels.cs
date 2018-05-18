@@ -58,6 +58,9 @@ namespace InrappAdmin.Web.Models.ViewModels
         public class AdmForvantadfilViewModel
         {
             public int Id { get; set; }
+            public IEnumerable<RegisterInfo> RegisterList { get; set; }
+            public int SelectedDelregisterId { get; set; }
+            public int SelectedFilkravId { get; set; }
             public int FilkravId { get; set; }
             public string FilkravNamn { get; set; }
             public int? ForeskriftsId { get; set; }

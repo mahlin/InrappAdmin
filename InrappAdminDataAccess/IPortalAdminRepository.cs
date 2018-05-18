@@ -100,6 +100,8 @@ namespace InrappAdmin.DataAccess
 
         string GetPeriodForAktuellLeverans(int forvLevid);
 
+        AdmForeskrift GetForeskriftByFileReq(int fileReqId);
+
         IEnumerable<LevereradFil> GetFilerForLeveransId(int leveransId);
 
         void CreateOrgUnit(Organisationsenhet orgUnit);

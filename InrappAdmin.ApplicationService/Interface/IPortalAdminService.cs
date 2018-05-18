@@ -79,6 +79,8 @@ namespace InrappAdmin.ApplicationService.Interface
 
         string HamtaNamnForFilkrav(int filkravId);
 
+        AdmForeskrift HamtaForeskriftByFilkrav(int filkravId);
+
         IEnumerable<FilloggDetaljDTO> HamtaHistorikForOrganisation(int orgId);
 
         void SkapaOrganisationsenhet(Organisationsenhet orgUnit, string userName);

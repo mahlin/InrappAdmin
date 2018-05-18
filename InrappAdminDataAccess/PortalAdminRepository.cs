@@ -342,6 +342,13 @@ namespace InrappAdmin.DataAccess
             return faq;
         }
 
+        public AdmForeskrift GetForeskriftByFileReq(int fileReqId)
+        {
+            var filkrav = DbContext.AdmFilkrav.FirstOrDefault(x => x.Id == fileReqId);
+            var foreskrift = DbContext.AdmForeskrift.FirstOrDefault(x => x.Id == filkrav.ForeskriftsId);
+            return foreskrift;
+        }
+
         public void CreateOrgUnit(Organisationsenhet orgUnit)
         {
             DbContext.Organisationsenhet.Add(orgUnit);

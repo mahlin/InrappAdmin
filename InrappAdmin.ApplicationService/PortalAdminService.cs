@@ -357,6 +357,12 @@ namespace InrappAdmin.ApplicationService
             return sorteradHistorikLista;
         }
 
+        public AdmForeskrift HamtaForeskriftByFilkrav(int filkravId)
+        {
+            var foreskrift = _portalAdminRepository.GetForeskriftByFileReq(filkravId);
+            return foreskrift;
+        }
+
         public void SkapaOrganisationsenhet(Organisationsenhet orgUnit, string userName)
         {
             //Sätt datum och användare

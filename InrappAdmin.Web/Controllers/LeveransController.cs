@@ -526,7 +526,15 @@ namespace InrappAdmin.Web.Controllers
         [Authorize]
         public ActionResult CreateForvantadFil()
         {
-            return View();
+            // Ladda drop down lists
+            var model = new LeveransViewModels.AdmForvantadfilViewModel();
+            model.RegisterList = _portalAdminService.HamtaDelregisterOchFilkrav();
+            var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
+            this.ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
+            ViewBag.FilkravList = CreateDummyFilkravDropDownList();
+            model.SelectedDelregisterId = 0;
+            model.SelectedFilkravId = 0;
+            return View(model);
         }
 
         // POST
@@ -542,7 +550,8 @@ namespace InrappAdmin.Web.Controllers
                     var userName = User.Identity.GetUserName();
 
                     var admForvFil = new AdmForvantadfil();
-                    admForvFil.FilkravId = forvantadFil.FilkravId;
+                    admForvFil.FilkravId = forvantadFil.SelectedFilkravId;
+                    admForvFil.ForeskriftsId = _portalAdminService.HamtaForeskriftByFilkrav(forvantadFil.SelectedFilkravId).Id;
                     admForvFil.Filmask= forvantadFil.Filmask;
                     admForvFil.Regexp = forvantadFil.Regexp;
                     admForvFil.Obligatorisk = forvantadFil.Obligatorisk;
