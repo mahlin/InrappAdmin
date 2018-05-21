@@ -34,6 +34,8 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<ApplicationUser> GetContactPersonsForOrg(int orgId);
 
+        IEnumerable<AppUserAdmin> GetAdminUsers();
+
         IEnumerable<Organisationsenhet> GetOrgUnitsForOrg(int orgId);
 
         IEnumerable<AdmUppgiftsskyldighet> GetReportObligationInformationForOrg(int orgId);
@@ -128,6 +130,7 @@ namespace InrappAdmin.DataAccess
 
         void UpdateContactPerson(ApplicationUser user);
 
+        void UpdateAdminUser(AppUserAdmin user);
         void UpdateOrgUnit(Organisationsenhet orgUnit);
 
         void UpdateReportObligation(AdmUppgiftsskyldighet repObligation);
@@ -165,5 +168,7 @@ namespace InrappAdmin.DataAccess
         void DeleteSpecialDay(int specialDayId);
 
         void DeleteContact(string contactId);
+
+        void DeleteAdminUser(string userId);
     }
 }

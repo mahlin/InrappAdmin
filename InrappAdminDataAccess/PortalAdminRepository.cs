@@ -124,6 +124,12 @@ namespace InrappAdmin.DataAccess
             return contacts;
         }
 
+        public IEnumerable<AppUserAdmin> GetAdminUsers()
+        {
+            var adminUsers = IdentityDbContext.Users.ToList();
+            return adminUsers;
+        }
+
         public IEnumerable<Organisationsenhet> GetOrgUnitsForOrg(int orgId)
         {
             var orgUnits = DbContext.Organisationsenhet.Where(x => x.OrganisationsId == orgId).ToList();
@@ -445,16 +451,26 @@ namespace InrappAdmin.DataAccess
             DbContext.SaveChanges();
         }
 
+        public void UpdateAdminUser(AppUserAdmin user)
+        {
+            var usrDb = IdentityDbContext.Users.Where(u => u.Id == user.Id).Select(u => u).SingleOrDefault();
+            usrDb.PhoneNumber= user.PhoneNumber;
+            usrDb.Email = user.Email;
+            usrDb.AndradDatum = user.AndradDatum;
+            usrDb.AndradAv = user.AndradAv;
+            IdentityDbContext.SaveChanges(); 
+        }
+
         public void UpdateContactPerson(ApplicationUser user)
         {
             var usrDb = DbContext.ApplicationUser.Where(u => u.Id == user.Id).Select(u => u).SingleOrDefault();
-            usrDb.PhoneNumber= user.PhoneNumber;
+            usrDb.PhoneNumber = user.PhoneNumber;
             usrDb.PhoneNumberConfirmed = user.PhoneNumberConfirmed;
             usrDb.AktivFrom = user.AktivFrom;
             usrDb.AktivTom = user.AktivTom;
             usrDb.AndradDatum = user.AndradDatum;
             usrDb.AndradAv = user.AndradAv;
-            DbContext.SaveChanges(); 
+            DbContext.SaveChanges();
         }
 
         public void UpdateOrgUnit(Organisationsenhet orgUnit)
@@ -692,6 +708,13 @@ namespace InrappAdmin.DataAccess
                 DbContext.ApplicationUser.Remove(contactToDelete);
                 DbContext.SaveChanges();
             }
+        }
+
+        public void DeleteAdminUser(string userId)
+        {
+            var cuserToDelete = IdentityDbContext.Users.SingleOrDefault(x => x.Id == userId);
+            IdentityDbContext.Users.Remove(cuserToDelete);
+            IdentityDbContext.SaveChanges();
         }
 
 

@@ -83,6 +83,8 @@ namespace InrappAdmin.ApplicationService.Interface
 
         IEnumerable<FilloggDetaljDTO> HamtaHistorikForOrganisation(int orgId);
 
+        IEnumerable<AppUserAdmin> HamtaAdminUsers();
+
         void SkapaOrganisationsenhet(Organisationsenhet orgUnit, string userName);
 
         void SkapaFAQKategori(AdmFAQKategori faqKategori, string userName);
@@ -110,6 +112,8 @@ namespace InrappAdmin.ApplicationService.Interface
         void UppdateraOrganisation(Organisation org, string userName);
 
         void UppdateraKontaktperson(ApplicationUser user, string userName);
+
+        void UppdateraAdminAnvandare(AppUserAdmin user, string userName);
 
         void UppdateraOrganisationsenhet(Organisationsenhet orgUnit, string userName);
 
@@ -148,6 +152,8 @@ namespace InrappAdmin.ApplicationService.Interface
         void TaBortSpecialdag(int specialDayId);
 
         void TaBortKontaktperson(string contactId);
+
+        void TaBortAdminAnvandare(string userId);
 
         List<OpeningDay> MarkeraStangdaDagar(List<string> closedDays);
 

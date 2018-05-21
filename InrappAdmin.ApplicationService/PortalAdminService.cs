@@ -40,6 +40,12 @@ namespace InrappAdmin.ApplicationService
             return contacts;
         }
 
+        public IEnumerable<AppUserAdmin> HamtaAdminUsers()
+        {
+            var adminUsers = _portalAdminRepository.GetAdminUsers();
+            return adminUsers;
+        }
+
         public Organisation HamtaOrganisationForKommunkod(string kommunkod)
         {
             var org = _portalAdminRepository.GetOrganisationFromKommunkod(kommunkod);
@@ -503,6 +509,13 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.UpdateContactPerson(user);
         }
 
+        public void UppdateraAdminAnvandare(AppUserAdmin user, string userName)
+        {
+            user.AndradDatum = DateTime.Now;
+            user.AndradAv = userName;
+            _portalAdminRepository.UpdateAdminUser(user);
+        }
+
         public void UppdateraOrganisationsenhet(Organisationsenhet orgUnit, string userName)
         {
             //Sätt datum och användare
@@ -721,6 +734,10 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.DeleteContact(contactId);
         }
 
+        public void TaBortAdminAnvandare(string userId)
+        {
+            _portalAdminRepository.DeleteAdminUser(userId);
+        }
 
     }
 }
