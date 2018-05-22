@@ -151,13 +151,13 @@ namespace InrappAdmin.DataAccess
         public IEnumerable<AdmFAQKategori> GetFAQCategories()
         {
             //var faqCats = DbContext.AdmFAQKategori.Include(x => x.AdmFAQ).ToList();
-            var faqCats = DbContext.AdmFAQKategori.ToList();
+            var faqCats = DbContext.AdmFAQKategori.OrderBy(x => x.Sortering).ToList();
             return faqCats;
         }
 
         public IEnumerable<AdmFAQ> GetFAQs(int faqCatId)
         {
-            var faqs = DbContext.AdmFAQ.Where(x => x.FAQkategoriId == faqCatId).ToList();
+            var faqs = DbContext.AdmFAQ.Where(x => x.FAQkategoriId == faqCatId).OrderBy(x => x.Sortering).ToList();
             return faqs;
         }
 
@@ -502,6 +502,7 @@ namespace InrappAdmin.DataAccess
         {
             var faqCatDb = DbContext.AdmFAQKategori.Where(x => x.Id == faqCategory.Id).Select(x => x).SingleOrDefault();
             faqCatDb.Kategori = faqCategory.Kategori;
+            faqCatDb.Sortering = faqCategory.Sortering;
             faqCatDb.AndradDatum = faqCategory.AndradDatum;
             faqCatDb.AndradAv = faqCategory.AndradAv;
 
@@ -513,6 +514,7 @@ namespace InrappAdmin.DataAccess
             var faqDb = DbContext.AdmFAQ.Where(x => x.Id == faq.Id).Select(x => x).SingleOrDefault();
             faqDb.Fraga = faq.Fraga;
             faqDb.Svar = faq.Svar;
+            faqDb.Sortering = faq.Sortering;
             faqDb.RegisterId = faq.RegisterId;
             faqDb.AndradDatum = faq.AndradDatum;
             faqDb.AndradAv = faq.AndradAv;

@@ -21,6 +21,8 @@ namespace InrappAdmin.Web.Models.ViewModels
 
             public int SelectedFAQCategory { get; set; }
 
+            public string SelectedFAQCategoryName { get; set; }
+
             public int SelectedFAQId { get; set; }
 
             public string SelectedInfo { get; set; }
@@ -48,6 +50,7 @@ namespace InrappAdmin.Web.Models.ViewModels
         public class FAQCategoryViewModel
         {
             public string Kategori{ get; set; }
+            public int? Sortering { get; set; }
 
         }
 
@@ -61,6 +64,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public string Fraga { get; set; }
             [AllowHtml]
             public string Svar { get; set; }
+            public int? Sortering { get; set; }
 
         }
 

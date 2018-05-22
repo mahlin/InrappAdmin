@@ -60,7 +60,7 @@ namespace InrappAdmin.Web.Controllers
 
         // GET: FAQs
         [Authorize]
-        public ActionResult GetFAQs(int faqCatId = 0)
+        public ActionResult GetFAQs(int faqCatId = 0, string faqCatName = "")
         {
             var model = new SystemViewModels.SystemViewModel();
             try
@@ -68,6 +68,7 @@ namespace InrappAdmin.Web.Controllers
                 var faqs = _portalAdminService.HamtaFAQs(faqCatId);
                 model.FAQs = ConvertAdmFAQToViewModel(faqs.ToList());
                 model.SelectedFAQCategory = faqCatId;
+                model.SelectedFAQCategoryName = faqCatName;
                 // Ladda drop down lists. 
                 var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
                 this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
@@ -416,7 +417,8 @@ namespace InrappAdmin.Web.Controllers
                         FAQkategoriId = model.FAQkategoriId,
                         RegisterId = model.SelectedRegisterId,
                         Fraga = model.Fraga,
-                        Svar = model.Svar
+                        Svar = model.Svar,
+                        Sortering = model.Sortering
                     };
                     _portalAdminService.SkapaFAQ(faq, userName);
                 }
@@ -549,6 +551,7 @@ namespace InrappAdmin.Web.Controllers
             model.SelectedFAQ.Id = selectedFAQDb.Id;
             model.SelectedFAQ.Fraga = selectedFAQDb.Fraga;
             model.SelectedFAQ.Svar = selectedFAQDb.Svar;
+            model.SelectedFAQ.Sortering = selectedFAQDb.Sortering;
 
             if (selectedFAQDb.RegisterId != null)
             {
@@ -590,7 +593,8 @@ namespace InrappAdmin.Web.Controllers
                         FAQkategoriId = model.SelectedFAQ.FAQkategoriId,
                         RegisterId = model.SelectedFAQ.RegisterId,
                         Fraga = model.SelectedFAQ.Fraga,
-                        Svar = model.SelectedFAQ.Svar
+                        Svar = model.SelectedFAQ.Svar,
+                        Sortering = model.SelectedFAQ.Sortering
 
                     };
                     _portalAdminService.UppdateraFAQ(faq, userName);
@@ -910,7 +914,8 @@ namespace InrappAdmin.Web.Controllers
                     SelectedRegisterId = faq.RegisterId,
                     FAQkategoriId = faq.FAQkategoriId,
                     Fraga = faq.Fraga,
-                    Svar = faq.Svar
+                    Svar = faq.Svar,
+                    Sortering = faq.Sortering
                 };
 
                 if (faq.RegisterId != null )
@@ -931,7 +936,8 @@ namespace InrappAdmin.Web.Controllers
                 Id = faq.Id,
                 FAQkategoriId = faq.FAQkategoriId,
                 Fraga = faq.Fraga,
-                Svar = faq.Svar
+                Svar = faq.Svar,
+                Sortering = faq.Sortering
             };
 
             if (faq.SelectedRegisterId == 0)

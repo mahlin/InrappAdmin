@@ -323,6 +323,7 @@ namespace InrappAdmin.DataAccess
             modelBuilder.Entity<AdmFAQKategori>().ToTable("admFAQKategori");
             modelBuilder.Entity<AdmFAQKategori>().Property(e => e.Id).HasColumnName("faqkategoriid");
             modelBuilder.Entity<AdmFAQKategori>().Property(e => e.Kategori).HasColumnName("kategori");
+            modelBuilder.Entity<AdmFAQKategori>().Property(e => e.Sortering).HasColumnName("sortering");
             modelBuilder.Entity<AdmFAQKategori>().Property(e => e.SkapadDatum).HasColumnName("skapaddatum");
             modelBuilder.Entity<AdmFAQKategori>().Property(e => e.SkapadAv).HasColumnName("skapadav");
             modelBuilder.Entity<AdmFAQKategori>().Property(e => e.AndradDatum).HasColumnName("andraddatum");
@@ -339,6 +340,7 @@ namespace InrappAdmin.DataAccess
                 .HasForeignKey(c => c.FAQkategoriId);
             modelBuilder.Entity<AdmFAQ>().Property(e => e.Fraga).HasColumnName("fraga");
             modelBuilder.Entity<AdmFAQ>().Property(e => e.Svar).HasColumnName("svar");
+            modelBuilder.Entity<AdmFAQ>().Property(e => e.Sortering).HasColumnName("sortering");
             modelBuilder.Entity<AdmFAQ>().Property(e => e.SkapadDatum).HasColumnName("skapaddatum");
             modelBuilder.Entity<AdmFAQ>().Property(e => e.SkapadAv).HasColumnName("skapadav");
             modelBuilder.Entity<AdmFAQ>().Property(e => e.AndradDatum).HasColumnName("andraddatum");

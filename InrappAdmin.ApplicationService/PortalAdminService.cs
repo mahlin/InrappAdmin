@@ -536,6 +536,7 @@ namespace InrappAdmin.ApplicationService
         {
             faqKategori.AndradDatum = DateTime.Now;
             faqKategori.AndradAv = userName;
+            faqKategori.Sortering = Convert.ToInt32(faqKategori.Sortering);
             _portalAdminRepository.UpdateFAQCategory(faqKategori);
         }
 
