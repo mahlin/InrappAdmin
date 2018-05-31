@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.WebPages;
 using InrappAdmin.ApplicationService;
 using InrappAdmin.ApplicationService.DTOModel;
 using InrappAdmin.ApplicationService.Interface;
@@ -68,7 +69,16 @@ namespace InrappAdmin.Web.Controllers
                 var faqs = _portalAdminService.HamtaFAQs(faqCatId);
                 model.FAQs = ConvertAdmFAQToViewModel(faqs.ToList());
                 model.SelectedFAQCategory = faqCatId;
-                model.SelectedFAQCategoryName = faqCatName;
+                if (faqCatId != 0 && faqCatName.IsEmpty())
+                {
+                    var faqCat = _portalAdminService.HamtaFAQKategori(faqCatId);
+                    model.SelectedFAQCategoryName = faqCat.Kategori;
+                }
+                else
+                {
+                    model.SelectedFAQCategoryName = faqCatName;
+                }
+                
                 // Ladda drop down lists. 
                 var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
                 this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
@@ -420,6 +430,11 @@ namespace InrappAdmin.Web.Controllers
                         Svar = model.Svar,
                         Sortering = model.Sortering
                     };
+
+                    if (model.SelectedRegisterId == 0)
+                    {
+                        faq.RegisterId = null;
+                    }
                     _portalAdminService.SkapaFAQ(faq, userName);
                 }
                 catch (Exception e)

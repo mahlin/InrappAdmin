@@ -36,6 +36,8 @@ namespace InrappAdmin.ApplicationService.Interface
 
         AdmFAQ HamtaFAQ(int faqId);
 
+        AdmFAQKategori HamtaFAQKategori(int faqCatId);
+
         IEnumerable<AdmInformation> HamtaInformationstexter();
 
         OpeningHoursInfoDTO HamtaOppettider();

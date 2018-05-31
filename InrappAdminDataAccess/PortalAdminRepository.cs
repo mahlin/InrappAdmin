@@ -342,6 +342,12 @@ namespace InrappAdmin.DataAccess
             return delregistersList;
         }
 
+        public AdmFAQKategori GetFAQCategory(int faqCatId)
+        {
+            var faqCat = DbContext.AdmFAQKategori.SingleOrDefault(x => x.Id == faqCatId);
+            return faqCat;
+        }
+
         public AdmFAQ GetFAQ(int faqId)
         {
             var faq = DbContext.AdmFAQ.SingleOrDefault(x => x.Id == faqId);

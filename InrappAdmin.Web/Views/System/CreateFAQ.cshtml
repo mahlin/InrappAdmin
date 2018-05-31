@@ -12,10 +12,20 @@
         $("#SelectedRegisterId").val($('#ddlRegister').val());
     });
 
+    //$(document).on('submit', '#faqForm', function (e) {
+    //    var x = $('#SelectedRegisterId').val();
+    //    if ($('#SelectedRegisterId').val() === "0") {
+    //        alert("Inget register valt");
+    //        e.preventDefault();
+    //    } else {
+    //        alert("Valt registerid: " + $('#SelectedRegisterId').val());
+    //    }
+    //});
+
 </script>
 
 
-@using (Html.BeginForm("CreateFAQ", "System", FormMethod.Post))
+@using (Html.BeginForm("CreateFAQ", "System", FormMethod.Post, new { id = "faqForm" }))
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.FAQkategoriId)

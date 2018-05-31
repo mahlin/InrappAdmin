@@ -308,6 +308,12 @@ namespace InrappAdmin.ApplicationService
             return filkrav;
         }
 
+        public AdmFAQKategori HamtaFAQKategori(int faqCatId)
+        {
+            var faqcat = _portalAdminRepository.GetFAQCategory(faqCatId);
+            return faqcat;
+        }
+
         public AdmFAQ HamtaFAQ(int faqId)
         {
             var faq = _portalAdminRepository.GetFAQ(faqId);
@@ -740,5 +746,6 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.DeleteAdminUser(userId);
         }
 
+ 
     }
 }
