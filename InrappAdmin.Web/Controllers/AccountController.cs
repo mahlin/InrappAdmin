@@ -224,7 +224,7 @@ namespace InrappAdmin.Web.Controllers
 
                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                await UserManager.SendEmailAsync(user.Id, "Återställ pinkod", "Vänligen återställ ditt lösenord genom att klicka <a href=\"" + callbackUrl + "\">här</a>");
+                await UserManager.SendEmailAsync(user.Id, "Återställ lösenord", "Vänligen återställ ditt lösenord genom att klicka <a href=\"" + callbackUrl + "\">här</a>");
 
                 return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
@@ -247,7 +247,32 @@ namespace InrappAdmin.Web.Controllers
         [AllowAnonymous]
         public ActionResult ResetPassword(string code)
         {
-            return code == null ? View("Error") : View();
+            var userId = String.Empty;
+            if (code == null)
+            {
+                return View("Error");
+            }
+            try
+            {
+                userId = User.Identity.GetUserId();
+                var user = UserManager.FindById(userId);
+                var model = new ResetPasswordViewModel
+                {
+                    Email = user.Email
+                };
+                return View(model);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("AccountController", "ResetPassword", e.ToString(), e.HResult, userId);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade när lösenord skulle bytas.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+            }
         }
 
         //
