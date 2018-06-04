@@ -512,6 +512,11 @@ namespace InrappAdmin.ApplicationService
         {
             user.AndradDatum = DateTime.Now;
             user.AndradAv = userName;
+            //Om man nollställt användarens telefonnummer, säkerställ att phonenumberconfirmed = false 
+            if (user.PhoneNumber == null)
+            {
+                user.PhoneNumberConfirmed = false;
+            }
             _portalAdminRepository.UpdateContactPerson(user);
         }
 
