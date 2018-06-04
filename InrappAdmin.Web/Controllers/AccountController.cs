@@ -245,16 +245,14 @@ namespace InrappAdmin.Web.Controllers
         //
         // GET: /Account/ResetPassword
         [AllowAnonymous]
-        public ActionResult ResetPassword(string code)
+        public ActionResult ResetPassword(string code, string userId)
         {
-            var userId = String.Empty;
             if (code == null)
             {
                 return View("Error");
             }
             try
             {
-                userId = User.Identity.GetUserId();
                 var user = UserManager.FindById(userId);
                 var model = new ResetPasswordViewModel
                 {
