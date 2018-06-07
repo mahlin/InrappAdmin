@@ -30,7 +30,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public  IEnumerable<ReportObligationsViewModel> ReportObligations { get; set; }
 
         }
-
+        
         public class OrganisationsenhetViewModel
         {
             public int Organisationsid { get; set; }

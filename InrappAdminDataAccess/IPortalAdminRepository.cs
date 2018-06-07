@@ -108,6 +108,8 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<LevereradFil> GetFilerForLeveransId(int leveransId);
 
+        int CreateOrganisation(Organisation org);
+
         void CreateOrgUnit(Organisationsenhet orgUnit);
 
         void CreateFAQCategory(AdmFAQKategori faqCategory);

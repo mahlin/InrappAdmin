@@ -22,9 +22,9 @@ namespace InrappAdmin.DomainModel
         public string Postnr { get; set; }
         public string Postort { get; set; }
         public string Epostdoman { get; set; }
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? AktivFrom { get; set; }
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? AktivTom { get; set; }
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime SkapadDatum { get; set; }

@@ -323,6 +323,44 @@ namespace InrappAdmin.Web.Controllers
         }
 
         [Authorize]
+        public ActionResult CreateOrganisation()
+        {
+            return View();
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public ActionResult CreateOrganisation(OrganisationViewModels.OrganisationViewModel model)
+        {
+            var kommunkod = String.Empty;
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var userName = User.Identity.GetUserName();
+                    var orgId = _portalAdminService.SkapaOrganisation(model.Organisation, userName);
+                    kommunkod = _portalAdminService.HamtaKommunkodForOrg(orgId);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("OrganisationController", "CreateOrganisation", e.ToString(), e.HResult, User.Identity.Name);
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade när ny organisation skulle sparas.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
+                return RedirectToAction("GetOrganisation", new { kommunkod = kommunkod });
+            }
+
+            return View();
+        }
+
+        [Authorize]
         public ActionResult CreateOrganisationUnit(int orgId = 0)
         {
             var model = new OrganisationViewModels.OrganisationsenhetViewModel();

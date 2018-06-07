@@ -375,6 +375,18 @@ namespace InrappAdmin.ApplicationService
             return foreskrift;
         }
 
+        public int SkapaOrganisation(Organisation org, string userName)
+        {
+            //Sätt datum och användare
+            org.SkapadDatum = DateTime.Now;
+            org.SkapadAv = userName;
+            org.AndradDatum = DateTime.Now;
+            org.AndradAv = userName;
+
+            var orgId = _portalAdminRepository.CreateOrganisation(org);
+            return orgId;
+        }
+
         public void SkapaOrganisationsenhet(Organisationsenhet orgUnit, string userName)
         {
             //Sätt datum och användare
@@ -751,6 +763,6 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.DeleteAdminUser(userId);
         }
 
- 
+
     }
 }

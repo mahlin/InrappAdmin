@@ -87,6 +87,8 @@ namespace InrappAdmin.ApplicationService.Interface
 
         IEnumerable<AppUserAdmin> HamtaAdminUsers();
 
+        int SkapaOrganisation(Organisation org, string userName);
+
         void SkapaOrganisationsenhet(Organisationsenhet orgUnit, string userName);
 
         void SkapaFAQKategori(AdmFAQKategori faqKategori, string userName);

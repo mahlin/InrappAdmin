@@ -361,10 +361,15 @@ namespace InrappAdmin.DataAccess
             return foreskrift;
         }
 
+        public int CreateOrganisation(Organisation org)
+        {
+            DbContext.Organisation.Add(org);
+            DbContext.SaveChanges();
+            return org.Id;
+        }
         public void CreateOrgUnit(Organisationsenhet orgUnit)
         {
             DbContext.Organisationsenhet.Add(orgUnit);
-
             DbContext.SaveChanges();
         }
 
