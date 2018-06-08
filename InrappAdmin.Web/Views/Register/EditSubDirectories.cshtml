@@ -4,6 +4,16 @@
 
 <script type="text/javascript">
 
+
+    $(document).ready(function() {
+        if ($('#RegisterShortName').val() !== "") {
+            $(".createSubDir").show();
+        } else {
+            $(".createSubDir").hide();
+        }
+    });
+
+
     $(function () {
         $("#txtRegisterKortNamn").focus();
     });
@@ -11,6 +21,11 @@
     $(document).on('blur','input.regShortName',function() {
             var tmp = $('input.regShortName').val();
             $('#RegisterShortName').val($('input.regShortName').val());
+            if ($('#RegisterShortName').val() !== "") {
+                $(".createSubDir").show();
+            } else {
+                $(".createSubDir").hide();
+            }
     });
 
 
@@ -126,7 +141,7 @@
         <hr />
         <div class="row">
             <div class="col-md-8">
-                @Html.ActionLink("Skapa nytt delregister", "CreateSubDirectory", "Register", new { regShortName = Model.RegisterShortName }, null)
+                @Html.ActionLink("Skapa nytt delregister", "CreateSubDirectory", "Register", new { regShortName = Model.RegisterShortName }, new {@class = "createSubDir" })
             </div>
             @Html.ActionLink("Tillbaka till register", "Index", "Register")
         </div>

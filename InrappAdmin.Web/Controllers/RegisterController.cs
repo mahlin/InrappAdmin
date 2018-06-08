@@ -80,14 +80,16 @@ namespace InrappAdmin.Web.Controllers
                 }
                 if (!model.RegisterShortName.IsNullOrWhiteSpace())
                 {
+                    model.RegisterShortName = model.RegisterShortName;
                     register = _portalAdminService.HamtaRegisterMedKortnamn(model.RegisterShortName);
                 }
                 else if(regShortName != "")
                 {
+                    model.RegisterShortName = regShortName;
                     register = _portalAdminService.HamtaRegisterMedKortnamn(regShortName);
                 }
 
-                model.RegisterShortName = regShortName;
+                
                 model.SelectedDirectoryId = register.Id;
                 model.DelRegisters = _portalAdminService.HamtaDelRegisterForRegister(register.Id);
             }
@@ -248,9 +250,16 @@ namespace InrappAdmin.Web.Controllers
         public ActionResult CreateSubDirectory(string regShortName)
         {
             var model = new RegisterViewModels.AdmDelregisterViewModel();
-            var register = _portalAdminService.HamtaRegisterMedKortnamn(regShortName);
-            model.RegisterShortName = register.Kortnamn;
-            model.RegisterId = register.Id;
+            if (regShortName == null)
+            {
+                ModelState.AddModelError("", "Du måste välja register som delregistret ska tillhöra.");
+            }
+            else
+            {
+                var register = _portalAdminService.HamtaRegisterMedKortnamn(regShortName);
+                model.RegisterShortName = register.Kortnamn;
+                model.RegisterId = register.Id;
+            }
             return View(model);
         }
 
