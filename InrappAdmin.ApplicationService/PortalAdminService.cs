@@ -375,6 +375,12 @@ namespace InrappAdmin.ApplicationService
             return foreskrift;
         }
 
+        public IEnumerable<Rapporteringsresultat> HamtaRapporteringsresultatForRegOchPeriod(int delRegId, string period)
+        {
+            var rappResList = _portalAdminRepository.GetReportResultForDirAndPeriod(delRegId, period);
+            return rappResList;
+        }
+
         public int SkapaOrganisation(Organisation org, string userName)
         {
             //Sätt datum och användare

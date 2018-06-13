@@ -343,6 +343,83 @@ namespace InrappAdmin.Web.Controllers
             return View("EditLeverans", model);
         }
 
+        // GET
+        [Authorize]
+        public ActionResult GetReminderinfo()
+        {
+            var tmp = _portalAdminService.HamtaRapporteringsresultatForRegOchPeriod(12, "201804");
+            var model = new LeveransViewModels.ReminderViewModel();
+            //// Ladda drop down lists. 
+            var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
+            //this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
+            //model.SelectedRegisterId = 0;
+
+            // Ladda drop down lists. 
+            ViewBag.RegisterList = new SelectList(registerList, "Id", "Kortnamn");
+            model.SelectedRegisterId = 0;
+            return View("ReminderInfo", model);
+        }
+
+        [HttpGet]
+        public List<KeyValuePair<int, string>> GetSubDirectoriesForDir(int dirId)
+        {
+            var delregList = _portalAdminService.HamtaDelRegisterForRegister(dirId);
+            var tmp = new List<KeyValuePair<int, string>>();
+            foreach (var delreg in delregList)
+            {
+                KeyValuePair<int, string> keyValuePair = new KeyValuePair<int, string>(delreg.Id, delreg.Kortnamn);
+                tmp.Add(keyValuePair);
+            }
+
+            return tmp;
+
+            //return Json("Hej");
+        }
+
+
+        // GET
+        [Authorize]
+        public ActionResult GetReminderInfoForRegAndPeriod(LeveransViewModels.LeveransViewModel model, int regId = 0)
+        {
+
+            var tmp = _portalAdminService.HamtaRapporteringsresultatForRegOchPeriod(12, "201804");
+            try
+            {
+                var dirId = model.SelectedRegisterId;
+                if (dirId == 0 && regId != 0)
+                {
+                    dirId = regId;
+                }
+                if (dirId != 0)
+                {
+                    var register = _portalAdminService.HamtaRegisterMedId(dirId);
+                    var filkravList = _portalAdminService.HamtaFilkravForRegister(register.Id);
+                    //Lägg över i modellen
+                    model.Filkrav = ConvertFilkravToViewModel(filkravList.ToList());
+                    // Ladda drop down lists. 
+                    var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
+                    this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
+                    model.SelectedRegisterId = dirId;
+                }
+                else
+                {
+                    return RedirectToAction("GetFilkrav");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("LeveransController", "GetReminderInfoForRegAndPeriod", e.ToString(), e.HResult, User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid hämtning av påminnelseinformation",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+            }
+            return View("ReminderInfo", model);
+        }
+
 
         [HttpPost]
         [Authorize]

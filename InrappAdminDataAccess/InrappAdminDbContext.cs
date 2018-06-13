@@ -362,7 +362,18 @@ namespace InrappAdmin.DataAccess
             modelBuilder.Entity<AdmForeskrift>().Property(e => e.SkapadAv).HasColumnName("skapadav");
             modelBuilder.Entity<AdmForeskrift>().Property(e => e.AndradDatum).HasColumnName("andraddatum");
             modelBuilder.Entity<AdmForeskrift>().Property(e => e.AndradAv).HasColumnName("andradav");
-        }
+
+            //Rapporteringsresultat (view_rapporteringsresultat)
+            modelBuilder.Entity<Rapporteringsresultat>().ToTable("view_rapporteringsresultat");
+            modelBuilder.Entity<Rapporteringsresultat>().Property(e => e.Lankod).HasColumnName("lankod");
+            modelBuilder.Entity<Rapporteringsresultat>().Property(e => e.Kommunkod).HasColumnName("kommunkod");
+            modelBuilder.Entity<Rapporteringsresultat>().Property(e => e.Organisationsnamn).HasColumnName("organisationsnamn");
+            modelBuilder.Entity<Rapporteringsresultat>().Property(e => e.Register).HasColumnName("register");
+            modelBuilder.Entity<Rapporteringsresultat>().Property(e => e.Period).HasColumnName("period");
+            modelBuilder.Entity<Rapporteringsresultat>().Property(e => e.RegisterKortnamn).HasColumnName("kortnamn");
+            modelBuilder.Entity<Rapporteringsresultat>().Property(e => e.Enhetskod).HasColumnName("enhetskod");
+            modelBuilder.Entity<Rapporteringsresultat>().Property(e => e.AntalLeveranser).HasColumnName("antalleveranser");
+    }
 
 
         public DbSet<Organisation> Organisation { get; set; }
@@ -386,6 +397,7 @@ namespace InrappAdmin.DataAccess
         public DbSet<Inloggning> Inloggning { get; set; }
         public DbSet<Roll> Roll { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
+        public DbSet<Rapporteringsresultat> RapporteringsResultat { get; set; }
 
     }
 }

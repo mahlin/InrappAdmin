@@ -1,0 +1,166 @@
+﻿@model InrappAdmin.Web.Models.ViewModels.LeveransViewModels.ReminderViewModel
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+@*<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />*@
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+    });
+
+    $(function () {
+        $("#ddlDelregister").focus();
+    });
+
+    $(document).on('change', '#ddlRegister', function () {
+        $("#SelectedRegisterId").val(selectedRegister);
+        var selectedRegister = $('#ddlRegister').val();
+        var $ddlDelregister = $("#ddlDelregister");
+        $ddlDelregister.empty();
+        $ddlDelregister.append("<option> - Välj delregister - </option>");
+        //Hämta delregister för valt register
+        $.ajax({
+            data: { dirId: selectedRegister },
+            cache: false,
+            type: 'get',
+            url: '@Url.Action("GetSubDirectoriesForDir", "Leverans")',
+            success: function (data) {
+                var xw = data;
+                $.each(data, function (i, item) {
+                    var x = 1;
+                    var y = 2;
+                    //Access the items from their properties
+                    alert("Name : " + item.Id);
+                    alert("Description : " + item.Kortnamn);
+                });
+            },
+            error: function () {
+                alert('Cannot retrieve the data');
+            }
+                //var vals = {};
+                //$x.each(function (unit, index) {
+                //    vals[unit.Key] = unit.Value;
+                //});
+                
+                //response.forEach(function(unit, index) {
+                //    vals[unit.Key] = unit.Value;
+                //});
+                //$.each(vals, function(index, value) {
+                //    $ddlUnits.append("<option value=" + index + " >" + value + "</option>");
+                //    //alert(index + ' : ' + value);
+                //});
+            //}
+        });
+
+        //$ddlDelregister.append("<option> - Välj delregister - </option>");
+        //$.each(vals,
+        //    function(index, value) {
+        //        $ddlDelregister.append("<option value=" + index + " >" + value + "</option>");
+        //        //alert(index + ' : ' + value);
+        //    });
+
+        $('#delregDrop').show();
+
+
+    });
+
+    //$(function () {
+    //    $('th a, tfoot a').click(function () {
+    //        alert("Klick! KOd: " + $('#SelectedCountyCode').val());
+    //        $('#SelectedCountyCode').val($('#Kommunkod').val());
+    //        alert("Klick!2 " + $('#SelectedCountyCode').val());
+    //        //$('form').attr('action', $(this).attr('href')).submit();
+    //        //return false;
+    //    });
+    //});
+
+</script>
+
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div id="pageContainer">
+    <div class="row">
+        <div class="col-md-8 padding-top-55">
+            <h4>Administrera påminnelser</h4>
+            <br />
+            <section id="searchForm">
+                @using (Html.BeginForm("GetReminderInfoForRegAndPeriod", "Leverans", new { ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.HiddenFor(m => m.SelectedRegisterId)
+
+                    <div class="form-group">
+                        @Html.Label("Register", new { @class = "col-md-2 control-label" })
+                        @Html.DropDownListFor(m => m.SelectedRegisterId, ViewBag.RegisterList as SelectList, " - Välj register -", new { @class = "form-control", id = "ddlRegister" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Delregister", new { @class = "col-md-2 control-label" })
+                        @*@Html.DropDownListFor(m => m.SelectedDelregisterId, ViewBag.DelregisterList as SelectList, " - Välj delregister -", new { @class = "form-control", id = "ddlDelregister", @readonly = "readonly" })*@
+                        @Html.DropDownListFor(m => m.SelectedDelregisterId, Enumerable.Empty<SelectListItem>(), " - Välj delregister -", new { @class = "form-control", id = "ddlDelregister", @readonly = "readonly" })
+                    </div>
+                    @*<div class="row">
+                        <div class="col-md-8 form-group" style="width: 225px !important; margin-left: 5px;">
+                            @Html.DropDownListFor(m => m.SelectedRegisterId, ViewBag.RegisterList as SelectList, " - Välj Register -", new { id = "ddlRegister", @class = "form-control", style = "max-width:150px !important" })
+                        </div>
+                        <div class="col-md-8" style="padding-left: 0px; margin-left: -10px;">
+                            <div><input type="submit" value="Visa" class="btn btn-default" /></div>
+                        </div>
+                    </div>*@
+
+                    <div class="col-md-8" style="padding-left: 0px; margin-left: -10px;">
+                        <div><input type="submit" value="Visa" class="btn btn-default" /></div>
+                    </div>
+
+                }
+            </section>
+        </div>
+    </div>
+
+
+    @*@if (Model != null)
+    {
+        <div id="gridContent" style="font-family: Arial; padding: 20px;">
+
+        @{
+            ViewBag.Title = "Administrera påminnelser";
+            var grid = new WebGrid(source: Model.ContactPersons, canPage: false, rowsPerPage: 10, ajaxUpdateContainerId: "contatcsGrid");
+        }
+
+        @grid.GetHtml(tableStyle: "webgrid-table",
+                headerStyle: "webgrid-header",
+                footerStyle: "webgrid-footer",
+                alternatingRowStyle: "webgrid-alternating-row",
+                selectedRowStyle: "webgrid-selected-row",
+                rowStyle: "webgrid-row-style",
+                mode: WebGridPagerModes.All,
+                columns: grid.Columns(
+                    grid.Column(null, null, format: @<input type="hidden" id="ContactId" name="IDHidden" value="@item.ID" />),
+                    grid.Column("Namn", format: @<text><span class="display-mode">@item.Namn</span><label id="ContactName" class="edit-mode">@item.Namn</label></text>, style: "col3Width"),
+                    grid.Column("E-post", format: @<text><span class="display-mode col3Width">@item.Email</span><label id="Epost" class="edit-mode col3Width">@item.Email</label></text>, style: "col3Width"),
+
+                    grid.Column("Telefon", "Telefon", format: @<text><span class="display-mode col2Width"><label id="lblPhoneNumber">@item.PhoneNumber</label></span>
+                    <input type="text" id="ContactPhoneNumber" value="@item.PhoneNumber" class="edit-mode form-control" /></text>, style: "col2Width"),
+
+                    grid.Column("Telefonnr verifierat", "Telefonnr verifierat", format: @<text>
+                    <span class="display-mode"><input id="lblContactPhoneNumberVerified" class="checkbox" name="select" type="checkbox" disabled @(item.PhoneNumberConfirmed ? "checked='checked'" : "") value="@item.PhoneNumberConfirmed"/></span>
+                    <input id="ContactPhoneNumberConfirmed" class="edit-mode form-control checkbox" name="select" type="checkbox" @(item.PhoneNumberConfirmed ? "checked='checked'" : "") value="@item.PhoneNumberConfirmed"/></text>, style: "colMinWidth centered"),
+                    grid.Column("Aktiv fr.o.m", "Aktiv fr.o.m", format: @<text><span class="display-mode"><label id="lblAktivFrom">@( item.AktivFrom != null ? item.AktivFrom.ToString("yyyy-MM-dd") : item.AktivFrom)</label></span>
+                    <input type="text" id="ContactAktivFrom" value="@( item.AktivFrom != null ? item.AktivFrom.ToString("yyyy-MM-dd") : item.AktivFrom)" class="edit-mode form-control" /></text>, style: "col2Width"),
+                    grid.Column("Aktiv t.o.m", "Aktiv t.o.m", format: @<text><span class="display-mode"><label id="lblAktivTom">@( item.AktivTom != null ? item.AktivTom.ToString("yyyy-MM-dd") : item.AktivTom)</label></span>
+                    <input type="text" id="ContactAktivTom" value="@( item.AktivTom != null ? item.AktivTom.ToString("yyyy-MM-dd") : item.AktivTom)" class="edit-mode form-control" /></text>, style: "col2Width"),
+                    grid.Column("Status", "Status", format: @<text><span class="display-mode col1Width"><label id="lblStatus">@item.Status</label></span>
+                    <input type="text" id="ContactStatus" value="@item.Status" class="edit-mode form-control" /></text>, style: "col1Width"),
+
+                    grid.Column(null, format: @<text>
+                    <button class="save-user edit-mode btn btn-default">Maila</button>
+                </text>, style: "col3Width", canSort: false)))
+
+        </div>
+    }*@
+</div>
+

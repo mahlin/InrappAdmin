@@ -8,6 +8,17 @@
 
 <script type="text/javascript">
 
+    $(function() {
+        var commentCount = 2;
+        $("#btn").click(function() {
+            commentCount= commentCount + 2;
+            $("#comments").load("post-list.php", 
+                {
+                    commentNewCount: commentCount });
+        });
+    });
+
+
     $(document).ready(function () {
     });
 </script>

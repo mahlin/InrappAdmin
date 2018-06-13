@@ -70,6 +70,7 @@
     <Compile Include="AppRoleAdmin.cs" />
     <Compile Include="AppUserAdmin.cs" />
     <Compile Include="Aterkoppling.cs" />
+    <Compile Include="Rapporteringsresultat.cs" />
     <Compile Include="Inloggning.cs" />
     <Compile Include="Leverans.cs" />
     <Compile Include="LevereradFil.cs" />

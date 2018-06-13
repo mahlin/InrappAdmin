@@ -21,7 +21,6 @@ namespace InrappAdmin.Web.Models.ViewModels
             [DisplayName("Visa endast pågående")]
             public bool FilterPagaende{ get; set; }
             public string SelectedCountyCode { get; set; }
-
             [Display(Name = "Kommunkod")]
             public string Kommunkod { get; set; }
         }
@@ -80,6 +79,15 @@ namespace InrappAdmin.Web.Models.ViewModels
             public int? ForeskriftsId { get; set; }
             public string Namn { get; set; }
 
+        }
+
+        public class ReminderViewModel
+        {
+            public int SelectedRegisterId { get; set; }
+            public int SelectedDelregisterId { get; set; }
+            public string SelectedPeriod { get; set; }
+
+            private IEnumerable<Rapporteringsresultat> RapportResList { get; set; }
         }
     }
 }

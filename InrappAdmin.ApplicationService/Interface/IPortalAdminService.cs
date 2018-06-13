@@ -87,6 +87,8 @@ namespace InrappAdmin.ApplicationService.Interface
 
         IEnumerable<AppUserAdmin> HamtaAdminUsers();
 
+        IEnumerable<Rapporteringsresultat> HamtaRapporteringsresultatForRegOchPeriod(int delRegId, string period);
+
         int SkapaOrganisation(Organisation org, string userName);
 
         void SkapaOrganisationsenhet(Organisationsenhet orgUnit, string userName);

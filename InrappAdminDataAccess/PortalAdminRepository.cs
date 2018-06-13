@@ -361,6 +361,17 @@ namespace InrappAdmin.DataAccess
             return foreskrift;
         }
 
+        public IEnumerable<Rapporteringsresultat> GetReportResultForDirAndPeriod(int delRegId, string period)
+        {
+            var repResults = DbContext.RapporteringsResultat.Where(x => x.DelregisterId == delRegId).ToList();
+            return repResults;
+
+            //var trials = q.progressive_filtering_lookup_decoded_v
+            //    .Where(z => z.source == "")
+            //    .Select(z => z.trial_id);
+        }
+        
+
         public int CreateOrganisation(Organisation org)
         {
             DbContext.Organisation.Add(org);

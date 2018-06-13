@@ -108,6 +108,8 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<LevereradFil> GetFilerForLeveransId(int leveransId);
 
+        IEnumerable<Rapporteringsresultat> GetReportResultForDirAndPeriod(int delRegId, string period);
+
         int CreateOrganisation(Organisation org);
 
         void CreateOrgUnit(Organisationsenhet orgUnit);
