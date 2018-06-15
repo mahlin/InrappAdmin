@@ -73,7 +73,13 @@
                         <li>@Html.ActionLink("Filkrav", "GetFilkrav", "Leverans")</li>
                         <li>@Html.ActionLink("Förväntad leverans", "Index", "Leverans")</li>
                         <li>@Html.ActionLink("Förväntad fil", "GetForvantadeFiler", "Leverans")</li>
-                        <li>@Html.ActionLink("Leveranser", "GetDeliveries", "Leverans")</li>
+                        <li class="dropdown dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Leveranser</a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Leveranshistorik", "GetDeliveries", "Leverans")</li>
+                                <li>@Html.ActionLink("Leveransstatus per organisation", "GetDeliveryStatus", "Leverans")</li>
+                            </ul>
+                        </li>
                         @*<li>@Html.ActionLink("Påminnelser", "GetReminderinfo", "Leverans")</li>*@
 
                     </ul>

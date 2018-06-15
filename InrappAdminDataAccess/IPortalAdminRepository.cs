@@ -65,6 +65,8 @@ namespace InrappAdmin.DataAccess
 
         AdmRegister GetDirectoryById(int dirId);
 
+        AdmDelregister GetSubDirectoryById(int subdirId);
+
         IEnumerable<AdmRegister> GetDirectories();
 
         IEnumerable<AdmDelregister> GetSubDirectories();
@@ -109,6 +111,21 @@ namespace InrappAdmin.DataAccess
         IEnumerable<LevereradFil> GetFilerForLeveransId(int leveransId);
 
         IEnumerable<Rapporteringsresultat> GetReportResultForDirAndPeriod(int delRegId, string period);
+
+        IEnumerable<AdmRegister> GetDirectoriesForOrg(int orgId);
+
+        IEnumerable<string> GetSubDirectoysPeriodsForAYear(int subdirId, int year);
+        List<DateTime> GetTaskStartForSubdir(int subdirId);
+        DateTime GetReportstartForRegisterAndPeriod(int dirId, string period);
+        DateTime GetReportstartForRegisterAndPeriodSpecial(int dirId, string period);
+        DateTime GetLatestReportDateForRegisterAndPeriod(int dirId, string period);
+        DateTime GetLatestReportDateForRegisterAndPeriodSpecial(int dirId, string period);
+
+        IEnumerable<AdmDelregister> GetSubdirsForDirectory(int dirId);
+
+        int GetExpextedDeliveryIdForSubDirAndPeriod(int subDirId, string period);
+
+        Leverans GetLatestDeliveryForOrganisationSubDirectoryAndPeriod(int orgId, int subdirId, int forvlevId);
 
         int CreateOrganisation(Organisation org);
 

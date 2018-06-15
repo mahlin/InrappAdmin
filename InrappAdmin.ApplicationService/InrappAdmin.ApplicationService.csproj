@@ -54,7 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTOModel\FilloggDetaljDTO.cs" />
+    <Compile Include="DTOModel\LeveransStatusDTO.cs" />
     <Compile Include="DTOModel\OpeningHoursInfoDTO.cs" />
+    <Compile Include="DTOModel\RegisterLeveransDTO.cs" />
     <Compile Include="Helpers\ExtensionMethods.cs" />
     <Compile Include="Interface\IPortalAdminService.cs" />
     <Compile Include="PortalAdminService.cs" />

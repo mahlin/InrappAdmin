@@ -89,6 +89,23 @@ namespace InrappAdmin.ApplicationService.Interface
 
         IEnumerable<Rapporteringsresultat> HamtaRapporteringsresultatForRegOchPeriod(int delRegId, string period);
 
+        IEnumerable<AdmRegister> HamtaRegisterForOrg(int orgId);
+
+        IEnumerable<string> HamtaDelregistersPerioderForAr(int delregId, int ar);
+
+        List<int> HamtaValbaraAr(int delregId);
+        DateTime HamtaRapporteringsstartForRegisterOchPeriod(int regId, string period);
+
+        DateTime HamtaRapporteringsstartForRegisterOchPeriodSpecial(int regId, string period);
+        DateTime HamtaSenasteRapporteringForRegisterOchPeriodSpecial(int regId, string period);
+
+        DateTime HamtaSenasteRapporteringForRegisterOchPeriod(int regId, string period);
+
+        IEnumerable<FilloggDetaljDTO> HamtaHistorikForOrganisationRegisterPeriod(int orgId, int regId, string periodForReg);
+
+        string HamtaSammanlagdStatusForPeriod(IEnumerable<FilloggDetaljDTO> historikLista);
+
+
         int SkapaOrganisation(Organisation org, string userName);
 
         void SkapaOrganisationsenhet(Organisationsenhet orgUnit, string userName);

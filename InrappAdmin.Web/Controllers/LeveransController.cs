@@ -421,6 +421,131 @@ namespace InrappAdmin.Web.Controllers
         }
 
 
+        // GET
+        public ActionResult GetDeliveryStatus()
+        {
+            var model = new LeveransViewModels.HistoryViewModel();
+            model.SelectableYears = new List<int>();
+            return View("LatestDeliveries", model);
+        }
+
+        // POST: Leveransstatus
+        public ActionResult GetDeliveryStatusForOrg(int chosenYear = 0, string kommunkod = "")
+        {
+            var model = new LeveransViewModels.HistoryViewModel();
+            model.LeveransListaRegister = new List<RegisterLeveransDTO>();
+            var selectableYearsForUser = new List<int>();
+
+            try
+            {
+                if (chosenYear == 0)
+                {
+                    chosenYear = DateTime.Now.Year;
+                }
+
+                model.SelectedYear = chosenYear;
+                model.Kommunkod = kommunkod;
+                var org = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+                model.OrganisationsNamn = org.Organisationsnamn;
+                IEnumerable<AdmRegister> admRegList = _portalAdminService.HamtaRegisterForOrg(org.Id);
+
+                //hämta historik före resp register och period inom valt år
+                foreach (var register in admRegList)
+                {
+                    var periodsForRegister = new List<string>();
+                    var regLev = new RegisterLeveransDTO
+                    {
+                        RegisterKortnamn = register.Kortnamn,
+                        Leveranser = new List<LeveransStatusDTO>()
+                    };
+
+                    //För att hitta giltiga perioder för valt år måste vi ner på registrets delregister
+                    foreach (var delregister in register.AdmDelregister)
+                    {
+                        var delregPerioder = _portalAdminService.HamtaDelregistersPerioderForAr(delregister.Id, chosenYear);
+                        //för varje period för delregistret, spara i lista med perioder för registret
+                        foreach (var period in delregPerioder)
+                        {
+                            if (!periodsForRegister.Contains(period))
+                                periodsForRegister.Add(period);
+                        }
+                        //Hämta valbara år för användarens valda register
+                        var yearsForSubDir = _portalAdminService.HamtaValbaraAr(delregister.Id);
+                        foreach (var year in yearsForSubDir)
+                        {
+                            if (!selectableYearsForUser.Contains(year))
+                                selectableYearsForUser.Add(year);
+                        }
+                    }
+                    //För varje (distinct) period i listan ovan spara i ett LeveransStatusDTO-objekt.
+                    //I detta objekt spara registerId och registernamn oxå
+                    //För varje period för registret hämta historik för alla delregister - spara som historiklista i LevereansStatusDTO-objekt
+                    var i = 0;
+                    foreach (var period in periodsForRegister)
+                    {
+                        i++;
+                        var leveransStatus = new LeveransStatusDTO();
+                        leveransStatus.Id = register.Id * 100 + i; //Behöver unikt id för togglingen i vyn
+                        leveransStatus.RegisterId = register.Id;
+                        leveransStatus.RegisterKortnamn = register.Kortnamn;
+                        leveransStatus.Period = period;
+                        //TODO - fulfix. Refactor this. Special för EKB-År
+                        if (register.Kortnamn == "EKB" && period.Length == 4)
+                        {
+                            leveransStatus.Rapporteringsstart = _portalAdminService.HamtaRapporteringsstartForRegisterOchPeriodSpecial(register.Id, period);
+                            leveransStatus.Rapporteringssenast = _portalAdminService.HamtaSenasteRapporteringForRegisterOchPeriodSpecial(register.Id, period);
+                        }
+                        else
+                        {
+                            leveransStatus.Rapporteringsstart = _portalAdminService.HamtaRapporteringsstartForRegisterOchPeriod(register.Id, period);
+                            leveransStatus.Rapporteringssenast = _portalAdminService.HamtaSenasteRapporteringForRegisterOchPeriod(register.Id, period);
+                        }
+                        leveransStatus.HistorikLista = _portalAdminService.HamtaHistorikForOrganisationRegisterPeriod(org.Id, register.Id, period).ToList();
+                        if (leveransStatus.HistorikLista.Any())
+                        {
+                            leveransStatus.Status = _portalAdminService.HamtaSammanlagdStatusForPeriod(leveransStatus.HistorikLista);
+                        }
+                        else
+                        {
+                            if (leveransStatus.Rapporteringsstart <= DateTime.Now)
+                            {
+                                leveransStatus.Status = "error";
+                            }
+                            else
+                            {
+                                leveransStatus.Status = "notStarted";
+                            }
+
+                        }
+
+                        //Lägg hela DTO-objektet i regLev.Leveranser
+                        regLev.Leveranser.Add(leveransStatus);
+                    }
+                    model.LeveransListaRegister.Add(regLev);
+                    model.SelectableYears = selectableYearsForUser;
+                }
+
+                //// Ladda drop down lists. 
+                //var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
+                //this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
+                ////model.SelectedFAQ.SelectedRegisterId = 0;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("HistoryController", "GetDeliveryStatus", e.ToString(), e.HResult, User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid hämtning av senaste leveranser",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+
+            }
+            return View("LatestDeliveries", model);
+        }
+
+
         [HttpPost]
         [Authorize]
         public ActionResult UpdateForvantadLeverans(LeveransViewModels.AdmForvantadleveransViewModel forvLevModel, string regId = "0")

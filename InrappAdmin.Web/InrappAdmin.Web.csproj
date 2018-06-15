@@ -322,6 +322,7 @@
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Organisation\CreateOrganisation.cshtml" />
     <Content Include="Views\Leverans\ReminderInfo.cshtml" />
+    <Content Include="Views\Leverans\LatestDeliveries.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -305,3 +305,43 @@ label {
         border-radius: 6px 0 6px 6px;
     }
 
+
+/*************** Leveransstatus ****************/
+.panelColorError {
+    border-color: red;
+}
+
+.panelColorWarning {
+    border-color: yellow
+}
+
+.panelColorOk {
+    border-color: green
+}
+
+.headerText {
+    font-size: 1.2 em;
+    font-weight: bold;
+}
+
+.panel-heading[data-toggle="collapse"] {
+    cursor: pointer;
+}
+
+.panel-default > .panel-heading {
+    padding-right: 30px;
+    position: relative;
+}
+
+.panel-default > .panel-heading:after {
+    content: '-';
+    position: absolute;
+    font-size: 20px;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.panel-default > .panel-heading.collapsed:after {
+    content: '+';
+}

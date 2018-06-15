@@ -221,6 +221,12 @@ namespace InrappAdmin.DataAccess
             return register;
         }
 
+        public AdmDelregister GetSubDirectoryById(int subdirId)
+        {
+            var delregister = DbContext.AdmDelregister.SingleOrDefault(x => x.Id == subdirId);
+            return delregister;
+        }
+
         public IEnumerable<AdmDelregister> GetSubDirectories()
         {
             var subDirectories = DbContext.AdmDelregister.ToList();
@@ -370,7 +376,83 @@ namespace InrappAdmin.DataAccess
             //    .Where(z => z.source == "")
             //    .Select(z => z.trial_id);
         }
-        
+
+        public IEnumerable<string> GetSubDirectoysPeriodsForAYear(int subdirId, int year)
+        {
+            var dateFrom = new DateTime(year, 01, 01);
+            var dateTom = new DateTime(year, 12, 31).Date;
+            var periods = DbContext.AdmForvantadleverans
+                .Where(x => x.DelregisterId == subdirId && x.Uppgiftsstart >= dateFrom && x.Uppgiftsslut <= dateTom)
+                .Select(x => x.Period).ToList();
+
+            return periods;
+        }
+
+        public List<DateTime> GetTaskStartForSubdir(int subdirId)
+        {
+            var taskstartList = DbContext.AdmForvantadleverans.Where(x => x.DelregisterId == subdirId)
+                .Select(x => x.Uppgiftsstart).ToList();
+
+            return taskstartList;
+        }
+
+        //TODO - special för EKB-År, Lös på annat sätt. Db?
+        public DateTime GetReportstartForRegisterAndPeriodSpecial(int dirId, string period)
+        {
+            var subDir = DbContext.AdmDelregister.FirstOrDefault(x => x.RegisterId == dirId && x.Kortnamn == "EKB-År");
+            var reportstart = DbContext.AdmForvantadleverans.Where(x => x.DelregisterId == subDir.Id && x.Period == period)
+                .Select(x => x.Rapporteringsstart).FirstOrDefault();
+
+            return reportstart;
+        }
+        public DateTime GetReportstartForRegisterAndPeriod(int dirId, string period)
+        {
+            var firstSubDirForReg = DbContext.AdmDelregister.FirstOrDefault(x => x.RegisterId == dirId);
+            var reportstart = DbContext.AdmForvantadleverans.Where(x => x.DelregisterId == firstSubDirForReg.Id && x.Period == period)
+                .Select(x => x.Rapporteringsstart).FirstOrDefault();
+
+            return reportstart;
+        }
+
+        public DateTime GetLatestReportDateForRegisterAndPeriod(int dirId, string period)
+        {
+            var firstSubDirForReg = DbContext.AdmDelregister.FirstOrDefault(x => x.RegisterId == dirId);
+            var reportstart = DbContext.AdmForvantadleverans.Where(x => x.DelregisterId == firstSubDirForReg.Id && x.Period == period)
+                .Select(x => x.Rapporteringsenast).FirstOrDefault();
+
+            return reportstart;
+        }
+
+        public DateTime GetLatestReportDateForRegisterAndPeriodSpecial(int dirId, string period)
+        {
+            var subDir = DbContext.AdmDelregister.FirstOrDefault(x => x.RegisterId == dirId && x.Kortnamn == "EKB-År");
+            var reportstart = DbContext.AdmForvantadleverans.Where(x => x.DelregisterId == subDir.Id && x.Period == period)
+                .Select(x => x.Rapporteringsenast).FirstOrDefault();
+
+            return reportstart;
+        }
+
+        public IEnumerable<AdmDelregister> GetSubdirsForDirectory(int dirId)
+        {
+            var subdirectories = DbContext.AdmDelregister.Where(x => x.RegisterId == dirId).ToList();
+            return subdirectories;
+        }
+
+        public int GetExpextedDeliveryIdForSubDirAndPeriod(int subDirId, string period)
+        {
+            var forvLevId = DbContext.AdmForvantadleverans.Where(x => x.DelregisterId == subDirId && x.Period == period)
+                .Select(x => x.Id).SingleOrDefault();
+            return forvLevId;
+        }
+
+        public Leverans GetLatestDeliveryForOrganisationSubDirectoryAndPeriod(int orgId, int subdirId, int forvlevId)
+        {
+            var latestsDeliveryForOrgAndSubdirectory = AllaLeveranser()
+                .Where(a => a.OrganisationId == orgId && a.DelregisterId == subdirId &&
+                            a.ForvantadleveransId == forvlevId).OrderByDescending(x => x.Id).FirstOrDefault();
+            return latestsDeliveryForOrgAndSubdirectory;
+        }
+
 
         public int CreateOrganisation(Organisation org)
         {
@@ -739,6 +821,11 @@ namespace InrappAdmin.DataAccess
             var cuserToDelete = IdentityDbContext.Users.SingleOrDefault(x => x.Id == userId);
             IdentityDbContext.Users.Remove(cuserToDelete);
             IdentityDbContext.SaveChanges();
+        }
+
+        public IEnumerable<AdmRegister> GetDirectoriesForOrg(int orgId)
+        {
+            throw new NotImplementedException();
         }
 
 
