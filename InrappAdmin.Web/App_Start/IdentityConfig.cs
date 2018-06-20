@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -21,11 +22,11 @@ namespace InrappAdmin.Web
         public Task SendAsync(IdentityMessage message)
         {
             // Plug in your email service here to send an email.
-            SendMail(message);
+            SendMail(message, null);
             return Task.FromResult(0);
         }
 
-        private void SendMail(IdentityMessage message)
+        private void SendMail(IdentityMessage message, string attachmentFilename)
         {
             #region formatter
 
@@ -45,9 +46,18 @@ namespace InrappAdmin.Web
             msg.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(text, null, MediaTypeNames.Text.Plain));
             msg.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(html, null, MediaTypeNames.Text.Html));
 
-            //var credentials = new NetworkCredential(
-            //    ConfigurationManager.AppSettings["MailSender"],
-            //    ConfigurationManager.AppSettings["MailPwd"]);
+            if (attachmentFilename != null)
+            {
+                Attachment attachment = new Attachment(attachmentFilename, MediaTypeNames.Application.Octet);
+                ContentDisposition disposition = attachment.ContentDisposition;
+                disposition.CreationDate = File.GetCreationTime(attachmentFilename);
+                disposition.ModificationDate = File.GetLastWriteTime(attachmentFilename);
+                disposition.ReadDate = File.GetLastAccessTime(attachmentFilename);
+                disposition.FileName = Path.GetFileName(attachmentFilename);
+                disposition.Size = new FileInfo(attachmentFilename).Length;
+                disposition.DispositionType = DispositionTypeNames.Attachment;
+                msg.Attachments.Add(attachment);
+            }
 
             using (SmtpClient smtpClient = new SmtpClient(ConfigurationManager.AppSettings["MailServer"]))
             {

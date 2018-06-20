@@ -6,10 +6,11 @@ using System.Linq;
 using System.Web;
 using InrappAdmin.DomainModel;
 
-namespace InrappAdmin.DomainModel
+namespace InrappAdmin.ApplicationService.DTOModel
 {
-    public class Rapporteringsresultat
+    public class RapporteringsresultatDTO
     {
+        public int Id { get; set; }
         public string Lankod { get; set; }
         public string Kommunkod { get; set; }
         public string Organisationsnamn { get; set; }
@@ -48,7 +49,7 @@ namespace InrappAdmin.DomainModel
         public int? OrganisationsenhetsId { get; set; }
         public int? LeveransId { get; set; }
 
-        
+        public bool Mail { get; set; }
 
     }
 }

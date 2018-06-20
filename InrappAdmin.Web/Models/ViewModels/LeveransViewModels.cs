@@ -87,8 +87,12 @@ namespace InrappAdmin.Web.Models.ViewModels
             public int SelectedDelregisterId { get; set; }
             public string SelectedPeriod { get; set; }
 
-            private IEnumerable<Rapporteringsresultat> RapportResList { get; set; }
+            public IEnumerable<RegisterBasicDTO> RegisterList { get; set; }
+
+            public List<RapporteringsresultatDTO> RapportResList { get; set; }
+            public int AntRader { get; set; }
         }
+
 
         public class HistoryViewModel
         {

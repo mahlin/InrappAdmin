@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
+using System.IO;
 using System.Linq;
+using System.Net.Mail;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 using InrappAdmin.ApplicationService.DTOModel;
 using InrappAdmin.ApplicationService.Interface;
 using InrappAdmin.ApplicationService.Helpers;
 using InrappAdmin.DataAccess;
 using InrappAdmin.DomainModel;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace InrappAdmin.ApplicationService
 {
@@ -302,6 +308,12 @@ namespace InrappAdmin.ApplicationService
             return forvLeveranser;
         }
 
+        public IEnumerable<AdmForvantadleverans> HamtaForvantadeLeveranserForDelregister(int delregId)
+        {
+            var forvLeveranser = _portalAdminRepository.GetExpectedDeliveriesForSubDirectory(delregId);
+            return forvLeveranser;
+        }
+
         public IEnumerable<AdmFilkrav> HamtaFilkravForRegister(int regId)
         {
             var filkrav= _portalAdminRepository.GetFileRequirementsForDirectory(regId); 
@@ -375,10 +387,12 @@ namespace InrappAdmin.ApplicationService
             return foreskrift;
         }
 
-        public IEnumerable<Rapporteringsresultat> HamtaRapporteringsresultatForRegOchPeriod(int delRegId, string period)
+        public IEnumerable<RapporteringsresultatDTO> HamtaRapporteringsresultatForRegOchPeriod(int delRegId, string period)
         {
             var rappResList = _portalAdminRepository.GetReportResultForDirAndPeriod(delRegId, period);
-            return rappResList;
+
+            var rappResListDTO = ConvertRappListDBToVM(rappResList);
+            return rappResListDTO;
         }
 
         public IEnumerable<AdmRegister> HamtaRegisterForOrg(int orgId)
@@ -981,6 +995,146 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.DeleteAdminUser(userId);
         }
 
+        private IEnumerable<RapporteringsresultatDTO> ConvertRappListDBToVM(IEnumerable<Rapporteringsresultat> rappResList)
+        {
+            var rappListDTO = new List<RapporteringsresultatDTO>();
+            var i = 0;
+            foreach (var resRad in rappResList)
+            {
+                i++;
+                var rappResRadVM = new RapporteringsresultatDTO
+                {
+                    Id = i,
+                    Lankod = resRad.Lankod,
+                    Kommunkod = resRad.Kommunkod,
+                    Organisationsnamn = resRad.Organisationsnamn,
+                    Register = resRad.Register,
+                    Period = resRad.Period,
+                    RegisterKortnamn = resRad.RegisterKortnamn,
+                    Enhetskod = resRad.Enhetskod,
+                    AntalLeveranser = resRad.AntalLeveranser,
+                    Leveranstidpunkt = resRad.Leveranstidpunkt,
+                    Leveransstatus = resRad.Leveransstatus,
+                    Email = resRad.Email,
+                    Filnamn = resRad.Filnamn,
+                    NyttFilnamn = resRad.NyttFilnamn,
+                    Filstatus = resRad.Filstatus,
+                    SkyldigFrom = resRad.SkyldigFrom,
+                    SkyldigTom = resRad.SkyldigTom,
+                    Uppgiftsstart = resRad.Uppgiftsstart,
+                    Uppgiftsslut = resRad.Uppgiftsslut,
+                    Rapporteringsstart = resRad.Rapporteringsstart,
+                    Rapporteringsslut = resRad.Rapporteringsslut,
+                    Rapporteringsenast = resRad.Rapporteringsenast,
+                    UppgiftsskyldighetId = resRad.UppgiftsskyldighetId,
+                    OrganisationsId = resRad.OrganisationsId,
+                    DelregisterId = resRad.DelregisterId,
+                    ForvantadLeveransId = resRad.ForvantadLeveransId,
+                    OrganisationsenhetsId = resRad.OrganisationsenhetsId,
+                    LeveransId = resRad.LeveransId,
+                    Mail= false
+                };
 
+                if (String.IsNullOrEmpty(rappResRadVM.Email))
+                {
+                    rappResRadVM.Email = GetEmail(rappResRadVM);
+                }
+                rappListDTO.Add(rappResRadVM);
+            }
+
+
+                
+            return rappListDTO;
+        }
+
+        private string GetEmail(RapporteringsresultatDTO rappRes)
+        {
+            var email = String.Empty;
+            //Get email from Organisation Kontaktperson
+            var contactList = _portalAdminRepository.GetContactPersonsForOrg(rappRes.OrganisationsId).ToList();
+            if (contactList.Count > 0)
+            {
+                for (int i = 0; i < contactList.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        email = contactList[i].Email;
+                    }
+                    else
+                    {
+                        email = email + ", " + contactList[i].Email;
+                    }
+                }
+            }
+            else
+            {
+                //Get email from organiastion
+                var org = _portalAdminRepository.GetOrganisation(rappRes.OrganisationsId);
+                if (org != null)
+                {
+                    email = org.EpostAdress;
+                }
+            }
+            return email;
+        }
+
+        public void SkickaPaminnelse(IEnumerable<RapporteringsresultatDTO> rappResList, string userId)
+        {
+            var emailList = String.Empty;
+            //ta fram lista med epostadresser för valda rader
+            foreach (var rappRes in rappResList)
+            {
+                if (rappRes.Mail)
+                {
+                    var x = rappRes.Email.IndexOf(",");
+                    if (rappRes.Email.IndexOf(",") == 0)
+                    {
+                        emailList = emailList + rappRes.Email + ";";
+                    }
+                    else if (rappRes.Email.IndexOf(",") > 0)
+                    {
+                        //Fler epostadresser finns för raden, splitta
+                        var newEmailStr = rappRes.Email.Split(',');
+                        foreach (var email in newEmailStr)
+                        {
+                            emailList = emailList + email + ";";
+                        }
+                    }
+                }
+            }
+            //Skapa fil/attachment 'in memory'
+            MemoryStream ms = new MemoryStream(ASCIIEncoding.ASCII.GetBytes(emailList));
+            Attachment emailAttachment = new Attachment(ms, new ContentType("text/bzk"));
+            emailAttachment.Name = "epostadresser" + ".txt";
+
+            //Send mail
+            MailMessage msg = new MailMessage();
+            msg.From = new MailAddress(ConfigurationManager.AppSettings["MailSender"]);
+            //TODO
+            msg.To.Add(new MailAddress("marie.ahlin@socialstyrelsen.se"));
+            //msg.To.Add(new MailAddress(_portalAdminRepository.GetUserEmail(userId)));
+            msg.Subject = "Påminnelse";
+
+            if (emailAttachment != null)
+            {
+                ContentDisposition disposition = emailAttachment.ContentDisposition;
+                disposition.CreationDate = File.GetCreationTime(emailAttachment.Name);
+                disposition.ModificationDate = File.GetLastWriteTime(emailAttachment.Name);
+                disposition.ReadDate = File.GetLastAccessTime(emailAttachment.Name);
+                disposition.FileName = Path.GetFileName(emailAttachment.Name);
+                //disposition.Size = new FileInfo(emailAttachment.Name).Length;
+                disposition.DispositionType = DispositionTypeNames.Attachment;
+                msg.Attachments.Add(emailAttachment);
+            }
+
+            using (SmtpClient smtpClient = new SmtpClient(ConfigurationManager.AppSettings["MailServer"]))
+            {
+                if (ConfigurationManager.AppSettings["EnableSsl"] == "True")
+                {
+                    smtpClient.EnableSsl = true;
+                }
+                smtpClient.Send(msg);
+            }
+        }
     }
 }

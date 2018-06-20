@@ -4,65 +4,144 @@
 
 
 <script type="text/javascript">
+    var registerLista = @Html.Raw(Json.Encode(Model.RegisterList));
+    var antalRader = @Html.Raw(Json.Encode(Model.AntRader));
 
     $(document).ready(function () {
+        //$("#GridHeader").html("<table>" + $('#gridContent table thead').html() + "</table>");
+        $("#GridHeader").html("<table style='width:1140px;'><tr><th class='colMinWidth'>Kommunkod</th><th class='col3Width'>Organisation</th><th class='col5Width'>Epostadress</th><th class='col1Width'>Antal</th><th class='col2Width'>Leveranstidpunkt</th><th class='colMinWidth'>Påminn</th></tr></table>");
+        $("#GridHeader table tr:first").append("<th style='width:12px;'></th>");
+        $("#GridBody").html("<table style='width:1140px;'>" + $('#gridContent table tbody').html() + "</table>");
+        $("#gridContent").hide();
+
+        if ($("#SelectedRegisterId").val() > 0) {
+            //set delreg-ddl
+            setDelregDrop($("#SelectedRegisterId").val());
+        }
+        if ($("#SelectedDelregisterId").val() !== "0") {
+            $('#ddlDelregister').val($("#SelectedDelregisterId").val());
+            //set period-ddl
+            setPeriodDrop($("#SelectedDelregisterId").val());
+        }
+        if ($("#SelectedPeriod").val() != null) {
+            $('#ddlPeriod').val($("#SelectedPeriod").val());
+        }
+
+        //Sätt antal rader
+        $('#headerText').html("");
+        if (antalRader > 0) {
+            var x = $('#RapportResList').length;
+            $('<H4><span style="font-size: 0.7em">Antal rader: ' + antalRader + '</span></H4>').appendTo('#headerText');
+        }
+
+        //onChange: function (option, checked, select) {
+        //    $.each(days, function (index, item) {
+        //        if ($('#ClosedDaysList_' + index + '__NameEnglish').val() === $(option).val()) {
+        //            if ($('#ClosedDaysList_' + index + '__Selected').val() === 'False')
+        //                $('#ClosedDaysList_' + index + '__Selected').val('True');
+        //            else
+        //                $('#ClosedDaysList_' + index + '__Selected').val('False');
+        //        }
+        //    });
+        //},
+
+
     });
 
     $(function () {
         $("#ddlDelregister").focus();
     });
 
-    $(document).on('change', '#ddlRegister', function () {
-        $("#SelectedRegisterId").val(selectedRegister);
-        var selectedRegister = $('#ddlRegister').val();
-        var $ddlDelregister = $("#ddlDelregister");
-        $ddlDelregister.empty();
-        $ddlDelregister.append("<option> - Välj delregister - </option>");
+    function setDelregDrop(selectedRegister) {
         //Hämta delregister för valt register
-        $.ajax({
-            data: { dirId: selectedRegister },
-            cache: false,
-            type: 'get',
-            url: '@Url.Action("GetSubDirectoriesForDir", "Leverans")',
-            success: function (data) {
-                var xw = data;
-                $.each(data, function (i, item) {
-                    var x = 1;
-                    var y = 2;
-                    //Access the items from their properties
-                    alert("Name : " + item.Id);
-                    alert("Description : " + item.Kortnamn);
-                });
-            },
-            error: function () {
-                alert('Cannot retrieve the data');
+        registerLista.forEach(function (register, index) {
+            if (selectedRegister === register.Id.toString()) {
+                if (register.DelregisterList.length !== 0) {
+                    //Populera delregister-dropdown
+                    var vals = {};
+                    register.DelregisterList.forEach(function (unit, index) {
+                        vals[unit.Id] = unit.Kortnamn;
+                    });
+
+                    var $ddlDelregister = $("#ddlDelregister");
+                    $ddlDelregister.empty();
+                    $ddlDelregister.append("<option> - Välj delregister - </option>");
+                    $.each(vals,
+                        function (index, value) {
+                            $ddlDelregister.append("<option value=" + index + " >" + value + "</option>");
+                        });
+                    $ddlDelregister.removeAttr('readonly');
+                }
             }
-                //var vals = {};
-                //$x.each(function (unit, index) {
-                //    vals[unit.Key] = unit.Value;
-                //});
-                
-                //response.forEach(function(unit, index) {
-                //    vals[unit.Key] = unit.Value;
-                //});
-                //$.each(vals, function(index, value) {
-                //    $ddlUnits.append("<option value=" + index + " >" + value + "</option>");
-                //    //alert(index + ' : ' + value);
-                //});
-            //}
         });
+    }
 
-        //$ddlDelregister.append("<option> - Välj delregister - </option>");
-        //$.each(vals,
-        //    function(index, value) {
-        //        $ddlDelregister.append("<option value=" + index + " >" + value + "</option>");
-        //        //alert(index + ' : ' + value);
-        //    });
+    function setPeriodDrop(selectedDelregister) {
+        var selectedRegister = $('#ddlRegister').val();
+        //Hämta perioder för valt delregister
+        registerLista.forEach(function (register, index) {
+            if (selectedRegister === register.Id.toString()) {
+                if (register.DelregisterList.length !== 0) {
+                    register.DelregisterList.forEach(function (delregister, index) {
+                        if (selectedDelregister === delregister.Id.toString()) {
+                            if (delregister.ForvantadeLeveranserList.length !== 0) {
+                                //Populera period-dropdown
+                                var vals = {};
+                                delregister.ForvantadeLeveranserList.forEach(function(unit, index) {
+                                    vals[unit.Period] = unit.Period;
+                                });
+                                var $ddlPeriod = $("#ddlPeriod");
+                                $ddlPeriod.empty();
+                                $ddlPeriod.append("<option> - Välj period - </option>");
+                                $.each(vals,function(index, value) {
+                                    $ddlPeriod.append("<option value=" + index + " >" + value + "</option>");
+                                });
+                                $ddlPeriod.removeAttr('readonly');
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
 
-        $('#delregDrop').show();
-
-
+    $(document).on('change', '#ddlRegister', function () {
+        //Nollställ dropparna
+        $('#ddlPeriod').empty();
+        $("#ddlPeriod").append("<option> - Välj period - </option>");
+        $('#ddlPeriod').attr('readonly', 'readonly');
+        var selectedRegister = $('#ddlRegister').val();
+        $("#SelectedRegisterId").val(selectedRegister);
+        //Hämta delregister för valt register
+        setDelregDrop(selectedRegister);
     });
+
+    $(document).on('change', '#ddlDelregister', function () {
+        var selectedRegister = $('#ddlRegister').val();
+        var selectedDelregister = $('#ddlDelregister').val();
+        $("#SelectedDelregisterId").val(selectedDelregister);
+        //Hämta perioder för valt delregister
+        setPeriodDrop(selectedDelregister);
+    });
+
+    $(document).on('change', '#ddlPeriod', function () {
+        $("#SelectedPeriod").val($('#ddlPeriod').val());
+    });
+
+    function setMail(id) {
+        var rappResLista = @Html.Raw(Json.Encode(Model.RapportResList));
+        var y = $('#RapportResList_1__Mail').val();
+        var selectedId = parseInt(id);
+        $.each(rappResLista, function (index, item) {
+            if (rappResLista[index].Id === selectedId) {
+                if ($('#RapportResList_' + index + '__Mail').val() === 'False')
+                    $('#RapportResList_' + index + '__Mail').val('True');
+                    else
+                    $('#RapportResList_' + index + '__Mail').val('False');
+                }
+            });
+    }
+
 
     //$(function () {
     //    $('th a, tfoot a').click(function () {
@@ -76,7 +155,28 @@
 
 </script>
 
+<style type="text/css">
 
+    #GridBody {
+        width: 1140px;
+        height: 400px;
+        overflow-y: scroll;
+        border: solid 1px #e8eef4;
+    }
+
+    #GridHeader table {
+        width: 1140px;
+        text-align: left;
+        margin-top: 0px;
+        border: solid 1px #A7C942;
+        padding: 0px;
+        border-collapse: collapse;
+    }
+
+    #GridHeader table th .colMinWidth {
+        width: 50px;
+    }
+</style>
 
 @{
     ViewBag.Title = "Index";
@@ -91,7 +191,10 @@
             <section id="searchForm">
                 @using (Html.BeginForm("GetReminderInfoForRegAndPeriod", "Leverans", new { ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
+
                     @Html.HiddenFor(m => m.SelectedRegisterId)
+                    @Html.HiddenFor(m => m.SelectedDelregisterId)
+                    @Html.HiddenFor(m => m.SelectedPeriod)
 
                     <div class="form-group">
                         @Html.Label("Register", new { @class = "col-md-2 control-label" })
@@ -100,67 +203,109 @@
 
                     <div class="form-group">
                         @Html.Label("Delregister", new { @class = "col-md-2 control-label" })
-                        @*@Html.DropDownListFor(m => m.SelectedDelregisterId, ViewBag.DelregisterList as SelectList, " - Välj delregister -", new { @class = "form-control", id = "ddlDelregister", @readonly = "readonly" })*@
                         @Html.DropDownListFor(m => m.SelectedDelregisterId, Enumerable.Empty<SelectListItem>(), " - Välj delregister -", new { @class = "form-control", id = "ddlDelregister", @readonly = "readonly" })
                     </div>
-                    @*<div class="row">
-                        <div class="col-md-8 form-group" style="width: 225px !important; margin-left: 5px;">
-                            @Html.DropDownListFor(m => m.SelectedRegisterId, ViewBag.RegisterList as SelectList, " - Välj Register -", new { id = "ddlRegister", @class = "form-control", style = "max-width:150px !important" })
-                        </div>
-                        <div class="col-md-8" style="padding-left: 0px; margin-left: -10px;">
-                            <div><input type="submit" value="Visa" class="btn btn-default" /></div>
-                        </div>
-                    </div>*@
 
-                    <div class="col-md-8" style="padding-left: 0px; margin-left: -10px;">
-                        <div><input type="submit" value="Visa" class="btn btn-default" /></div>
+                    <div class="form-group">
+                        @Html.Label("Period", new { @class = "col-md-2 control-label" })
+                        @Html.DropDownListFor(m => m.SelectedPeriod, Enumerable.Empty<SelectListItem>(), " - Välj period -", new { @class = "form-control", id = "ddlPeriod", @readonly = "readonly" })
+                    </div>
+
+                    <div class="col-md-12" style="padding-left: 0px; margin-left: -10px;">
+                        <label class="col-md-2">&nbsp;</label>
+                        <div>
+                            <input type="submit" value="Sök" class="btn btn-default" />
+                        </div>
                     </div>
 
                 }
             </section>
         </div>
     </div>
+    <hr>
 
-
-    @*@if (Model != null)
+    @if (Model.RapportResList != null)
     {
-        <div id="gridContent" style="font-family: Arial; padding: 20px;">
+        if (Model.RapportResList.Count > 0)
+        {
+             using (Html.BeginForm("SendReminder", "Leverans", FormMethod.Post, new { @class = "form-horizontal", role = "form", id ="reminderForm" }))
+            {
+                <div class="row col-md-12">
+                    <div class="col-md-10 padding-top-15" id="headerText" style="padding-left: 20px; ">
+                    </div>
+                    <div class="" style=""><input type="submit" value="Skicka påminnelse" class="btn btn-default" /></div>
+                </div>
 
-        @{
-            ViewBag.Title = "Administrera påminnelser";
-            var grid = new WebGrid(source: Model.ContactPersons, canPage: false, rowsPerPage: 10, ajaxUpdateContainerId: "contatcsGrid");
+                @Html.HiddenFor(m => m.SelectedRegisterId)
+                @Html.HiddenFor(m => m.SelectedDelregisterId)
+                @Html.HiddenFor(m => m.SelectedPeriod)
+                @Html.HiddenFor(m => m.AntRader)
+
+                for (var index = 0; index < Model.RapportResList.Count(); index++)
+                {
+                    @Html.HiddenFor(m => m.RapportResList[index].Lankod)
+                    @Html.HiddenFor(m => m.RapportResList[index].Kommunkod)
+                    @Html.HiddenFor(m => m.RapportResList[index].Organisationsnamn)
+                    @Html.HiddenFor(m => m.RapportResList[index].Register)
+                    @Html.HiddenFor(m => m.RapportResList[index].Period)
+                    @Html.HiddenFor(m => m.RapportResList[index].RegisterKortnamn)
+                    @Html.HiddenFor(m => m.RapportResList[index].Enhetskod)
+                    @Html.HiddenFor(m => m.RapportResList[index].AntalLeveranser)
+                    @Html.HiddenFor(m => m.RapportResList[index].Leveranstidpunkt)
+                    @Html.HiddenFor(m => m.RapportResList[index].Leveransstatus)
+                    @Html.HiddenFor(m => m.RapportResList[index].Email)
+                    @Html.HiddenFor(m => m.RapportResList[index].Filnamn)
+                    @Html.HiddenFor(m => m.RapportResList[index].NyttFilnamn)
+                    @Html.HiddenFor(m => m.RapportResList[index].Filstatus)
+                    @Html.HiddenFor(m => m.RapportResList[index].SkyldigFrom)
+                    @Html.HiddenFor(m => m.RapportResList[index].SkyldigTom)
+                    @Html.HiddenFor(m => m.RapportResList[index].Uppgiftsstart)
+                    @Html.HiddenFor(m => m.RapportResList[index].Uppgiftsslut)
+                    @Html.HiddenFor(m => m.RapportResList[index].Rapporteringsstart)
+                    @Html.HiddenFor(m => m.RapportResList[index].Rapporteringsslut)
+                    @Html.HiddenFor(m => m.RapportResList[index].Rapporteringsenast)
+                    @Html.HiddenFor(m => m.RapportResList[index].UppgiftsskyldighetId)
+                    @Html.HiddenFor(m => m.RapportResList[index].OrganisationsId)
+                    @Html.HiddenFor(m => m.RapportResList[index].DelregisterId)
+                    @Html.HiddenFor(m => m.RapportResList[index].ForvantadLeveransId)
+                    @Html.HiddenFor(m => m.RapportResList[index].OrganisationsenhetsId)
+                    @Html.HiddenFor(m => m.RapportResList[index].LeveransId)
+                    @Html.HiddenFor(m => m.RapportResList[index].Mail)
+                }
+
+                <div id="gridContent" style="font-family: Arial; padding: 20px;">
+
+                    @{
+                        ViewBag.Title = "Administrera påminnelser";
+                        var grid = new WebGrid(source: Model.RapportResList, canPage: false, rowsPerPage: 10, ajaxUpdateContainerId: "reminderGrid");
+                    }
+
+                    @grid.GetHtml(tableStyle: "webgrid-table",
+                    htmlAttributes: new { id = "reminderGrid" },
+                    headerStyle: "webgrid-header",
+                    footerStyle: "webgrid-footer",
+                    alternatingRowStyle: "webgrid-alternating-row",
+                    selectedRowStyle: "webgrid-selected-row",
+                    rowStyle: "webgrid-row-style",
+                    mode: WebGridPagerModes.All,
+                    columns: grid.Columns(
+                        grid.Column(null, format: @<text><input type="hidden" id="Id" value="@item.Id" class="form-control hide" /></text>, style: "colZeroWidth"),
+                        grid.Column("Kommunkod", format: @<text><span class="">@item.Kommunkod</span></text>, style: "col1Width"),
+                        grid.Column("Organisation", format: @<text><span class="">@item.Organisationsnamn</span></text>, style: "col3Width"),
+                        grid.Column("E-post, kontaktperson", format: @<text><label id="ContactEmail" class="">@item.Email</label></text>, style: "col5Width"),
+                        grid.Column("Antal leveranser", format: @<text><label id="NumberOfDeliveries" class="">@item.AntalLeveranser</label></text>, style: "col1Width"),
+                        grid.Column("Leveranstidpunkt", format: @<text><label id="DeliveryTime" class="">@item.Leveranstidpunkt</label></text>, style: "col2Width"),
+                        grid.Column("Skicka påminnelse", format: @<text><span class=" centered"><input id="chkbxMail" class="checkbox" onchange="setMail('@item.Id');" name="select" type="checkbox" @( item.Mail ? "checked='checked'" : "") value="@item.Mail" /></span></text>, style: "colMinWidth centered", canSort: false)
+
+                                                                                                                                                                                                                    ))
+
+                </div>
+                <div id="Outer">
+                    <div id="GridHeader"></div>
+                    <div id="GridBody"></div>
+                </div>
+            }
         }
-
-        @grid.GetHtml(tableStyle: "webgrid-table",
-                headerStyle: "webgrid-header",
-                footerStyle: "webgrid-footer",
-                alternatingRowStyle: "webgrid-alternating-row",
-                selectedRowStyle: "webgrid-selected-row",
-                rowStyle: "webgrid-row-style",
-                mode: WebGridPagerModes.All,
-                columns: grid.Columns(
-                    grid.Column(null, null, format: @<input type="hidden" id="ContactId" name="IDHidden" value="@item.ID" />),
-                    grid.Column("Namn", format: @<text><span class="display-mode">@item.Namn</span><label id="ContactName" class="edit-mode">@item.Namn</label></text>, style: "col3Width"),
-                    grid.Column("E-post", format: @<text><span class="display-mode col3Width">@item.Email</span><label id="Epost" class="edit-mode col3Width">@item.Email</label></text>, style: "col3Width"),
-
-                    grid.Column("Telefon", "Telefon", format: @<text><span class="display-mode col2Width"><label id="lblPhoneNumber">@item.PhoneNumber</label></span>
-                    <input type="text" id="ContactPhoneNumber" value="@item.PhoneNumber" class="edit-mode form-control" /></text>, style: "col2Width"),
-
-                    grid.Column("Telefonnr verifierat", "Telefonnr verifierat", format: @<text>
-                    <span class="display-mode"><input id="lblContactPhoneNumberVerified" class="checkbox" name="select" type="checkbox" disabled @(item.PhoneNumberConfirmed ? "checked='checked'" : "") value="@item.PhoneNumberConfirmed"/></span>
-                    <input id="ContactPhoneNumberConfirmed" class="edit-mode form-control checkbox" name="select" type="checkbox" @(item.PhoneNumberConfirmed ? "checked='checked'" : "") value="@item.PhoneNumberConfirmed"/></text>, style: "colMinWidth centered"),
-                    grid.Column("Aktiv fr.o.m", "Aktiv fr.o.m", format: @<text><span class="display-mode"><label id="lblAktivFrom">@( item.AktivFrom != null ? item.AktivFrom.ToString("yyyy-MM-dd") : item.AktivFrom)</label></span>
-                    <input type="text" id="ContactAktivFrom" value="@( item.AktivFrom != null ? item.AktivFrom.ToString("yyyy-MM-dd") : item.AktivFrom)" class="edit-mode form-control" /></text>, style: "col2Width"),
-                    grid.Column("Aktiv t.o.m", "Aktiv t.o.m", format: @<text><span class="display-mode"><label id="lblAktivTom">@( item.AktivTom != null ? item.AktivTom.ToString("yyyy-MM-dd") : item.AktivTom)</label></span>
-                    <input type="text" id="ContactAktivTom" value="@( item.AktivTom != null ? item.AktivTom.ToString("yyyy-MM-dd") : item.AktivTom)" class="edit-mode form-control" /></text>, style: "col2Width"),
-                    grid.Column("Status", "Status", format: @<text><span class="display-mode col1Width"><label id="lblStatus">@item.Status</label></span>
-                    <input type="text" id="ContactStatus" value="@item.Status" class="edit-mode form-control" /></text>, style: "col1Width"),
-
-                    grid.Column(null, format: @<text>
-                    <button class="save-user edit-mode btn btn-default">Maila</button>
-                </text>, style: "col3Width", canSort: false)))
-
-        </div>
-    }*@
+    }
 </div>
 

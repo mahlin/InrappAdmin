@@ -150,6 +150,10 @@ textarea {
     padding: 3px 7px 2px;
 }
 
+#GridBody {
+    width: 1140px;
+}
+
 .colZeroWidth {
     width: 0px;
     margin: 0px;

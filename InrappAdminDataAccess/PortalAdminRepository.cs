@@ -312,6 +312,12 @@ namespace InrappAdmin.DataAccess
             return expectedDeliveriesList;
         }
 
+        public IEnumerable<AdmForvantadleverans> GetExpectedDeliveriesForSubDirectory(int subdirId)
+        {
+            var expectedDeliveriesList = DbContext.AdmForvantadleverans.Where(x => x.DelregisterId == subdirId).OrderBy(x => x.Uppgiftsstart).ToList();
+            return expectedDeliveriesList;
+        }
+
         public IEnumerable<AdmFilkrav> GetFileRequirementsForDirectory(int dirId)
         {
             var fileRequirementsList = new List<AdmFilkrav>();
@@ -369,12 +375,8 @@ namespace InrappAdmin.DataAccess
 
         public IEnumerable<Rapporteringsresultat> GetReportResultForDirAndPeriod(int delRegId, string period)
         {
-            var repResults = DbContext.RapporteringsResultat.Where(x => x.DelregisterId == delRegId).ToList();
+            var repResults = DbContext.RapporteringsResultat.Where(x => x.DelregisterId == delRegId && x.Period == period).ToList();
             return repResults;
-
-            //var trials = q.progressive_filtering_lookup_decoded_v
-            //    .Where(z => z.source == "")
-            //    .Select(z => z.trial_id);
         }
 
         public IEnumerable<string> GetSubDirectoysPeriodsForAYear(int subdirId, int year)
@@ -451,6 +453,12 @@ namespace InrappAdmin.DataAccess
                 .Where(a => a.OrganisationId == orgId && a.DelregisterId == subdirId &&
                             a.ForvantadleveransId == forvlevId).OrderByDescending(x => x.Id).FirstOrDefault();
             return latestsDeliveryForOrgAndSubdirectory;
+        }
+
+        public string GetUserEmail(string userId)
+        {
+            var email = IdentityDbContext.Users.Where(x => x.Id == userId).Select(x => x.Email).SingleOrDefault();
+            return email;
         }
 
 

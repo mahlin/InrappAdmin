@@ -67,6 +67,8 @@ namespace InrappAdmin.ApplicationService.Interface
         IEnumerable<AdmForvantadfil> HamtaForvantadeFilerForRegister(int regId);
         IEnumerable<AdmForvantadleverans> HamtaForvantadeLeveranserForRegister(int regId);
 
+        IEnumerable<AdmForvantadleverans> HamtaForvantadeLeveranserForDelregister(int delregId);
+
         IEnumerable<AdmFilkrav> HamtaFilkravForRegister(int regId);
         IEnumerable<AdmRegister> HamtaAllaRegister();
         IEnumerable<AdmRegister> HamtaAllaRegisterForPortalen();
@@ -87,7 +89,7 @@ namespace InrappAdmin.ApplicationService.Interface
 
         IEnumerable<AppUserAdmin> HamtaAdminUsers();
 
-        IEnumerable<Rapporteringsresultat> HamtaRapporteringsresultatForRegOchPeriod(int delRegId, string period);
+        IEnumerable<RapporteringsresultatDTO> HamtaRapporteringsresultatForRegOchPeriod(int delRegId, string period);
 
         IEnumerable<AdmRegister> HamtaRegisterForOrg(int orgId);
 
@@ -179,6 +181,8 @@ namespace InrappAdmin.ApplicationService.Interface
         void TaBortAdminAnvandare(string userId);
 
         List<OpeningDay> MarkeraStangdaDagar(List<string> closedDays);
+
+        void SkickaPaminnelse(IEnumerable<RapporteringsresultatDTO> rappResList, string userId);
 
     }
 }

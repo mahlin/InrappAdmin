@@ -82,6 +82,7 @@ namespace InrappAdmin.DataAccess
         IEnumerable<AdmFilkrav> GetAllFileRequirements();
 
         IEnumerable<AdmForvantadleverans> GetExpectedDeliveriesForDirectory(int dirId);
+        IEnumerable<AdmForvantadleverans> GetExpectedDeliveriesForSubDirectory(int subdirId);
         IEnumerable<AdmFilkrav> GetFileRequirementsForDirectory(int dirId);
 
         IEnumerable<AdmFilkrav> GetFileRequirementsForSubDirectory(int subdirId);
@@ -126,6 +127,8 @@ namespace InrappAdmin.DataAccess
         int GetExpextedDeliveryIdForSubDirAndPeriod(int subDirId, string period);
 
         Leverans GetLatestDeliveryForOrganisationSubDirectoryAndPeriod(int orgId, int subdirId, int forvlevId);
+
+        string GetUserEmail(string userId);
 
         int CreateOrganisation(Organisation org);
 

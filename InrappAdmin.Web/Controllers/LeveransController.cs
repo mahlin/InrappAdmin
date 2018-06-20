@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net.Configuration;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using InrappAdmin.ApplicationService;
@@ -347,64 +349,26 @@ namespace InrappAdmin.Web.Controllers
         [Authorize]
         public ActionResult GetReminderinfo()
         {
-            var tmp = _portalAdminService.HamtaRapporteringsresultatForRegOchPeriod(12, "201804");
             var model = new LeveransViewModels.ReminderViewModel();
+            model.AntRader = 0;
             //// Ladda drop down lists. 
-            var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
-            //this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
-            //model.SelectedRegisterId = 0;
-
-            // Ladda drop down lists. 
-            ViewBag.RegisterList = new SelectList(registerList, "Id", "Kortnamn");
-            model.SelectedRegisterId = 0;
+            model = GetDropDownLists(model);
+            
             return View("ReminderInfo", model);
-        }
-
-        [HttpGet]
-        public List<KeyValuePair<int, string>> GetSubDirectoriesForDir(int dirId)
-        {
-            var delregList = _portalAdminService.HamtaDelRegisterForRegister(dirId);
-            var tmp = new List<KeyValuePair<int, string>>();
-            foreach (var delreg in delregList)
-            {
-                KeyValuePair<int, string> keyValuePair = new KeyValuePair<int, string>(delreg.Id, delreg.Kortnamn);
-                tmp.Add(keyValuePair);
-            }
-
-            return tmp;
-
-            //return Json("Hej");
         }
 
 
         // GET
         [Authorize]
-        public ActionResult GetReminderInfoForRegAndPeriod(LeveransViewModels.LeveransViewModel model, int regId = 0)
+        public ActionResult GetReminderInfoForRegAndPeriod(LeveransViewModels.ReminderViewModel model)
         {
-
-            var tmp = _portalAdminService.HamtaRapporteringsresultatForRegOchPeriod(12, "201804");
             try
             {
-                var dirId = model.SelectedRegisterId;
-                if (dirId == 0 && regId != 0)
-                {
-                    dirId = regId;
-                }
-                if (dirId != 0)
-                {
-                    var register = _portalAdminService.HamtaRegisterMedId(dirId);
-                    var filkravList = _portalAdminService.HamtaFilkravForRegister(register.Id);
-                    //Lägg över i modellen
-                    model.Filkrav = ConvertFilkravToViewModel(filkravList.ToList());
-                    // Ladda drop down lists. 
-                    var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
-                    this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
-                    model.SelectedRegisterId = dirId;
-                }
-                else
-                {
-                    return RedirectToAction("GetFilkrav");
-                }
+                var rappList = _portalAdminService.HamtaRapporteringsresultatForRegOchPeriod(model.SelectedDelregisterId, model.SelectedPeriod);
+                model.RapportResList = rappList.ToList();
+                model.AntRader = model.RapportResList.Count();
+                model = GetDropDownLists(model);
+
             }
             catch (Exception e)
             {
@@ -420,6 +384,16 @@ namespace InrappAdmin.Web.Controllers
             return View("ReminderInfo", model);
         }
 
+        //POST
+        [Authorize]
+        public async Task< ActionResult> SendReminder(LeveransViewModels.ReminderViewModel model)
+        {
+            var userId = User.Identity.GetUserId();
+            _portalAdminService.SkickaPaminnelse(model.RapportResList, userId);
+
+            model = GetDropDownLists(model);
+            return View("ReminderInfo", model);
+        }
 
         // GET
         public ActionResult GetDeliveryStatus()
@@ -753,7 +727,10 @@ namespace InrappAdmin.Web.Controllers
 
                     var admForvFil = new AdmForvantadfil();
                     admForvFil.FilkravId = forvantadFil.SelectedFilkravId;
-                    admForvFil.ForeskriftsId = _portalAdminService.HamtaForeskriftByFilkrav(forvantadFil.SelectedFilkravId).Id;
+                    if (forvantadFil.SelectedFilkravId > 0)
+                    {
+                        admForvFil.ForeskriftsId = _portalAdminService.HamtaForeskriftByFilkrav(forvantadFil.SelectedFilkravId).Id;
+                    }
                     admForvFil.Filmask= forvantadFil.Filmask;
                     admForvFil.Regexp = forvantadFil.Regexp;
                     admForvFil.Obligatorisk = forvantadFil.Obligatorisk;
@@ -804,6 +781,7 @@ namespace InrappAdmin.Web.Controllers
                     var admFilkrav = new AdmFilkrav();
                     admFilkrav.Namn = filkrav.Namn;
                     admFilkrav.DelregisterId = filkrav.SelectedDelregisterId;
+                    admFilkrav.ForeskriftsId = filkrav.ForeskriftsId;
                     _portalAdminService.SkapaFilkrav(admFilkrav, userName);
                 }
                 catch (Exception e)
@@ -983,6 +961,59 @@ namespace InrappAdmin.Web.Controllers
             lstobj = new SelectList(list,"Value", "Text");
 
             return lstobj;
+        }
+
+        private LeveransViewModels.ReminderViewModel GetDropDownLists(LeveransViewModels.ReminderViewModel model)
+        {
+            var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
+            var regListDTO = new List<RegisterBasicDTO>();
+           
+            foreach (var registerDB in registerList)
+            {
+                var registerDTO = new RegisterBasicDTO
+                {
+                    Id = registerDB.Id,
+                    Registernamn = registerDB.Registernamn,
+                    Kortnamn = registerDB.Kortnamn
+                };
+                var delregListDTO = new List<DelregisterBasicDTO>();
+
+                var delregisterList = _portalAdminService.HamtaDelRegisterForRegister(registerDB.Id);
+                foreach (var delregisterDB in delregisterList)
+                {
+                    var delregDTO = new DelregisterBasicDTO
+                    {
+                        Id = delregisterDB.Id,
+                        Delregisternamn = delregisterDB.Delregisternamn,
+                        Kortnamn = delregisterDB.Kortnamn
+                    };
+
+                    var forvLevList = _portalAdminService.HamtaForvantadeLeveranserForDelregister(delregisterDB.Id);
+                    var forvLevListDTO = new List<ForvantadLeveransBasicDTO>();
+                    foreach (var forvLevDB in forvLevList)
+                    {
+                        var forvlevDTO = new ForvantadLeveransBasicDTO()
+                        {
+                            Id = forvLevDB.Id,
+                            FilkravId = forvLevDB.FilkravId,
+                            Period = forvLevDB.Period
+                        };
+                        forvLevListDTO.Add(forvlevDTO);
+                    }
+                    delregDTO.ForvantadeLeveranserList = forvLevListDTO;
+                    delregListDTO.Add(delregDTO);
+                }
+                registerDTO.DelregisterList = delregListDTO;
+                regListDTO.Add(registerDTO);
+            }
+            model.RegisterList = regListDTO;
+
+            // Ladda första dropdownlist (Register). 
+            ViewBag.RegisterList = new SelectList(registerList, "Id", "Kortnamn");
+
+            //model.SelectedRegisterId = 0;
+
+            return model;
         }
     }
 }

@@ -44,6 +44,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -53,9 +54,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOModel\DelregisterBasicDTO.cs" />
     <Compile Include="DTOModel\FilloggDetaljDTO.cs" />
+    <Compile Include="DTOModel\ForvantadLeveransBasicDTO.cs" />
     <Compile Include="DTOModel\LeveransStatusDTO.cs" />
     <Compile Include="DTOModel\OpeningHoursInfoDTO.cs" />
+    <Compile Include="DTOModel\RapporteringsresultatDTO.cs" />
+    <Compile Include="DTOModel\RegisterBasicDTO.cs" />
     <Compile Include="DTOModel\RegisterLeveransDTO.cs" />
     <Compile Include="Helpers\ExtensionMethods.cs" />
     <Compile Include="Interface\IPortalAdminService.cs" />
