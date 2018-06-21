@@ -390,11 +390,20 @@ namespace InrappAdmin.Web.Controllers
         {
             try
             {
+                var mail = false;
+                model = GetDropDownLists(model);
+                foreach (var rappRes in model.RapportResList)
+                {
+                    if (rappRes.Mail)
+                        mail = true;
+                }
+                if (!mail)
+                {
+                    ModelState.AddModelError("", "Inga rader valda.");
+                    return View("ReminderInfo",model);
+                }
                 var userId = User.Identity.GetUserId();
                 _portalAdminService.SkickaPaminnelse(model.RapportResList, userId);
-
-                model = GetDropDownLists(model);
-                
             }
             catch (Exception e)
             {
@@ -407,6 +416,7 @@ namespace InrappAdmin.Web.Controllers
                 };
                 return View("CustomError", errorModel);
             }
+            ViewBag.StatusMessage = "Mail med fil innehållande epostadresser för valda leveranser har skickats.";
             return View("ReminderInfo", model);
         }
 

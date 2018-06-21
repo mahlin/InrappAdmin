@@ -1120,7 +1120,7 @@ namespace InrappAdmin.ApplicationService
                     msg.To.Add(new MailAddress("marie.ahlin@socialstyrelsen.se"));
                     //msg.To.Add(new MailAddress(_portalAdminRepository.GetUserEmail(userId)));
                     msg.Subject = "Påminnelse";
-                    msg.Body = "'Påminnelsetext här'. Detta mail innehåller epostadresser till användare/organisationer som inte levererat godkända filer för valt register och period.";
+                    msg.Body = "'Påminnelsetext här'.<br> Detta mail innehåller en bifogad fil med epostadresser till användare/organisationer som inte levererat godkända filer för valt register och period.<br>Med vänliga hälsningar Astrid";
 
                     if (emailAttachment != null)
                     {
