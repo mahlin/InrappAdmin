@@ -388,10 +388,25 @@ namespace InrappAdmin.Web.Controllers
         [Authorize]
         public async Task< ActionResult> SendReminder(LeveransViewModels.ReminderViewModel model)
         {
-            var userId = User.Identity.GetUserId();
-            _portalAdminService.SkickaPaminnelse(model.RapportResList, userId);
+            try
+            {
+                var userId = User.Identity.GetUserId();
+                _portalAdminService.SkickaPaminnelse(model.RapportResList, userId);
 
-            model = GetDropDownLists(model);
+                model = GetDropDownLists(model);
+                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("LeveransController", "SendReminder", e.ToString(), e.HResult, User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade när påminnelsemail skulle skickas.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+            }
             return View("ReminderInfo", model);
         }
 

@@ -1087,11 +1087,7 @@ namespace InrappAdmin.ApplicationService
                 if (rappRes.Mail)
                 {
                     var x = rappRes.Email.IndexOf(",");
-                    if (rappRes.Email.IndexOf(",") == 0)
-                    {
-                        emailList = emailList + rappRes.Email + ";";
-                    }
-                    else if (rappRes.Email.IndexOf(",") > 0)
+                    if (rappRes.Email.IndexOf(",", StringComparison.Ordinal) > 0)
                     {
                         //Fler epostadresser finns för raden, splitta
                         var newEmailStr = rappRes.Email.Split(',');
@@ -1100,41 +1096,65 @@ namespace InrappAdmin.ApplicationService
                             emailList = emailList + email + ";";
                         }
                     }
+                    else
+                    {
+                        emailList = emailList + rappRes.Email + ";";
+                    }
                 }
             }
-            //Skapa fil/attachment 'in memory'
-            MemoryStream ms = new MemoryStream(ASCIIEncoding.ASCII.GetBytes(emailList));
-            Attachment emailAttachment = new Attachment(ms, new ContentType("text/bzk"));
-            emailAttachment.Name = "epostadresser" + ".txt";
-
-            //Send mail
-            MailMessage msg = new MailMessage();
-            msg.From = new MailAddress(ConfigurationManager.AppSettings["MailSender"]);
-            //TODO
-            msg.To.Add(new MailAddress("marie.ahlin@socialstyrelsen.se"));
-            //msg.To.Add(new MailAddress(_portalAdminRepository.GetUserEmail(userId)));
-            msg.Subject = "Påminnelse";
-
-            if (emailAttachment != null)
+            //Skapa fil/attachment 'in memory' and send mail
+            using (var stream = GenerateStreamFromString(emailList))
             {
-                ContentDisposition disposition = emailAttachment.ContentDisposition;
-                disposition.CreationDate = File.GetCreationTime(emailAttachment.Name);
-                disposition.ModificationDate = File.GetLastWriteTime(emailAttachment.Name);
-                disposition.ReadDate = File.GetLastAccessTime(emailAttachment.Name);
-                disposition.FileName = Path.GetFileName(emailAttachment.Name);
-                //disposition.Size = new FileInfo(emailAttachment.Name).Length;
-                disposition.DispositionType = DispositionTypeNames.Attachment;
-                msg.Attachments.Add(emailAttachment);
-            }
-
-            using (SmtpClient smtpClient = new SmtpClient(ConfigurationManager.AppSettings["MailServer"]))
-            {
-                if (ConfigurationManager.AppSettings["EnableSsl"] == "True")
+                // ... Do stuff to stream
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    smtpClient.EnableSsl = true;
+                    stream.CopyTo(ms);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    var emailAttachment = new Attachment(ms, new ContentType("text/bzk"));
+                    emailAttachment.Name = "epostadresser" + ".txt";
+
+                    //Send mail
+                    MailMessage msg = new MailMessage();
+                    msg.From = new MailAddress(ConfigurationManager.AppSettings["MailSender"]);
+                    //TODO
+                    msg.To.Add(new MailAddress("marie.ahlin@socialstyrelsen.se"));
+                    //msg.To.Add(new MailAddress(_portalAdminRepository.GetUserEmail(userId)));
+                    msg.Subject = "Påminnelse";
+                    msg.Body = "'Påminnelsetext här'. Detta mail innehåller epostadresser till användare/organisationer som inte levererat godkända filer för valt register och period.";
+
+                    if (emailAttachment != null)
+                    {
+                        ContentDisposition disposition = emailAttachment.ContentDisposition;
+                        disposition.CreationDate = File.GetCreationTime(emailAttachment.Name);
+                        disposition.ModificationDate = File.GetLastWriteTime(emailAttachment.Name);
+                        disposition.ReadDate = File.GetLastAccessTime(emailAttachment.Name);
+                        disposition.FileName = Path.GetFileName(emailAttachment.Name);
+                        //disposition.Size = new FileInfo(emailAttachment.Name).Length;
+                        disposition.DispositionType = DispositionTypeNames.Attachment;
+                        msg.Attachments.Add(emailAttachment);
+                    }
+                    using (SmtpClient smtpClient = new SmtpClient(ConfigurationManager.AppSettings["MailServer"]))
+                    {
+                        if (ConfigurationManager.AppSettings["EnableSsl"] == "True")
+                        {
+                            smtpClient.EnableSsl = true;
+                        }
+                        smtpClient.Send(msg);
+                    }
                 }
-                smtpClient.Send(msg);
             }
+        }
+
+        public static Stream GenerateStreamFromString(string s)
+        {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            //var x = stream.Length;
+            //string jsonString = Encoding.ASCII.GetString(stream.ToArray());
+            return stream;
         }
     }
 }
