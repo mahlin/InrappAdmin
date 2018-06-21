@@ -1115,12 +1115,13 @@ namespace InrappAdmin.ApplicationService
 
                     //Send mail
                     MailMessage msg = new MailMessage();
+                    msg.IsBodyHtml = true;
                     msg.From = new MailAddress(ConfigurationManager.AppSettings["MailSender"]);
                     //TODO
-                    msg.To.Add(new MailAddress("marie.ahlin@socialstyrelsen.se"));
-                    //msg.To.Add(new MailAddress(_portalAdminRepository.GetUserEmail(userId)));
+                    //msg.To.Add(new MailAddress("marie.ahlin@socialstyrelsen.se"));
+                    msg.To.Add(new MailAddress(_portalAdminRepository.GetUserEmail(userId)));
                     msg.Subject = "Påminnelse";
-                    msg.Body = "'Påminnelsetext här'.<br> Detta mail innehåller en bifogad fil med epostadresser till användare/organisationer som inte levererat godkända filer för valt register och period.<br>Med vänliga hälsningar Astrid";
+                    msg.Body = "'Påminnelsetext här'.<br /> Detta mail innehåller en bifogad fil med epostadresser till användare/organisationer som inte levererat godkända filer för valt register och period.<br />Med vänliga hälsningar Astrid";
 
                     if (emailAttachment != null)
                     {
