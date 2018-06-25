@@ -64,7 +64,9 @@ namespace InrappAdmin.Web.Models.ViewModels
             public string FilkravNamn { get; set; }
             public int? ForeskriftsId { get; set; }
             public string DelregisterKortnamn { get; set; }
+            [Required(ErrorMessage = "Fältet Filmask är obligatoriskt.")]
             public string Filmask { get; set; }
+            [Required(ErrorMessage = "Fältet Regexp är obligatoriskt.")]
             public string Regexp { get; set; }
             public bool Obligatorisk { get; set; }
             public bool Tom { get; set; }
