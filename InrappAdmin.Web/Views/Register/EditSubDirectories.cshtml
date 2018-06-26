@@ -175,7 +175,7 @@
                                     <input type="text" id="SubDirectoryFolder" value="@item.Slussmapp" class="edit-mode form-control" /></text>, style: "colMinWidth"),
                                          grid.Column("Inrapporteringsportal", "Inrapporteringsportal", format: @<text>
                                             <span class="display-mode"><input id="lblForPortal" class="checkbox" name="select" type="checkbox" disabled @(item.Inrapporteringsportal ? "checked='checked'" : "") value="@item.Inrapporteringsportal" /></span>
-                                            <input id="SubDirectoryForPortal" class="edit-mode form-control checkbox" name="select" type="checkbox" @(item.Inrapporteringsportal ? "checked='checked'" : "") value="@item.Inrapporteringsportal" /></text>, style: "colMinWidth centered"),
+                                            <input id="SubDirectoryForPortal" class="edit-mode checkbox" name="select" type="checkbox" @(item.Inrapporteringsportal ? "checked='checked'" : "") value="@item.Inrapporteringsportal" /></text>, style: "colMinWidth centered"),
 
                                               grid.Column(null, format: @<text>
                                                 <button class="edit-user display-mode btn btn-default">Ändra</button>

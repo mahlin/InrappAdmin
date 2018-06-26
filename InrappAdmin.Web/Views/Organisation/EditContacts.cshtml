@@ -201,7 +201,7 @@
 
                     grid.Column("Telefonnr verifierat", "Telefonnr verifierat", format: @<text>
                     <span class="display-mode"><input id="lblContactPhoneNumberVerified" class="checkbox" name="select" type="checkbox" disabled @(item.PhoneNumberConfirmed ? "checked='checked'" : "") value="@item.PhoneNumberConfirmed"/></span>
-                    <input id="ContactPhoneNumberConfirmed" class="edit-mode form-control checkbox" name="select" type="checkbox" @(item.PhoneNumberConfirmed ? "checked='checked'" : "") value="@item.PhoneNumberConfirmed"/></text>, style: "colMinWidth centered"),
+                    <input id="ContactPhoneNumberConfirmed" class="edit-mode checkbox" name="select" type="checkbox" @(item.PhoneNumberConfirmed ? "checked='checked'" : "") value="@item.PhoneNumberConfirmed"/></text>, style: "colMinWidth centered"),
                     grid.Column("Aktiv fr.o.m", "Aktiv fr.o.m", format: @<text><span class="display-mode"><label id="lblAktivFrom">@( item.AktivFrom != null ? item.AktivFrom.ToString("yyyy-MM-dd") : item.AktivFrom)</label></span>
                     <input type="text" id="ContactAktivFrom" value="@( item.AktivFrom != null ? item.AktivFrom.ToString("yyyy-MM-dd") : item.AktivFrom)" class="edit-mode form-control" /></text>, style: "col2Width"),
                     grid.Column("Aktiv t.o.m", "Aktiv t.o.m", format: @<text><span class="display-mode"><label id="lblAktivTom">@( item.AktivTom != null ? item.AktivTom.ToString("yyyy-MM-dd") : item.AktivTom)</label></span>

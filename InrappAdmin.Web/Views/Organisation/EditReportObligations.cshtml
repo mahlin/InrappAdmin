@@ -143,7 +143,7 @@
 
                                 grid.Column("Per enhet", "Per enhet", format: @<text>
                                 <span class="display-mode"><input id="lblRappPerEnhet" class="checkbox" name="select" type="checkbox" disabled @(item.RapporterarPerEnhet ? "checked='checked'" : "") value="@item.RapporterarPerEnhet"/></span>
-                                <input id="RepRapporterarPerEnhet" class="edit-mode form-control checkbox" name="select" type="checkbox" @(item.RapporterarPerEnhet ? "checked='checked'" : "") value="@item.RapporterarPerEnhet"/></text>, style: "colMinWidth centered"),
+                                <input id="RepRapporterarPerEnhet" class="edit-mode checkbox" name="select" type="checkbox" @(item.RapporterarPerEnhet ? "checked='checked'" : "") value="@item.RapporterarPerEnhet"/></text>, style: "colMinWidth centered"),
 
 
                                 grid.Column(null, format: @<text>
