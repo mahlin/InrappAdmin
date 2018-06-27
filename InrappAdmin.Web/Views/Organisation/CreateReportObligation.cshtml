@@ -6,14 +6,19 @@
 
 <script>
 
-    //$(document).ready(function () {
-    //    alert("Orgid: " + $('#Organisationsid').val());
-    //});
+        //$(document).ready(function () {
+        //    alert("Orgid: " + $('#Organisationsid').val());
+        //});
+
+    $(document).on('change', '#ddlDelregister', function () {
+        $("#DelregisterId").val(parseInt($('#ddlDelregister').val()));
+    });
+
 </script>
 
 
 @using (Html.BeginForm("CreateReportObligation", "Organisation", new { orgId = Model.OrganisationId }, FormMethod.Post, null))
-{
+    {
     @Html.AntiForgeryToken()
 
     @Html.HiddenFor(m => m.OrganisationId)
@@ -37,10 +42,18 @@
             </div>
         </div>
 
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("Delregister", new { @class = "control-label col-md-2" })
+            <div class="col-md-10" style="width: 225px !important;">
+                @Html.DropDownListFor(m => m.DelregisterId, ViewBag.DelregisterList as SelectList, " - Välj delregister -", new { id = "ddlDelregister", @class = "form-control", style = "width:275px !important" })
+            </div>
+        </div>
+
         <div class="form-group">
             @Html.LabelFor(model => model.SkyldigFrom, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.SkyldigFrom, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.SkyldigFrom, new { htmlAttributes = new { @clas = "form-control" } })
                 @Html.ValidationMessageFor(model => model.SkyldigFrom, "", new { @class = "text-danger" })
             </div>
         </div>

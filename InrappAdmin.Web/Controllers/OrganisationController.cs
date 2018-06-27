@@ -405,6 +405,9 @@ namespace InrappAdmin.Web.Controllers
         {
             var model = new OrganisationViewModels.ReportObligationsViewModel();
             model.OrganisationId = orgId;
+            var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
+            this.ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
+            model.DelregisterId = 0;
             return View(model);
         }
 
@@ -412,7 +415,7 @@ namespace InrappAdmin.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult CreateReportObligation(AdmUppgiftsskyldighet uppgSk, int orgId = 0)
+        public ActionResult CreateReportObligation(OrganisationViewModels.ReportObligationsViewModel uppgSk, int orgId)
         {
             var kommunkod = String.Empty;
             if (ModelState.IsValid)
@@ -420,7 +423,9 @@ namespace InrappAdmin.Web.Controllers
                 try
                 {
                     var userName = User.Identity.GetUserName();
-                    _portalAdminService.SkapaUppgiftsskyldighet(uppgSk, userName);
+                    var admUppgSkyldighet = ConvertToDbFromVM(uppgSk);
+                    admUppgSkyldighet.OrganisationId = orgId;
+                    _portalAdminService.SkapaUppgiftsskyldighet(admUppgSkyldighet, userName);
                     kommunkod = _portalAdminService.HamtaKommunkodForOrg(uppgSk.OrganisationId);
                 }
                 catch (Exception e)
@@ -540,6 +545,39 @@ namespace InrappAdmin.Web.Controllers
 
             return uppgSkyldigheter;
         }
-        
+
+
+        private AdmUppgiftsskyldighet ConvertToDbFromVM(OrganisationViewModels.ReportObligationsViewModel uppgSkVM)
+        {
+            var admUppgSk = new AdmUppgiftsskyldighet
+            {
+                Id = uppgSkVM.Id,
+                DelregisterId = uppgSkVM.DelregisterId,
+                SkyldigFrom = uppgSkVM.SkyldigFrom,
+                SkyldigTom = uppgSkVM.SkyldigTom,
+                RapporterarPerEnhet =uppgSkVM.RapporterarPerEnhet
+            };
+
+            return admUppgSk;
+        }
+
+        private IEnumerable<SelectListItem> CreateDelRegisterDropDownList(IEnumerable<AdmDelregister> delregisterList)
+        {
+            SelectList lstobj = null;
+
+            var list = delregisterList
+                .Select(p =>
+                    new SelectListItem
+                    {
+                        Value = p.Id.ToString(),
+                        Text = p.Kortnamn
+                    });
+
+            // Setting.  
+            lstobj = new SelectList(list, "Value", "Text");
+
+            return lstobj;
+        }
+
     }
 }

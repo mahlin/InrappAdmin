@@ -7,12 +7,13 @@
     var registerLista = @Html.Raw(Json.Encode(Model.RegisterList));
     var antalRader = @Html.Raw(Json.Encode(Model.AntRader));
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         //$("#GridHeader").html("<table>" + $('#gridContent table thead').html() + "</table>");
-        $("#GridHeader").html("<table style='width:1140px;'><tr><th class='colMinWidth'>Kommunkod</th><th class='col3Width'>Organisation</th><th class='col5Width'>Epostadress</th><th class='col1Width'>Antal</th><th class='col2Width'>Leveranstidpunkt</th><th class='colMinWidth'>Påminn</th></tr></table>");
-        $("#GridHeader table tr:first").append("<th style='width:12px;'></th>");
-        $("#GridBody").html("<table style='width:1140px;'>" + $('#gridContent table tbody').html() + "</table>");
-        $("#gridContent").hide();
+        //$("#GridHeader").html(
+        //        "<table style='width:1140px;'><tr><th class='colMinWidth'>Kommunkod</th><th class='col3Width'>Organisation</th><th class='col5Width'>Epostadress</th><th class='col1Width'>Antal</th><th class='col2Width'>Leveranstidpunkt</th><th class='colMinWidth'>Påminn</th></tr></table>");
+        //$("#GridHeader table tr:first").append("<th style='width:12px;'></th>");
+        //$("#GridBody").html("<table style='width:1140px;'>" + $('#gridContent table tbody').html() + "</table>");
+        //$("#gridContent").hide();
 
         if ($("#SelectedRegisterId").val() > 0) {
             //set delreg-ddl
@@ -48,18 +49,18 @@
 
     });
 
-    $(function () {
+    $(function() {
         $("#ddlDelregister").focus();
     });
 
     function setDelregDrop(selectedRegister) {
         //Hämta delregister för valt register
-        registerLista.forEach(function (register, index) {
+        registerLista.forEach(function(register, index) {
             if (selectedRegister === register.Id.toString()) {
                 if (register.DelregisterList.length !== 0) {
                     //Populera delregister-dropdown
                     var vals = {};
-                    register.DelregisterList.forEach(function (unit, index) {
+                    register.DelregisterList.forEach(function(unit, index) {
                         vals[unit.Id] = unit.Kortnamn;
                     });
 
@@ -67,7 +68,7 @@
                     $ddlDelregister.empty();
                     $ddlDelregister.append("<option> - Välj delregister - </option>");
                     $.each(vals,
-                        function (index, value) {
+                        function(index, value) {
                             $ddlDelregister.append("<option value=" + index + " >" + value + "</option>");
                         });
                     $ddlDelregister.removeAttr('readonly');
@@ -79,10 +80,10 @@
     function setPeriodDrop(selectedDelregister) {
         var selectedRegister = $('#ddlRegister').val();
         //Hämta perioder för valt delregister
-        registerLista.forEach(function (register, index) {
+        registerLista.forEach(function(register, index) {
             if (selectedRegister === register.Id.toString()) {
                 if (register.DelregisterList.length !== 0) {
-                    register.DelregisterList.forEach(function (delregister, index) {
+                    register.DelregisterList.forEach(function(delregister, index) {
                         if (selectedDelregister === delregister.Id.toString()) {
                             if (delregister.ForvantadeLeveranserList.length !== 0) {
                                 //Populera period-dropdown
@@ -93,9 +94,10 @@
                                 var $ddlPeriod = $("#ddlPeriod");
                                 $ddlPeriod.empty();
                                 $ddlPeriod.append("<option> - Välj period - </option>");
-                                $.each(vals,function(index, value) {
-                                    $ddlPeriod.append("<option value=" + index + " >" + value + "</option>");
-                                });
+                                $.each(vals,
+                                    function(index, value) {
+                                        $ddlPeriod.append("<option value=" + index + " >" + value + "</option>");
+                                    });
                                 $ddlPeriod.removeAttr('readonly');
                             }
                         }
@@ -105,42 +107,68 @@
         });
     }
 
-    $(document).on('change', '#ddlRegister', function () {
-        //Nollställ dropparna
-        $('#ddlPeriod').empty();
-        $("#ddlPeriod").append("<option> - Välj period - </option>");
-        $('#ddlPeriod').attr('readonly', 'readonly');
-        var selectedRegister = $('#ddlRegister').val();
-        $("#SelectedRegisterId").val(selectedRegister);
-        //Hämta delregister för valt register
-        setDelregDrop(selectedRegister);
-    });
+    $(document).on('change',
+        '#ddlRegister',
+        function() {
+            //Nollställ dropparna
+            $('#ddlPeriod').empty();
+            $("#ddlPeriod").append("<option> - Välj period - </option>");
+            $('#ddlPeriod').attr('readonly', 'readonly');
+            var selectedRegister = $('#ddlRegister').val();
+            $("#SelectedRegisterId").val(selectedRegister);
+            //Hämta delregister för valt register
+            setDelregDrop(selectedRegister);
+        });
 
-    $(document).on('change', '#ddlDelregister', function () {
-        var selectedRegister = $('#ddlRegister').val();
-        var selectedDelregister = $('#ddlDelregister').val();
-        $("#SelectedDelregisterId").val(selectedDelregister);
-        //Hämta perioder för valt delregister
-        setPeriodDrop(selectedDelregister);
-    });
+    $(document).on('change',
+        '#ddlDelregister',
+        function() {
+            var selectedRegister = $('#ddlRegister').val();
+            var selectedDelregister = $('#ddlDelregister').val();
+            $("#SelectedDelregisterId").val(selectedDelregister);
+            //Hämta perioder för valt delregister
+            setPeriodDrop(selectedDelregister);
+        });
 
-    $(document).on('change', '#ddlPeriod', function () {
-        $("#SelectedPeriod").val($('#ddlPeriod').val());
-    });
+    $(document).on('change',
+        '#ddlPeriod',
+        function() {
+            $("#SelectedPeriod").val($('#ddlPeriod').val());
+        });
 
     function setMail(id) {
         var rappResLista = @Html.Raw(Json.Encode(Model.RapportResList));
         var y = $('#RapportResList_1__Mail').val();
         var selectedId = parseInt(id);
-        $.each(rappResLista, function (index, item) {
-            if (rappResLista[index].Id === selectedId) {
-                if ($('#RapportResList_' + index + '__Mail').val() === 'False')
-                    $('#RapportResList_' + index + '__Mail').val('True');
+        $.each(rappResLista,
+            function(index, item) {
+                if (rappResLista[index].Id === selectedId) {
+                    if ($('#RapportResList_' + index + '__Mail').val() === 'False')
+                        $('#RapportResList_' + index + '__Mail').val('True');
                     else
-                    $('#RapportResList_' + index + '__Mail').val('False');
+                        $('#RapportResList_' + index + '__Mail').val('False');
                 }
             });
     }
+
+    @*function selectAll() {
+        var rappResLista = @Html.Raw(Json.Encode(Model.RapportResList));
+        $.each(rappResLista, function (index, item) {
+            var x = item;
+            $('#RapportResList_' + index + '__Mail').val('True');
+            var y = $('#RapportResList_0__Mail').val();
+        });
+        //var gridTable = document.getElementById('reminderGrid');
+        var tableRows = $('#reminderGrid tbody tr');
+        tableRows.each(function () {
+            var v = $(this);
+            var z = $(this).find('td .checkbox');
+            $(z).attr("value", true);
+            //$(this).find('td input.chkbxMail').val('True');
+        });
+        //var f = $('#gridContent table tbody').html();
+        //$("#GridBody").html("<table style='width:1140px;'>" + $('#gridContent table tbody').html() + "</table>");
+    }*@
 
 
     //$(function () {
@@ -234,11 +262,12 @@
         {
             using (Html.BeginForm("SendReminder", "Leverans", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "reminderForm" }))
             {
-                <div class="row col-md-12">
-                    <div class="col-md-10 padding-top-15" id="headerText" style="padding-left: 20px; ">
-                    </div>
-                    <div class="" style=""><input type="submit" value="Skicka påminnelse" class="btn btn-default" /></div>
-                </div>
+    <div class="row col-md-12">
+        <div class="col-md-10 padding-top-15" id="headerText" style="padding-left: 20px; ">
+        </div>
+        <div class="" style=""><input type="submit" value="Skicka påminnelse" class="btn btn-default" /></div>
+        @*<div class="" style=""><input type="button" value="Välj alla TEST" onclick="selectAll();" class="btn btn-default" /></div>*@
+    </div>
 
                 @Html.HiddenFor(m => m.SelectedRegisterId)
                 @Html.HiddenFor(m => m.SelectedDelregisterId)
@@ -299,7 +328,7 @@
                                                          grid.Column("E-post, kontaktperson", format: @<text><label id="ContactEmail" class="">@item.Email</label></text>, style: "col5Width"),
                                                                  grid.Column("Antal leveranser", format: @<text><label id="NumberOfDeliveries" class="">@item.AntalLeveranser</label></text>, style: "col1Width"),
                                                                          grid.Column("Leveranstidpunkt", format: @<text><label id="DeliveryTime" class="">@item.Leveranstidpunkt</label></text>, style: "col2Width"),
-                                                                                 grid.Column("Skicka påminnelse", format: @<text><span class=" centered"><input id="chkbxMail" class="checkbox" onchange="setMail('@item.Id');" name="select" type="checkbox" @( item.Mail ? "checked='checked'" : "") value="@item.Mail" /></span></text>, style: "colMinWidth centered", canSort: false)
+                                                                                 grid.Column("Skicka påminnelse", format: @<text><span class="centered"><input id="chkbxMail" class="checkbox" onchange="setMail('@item.Id');" name="select" type="checkbox" @( item.Mail ? "checked='checked'" : "") value="@item.Mail" /></span></text>, style: "colMinWidth centered", canSort: false)
 
                                                                                                                                                                                                                                                                                      ))
 
