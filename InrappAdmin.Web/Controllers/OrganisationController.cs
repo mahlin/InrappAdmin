@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using InrappAdmin.ApplicationService;
+using InrappAdmin.ApplicationService.DTOModel;
 using InrappAdmin.ApplicationService.Interface;
 using InrappAdmin.DataAccess;
 using InrappAdmin.DomainModel;
@@ -199,6 +200,55 @@ namespace InrappAdmin.Web.Controllers
             return View("EditReportObligations", model);
         }
 
+        //GET
+        [Authorize]
+        public ActionResult GetUnitReportObligations()
+        {
+            var model = new OrganisationViewModels.UnitReportObligationsViewModel();
+            //// Ladda drop down lists. 
+            model = GetOrgDropDownLists(model);
+            return View("EditUnitReportObligations", model);
+        }
+
+
+        [Authorize]
+        public ActionResult GetOrganisationsUnitReportObligations(OrganisationViewModels.UnitReportObligationsViewModel model, int orgId = 0, int orgenhetsId = 0)
+        {
+            try
+            {
+                if (orgId != 0)
+                {
+                    model.SelectedOrganisationId = orgId;
+                }
+                if (orgenhetsId != 0)
+                {
+                    model.SelectedOrganisationsenhetsId = orgenhetsId;
+                }
+                var admEnhetUppgSkyldighetList = _portalAdminService.HamtaEnhetsUppgiftsskyldighetForOrgEnhet(model.SelectedOrganisationsenhetsId).ToList();
+                model.UnitReportObligations = admEnhetUppgSkyldighetList;
+                // Ladda drop down lists. 
+                model = GetOrgDropDownLists(model);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("OrganisationController", "GetOrganisationsUnitReportObligations", e.ToString(), e.HResult,
+                    User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid hämtning av enhetsuppgiftsskyldighet.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                if (e.Message == "Sequence contains no elements")
+                {
+                    errorModel.Information = "Felaktig kommunkod";
+                }
+                return View("CustomError", errorModel);
+            }
+
+            return View("EditUnitReportObligations", model);
+        }
+
         [HttpPost]
         [Authorize]
         public ActionResult UpdateOrganisation(OrganisationViewModels.OrganisationViewModel model)
@@ -319,6 +369,36 @@ namespace InrappAdmin.Web.Controllers
                 return View("CustomError", errorModel);
             }
             return RedirectToAction("GetOrganisationsReportObligations", new { kommunkod = kommunkod });
+
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult UpdateOrganisationsUnitReportObligation(AdmEnhetsUppgiftsskyldighet admEnhetsUppgSkyldighet)
+        {
+            var org = new Organisation();
+            try
+            {
+                org = _portalAdminService.HamtaOrgForUppgiftsskyldighet(admEnhetsUppgSkyldighet.UppgiftsskyldighetId);
+                if (ModelState.IsValid)
+                {
+                    var userName = User.Identity.GetUserName();
+                    _portalAdminService.UppdateraEnhetsUppgiftsskyldighet(admEnhetsUppgSkyldighet, userName);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("OrganisationController", "UpdateOrganisationsUnitReportObligation", e.ToString(), e.HResult,
+                    User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid uppdatering av enhetsuppgiftsskyldighet.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+            }
+            return RedirectToAction("GetOrganisationsUnitReportObligations", new { orgId = org.Id, orgenhetsId = admEnhetsUppgSkyldighet.OrganisationsenhetsId});
 
         }
 
@@ -445,6 +525,54 @@ namespace InrappAdmin.Web.Controllers
             return View();
         }
 
+        [Authorize]
+        public ActionResult CreateUnitReportObligation(int orgId = 0, int orgenhetsId = 0)
+        {
+            var model = new OrganisationViewModels.UnitReportObligationsViewModel();
+            model.SelectedOrganisationId = orgId;
+            model.SelectedOrganisationsenhetsId = orgenhetsId;
+            var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
+            this.ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
+
+            var orgenhetsList = _portalAdminService.HamtaOrgEnheterForOrg(orgId);
+            this.ViewBag.OrgenhetList = CreateOrgenhetDropDownList(orgenhetsList);
+            return View(model);
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public ActionResult CreateUnitReportObligation(OrganisationViewModels.UnitReportObligationsViewModel enhetsUppgSk)
+        {
+            var kommunkod = String.Empty;
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var userName = User.Identity.GetUserName();
+                    var admEnhetsUppgSkyldighet = ConvertViewModelToAdmEnhetsUppgiftsskyldighet(enhetsUppgSk);
+                    admEnhetsUppgSkyldighet.UppgiftsskyldighetId = _portalAdminService.HamtaUppgiftsskyldighetForOrgOchDelreg(Convert.ToInt32(enhetsUppgSk.SelectedOrganisationId),
+                            Convert.ToInt32(enhetsUppgSk.SelectedDelregisterId)).Id;
+                    _portalAdminService.SkapaEnhetsUppgiftsskyldighet(admEnhetsUppgSkyldighet, userName);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("OrganisationController", "CreateUnitReportObligation", e.ToString(), e.HResult, User.Identity.Name);
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade när ny enhetsuppgiftsskyldighet skulle sparas.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
+                return RedirectToAction("GetOrganisationsUnitReportObligations", new { orgId = Convert.ToInt32(enhetsUppgSk.SelectedOrganisationId), orgenhetsId = Convert.ToInt32(enhetsUppgSk.SelectedDelregisterId) });
+            }
+
+            return View();
+        }
+
         [HttpPost]
         [Authorize]
         public ActionResult DeleteContact(string contactId, string kommunkod)
@@ -465,6 +593,46 @@ namespace InrappAdmin.Web.Controllers
                 return View("CustomError", errorModel);
             }
             return RedirectToAction("GetOrganisationsContacts", new {kommunkod = kommunkod});
+        }
+
+
+        private OrganisationViewModels.UnitReportObligationsViewModel GetOrgDropDownLists(OrganisationViewModels.UnitReportObligationsViewModel model)
+        {
+            var orgList = _portalAdminService.HamtaAllaOrganisationer();
+            var orgListDTO = new List<OrganisationDTO>();
+
+            foreach (var org in orgList)
+            {
+                var organisationDTO = new OrganisationDTO
+                {
+                    Id = org.Id,
+                    Kommunkod = org.Kommunkod,
+                    Landstingskod = org.Landstingskod,
+                    Organisationsnamn = org.Organisationsnamn
+                };
+                var orgenheter = _portalAdminService.HamtaOrgEnheterForOrg(org.Id).ToList();
+                var orgenhetsListDTO = new List<OrganisationsenhetDTO>();
+
+                foreach (var orgenhet in orgenheter)
+                {
+                    var orgenhetDTO = new OrganisationsenhetDTO
+                    {
+                        Id = orgenhet.Id,
+                        Enhetsnamn = orgenhet.Enhetsnamn,
+                        Enhetskod = orgenhet.Enhetskod
+                    };
+                    orgenhetsListDTO.Add(orgenhetDTO);
+                }
+                organisationDTO.Organisationsenheter = orgenhetsListDTO;
+                orgListDTO.Add(organisationDTO);
+                
+            }
+
+            model.OrganisationList = orgListDTO;
+            ViewBag.OrganisationList = new SelectList(orgListDTO, "Id", "Kommunkod");
+
+            return model;
+
         }
 
         private IEnumerable<OrganisationViewModels.ApplicationUserViewModel> ConvertUsersViewModelUser(IEnumerable<ApplicationUser> contacts)
@@ -546,6 +714,39 @@ namespace InrappAdmin.Web.Controllers
             return uppgSkyldigheter;
         }
 
+        private AdmEnhetsUppgiftsskyldighet ConvertViewModelToAdmEnhetsUppgiftsskyldighet(OrganisationViewModels.UnitReportObligationsViewModel admEnhetsUppgskyldView)
+        {
+            var enhetsUppgskyldighet = new AdmEnhetsUppgiftsskyldighet()
+            {
+                Id = admEnhetsUppgskyldView.Id,
+                OrganisationsenhetsId = admEnhetsUppgskyldView.SelectedOrganisationsenhetsId,
+                UppgiftsskyldighetId = admEnhetsUppgskyldView.UppgiftsskyldighetId,
+                SkyldigFrom = admEnhetsUppgskyldView.SkyldigFrom,
+                SkyldigTom = admEnhetsUppgskyldView.SkyldigTom
+            };
+
+            return enhetsUppgskyldighet;
+        }
+
+        //private List<OrganisationViewModels.UnitReportObligationsViewModel> ConvertAdmEnhetsUppgiftsskyldighetToViewModel(List<AdmEnhetsUppgiftsskyldighet> admEnhetsUppgskyldighetList)
+        //{
+        //    var enhetsuppgkyldigheter = new List<OrganisationViewModels.UnitReportObligationsViewModel>();
+        //    foreach (var admEnhetsUppgskyldighet in admEnhetsUppgskyldighetList)
+        //    {
+        //        var enhetsuppgSkyldighetView = new OrganisationViewModels.UnitReportObligationsViewModel()
+        //        {
+        //            Id = admEnhetsUppgskyldighet.Id,
+        //            OrganisationenhetsId = admEnhetsUppgskyldighet.OrganisationsenhetsId,
+        //            SkyldigFrom = admEnhetsUppgskyldighet.SkyldigFrom,
+        //            SkyldigTom = admEnhetsUppgskyldighet.SkyldigTom,
+        //        };
+
+        //        enhetsuppgkyldigheter.Add(enhetsuppgSkyldighetView);
+        //    }
+
+        //    return enhetsuppgkyldigheter;
+        //}
+
 
         private AdmUppgiftsskyldighet ConvertToDbFromVM(OrganisationViewModels.ReportObligationsViewModel uppgSkVM)
         {
@@ -578,6 +779,28 @@ namespace InrappAdmin.Web.Controllers
 
             return lstobj;
         }
+
+        private IEnumerable<SelectListItem> CreateOrgenhetDropDownList(IEnumerable<Organisationsenhet> orgenhetList)
+        {
+            SelectList lstobj = null;
+
+            var list = orgenhetList
+                .Select(p =>
+                    new SelectListItem
+                    {
+                        Value = p.Id.ToString(),
+                        Text = p.Enhetsnamn
+                    });
+
+            // Setting.  
+            lstobj = new SelectList(list, "Value", "Text");
+
+            return lstobj;
+        }
+
+
+
+        
 
     }
 }

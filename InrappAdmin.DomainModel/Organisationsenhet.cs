@@ -20,6 +20,7 @@ namespace InrappAdmin.DomainModel
         public string AndradAv { get; set; }
         public virtual Organisation Organisation { get; set; }
         public virtual ICollection<Leverans> Leveranser { get; set; }
-        }
+        public virtual ICollection<AdmEnhetsUppgiftsskyldighet> AdmEnhetsUppgiftsskyldighet { get; set; }
+    }
 }
 

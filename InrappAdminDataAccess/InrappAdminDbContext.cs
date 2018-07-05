@@ -190,6 +190,26 @@ namespace InrappAdmin.DataAccess
             modelBuilder.Entity<AdmUppgiftsskyldighet>().Property(e => e.AndradDatum).HasColumnName("andraddatum");
             modelBuilder.Entity<AdmUppgiftsskyldighet>().Property(e => e.AndradAv).HasColumnName("andradav");
 
+            //AdmEnhetsUppgiftsskyldighet
+            modelBuilder.Entity<AdmEnhetsUppgiftsskyldighet>().ToTable("admEnhetsuppgiftsskyldighet");
+            modelBuilder.Entity<AdmEnhetsUppgiftsskyldighet>().Property(e => e.Id).HasColumnName("enhetsuppgiftsskyldighetid");
+            modelBuilder.Entity<AdmEnhetsUppgiftsskyldighet>().Property(e => e.OrganisationsenhetsId).HasColumnName("organisationsenhetsId");
+            modelBuilder.Entity<AdmEnhetsUppgiftsskyldighet>()
+                .HasRequired(c => c.Organisationsenhet)
+                .WithMany(d => d.AdmEnhetsUppgiftsskyldighet)
+                .HasForeignKey(c => c.OrganisationsenhetsId);
+            modelBuilder.Entity<AdmEnhetsUppgiftsskyldighet>()
+                .HasRequired(c => c.AdmUppgiftsskyldighet)
+                .WithMany(d => d.AdmEnhetsUppgiftsskyldighet)
+                .HasForeignKey(c => c.UppgiftsskyldighetId);
+            modelBuilder.Entity<AdmEnhetsUppgiftsskyldighet>().Property(e => e.SkyldigFrom).HasColumnName("skyldigfrom");
+            modelBuilder.Entity<AdmEnhetsUppgiftsskyldighet>().Property(e => e.SkyldigTom).HasColumnName("skyldigtom");
+            modelBuilder.Entity<AdmEnhetsUppgiftsskyldighet>().Property(e => e.SkapadDatum).HasColumnName("skapaddatum");
+            modelBuilder.Entity<AdmEnhetsUppgiftsskyldighet>().Property(e => e.SkapadAv).HasColumnName("skapadav");
+            modelBuilder.Entity<AdmEnhetsUppgiftsskyldighet>().Property(e => e.AndradDatum).HasColumnName("andraddatum");
+            modelBuilder.Entity<AdmEnhetsUppgiftsskyldighet>().Property(e => e.AndradAv).HasColumnName("andradav");
+
+
             //AdmFilkrav
             modelBuilder.Entity<AdmFilkrav>().ToTable("admFilkrav");
             modelBuilder.Entity<AdmFilkrav>().Property(e => e.Id).HasColumnName("filkravid");
@@ -388,6 +408,7 @@ namespace InrappAdmin.DataAccess
         public DbSet<Aterkoppling> Aterkoppling { get; set; }
         public DbSet<AdmInformation> AdmInformation { get; set; }
         public DbSet<AdmUppgiftsskyldighet> AdmUppgiftsskyldighet { get; set; }
+        public DbSet<AdmEnhetsUppgiftsskyldighet> AdmEnhetsUppgiftsskyldighet { get; set; }
         public DbSet<AdmFAQKategori> AdmFAQKategori { get; set; }
         public DbSet<AdmFAQ> AdmFAQ { get; set; }
         public DbSet<AdmKonfiguration> AdmKonfiguration { get; set; }

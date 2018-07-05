@@ -323,6 +323,8 @@
     <Content Include="Views\Organisation\CreateOrganisation.cshtml" />
     <Content Include="Views\Leverans\ReminderInfo.cshtml" />
     <Content Include="Views\Leverans\LatestDeliveries.cshtml" />
+    <Content Include="Views\Organisation\EditUnitReportObligations.cshtml" />
+    <Content Include="Views\Organisation\CreateUnitReportObligation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

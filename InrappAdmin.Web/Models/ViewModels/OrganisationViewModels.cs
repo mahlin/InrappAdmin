@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Permissions;
 using System.Web;
+using InrappAdmin.ApplicationService.DTOModel;
 using InrappAdmin.DomainModel;
 using Microsoft.AspNet.Identity;
 
@@ -28,6 +29,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public IEnumerable<Organisationsenhet> OrgUnits { get; set; }
 
             public  IEnumerable<ReportObligationsViewModel> ReportObligations { get; set; }
+            
 
         }
         
@@ -38,6 +40,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public string Enhetskod { get; set; }
             public DateTime? AktivFrom { get; set; }
             public DateTime? AktivTom { get; set; }
+            public IEnumerable<UnitReportObligationsViewModel> UnitReportObligations { get; set; }
 
         }
 
@@ -50,6 +53,21 @@ namespace InrappAdmin.Web.Models.ViewModels
             public DateTime? SkyldigFrom { get; set; }
             public DateTime? SkyldigTom { get; set; }
             public bool RapporterarPerEnhet { get; set; }
+
+        }
+
+        public class UnitReportObligationsViewModel
+        {
+            public int Id { get; set; }
+            public int SelectedOrganisationId { get; set; }
+            public int SelectedOrganisationsenhetsId { get; set; }
+            public int SelectedDelregisterId { get; set; }
+            public List<OrganisationDTO> OrganisationList { get; set; }
+            public IEnumerable<AdmEnhetsUppgiftsskyldighet> UnitReportObligations { get; set; }
+            public string DelregisterKortnamn { get; set; }
+            public int UppgiftsskyldighetId { get; set; }
+            public DateTime? SkyldigFrom { get; set; }
+            public DateTime? SkyldigTom { get; set; }
 
         }
 

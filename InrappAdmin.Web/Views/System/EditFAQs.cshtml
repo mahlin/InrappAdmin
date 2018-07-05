@@ -23,8 +23,6 @@
 
         modalConfirm(function (confirm) {
             if (confirm) {
-                //alert($('#SelectedFAQ').val());
-                //alert($('#SelectedFAQCategory').val());
                 var data = { 'faqId': $('#SelectedFAQId').val(), 'faqCatId': $('#SelectedFAQCategory').val() };
                 $.ajax({
                     url: '/System/DeleteFAQ',
@@ -34,8 +32,8 @@
                     success: function (data) {
                         //On ajax success do this
                         $("#pageContainer").html(data);
-                        tr.find('.edit-mode, .display-mode').toggle();
                         $('#footer').hide();
+                        tr.find('.edit-mode, .display-mode').toggle();
                     }
                 });
             }
@@ -124,7 +122,6 @@
                 success: function (data) {
                     //location.reload();
                     $("#pageContainer").html(data);
-                    tr.find('.edit-mode, .display-mode').toggle();
                     $('#footer').hide();
                     //alert('Record updated Successfully!!');
                 }
@@ -176,6 +173,7 @@
     @if (Model != null)
     {
         @Html.HiddenFor(m => m.SelectedFAQ)
+        @Html.HiddenFor(m => m.SelectedFAQId)
         @Html.HiddenFor(m => m.SelectedFAQCategory)
 
         <div class="row">
@@ -188,33 +186,33 @@
         <div id="gridContent" style="font-family: Arial; padding: 20px;">
 
             @{
-        ViewBag.Title = "Administrera FAQs";
-        var grid = new WebGrid(source: Model.FAQs, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "faqsGrid");
-        grid.Pager(WebGridPagerModes.All);
+                ViewBag.Title = "Administrera FAQs";
+                var grid = new WebGrid(source: Model.FAQs, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "faqsGrid");
+                grid.Pager(WebGridPagerModes.All);
             }
 
 
             @grid.GetHtml(htmlAttributes: new { id = "FAQAnswerTable" },
-    tableStyle: "webgrid-table",
-    headerStyle: "webgrid-header",
-    footerStyle: "webgrid-footer",
-    alternatingRowStyle: "webgrid-alternating-row",
-    selectedRowStyle: "webgrid-selected-row",
-    rowStyle: "webgrid-row-style",
-    mode: WebGridPagerModes.All,
-    columns: grid.Columns(
-        grid.Column("ID", format: @<text><label id="FAQId">@item.Id</label></text>, style: "colMinWidth"),
-        grid.Column("Register", format: @<text><label id="lblRegister">@item.RegisterKortNamn</label></text>, style: "colMinWidth"),
-        grid.Column("Sortering", format: @<text><label id="lblSortering">@item.Sortering</label></text>, style: "colMinWidth"),
-        grid.Column("Fråga", format: @<text><label id="lblFraga" class="longColumnText" style="width: 200px;">@item.Fraga</label></text>, style: "col2Width"),
-        grid.Column("Svar", format: @<text> <label id="lblSvar" class="longColumnText" style="width: 200px;">@item.Svar</label></text>, style: "col3Width"),
+         tableStyle: "webgrid-table",
+         headerStyle: "webgrid-header",
+         footerStyle: "webgrid-footer",
+         alternatingRowStyle: "webgrid-alternating-row",
+         selectedRowStyle: "webgrid-selected-row",
+         rowStyle: "webgrid-row-style",
+         mode: WebGridPagerModes.All,
+         columns: grid.Columns(
+             grid.Column("ID", format: @<text><label id="FAQId">@item.Id</label></text>, style: "colMinWidth"),
+                 grid.Column("Register", format: @<text><label id="lblRegister">@item.RegisterKortNamn</label></text>, style: "colMinWidth"),
+                     grid.Column("Sortering", format: @<text><label id="lblSortering">@item.Sortering</label></text>, style: "colMinWidth"),
+                         grid.Column("Fråga", format: @<text><label id="lblFraga" class="longColumnText" style="width: 200px;">@item.Fraga</label></text>, style: "col2Width"),
+                             grid.Column("Svar", format: @<text> <label id="lblSvar" class="longColumnText" style="width: 200px;">@item.Svar</label></text>, style: "col3Width"),
 
-     grid.Column(null, format: @<text>
-            <button class="edit-user display-mode btn btn-default" onclick="showEditForm('@item.Id');">Ändra</button>
-            <button class="display-mode btn btn-default" onclick="deleteFAQ(@item.Id,'@item.Fraga');return false;">Ta bort</button>
-            @*<button class="save-user edit-mode btn btn-default">Spara</button>*@
-            <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-        </text>, style: "col3Width", canSort: false)))
+                              grid.Column(null, format: @<text>
+                                <button class="edit-user display-mode btn btn-default" onclick="showEditForm('@item.Id');">Ändra</button>
+                                <button class="display-mode btn btn-default" onclick="deleteFAQ(@item.Id,'@item.Fraga');return false;">Ta bort</button>
+                                @*<button class="save-user edit-mode btn btn-default">Spara</button>*@
+                                <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                            </text>, style: "col3Width", canSort: false)))
         </div>
 
         <div id="editSelectedFAQForm">
@@ -222,42 +220,42 @@
         </div>
 
         @*<div id="editFAQAnswer">
-            @using (Html.BeginForm("UpdateFAQ", "System", FormMethod.Post))
-            {
+                @using (Html.BeginForm("UpdateFAQ", "System", FormMethod.Post))
+                {
 
-                @Html.HiddenFor(x => Model.SelectedFAQ)
+                    @Html.HiddenFor(x => Model.SelectedFAQ)
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.RegisterId, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.RegisterId, new { htmlAttributes = new { @class = "form-control", id = "txtRegisterId" } })
-                        @Html.ValidationMessageFor(model => model.RegisterId, "", new { @class = "text-danger", id = "FAQRegisterId" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Fraga, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Fraga, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Fraga, "", new { @class = "text-danger", id = "FAQFraga" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-8">
-                            @Html.Label("FAQ svar: ", new { @class = "control-label" })
-                            @Html.TextAreaFor(m => Model.SelectedFAQAnswer, 10, 100, new { @class = "form-control", id = "FAQSvar", style = "max-width:95% !important;" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RegisterId, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.RegisterId, new { htmlAttributes = new { @class = "form-control", id = "txtRegisterId" } })
+                            @Html.ValidationMessageFor(model => model.RegisterId, "", new { @class = "text-danger", id = "FAQRegisterId" })
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Spara" class="save-user btn btn-default" />
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Fraga, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Fraga, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Fraga, "", new { @class = "text-danger", id = "FAQFraga" })
+                        </div>
                     </div>
-                </div>
-            }
-        </div>*@
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-8">
+                                @Html.Label("FAQ svar: ", new { @class = "control-label" })
+                                @Html.TextAreaFor(m => Model.SelectedFAQAnswer, 10, 100, new { @class = "form-control", id = "FAQSvar", style = "max-width:95% !important;" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Spara" class="save-user btn btn-default" />
+                        </div>
+                    </div>
+                }
+            </div>*@
     }
 </div>
 

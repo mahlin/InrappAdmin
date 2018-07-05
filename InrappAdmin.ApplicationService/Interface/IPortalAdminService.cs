@@ -26,6 +26,10 @@ namespace InrappAdmin.ApplicationService.Interface
 
         IEnumerable<AdmUppgiftsskyldighet> HamtaUppgiftsskyldighetForOrg(int orgId);
 
+        AdmUppgiftsskyldighet HamtaUppgiftsskyldighetForOrgOchDelreg(int orgId, int delregId);
+
+        IEnumerable<AdmEnhetsUppgiftsskyldighet> HamtaEnhetsUppgiftsskyldighetForOrgEnhet(int orgenhetId);
+
         IEnumerable<AdmFAQKategori> HamtaFAQkategorier();
 
         IEnumerable<AdmFAQ> HamtaFAQs(int faqCatId);
@@ -74,6 +78,8 @@ namespace InrappAdmin.ApplicationService.Interface
         IEnumerable<AdmRegister> HamtaAllaRegisterForPortalen();
 
         IEnumerable<AdmDelregister> HamtaAllaDelregisterForPortalen();
+
+        IEnumerable<Organisation> HamtaAllaOrganisationer();
 
         string HamtaKortnamnForDelregisterMedFilkravsId(int filkravsId);
 
@@ -124,6 +130,8 @@ namespace InrappAdmin.ApplicationService.Interface
 
         void SkapaUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSk, string userName);
 
+        void SkapaEnhetsUppgiftsskyldighet(AdmEnhetsUppgiftsskyldighet enhetsUppgSk, string userName);
+
         void SkapaRegister(AdmRegister reg, string userName);
 
         void SkapaDelregister(AdmDelregister delReg, string userName);
@@ -143,6 +151,8 @@ namespace InrappAdmin.ApplicationService.Interface
         void UppdateraOrganisationsenhet(Organisationsenhet orgUnit, string userName);
 
         void UppdateraUppgiftsskyldighet(AdmUppgiftsskyldighet uppgSkyldighet, string userName);
+
+        void UppdateraEnhetsUppgiftsskyldighet(AdmEnhetsUppgiftsskyldighet enhetsUppgSkyldighet, string userName);
 
         void UppdateraFAQKategori(AdmFAQKategori faqKategori, string userName);
 

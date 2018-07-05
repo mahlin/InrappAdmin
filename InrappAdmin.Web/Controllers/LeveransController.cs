@@ -328,8 +328,9 @@ namespace InrappAdmin.Web.Controllers
                 var org = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
                 IEnumerable<FilloggDetaljDTO>
                     historyFileList = _portalAdminService.HamtaHistorikForOrganisation(org.Id);
-
+                
                 model.Leveranser = historyFileList;
+                model.Kommunkod = kommunkod;
             }
             catch (Exception e)
             {

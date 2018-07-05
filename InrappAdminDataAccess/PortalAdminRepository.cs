@@ -142,6 +142,19 @@ namespace InrappAdmin.DataAccess
             return reportObligationInfo;
         }
 
+        public AdmUppgiftsskyldighet GetReportObligationInformationForOrgAndSubDir(int orgId, int subdirId)
+        {
+            var reportObligation = DbContext.AdmUppgiftsskyldighet.SingleOrDefault(x => x.OrganisationId == orgId && x.DelregisterId == subdirId);
+            return reportObligation;
+        }
+
+        public IEnumerable<AdmEnhetsUppgiftsskyldighet> GetUnitReportObligationInformationForOrgUnit(int orgUnitId)
+        {
+            var unitReportObligationInfo = DbContext.AdmEnhetsUppgiftsskyldighet.Where(x => x.OrganisationsenhetsId == orgUnitId).ToList();
+            return unitReportObligationInfo;
+
+        }
+
         public string GetKommunkodForOrg(int orgId)
         {
             var kommunkod = DbContext.Organisation.Where(x => x.Id == orgId).Select(x => x.Kommunkod).SingleOrDefault();
@@ -342,6 +355,12 @@ namespace InrappAdmin.DataAccess
             return registersList;
         }
 
+        public IEnumerable<Organisation> GetAllOrganisations()
+        {
+            var orgList = DbContext.Organisation.ToList();
+            return orgList;
+        }
+
         public IEnumerable<AdmRegister> GetAllRegistersForPortal()
         {
             var registersList = DbContext.AdmRegister.Where(x => x.Inrapporteringsportal).ToList();
@@ -509,6 +528,12 @@ namespace InrappAdmin.DataAccess
             DbContext.SaveChanges();
         }
 
+        public void CreateUnitReportObligation(AdmEnhetsUppgiftsskyldighet enhetsUppgSk)
+        {
+            DbContext.AdmEnhetsUppgiftsskyldighet.Add(enhetsUppgSk);
+            DbContext.SaveChanges();
+        }
+
         public void CreateDirectory(AdmRegister dir)
         {
             DbContext.AdmRegister.Add(dir);
@@ -606,6 +631,18 @@ namespace InrappAdmin.DataAccess
             repObl.SkyldigTom = repObligation.SkyldigTom;
             repObl.AndradDatum = repObligation.AndradDatum;
             repObl.AndradAv = repObligation.AndradAv;
+
+            DbContext.SaveChanges();
+        }
+
+        public void UpdateUnitReportObligation(AdmEnhetsUppgiftsskyldighet unitRepObligation)
+        {
+            var unitRepOblDb = DbContext.AdmEnhetsUppgiftsskyldighet.Where(u => u.Id == unitRepObligation.Id).Select(u => u).SingleOrDefault();
+            unitRepOblDb.UppgiftsskyldighetId = unitRepObligation.UppgiftsskyldighetId;
+            unitRepOblDb.SkyldigFrom = unitRepObligation.SkyldigFrom;
+            unitRepOblDb.SkyldigTom = unitRepObligation.SkyldigTom;
+            unitRepOblDb.AndradDatum = unitRepObligation.AndradDatum;
+            unitRepOblDb.AndradAv = unitRepObligation.AndradAv;
 
             DbContext.SaveChanges();
         }

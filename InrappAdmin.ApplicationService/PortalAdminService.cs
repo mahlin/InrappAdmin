@@ -69,6 +69,18 @@ namespace InrappAdmin.ApplicationService
             var uppgiftsskyldigheter = _portalAdminRepository.GetReportObligationInformationForOrg(orgId);
             return uppgiftsskyldigheter;
         }
+
+        public AdmUppgiftsskyldighet HamtaUppgiftsskyldighetForOrgOchDelreg(int orgId, int delregId)
+        {
+            var uppgiftsskyldighet = _portalAdminRepository.GetReportObligationInformationForOrgAndSubDir(orgId, delregId);
+            return uppgiftsskyldighet;
+        }
+
+        public IEnumerable<AdmEnhetsUppgiftsskyldighet> HamtaEnhetsUppgiftsskyldighetForOrgEnhet(int orgenhetId)
+        {
+            var uppgiftsskyldigheter = _portalAdminRepository.GetUnitReportObligationInformationForOrgUnit(orgenhetId);
+            return uppgiftsskyldigheter;
+        }
         public Organisation HamtaOrgForAnvandare(string userId)
         {
             var org = _portalAdminRepository.GetOrgForUser(userId);
@@ -192,6 +204,7 @@ namespace InrappAdmin.ApplicationService
             return subDirectories;
         }
 
+
         public AdmDelregister HamtaDelRegisterForKortnamn(string shortName)
         {
             var subDirectory = _portalAdminRepository.GetSubDirectoryByShortName(shortName);
@@ -300,6 +313,12 @@ namespace InrappAdmin.ApplicationService
         {
             var delregistersList = _portalAdminRepository.GetAllSubDirectoriesForPortal();
             return delregistersList;
+        }
+
+        public IEnumerable<Organisation> HamtaAllaOrganisationer()
+        {
+            var orgList = _portalAdminRepository.GetAllOrganisations();
+            return orgList;
         }
 
         public IEnumerable<AdmForvantadleverans> HamtaForvantadeLeveranserForRegister(int regId)
@@ -694,6 +713,16 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.CreateReportObligation(uppgSk);
         }
 
+        public void SkapaEnhetsUppgiftsskyldighet(AdmEnhetsUppgiftsskyldighet enhetsUppgSk, string userName)
+        {
+            //Sätt datum och användare
+            enhetsUppgSk.SkapadDatum = DateTime.Now;
+            enhetsUppgSk.SkapadAv = userName;
+            enhetsUppgSk.AndradDatum = DateTime.Now;
+            enhetsUppgSk.AndradAv = userName;
+            _portalAdminRepository.CreateUnitReportObligation(enhetsUppgSk);
+        }
+
         public void SkapaRegister(AdmRegister reg, string userName)
         {
             //Sätt datum och användare
@@ -785,6 +814,14 @@ namespace InrappAdmin.ApplicationService
             uppgSkyldighet.AndradDatum = DateTime.Now;
             uppgSkyldighet.AndradAv = userName;
             _portalAdminRepository.UpdateReportObligation(uppgSkyldighet);
+        }
+
+        public void UppdateraEnhetsUppgiftsskyldighet(AdmEnhetsUppgiftsskyldighet enhetsUppgSkyldighet, string userName)
+        {
+            //Sätt datum och användare
+            enhetsUppgSkyldighet.AndradDatum = DateTime.Now;
+            enhetsUppgSkyldighet.AndradAv = userName;
+            _portalAdminRepository.UpdateUnitReportObligation(enhetsUppgSkyldighet);
         }
 
         public void UppdateraFAQKategori(AdmFAQKategori faqKategori, string userName)
@@ -1157,5 +1194,7 @@ namespace InrappAdmin.ApplicationService
             //string jsonString = Encoding.ASCII.GetString(stream.ToArray());
             return stream;
         }
+
+
     }
 }

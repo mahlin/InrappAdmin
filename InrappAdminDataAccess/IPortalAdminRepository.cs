@@ -32,6 +32,7 @@ namespace InrappAdmin.DataAccess
 
         int GetReportObligationOrganisationId(int repObligationId);
 
+
         IEnumerable<ApplicationUser> GetContactPersonsForOrg(int orgId);
 
         IEnumerable<AppUserAdmin> GetAdminUsers();
@@ -39,6 +40,10 @@ namespace InrappAdmin.DataAccess
         IEnumerable<Organisationsenhet> GetOrgUnitsForOrg(int orgId);
 
         IEnumerable<AdmUppgiftsskyldighet> GetReportObligationInformationForOrg(int orgId);
+
+        AdmUppgiftsskyldighet GetReportObligationInformationForOrgAndSubDir(int orgId, int subdirId);
+
+        IEnumerable<AdmEnhetsUppgiftsskyldighet> GetUnitReportObligationInformationForOrgUnit(int orgUnitId);
 
         IEnumerable<AdmFAQKategori> GetFAQCategories();
 
@@ -91,6 +96,8 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<AdmRegister> GetAllRegisters();
 
+        IEnumerable<Organisation> GetAllOrganisations();
+
         IEnumerable<AdmRegister> GetAllRegistersForPortal();
 
         IEnumerable<AdmDelregister> GetAllSubDirectoriesForPortal();
@@ -142,6 +149,8 @@ namespace InrappAdmin.DataAccess
         void CreateInformationText(AdmInformation infoText);
         void CreateReportObligation(AdmUppgiftsskyldighet uppgSk);
 
+        void CreateUnitReportObligation(AdmEnhetsUppgiftsskyldighet enhetsUppgSk);
+
         void CreateDirectory(AdmRegister dir);
 
         void CreateSubDirectory(AdmDelregister subDir);
@@ -160,6 +169,8 @@ namespace InrappAdmin.DataAccess
         void UpdateOrgUnit(Organisationsenhet orgUnit);
 
         void UpdateReportObligation(AdmUppgiftsskyldighet repObligation);
+
+        void UpdateUnitReportObligation(AdmEnhetsUppgiftsskyldighet unitRepObligation);
 
         void UpdateFAQCategory(AdmFAQKategori faqCategory);
 
