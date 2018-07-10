@@ -529,13 +529,33 @@ namespace InrappAdmin.Web.Controllers
         public ActionResult CreateUnitReportObligation(int orgId = 0, int orgenhetsId = 0)
         {
             var model = new OrganisationViewModels.UnitReportObligationsViewModel();
-            model.SelectedOrganisationId = orgId;
-            model.SelectedOrganisationsenhetsId = orgenhetsId;
-            var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
-            this.ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
 
-            var orgenhetsList = _portalAdminService.HamtaOrgEnheterForOrg(orgId);
-            this.ViewBag.OrgenhetList = CreateOrgenhetDropDownList(orgenhetsList);
+            try
+            {
+                model.SelectedOrganisationId = orgId;
+                model.SelectedOrganisationsenhetsId = orgenhetsId;
+                var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
+                this.ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
+
+                if (orgId != 0)
+                {
+                    model.Organisationsnamn = _portalAdminService.HamtaOrganisation(orgId).Organisationsnamn;
+                }
+
+                var orgenhetsList = _portalAdminService.HamtaOrgEnheterForOrg(orgId);
+                this.ViewBag.OrgenhetList = CreateOrgenhetDropDownList(orgenhetsList);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("OrganisationController", "CreateUnitReportObligation", e.ToString(), e.HResult, User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade när formuläret för ny enhetsuppgiftsskyldighet skulle visas.",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+            }
             return View(model);
         }
 
@@ -567,7 +587,7 @@ namespace InrappAdmin.Web.Controllers
                     };
                     return View("CustomError", errorModel);
                 }
-                return RedirectToAction("GetOrganisationsUnitReportObligations", new { orgId = Convert.ToInt32(enhetsUppgSk.SelectedOrganisationId), orgenhetsId = Convert.ToInt32(enhetsUppgSk.SelectedDelregisterId) });
+                return RedirectToAction("GetOrganisationsUnitReportObligations", new { orgId = Convert.ToInt32(enhetsUppgSk.SelectedOrganisationId), orgenhetsId = Convert.ToInt32(enhetsUppgSk.SelectedOrganisationsenhetsId) });
             }
 
             return View();
@@ -603,33 +623,36 @@ namespace InrappAdmin.Web.Controllers
 
             foreach (var org in orgList)
             {
-                var organisationDTO = new OrganisationDTO
+                if (org.Kommunkod != null) //Endast kommuner tills vidare
                 {
-                    Id = org.Id,
-                    Kommunkod = org.Kommunkod,
-                    Landstingskod = org.Landstingskod,
-                    Organisationsnamn = org.Organisationsnamn
-                };
-                var orgenheter = _portalAdminService.HamtaOrgEnheterForOrg(org.Id).ToList();
-                var orgenhetsListDTO = new List<OrganisationsenhetDTO>();
-
-                foreach (var orgenhet in orgenheter)
-                {
-                    var orgenhetDTO = new OrganisationsenhetDTO
+                    var organisationDTO = new OrganisationDTO
                     {
-                        Id = orgenhet.Id,
-                        Enhetsnamn = orgenhet.Enhetsnamn,
-                        Enhetskod = orgenhet.Enhetskod
+                        Id = org.Id,
+                        Kommunkod = org.Kommunkod,
+                        Landstingskod = org.Landstingskod,
+                        Organisationsnamn = org.Organisationsnamn,
+                        KommunkodOchOrgnamn = org.Kommunkod + " , " + org.Organisationsnamn
                     };
-                    orgenhetsListDTO.Add(orgenhetDTO);
+                    var orgenheter = _portalAdminService.HamtaOrgEnheterForOrg(org.Id).ToList();
+                    var orgenhetsListDTO = new List<OrganisationsenhetDTO>();
+
+                    foreach (var orgenhet in orgenheter)
+                    {
+                        var orgenhetDTO = new OrganisationsenhetDTO
+                        {
+                            Id = orgenhet.Id,
+                            Enhetsnamn = orgenhet.Enhetsnamn,
+                            Enhetskod = orgenhet.Enhetskod
+                        };
+                        orgenhetsListDTO.Add(orgenhetDTO);
+                    }
+                    organisationDTO.Organisationsenheter = orgenhetsListDTO;
+                    orgListDTO.Add(organisationDTO);
                 }
-                organisationDTO.Organisationsenheter = orgenhetsListDTO;
-                orgListDTO.Add(organisationDTO);
-                
             }
 
             model.OrganisationList = orgListDTO;
-            ViewBag.OrganisationList = new SelectList(orgListDTO, "Id", "Kommunkod");
+            ViewBag.OrganisationList = new SelectList(orgListDTO, "Id", "KommunkodOchOrgnamn");
 
             return model;
 

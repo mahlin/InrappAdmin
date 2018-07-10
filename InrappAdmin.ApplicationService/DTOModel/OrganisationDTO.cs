@@ -12,6 +12,7 @@ namespace InrappAdmin.ApplicationService.DTOModel
         public string Landstingskod { get; set; }
         public string Kommunkod { get; set; }
         public string Organisationsnamn { get; set; }
+        public string KommunkodOchOrgnamn { get; set; }
         public List<OrganisationsenhetDTO> Organisationsenheter { get; set; }
     }
 }

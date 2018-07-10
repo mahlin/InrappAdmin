@@ -65,6 +65,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public List<OrganisationDTO> OrganisationList { get; set; }
             public IEnumerable<AdmEnhetsUppgiftsskyldighet> UnitReportObligations { get; set; }
             public string DelregisterKortnamn { get; set; }
+            public string Organisationsnamn { get; set; }
             public int UppgiftsskyldighetId { get; set; }
             public DateTime? SkyldigFrom { get; set; }
             public DateTime? SkyldigTom { get; set; }

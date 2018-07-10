@@ -14,8 +14,11 @@
             //set orgenhets-ddl
             setOrgenhetsDrop($("#SelectedOrganisationId").val());
         }
-        if ($("#SelectedOrganisationsenhetsId").val() !== "0") {
+        if ($("#SelectedOrganisationsenhetsId").val() > 0) {
+            $('#skapaNy').show();
             $('#ddlOrgenheter').val($("#SelectedOrganisationsenhetsId").val());
+        } else {
+            $('#skapaNy').hide();
         }
     });
 
@@ -27,6 +30,7 @@
             $("#ddlOrgenheter").append("<option> - Välj organisationsenhet - </option>");
             var selectedOrg = $('#ddlOrganisation').val();
             $("#SelectedOrganisationId").val(selectedOrg);
+
             //Hämta orgenheter för vald kommun
             setOrgenhetsDrop(selectedOrg);
         });
@@ -35,6 +39,12 @@
         function() {
             var selectedOrgenhet = $('#ddlOrgenheter').val();
             $("#SelectedOrganisationsenhetsId").val(selectedOrgenhet);
+            
+            if (selectedOrgenhet > 0) {
+                $('#skapaNy').show();
+            } else {
+                $('#skapaNy').hide(); 
+            }
         });
 
     function setOrgenhetsDrop(orgId) {
@@ -46,13 +56,15 @@
                     var vals = {};
                     org.Organisationsenheter.forEach(function(unit, index) {
                         vals[unit.Id] = unit.Enhetsnamn;
+                        var x = unit.Id;
                     });
 
                     var $ddlOrgenheter = $("#ddlOrgenheter");
                     $ddlOrgenheter.empty();
                     $ddlOrgenheter.append("<option> - Välj organisationsenhet - </option>");
                     $.each(vals,
-                        function(index, value) {
+                        function (index, value) {
+                            var x = index;
                             $ddlOrgenheter.append("<option value=" + index + " >" + value + "</option>");
                         });
                     $ddlOrgenheter.removeAttr('readonly');
@@ -71,7 +83,7 @@
         $('.save-user').on('click',
             function() {
                 var tr = $(this).parents('tr:first');
-                var unitRepId = tr.find("#UnitRepId").val();
+                var unitRepId = tr.find("#UnitRepId").html();
                 var uppgskyldighetsId = tr.find("#UnitRepUppgSkId").val();
                 var unitRepSkyldigFrom = tr.find("#UnitRepSkyldigFrom").val();
                 var unitRepSkyldigTom = tr.find("#UnitRepSkyldigTom").val();
@@ -113,6 +125,18 @@
                 tr.find("#lblSkyldigTom").text(unitRepSkyldigTom);
             });
     });
+
+
+    $(document).on('click','.createNew',function(e) {
+            //Cancel original submission
+            e.preventDefault();
+            var orgId = $('#SelectedOrganisationId').val();
+            var orgenhetsId = $('#SelectedOrganisationsenhetsId').val();
+            var tmp = $(this).attr('href');
+
+            window.location = $(this).attr('href') + '?orgId=' + orgId + '&orgenhetsId=' + orgenhetsId;
+        });
+
 </script>
 
 
@@ -166,7 +190,11 @@
         <br /><br />
         <hr />
 
-        @Html.ActionLink("Skapa ny enhetsuppgiftsskyldighet", "CreateUnitReportObligation", "Organisation", new { orgId = Model.SelectedOrganisationId, orgenhetsId = Model.SelectedOrganisationsenhetsId }, null)
+        <div id="skapaNy">
+            @*@Html.ActionLink("Skapa ny enhetsuppgiftsskyldighet", "CreateUnitReportObligation", "Organisation", new { orgId = Model.SelectedOrganisationId, orgenhetsId = Model.SelectedOrganisationsenhetsId }, null)*@
+            @Html.ActionLink("Skapa ny enhetsuppgiftsskyldighet", "CreateUnitReportObligation", null, new { @class = "createNew" })
+        </div>
+        @Html.HiddenFor(m => m.SelectedOrganisationId)
 
         if (Model.UnitReportObligations != null)
         {
@@ -182,26 +210,30 @@
                     }
 
 
-                    @grid.GetHtml(tableStyle: "webgrid-table",
-                             headerStyle: "webgrid-header",
-                             footerStyle: "webgrid-footer",
-                             alternatingRowStyle: "webgrid-alternating-row",
-                             selectedRowStyle: "webgrid-selected-row",
-                             rowStyle: "webgrid-row-style",
-                             mode: WebGridPagerModes.All,
-                             columns: grid.Columns(
-                                grid.Column(null, null, format: @<text><input type="hidden" id="UnitRepId" value="@item.Id" class="edit-mode form-control colZeroWidth" /></text>, style: "colZeroWidth"),
-                                grid.Column(null, null, format: @<text><input type="hidden" id="UnitRepUppgSkId" value="@item.UppgiftsskyldighetId" class="edit-mode form-control" /></text>, style: "colZeroWidth"),
+                    @grid.GetHtml(tableStyle: "webgrid-table500",
+                            headerStyle: "webgrid-header",
+                            footerStyle: "webgrid-footer",
+                            alternatingRowStyle: "webgrid-alternating-row",
+                            selectedRowStyle: "webgrid-selected-row",
+                            rowStyle: "webgrid-row-style",
+                            mode: WebGridPagerModes.All,
+                            columns: grid.Columns(
+                                 grid.Column(null, null, format: @<input type="hidden" id="UnitRepUppgSkId" value="@item.UppgiftsskyldighetId" class="edit-mode form-control colZeroWidth" />),
+                                grid.Column("Id", format: @<text><span class="display-mode">@item.Id</span><label id="UnitRepId" class="edit-mode colMinWidth">@item.Id</label> </text>, style: "colMinWidth"),
 
-                                grid.Column("Fr.o.m", "Fr.o.m", format: @<text><span class="display-mode"><label id="lblSkyldigFrom">@( item.SkyldigFrom != null ? item.SkyldigFrom.ToString("yyyy-MM-dd") : item.SkyldigFrom)</label></span>
-                                        <input type="text" id="UnitRepSkyldigFrom" value="@( item.SkyldigFrom != null ? item.SkyldigFrom.ToString("yyyy-MM-dd") : item.SkyldigFrom)" class="edit-mode form-control" /></text>, style: "col2Width"),
-                                grid.Column("T.o.m", "T.o.m", format: @<text><span class="display-mode"><label id="lblSkyldigTom">@( item.SkyldigTom != null ? item.SkyldigTom.ToString("yyyy-MM-dd") : item.SkyldigTom)</label></span>
-                                            <input type="text" id="UnitRepSkyldigTom" value="@( item.SkyldigTom != null ? item.SkyldigTom.ToString("yyyy-MM-dd") : item.SkyldigTom)" class="edit-mode form-control" /></text>, style: "col2Width"),
-                                grid.Column(null, format: @<text>
-                                    <button class="edit-user display-mode btn btn-default">Ändra</button>
-                                    <button class="save-user edit-mode btn btn-default">Spara</button>
-                                    <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-                                </text>, style: "col3Width", canSort: false)))
+                                                         grid.Column("Fr.o.m", "Fr.o.m", format: @<text>
+                                                            <span class="display-mode"><label id="lblSkyldigFrom">@( item.SkyldigFrom != null ? item.SkyldigFrom.ToString("yyyy-MM-dd") : item.SkyldigFrom)</label></span>
+                                                            <input type="text" id="UnitRepSkyldigFrom" value="@( item.SkyldigFrom != null ? item.SkyldigFrom.ToString("yyyy-MM-dd") : item.SkyldigFrom)" class="edit-mode form-control" />
+                                                        </text>, style: "col2Width"),
+                                                                     grid.Column("T.o.m", "T.o.m", format: @<text>
+                                                                        <span class="display-mode"><label id="lblSkyldigTom">@( item.SkyldigTom != null ? item.SkyldigTom.ToString("yyyy-MM-dd") : item.SkyldigTom)</label></span>
+                                                                        <input type="text" id="UnitRepSkyldigTom" value="@( item.SkyldigTom != null ? item.SkyldigTom.ToString("yyyy-MM-dd") : item.SkyldigTom)" class="edit-mode form-control" />
+                                                                    </text>, style: "col2Width"),
+                                                                                 grid.Column(null, format: @<text>
+                                                                                    <button class="edit-user display-mode btn btn-default">Ändra</button>
+                                                                                    <button class="save-user edit-mode btn btn-default">Spara</button>
+                                                                                    <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                                                                                </text>, style: "col3Width", canSort: false)))
 
                 </div>
             }

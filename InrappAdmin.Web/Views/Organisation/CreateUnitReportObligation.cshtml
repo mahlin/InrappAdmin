@@ -1,7 +1,7 @@
 ﻿@model InrappAdmin.Web.Models.ViewModels.OrganisationViewModels.UnitReportObligationsViewModel
 
 @{
-    ViewBag.Title = "Skapa ny enhetsuppgiftsskyldighet";
+    ViewBag.Title = "Skapa ny enhetsuppgiftsskyldighet för " + Html.Raw(Model.Organisationsnamn);
 }
 
 <script>
@@ -33,7 +33,7 @@
         @Html.HiddenFor(m => m.SelectedOrganisationId)
 
     <div class="form-horizontal padding-top-55">
-        <h4>Skapa enhetsuppgiftsskyldighet</h4>
+        <h4>@ViewBag.Title</h4>
         <hr />
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -75,7 +75,7 @@
         </div>
     </div>
     <div>
-        @Html.ActionLink("Tillbaka", "GetOrganisationsUnitReportObligations", "Organisation", new { orgId = Model.SelectedOrganisationId }, null)
+        @Html.ActionLink("Tillbaka", "GetOrganisationsUnitReportObligations", "Organisation", new { orgId = Model.SelectedOrganisationId, orgenhetsId = Model.SelectedOrganisationsenhetsId }, null)
 
     </div>
 }
