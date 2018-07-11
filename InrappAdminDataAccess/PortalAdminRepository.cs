@@ -124,6 +124,21 @@ namespace InrappAdmin.DataAccess
             return contacts;
         }
 
+        public IEnumerable<ApplicationUser> GetContactPersonsForOrgAndSubdir(int orgId, int subdirId)
+        {
+            var contactList = new List<ApplicationUser>();
+            var contacts = DbContext.ApplicationUser.Where(x => x.OrganisationId == orgId).ToList();
+            foreach (var contact in contacts)
+            {
+                var role = DbContext.Roll.FirstOrDefault(x => x.ApplicationUserId == contact.Id && x.DelregisterId == subdirId);
+                if (role != null)
+                {
+                    contactList.Add(contact);
+                }
+            }
+            return contactList;
+        }
+
         public IEnumerable<AppUserAdmin> GetAdminUsers()
         {
             var adminUsers = IdentityDbContext.Users.ToList();
@@ -478,6 +493,12 @@ namespace InrappAdmin.DataAccess
         {
             var email = IdentityDbContext.Users.Where(x => x.Id == userId).Select(x => x.Email).SingleOrDefault();
             return email;
+        }
+
+        public ApplicationUser GetUserByEmail(string email)
+        {
+            var user = DbContext.ApplicationUser.SingleOrDefault(x => x.Email == email);
+            return user;
         }
 
 
@@ -873,6 +894,6 @@ namespace InrappAdmin.DataAccess
             throw new NotImplementedException();
         }
 
-
+ 
     }
 }

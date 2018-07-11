@@ -34,6 +34,7 @@ namespace InrappAdmin.DataAccess
 
 
         IEnumerable<ApplicationUser> GetContactPersonsForOrg(int orgId);
+        IEnumerable<ApplicationUser> GetContactPersonsForOrgAndSubdir(int orgId, int subdirId);
 
         IEnumerable<AppUserAdmin> GetAdminUsers();
 
@@ -136,6 +137,8 @@ namespace InrappAdmin.DataAccess
         Leverans GetLatestDeliveryForOrganisationSubDirectoryAndPeriod(int orgId, int subdirId, int forvlevId);
 
         string GetUserEmail(string userId);
+
+        ApplicationUser GetUserByEmail(string email);
 
         int CreateOrganisation(Organisation org);
 

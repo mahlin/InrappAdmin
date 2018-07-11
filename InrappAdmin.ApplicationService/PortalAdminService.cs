@@ -410,7 +410,7 @@ namespace InrappAdmin.ApplicationService
         {
             var rappResList = _portalAdminRepository.GetReportResultForDirAndPeriod(delRegId, period);
 
-            var rappResListDTO = ConvertRappListDBToVM(rappResList);
+            var rappResListDTO = ConvertRappListDBToVM(rappResList, delRegId);
             return rappResListDTO;
         }
 
@@ -1032,7 +1032,7 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.DeleteAdminUser(userId);
         }
 
-        private IEnumerable<RapporteringsresultatDTO> ConvertRappListDBToVM(IEnumerable<Rapporteringsresultat> rappResList)
+        private IEnumerable<RapporteringsresultatDTO> ConvertRappListDBToVM(IEnumerable<Rapporteringsresultat> rappResList, int delRegId)
         {
             var rappListDTO = new List<RapporteringsresultatDTO>();
             var i = 0;
@@ -1072,40 +1072,65 @@ namespace InrappAdmin.ApplicationService
                     Mail= false
                 };
 
+                //If user is inactive, remove emailadress from list
+                if (!String.IsNullOrEmpty(rappResRadVM.Email))
+                {
+                    var user = _portalAdminRepository.GetUserByEmail(rappResRadVM.Email);
+                    if (user.AktivTom < DateTime.Now.Date)
+                        rappResRadVM.Email = null;
+                }
+                //If no emailadress/contactperson for delivery, get organisations contactperson for chosen subdir
                 if (String.IsNullOrEmpty(rappResRadVM.Email))
                 {
-                    rappResRadVM.Email = GetEmail(rappResRadVM);
+                    rappResRadVM.Email = GetEmail(rappResRadVM, delRegId);
                 }
                 rappListDTO.Add(rappResRadVM);
             }
-
-
                 
             return rappListDTO;
         }
 
-        private string GetEmail(RapporteringsresultatDTO rappRes)
+        private string GetEmail(RapporteringsresultatDTO rappRes, int delRegId)
         {
             var email = String.Empty;
-            //Get email from Organisation Kontaktperson
-            var contactList = _portalAdminRepository.GetContactPersonsForOrg(rappRes.OrganisationsId).ToList();
+            //Get email from Organisations Kontaktperson
+            var contactList = _portalAdminRepository.GetContactPersonsForOrgAndSubdir(rappRes.OrganisationsId, delRegId).ToList();
             if (contactList.Count > 0)
             {
                 for (int i = 0; i < contactList.Count; i++)
                 {
-                    if (i == 0)
+                    //Check if user is active
+                    if (contactList[i].AktivTom == null)
                     {
-                        email = contactList[i].Email;
+                        if (i == 0)
+                        {
+                            email = contactList[i].Email;
+                        }
+                        else
+                        {
+                            email = email + ", " + contactList[i].Email;
+                        }
                     }
                     else
                     {
-                        email = email + ", " + contactList[i].Email;
+                        if (contactList[i].AktivTom >= DateTime.Now.Date)
+                        {
+                            if (i == 0)
+                            {
+                                email = contactList[i].Email;
+                            }
+                            else
+                            {
+                                email = email + ", " + contactList[i].Email;
+                            }
+                        }
                     }
                 }
+                    
             }
             else
             {
-                //Get email from organiastion
+                //Get email from organisation
                 var org = _portalAdminRepository.GetOrganisation(rappRes.OrganisationsId);
                 if (org != null)
                 {
