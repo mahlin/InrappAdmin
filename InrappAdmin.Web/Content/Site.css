@@ -183,8 +183,26 @@ textarea {
     padding: 3px 7px 2px;
 }
 
+.col70Width {
+    width: 70px;
+    margin: -5px;
+    padding: 3px 7px 2px;
+}
+
 .col1Width {
     width: 100px;
+    margin: -5px;
+    padding: 3px 7px 2px;
+}
+
+.col150Width {
+    width: 150px;
+    margin: -5px;
+    padding: 3px 7px 2px;
+}
+
+.col170Width {
+    width: 170px;
     margin: -5px;
     padding: 3px 7px 2px;
 }
@@ -203,6 +221,12 @@ textarea {
 
 .col4Width {
     width: 320px;
+    margin: -5px;
+    padding: 3px 7px 2px;
+}
+
+.col350Width {
+    width: 350px;
     margin: -5px;
     padding: 3px 7px 2px;
 }

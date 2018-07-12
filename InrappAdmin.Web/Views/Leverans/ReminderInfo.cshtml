@@ -263,12 +263,12 @@
         {
             using (Html.BeginForm("SendReminder", "Leverans", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "reminderForm" }))
             {
-    <div class="row col-md-12">
-        <div class="col-md-10 padding-top-15" id="headerText" style="padding-left: 20px; ">
-        </div>
-        <div class="" style=""><input type="submit" value="Skicka påminnelse" class="btn btn-default" /></div>
-        @*<div class="" style=""><input type="button" value="Välj alla TEST" onclick="selectAll();" class="btn btn-default" /></div>*@
-    </div>
+                <div class="row col-md-12">
+                    <div class="col-md-10 padding-top-15" id="headerText" style="padding-left: 20px; ">
+                    </div>
+                    <div class="" style=""><input type="submit" value="Skicka påminnelse" class="btn btn-default" /></div>
+                    @*<div class="" style=""><input type="button" value="Välj alla TEST" onclick="selectAll();" class="btn btn-default" /></div>*@
+                </div>
 
                 @Html.HiddenFor(m => m.SelectedRegisterId)
                 @Html.HiddenFor(m => m.SelectedDelregisterId)
@@ -323,21 +323,18 @@
                               rowStyle: "webgrid-row-style",
                               mode: WebGridPagerModes.All,
                               columns: grid.Columns(
-                                  grid.Column(null, format: @<text><input type="hidden" id="Id" value="@item.Id" class="form-control hide" /></text>, style: "colZeroWidth"),
-                                         grid.Column("Kommunkod", format: @<text><span class="">@item.Kommunkod</span></text>, style: "col1Width"),
-                                                 grid.Column("Organisation", format: @<text><span class="">@item.Organisationsnamn</span></text>, style: "col3Width"),
-                                                         grid.Column("E-post, kontaktperson", format: @<text><label id="ContactEmail" class="">@item.Email</label></text>, style: "col5Width"),
-                                                                 grid.Column("Antal leveranser", format: @<text><label id="NumberOfDeliveries" class="">@item.AntalLeveranser</label></text>, style: "col1Width"),
-                                                                         grid.Column("Leveranstidpunkt", format: @<text><label id="DeliveryTime" class="">@item.Leveranstidpunkt</label></text>, style: "col2Width"),
-                                                                                 grid.Column("Skicka påminnelse", format: @<text><span class="centered"><input id="chkbxMail" class="checkbox" onchange="setMail('@item.Id');" name="select" type="checkbox" @( item.Mail ? "checked='checked'" : "") value="@item.Mail" /></span></text>, style: "colMinWidth centered", canSort: false)
-
-                                                                                                                                                                                                                                                                                     ))
-
+                                grid.Column(null, format: @<text><input type="hidden" id="Id" value="@item.Id" class="form-control hide" /></text>, style: "colZeroWidth"),
+                                grid.Column("Kommunkod", format: @<text><span class="">@item.Kommunkod</span></text>, style: "col1Width"),
+                                grid.Column("Organisation", format: @<text><span class="">@item.Organisationsnamn</span></text>, style: "col3Width"),
+                                grid.Column("E-post, kontaktperson", format: @<text><label id="ContactEmail" class="">@item.Email</label></text>, style: "col5Width"),
+                                grid.Column("Antal leveranser", format: @<text><label id="NumberOfDeliveries" class="">@item.AntalLeveranser</label></text>, style: "col1Width"),
+                                grid.Column("Leveranstidpunkt", format: @<text><label id="DeliveryTime" class="">@item.Leveranstidpunkt</label></text>, style: "col2Width"),
+                                grid.Column("Skicka påminnelse", format: @<text><span class="centered"><input id="chkbxMail" class="checkbox" onchange="setMail('@item.Id');" name="select" type="checkbox" @( item.Mail ? "checked='checked'" : "") value="@item.Mail" /></span></text>, style: "colMinWidth centered", canSort: false)))
                 </div>
-                <div id="Outer">
+                @*<div id="Outer">
                     <div id="GridHeader"></div>
                     <div id="GridBody"></div>
-                </div>
+                </div>*@
             }
         }
     }
