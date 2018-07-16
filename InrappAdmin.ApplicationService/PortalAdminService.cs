@@ -204,6 +204,13 @@ namespace InrappAdmin.ApplicationService
             return subDirectories;
         }
 
+        public AdmDelregister HamtaDelRegisterForUppgiftsskyldighet(int uppgSkId)
+        {
+            var reportObligation = _portalAdminRepository.GetReportObligationById(uppgSkId);
+            var subdir = _portalAdminRepository.GetSubDirectoryById(reportObligation.DelregisterId);
+            return subdir;
+        }
+
 
         public AdmDelregister HamtaDelRegisterForKortnamn(string shortName)
         {

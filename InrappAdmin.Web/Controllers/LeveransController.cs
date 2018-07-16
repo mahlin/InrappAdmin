@@ -14,6 +14,7 @@ using InrappAdmin.DomainModel;
 using InrappAdmin.Web.Helpers;
 using InrappAdmin.Web.Models;
 using InrappAdmin.Web.Models.ViewModels;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security.Provider;
 
@@ -32,7 +33,7 @@ namespace InrappAdmin.Web.Controllers
 
         [Authorize]
         // GET: Leverans
-        public ActionResult Index(bool filterPgnde = false)
+        public ActionResult Index(bool filterPgnde = false, int regId = 0)
         {
 
             var model = new LeveransViewModels.LeveransViewModel();
@@ -56,7 +57,7 @@ namespace InrappAdmin.Web.Controllers
                 // Ladda drop down lists. 
                 var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
                 this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
-                model.SelectedRegisterId = 0;
+                model.SelectedRegisterId = regId;
                 model.FilterPagaende = filterPagaende;
 
             }
@@ -77,7 +78,7 @@ namespace InrappAdmin.Web.Controllers
 
         // GET
         [Authorize]
-        public ActionResult GetDirectorysExpectedDeliveries(LeveransViewModels.LeveransViewModel model, int regId = 0)
+        public ActionResult GetDirectorysExpectedDeliveries(LeveransViewModels.LeveransViewModel model, bool filterPgnde = false, int regId = 0)
         {
             try
             {
@@ -89,6 +90,10 @@ namespace InrappAdmin.Web.Controllers
                     Char delimiter = ',';
                     String[] substrings = tmpPagaende.Split(delimiter);
                     filterPagaende = Convert.ToBoolean(substrings.Last());
+                }
+                else if (filterPgnde)
+                {
+                    filterPagaende = filterPgnde;
                 }
                 else
                 {
@@ -266,7 +271,7 @@ namespace InrappAdmin.Web.Controllers
 
         // GET: AdmFilkrav
         [Authorize]
-        public ActionResult GetFilkrav()
+        public ActionResult GetFilkrav(int regId = 0)
         {
             var model = new LeveransViewModels.LeveransViewModel();
             try
@@ -292,7 +297,7 @@ namespace InrappAdmin.Web.Controllers
                 // Ladda drop down lists. 
                 var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
                 this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
-                model.SelectedRegisterId = 0;
+                model.SelectedRegisterId = regId;
             }
             catch (Exception e)
             {
@@ -361,10 +366,23 @@ namespace InrappAdmin.Web.Controllers
 
         // GET
         [Authorize]
-        public ActionResult GetReminderInfoForRegAndPeriod(LeveransViewModels.ReminderViewModel model)
+        public ActionResult GetReminderInfoForRegAndPeriod(LeveransViewModels.ReminderViewModel model, int regId = 0, int delregId = 0, string period = "")
         {
             try
             {
+                if (regId != 0)
+                {
+                    model.SelectedRegisterId = regId;
+                }
+                if (delregId != 0)
+                {
+                    model.SelectedDelregisterId = delregId;
+                }
+                if (!period.IsNullOrWhiteSpace())
+                {
+                    model.SelectedPeriod = period;
+                }
+
                 var rappList = _portalAdminService.HamtaRapporteringsresultatForRegOchPeriod(model.SelectedDelregisterId, model.SelectedPeriod);
                 model.RapportResList = rappList.ToList();
                 model.AntRader = model.RapportResList.Count();
@@ -671,7 +689,7 @@ namespace InrappAdmin.Web.Controllers
 
         // GET
         [Authorize]
-        public ActionResult CreateForvantadLeverans()
+        public ActionResult CreateForvantadLeverans(bool filterPgnde = false, int selectedRegId = 0)
         {
             // Ladda drop down lists
             var model = new LeveransViewModels.AdmForvantadleveransViewModel();
@@ -681,6 +699,8 @@ namespace InrappAdmin.Web.Controllers
             ViewBag.FilkravList = CreateDummyFilkravDropDownList();
             model.SelectedDelregisterId = 0;
             model.SelectedFilkravId = 0;
+            model.SelectedRegisterId = selectedRegId;
+            model.Pagaende = filterPgnde;
             return View(model);
         }
 
@@ -726,7 +746,7 @@ namespace InrappAdmin.Web.Controllers
 
         // GET
         [Authorize]
-        public ActionResult CreateForvantadFil()
+        public ActionResult CreateForvantadFil(int selectedRegId = 0)
         {
             // Ladda drop down lists
             var model = new LeveransViewModels.AdmForvantadfilViewModel();
@@ -736,6 +756,7 @@ namespace InrappAdmin.Web.Controllers
             ViewBag.FilkravList = CreateDummyFilkravDropDownList();
             model.SelectedDelregisterId = 0;
             model.SelectedFilkravId = 0;
+            model.SelectedRegisterId = selectedRegId;
             return View(model);
         }
 
@@ -782,13 +803,14 @@ namespace InrappAdmin.Web.Controllers
 
         // GET
         [Authorize]
-        public ActionResult CreateFilkrav()
+        public ActionResult CreateFilkrav(int selectedRegId = 0)
         {
             // Ladda drop down lists
             var model = new LeveransViewModels.AdmFilkravViewModel();
             var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
             this.ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
             model.SelectedDelregisterId = 0;
+            model.SelectedRegisterId = selectedRegId;
             return View(model);
         }
 

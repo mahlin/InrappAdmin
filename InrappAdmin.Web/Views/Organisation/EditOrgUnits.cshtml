@@ -8,6 +8,15 @@
         $("#txtKommunkod").focus();
     });
 
+    $(function () {
+        $('th a, tfoot a').click(function () {
+            var newUrl = $(this).attr('href') +
+                "&kommunkod=" +
+                $("#Kommunkod").val();
+            $('form').attr('action', newUrl).submit();
+            return false;
+        });
+    });
 
     $(function() {
         $('.edit-mode').hide();
@@ -132,11 +141,11 @@
                          grid.Column("Enhetskod", "Enhetskod", format: @<text><span class="display-mode"><label id="lblCode">@item.Enhetskod</label></span>
                         <input type="text" id="OrgUnitCode" value="@item.Enhetskod" class="edit-mode form-control" /></text>, style: "col2Width"),
         
-                        grid.Column("Aktiv from", "Aktiv from", format: @<text><span class="display-mode"><label id="lblAktivFrom">
+                        grid.Column("AktivFrom", "Aktiv from", format: @<text><span class="display-mode"><label id="lblAktivFrom">
                         @if (item.AktivFrom != null){@item.AktivFrom.ToString("yyyy-MM-dd")}else{@item.AktivFrom}</label></span>
                         <input type="text" id="OrgUnitAktivFrom" value="@if (item.AktivFrom != null){@item.AktivFrom.ToString("yyyy-MM-dd")}else{@item.AktivFrom}" class="edit-mode form-control" /></text>, style: "col2Width"),
 
-                        grid.Column("Aktiv tom", "Aktiv tom", format: @<text><span class="display-mode"><label id="lblAktivTom">
+                        grid.Column("AktivTom", "Aktiv tom", format: @<text><span class="display-mode"><label id="lblAktivTom">
                         @if (item.AktivTom != null){@item.AktivTom.ToString("yyyy-MM-dd")}else{@item.AktivTom}</label></span>
                         <input type="text" id="OrgUnitAktivTom" value="@if (item.AktivTom != null){@item.AktivTom.ToString("yyyy-MM-dd")}else{@item.AktivTom}" class="edit-mode form-control" /></text>, style: "col2Width"),
 

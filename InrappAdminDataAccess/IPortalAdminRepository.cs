@@ -121,7 +121,7 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<Rapporteringsresultat> GetReportResultForDirAndPeriod(int delRegId, string period);
 
-        IEnumerable<AdmRegister> GetDirectoriesForOrg(int orgId);
+        //IEnumerable<AdmRegister> GetDirectoriesForOrg(int orgId);
 
         IEnumerable<string> GetSubDirectoysPeriodsForAYear(int subdirId, int year);
         List<DateTime> GetTaskStartForSubdir(int subdirId);
@@ -132,6 +132,7 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<AdmDelregister> GetSubdirsForDirectory(int dirId);
 
+        AdmUppgiftsskyldighet GetReportObligationById(int repOblId);
         int GetExpextedDeliveryIdForSubDirAndPeriod(int subDirId, string period);
 
         Leverans GetLatestDeliveryForOrganisationSubDirectoryAndPeriod(int orgId, int subdirId, int forvlevId);

@@ -137,7 +137,7 @@
         @Html.HiddenFor(m => m.SelectedSpecialDayId)
         <div class="row">
             <div class="col-md-8">
-                @Html.ActionLink("Lägg in ny specialdag", "CreateSpecialDay", "System")
+                @Html.ActionLink("Lägg till specialdag", "CreateSpecialDay", "System")
             </div>
         </div>
 
@@ -160,26 +160,22 @@
                      columns: grid.Columns(
                       grid.Column("ID", format: @<text><label id="SpecialDayId">@item.Id</label></text>, style: "colMinWidth"),
                              grid.Column("Informationstyp", format: @<text><label id="lblInfoTyp">@item.Informationstyp</label></text>, style: "colMinWidth"),
+                            grid.Column("Specialdagdatum", "Specialdagdatum", format: @<text><span class="display-mode">
+                                    <label id="lblHelgdatum">@( item.Specialdagdatum != null ? item.Specialdagdatum.ToString("yyyy-MM-dd") : item.Specialdagdatum)</label></span>
+                                    <input type="text" id="SpecialDayDate" value="@( item.Specialdagdatum != null ? item.Specialdagdatum.ToString("yyyy-MM-dd") : item.Specialdagdatum)" class="edit-mode form-control" /></text>, style: "col1Width"),
+                            grid.Column("Oppna", "Öppna", format: @<text><span class="display-mode"><label id="lblOpen">@item.Oppna</label></span>
+                                    <input type="text" id="Open" value="@item.Oppna" class="edit-mode form-control" /></text>, style: "col2Width"),
+                            grid.Column("Stang", "Stäng", format: @<text><span class="display-mode"><label id="lblClose">@item.Stang</label></span>
+                                    <input type="text" id="Close" value="@item.Stang" class="edit-mode form-control" /></text>, style: "col2Width"),
+                            grid.Column("Anledning", "Anledning", format: @<text><span class="display-mode"><label id="lblReason">@item.Anledning</label></span>
+                                    <input type="text" id="Reason" value="@item.Anledning" class="edit-mode form-control" /></text>, style: "col2Width"),
 
-                                     grid.Column("Specialdagdatum", "Specialdagdatum", format: @<text><span class="display-mode">
-                                            <label id="lblHelgdatum">@( item.Specialdagdatum != null ? item.Specialdagdatum.ToString("yyyy-MM-dd") : item.Specialdagdatum)</label>
-                                        </span>
-                                        <input type="text" id="SpecialDayDate" value="@( item.Specialdagdatum != null ? item.Specialdagdatum.ToString("yyyy-MM-dd") : item.Specialdagdatum)" class="edit-mode form-control" /></text>, style: "col1Width"),
-
-                                             grid.Column("Öppna", "Öppna", format: @<text><span class="display-mode"><label id="lblOpen">@item.Oppna</label></span>
-                                            <input type="text" id="Open" value="@item.Oppna" class="edit-mode form-control" /></text>, style: "col2Width"),
-
-                                                     grid.Column("Stäng", "Stäng", format: @<text><span class="display-mode"><label id="lblClose">@item.Stang</label></span>
-                                                    <input type="text" id="Close" value="@item.Stang" class="edit-mode form-control" /></text>, style: "col2Width"),
-                                                             grid.Column("Anledning", "Anledning", format: @<text><span class="display-mode"><label id="lblReason">@item.Anledning</label></span>
-                                                            <input type="text" id="Reason" value="@item.Anledning" class="edit-mode form-control" /></text>, style: "col2Width"),
-
-                                                                     grid.Column(null, format: @<text>
-                                                                        <button class="edit-user display-mode btn btn-default">Ändra</button>
-                                                                        <button class="display-mode btn btn-default" onclick="deleteSpecialDay(@item.Id,'@item.Specialdagdatum');return false;">Ta bort</button>
-                                                                        <button class="save-user edit-mode btn btn-default">Spara</button>
-                                                                        <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-                                                                    </text>, style: "col3Width", canSort: false)))
+                            grid.Column(null, format: @<text>
+                                <button class="edit-user display-mode btn btn-default">Ändra</button>
+                                <button class="display-mode btn btn-default" onclick="deleteSpecialDay(@item.Id,'@item.Specialdagdatum');return false;">Ta bort</button>
+                                <button class="save-user edit-mode btn btn-default">Spara</button>
+                                <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                            </text>, style: "col3Width", canSort: false)))
         </div>
 
     }

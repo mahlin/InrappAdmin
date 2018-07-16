@@ -150,18 +150,18 @@
                                  mode: WebGridPagerModes.All,
                                  columns: grid.Columns(
                                      grid.Column(null, null, format: @<text><input type="hidden" id="Id" value="@item.Id" class="edit-mode form-control hide" /></text>, style: "colZeroWidth"),
-                                 grid.Column("Email", "Email", format: @<text><span class="display-mode"><label id="lblEmail" style="width: 300px;">@item.Email</label></span>
-                                <input type="text" id="Email" value="@item.Email" class="edit-mode form-control" /></text>, style: "col4Width"),
-                             grid.Column("Telefonnummer", "Telefonnummer", format: @<text><span class="display-mode"><label id="lblDescription" style="width: 200px;">@item.PhoneNumber  </label></span>
-                            <input type="text" id="PhoneNumber" value="@item.PhoneNumber" class="edit-mode form-control" /></text>, style: "colMinWidth"),
-                         grid.Column("Roller", format: @<text><label id="lblRoller" class="longColumnText" style="width: 200px;">@item.StringOfRoles</label></text>, style: "col3Width"),
+                                    grid.Column("Email", "Email", format: @<text><span class="display-mode"><label id="lblEmail" style="width: 300px;">@item.Email</label></span>
+                                        <input type="text" id="Email" value="@item.Email" class="edit-mode form-control" /></text>, style: "col4Width"),
+                                    grid.Column("PhoneNumber", "Telefonnummer", format: @<text><span class="display-mode"><label id="lblDescription" style="width: 200px;">@item.PhoneNumber  </label></span>
+                                        <input type="text" id="PhoneNumber" value="@item.PhoneNumber" class="edit-mode form-control" /></text>, style: "colMinWidth"),
+                                    grid.Column("StringOfRoles","Roller", format: @<text><label id="lblRoller" class="longColumnText" style="width: 200px;">@item.StringOfRoles</label></text>, style: "col3Width"),
 
-                     grid.Column(null, format: @<text>
-                        @*<button class="edit-user display-mode btn btn-default">Ändra</button>*@
-                        <button class="display-mode btn btn-default" onclick="deleteAdminUser('@item.Id'); return false;">Ta bort</button>
-                        <button class="save-user edit-mode btn btn-default">Spara</button>
-                        <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-                    </text>, style: "col3Width", canSort: false)))
+                                     grid.Column(null, format: @<text>
+                                        @*<button class="edit-user display-mode btn btn-default">Ändra</button>*@
+                                        <button class="display-mode btn btn-default" onclick="deleteAdminUser('@item.Id'); return false;">Ta bort</button>
+                                        <button class="save-user edit-mode btn btn-default">Spara</button>
+                                        <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                                    </text>, style: "col3Width", canSort: false)))
 
                     </div>
                 </section>

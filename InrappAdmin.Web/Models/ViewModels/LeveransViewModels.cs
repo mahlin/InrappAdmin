@@ -32,6 +32,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public string FilkravNamn { get; set; }
             public int DelregisterId { get; set; }
             public int SelectedDelregisterId { get; set; }
+            public int SelectedRegisterId { get; set; }
             public int SelectedFilkravId { get; set; }
             public string DelregisterKortnamn { get; set; }
             public IEnumerable<RegisterInfo> RegisterList { get; set; }
@@ -59,6 +60,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public int Id { get; set; }
             public IEnumerable<RegisterInfo> RegisterList { get; set; }
             public int SelectedDelregisterId { get; set; }
+            public int SelectedRegisterId { get; set; }
             public int SelectedFilkravId { get; set; }
             public int FilkravId { get; set; }
             public string FilkravNamn { get; set; }
@@ -77,6 +79,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public int Id { get; set; }
             public int DelregisterId { get; set; }
             public int SelectedDelregisterId { get; set; }
+            public int SelectedRegisterId { get; set; }
             public string DelregisterKortnamn { get; set; }
             public int? ForeskriftsId { get; set; }
             public string Namn { get; set; }

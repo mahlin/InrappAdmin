@@ -9,6 +9,16 @@
         $("#txtKommunkod").focus();
     });
 
+    $(function () {
+        $('th a, tfoot a').click(function () {
+            var newUrl = $(this).attr('href') +
+                "&kommunkod=" +
+                $("#Kommunkod").val();
+            $('form').attr('action', newUrl).submit();
+            return false;
+        });
+    });
+
     $(function() {
         $('.edit-mode').hide();
         $('.edit-user, .cancel-user').on('click',
@@ -132,16 +142,16 @@
                              columns: grid.Columns(
                                 grid.Column(null, null, format: @<text><input type="hidden" id="RepDelRegId" value="@item.DelregisterId" class="edit-mode form-control"/></text>, style: "colMiniminiWidth"),
 
-                                grid.Column("ID", format: @<text><span class="display-mode">@item.ID</span><label id="RepId" class="edit-mode colMinWidth">@item.Id</label></text>,style: "colMinWidth"),
-                                grid.Column("Delregister", "Delregister", format: @<text><span class="display-mode"><label id="lblDelregister">@item.DelregisterKortnamn</label></span>
+                                grid.Column("Id", format: @<text><span class="display-mode">@item.ID</span><label id="RepId" class="edit-mode colMinWidth">@item.Id</label></text>,style: "colMinWidth"),
+                                grid.Column("DelregisterKortnamn", "Delregister", format: @<text><span class="display-mode"><label id="lblDelregister">@item.DelregisterKortnamn</label></span>
                                 <input type="text" id="Delregister" value="@item.DelregisterKortnamn" class="edit-mode form-control"/></text>, style: "colMinWidth"),
-                                grid.Column("Fr.o.m", "Fr.o.m", format: @<text><span class="display-mode"><label id="lblSkyldigFrom">@( item.SkyldigFrom != null ? item.SkyldigFrom.ToString("yyyy-MM-dd") : item.SkyldigFrom)</label></span>
+                                grid.Column("SkyldigFrom", "Fr.o.m", format: @<text><span class="display-mode"><label id="lblSkyldigFrom">@( item.SkyldigFrom != null ? item.SkyldigFrom.ToString("yyyy-MM-dd") : item.SkyldigFrom)</label></span>
                                 <input type="text" id="RepSkyldigFrom" value="@( item.SkyldigFrom != null ? item.SkyldigFrom.ToString("yyyy-MM-dd") : item.SkyldigFrom)" class="edit-mode form-control" /></text>, style: "col2Width"),
 
-                                grid.Column("T.o.m", "T.o.m", format: @<text><span class="display-mode"><label id="lblSkyldigTom">@( item.SkyldigTom != null ? item.SkyldigTom.ToString("yyyy-MM-dd") : item.SkyldigTom)</label></span>
+                                grid.Column("SkyldigTom", "T.o.m", format: @<text><span class="display-mode"><label id="lblSkyldigTom">@( item.SkyldigTom != null ? item.SkyldigTom.ToString("yyyy-MM-dd") : item.SkyldigTom)</label></span>
                                 <input type="text" id="RepSkyldigTom" value="@( item.SkyldigTom != null ? item.SkyldigTom.ToString("yyyy-MM-dd") : item.SkyldigTom)" class="edit-mode form-control" /></text>, style: "col2Width"),
 
-                                grid.Column("Per enhet", "Per enhet", format: @<text>
+                                grid.Column("RapporterarPerEnhet", "Per enhet", format: @<text>
                                 <span class="display-mode"><input id="lblRappPerEnhet" class="checkbox" name="select" type="checkbox" disabled @(item.RapporterarPerEnhet ? "checked='checked'" : "") value="@item.RapporterarPerEnhet"/></span>
                                 <input id="RepRapporterarPerEnhet" class="edit-mode checkbox" name="select" type="checkbox" @(item.RapporterarPerEnhet ? "checked='checked'" : "") value="@item.RapporterarPerEnhet"/></text>, style: "colMinWidth centered"),
 

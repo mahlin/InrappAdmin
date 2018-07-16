@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
@@ -38,6 +39,7 @@ namespace InrappAdmin.Web.Models.ViewModels
         {
             public int Id { get; set; }
             public int RegisterId { get; set; }
+            [DisplayName("Register")]
             public string RegisterShortName { get; set; }
             public string Delregisternamn { get; set; }
             public string Kortnamn { get; set; }

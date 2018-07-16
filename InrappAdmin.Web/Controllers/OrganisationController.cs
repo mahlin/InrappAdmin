@@ -88,6 +88,7 @@ namespace InrappAdmin.Web.Controllers
                 model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
                 var contacts = _portalAdminService.HamtaKontaktpersonerForOrg(model.Organisation.Id);
                 model.ContactPersons = ConvertUsersViewModelUser(contacts);
+                model.Kommunkod = kommunkod;
             }
             catch (Exception e)
             {
@@ -225,7 +226,7 @@ namespace InrappAdmin.Web.Controllers
                     model.SelectedOrganisationsenhetsId = orgenhetsId;
                 }
                 var admEnhetUppgSkyldighetList = _portalAdminService.HamtaEnhetsUppgiftsskyldighetForOrgEnhet(model.SelectedOrganisationsenhetsId).ToList();
-                model.UnitReportObligations = admEnhetUppgSkyldighetList;
+                model.UnitReportObligations = ConvertEnhetsUppgSkyldighetToViewModel(admEnhetUppgSkyldighetList);
                 // Ladda drop down lists. 
                 model = GetOrgDropDownLists(model);
             }
@@ -631,7 +632,7 @@ namespace InrappAdmin.Web.Controllers
                         Kommunkod = org.Kommunkod,
                         Landstingskod = org.Landstingskod,
                         Organisationsnamn = org.Organisationsnamn,
-                        KommunkodOchOrgnamn = org.Kommunkod + " , " + org.Organisationsnamn
+                        KommunkodOchOrgnamn = org.Kommunkod + ", " + org.Organisationsnamn
                     };
                     var orgenheter = _portalAdminService.HamtaOrgEnheterForOrg(org.Id).ToList();
                     var orgenhetsListDTO = new List<OrganisationsenhetDTO>();
@@ -736,6 +737,29 @@ namespace InrappAdmin.Web.Controllers
 
             return uppgSkyldigheter;
         }
+
+        private List<OrganisationViewModels.AdmEnhetsUppgiftsskyldighetViewModel> ConvertEnhetsUppgSkyldighetToViewModel(List<AdmEnhetsUppgiftsskyldighet> admEnhetsUppgskyldighetList)
+        {
+            var enhUppgSkyldigheter = new List<OrganisationViewModels.AdmEnhetsUppgiftsskyldighetViewModel>();
+            foreach (var admEnhetsUppgskyldighet in admEnhetsUppgskyldighetList)
+            {
+                var enhetsUppgSkyldighetView = new OrganisationViewModels.AdmEnhetsUppgiftsskyldighetViewModel()
+                {
+                    Id = admEnhetsUppgskyldighet.Id,
+                    OrganisationsenhetsId = admEnhetsUppgskyldighet.OrganisationsenhetsId,
+                    UppgiftsskyldighetId = admEnhetsUppgskyldighet.UppgiftsskyldighetId,
+                    SkyldigFrom = admEnhetsUppgskyldighet.SkyldigFrom,
+                    SkyldigTom = admEnhetsUppgskyldighet.SkyldigTom,
+                    DelregisterKortnamn = _portalAdminService.HamtaDelRegisterForUppgiftsskyldighet(admEnhetsUppgskyldighet.UppgiftsskyldighetId).Kortnamn
+                };
+
+                enhUppgSkyldigheter.Add(enhetsUppgSkyldighetView);
+            }
+
+
+            return enhUppgSkyldigheter;
+        }
+        
 
         private AdmEnhetsUppgiftsskyldighet ConvertViewModelToAdmEnhetsUppgiftsskyldighet(OrganisationViewModels.UnitReportObligationsViewModel admEnhetsUppgskyldView)
         {

@@ -2,13 +2,8 @@
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 @*<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />*@
 
-
 <script type="text/javascript">
-    
-    var registerLista = @Html.Raw(Json.Encode(Model.RegisterList));
-    var antalRader = @Html.Raw(Json.Encode(Model.AntRader));
-
-    $(document).ready(function() {
+    $(document).ready(function () {
         //$("#GridHeader").html("<table>" + $('#gridContent table thead').html() + "</table>");
         //$("#GridHeader").html(
         //        "<table style='width:1140px;'><tr><th class='colMinWidth'>Kommunkod</th><th class='col3Width'>Organisation</th><th class='col5Width'>Epostadress</th><th class='col1Width'>Antal</th><th class='col2Width'>Leveranstidpunkt</th><th class='colMinWidth'>Påminn</th></tr></table>");
@@ -35,68 +30,27 @@
             var x = $('#RapportResList').length;
             $('<H4><span style="font-size: 0.7em">Antal rader: ' + antalRader + '</span></H4>').appendTo('#headerText');
         }
-
-        //onChange: function (option, checked, select) {
-        //    $.each(days, function (index, item) {
-        //        if ($('#ClosedDaysList_' + index + '__NameEnglish').val() === $(option).val()) {
-        //            if ($('#ClosedDaysList_' + index + '__Selected').val() === 'False')
-        //                $('#ClosedDaysList_' + index + '__Selected').val('True');
-        //            else
-        //                $('#ClosedDaysList_' + index + '__Selected').val('False');
-        //        }
-        //    });
-        //},
-
-
     });
-
-    $(function() {
-        $("#ddlDelregister").focus();
-    });
-
-    function setDelregDrop(selectedRegister) {
-        //Hämta delregister för valt register
-        registerLista.forEach(function(register, index) {
-            if (selectedRegister === register.Id.toString()) {
-                if (register.DelregisterList.length !== 0) {
-                    //Populera delregister-dropdown
-                    var vals = {};
-                    register.DelregisterList.forEach(function(unit, index) {
-                        vals[unit.Id] = unit.Kortnamn;
-                    });
-
-                    var $ddlDelregister = $("#ddlDelregister");
-                    $ddlDelregister.empty();
-                    $ddlDelregister.append("<option> - Välj delregister - </option>");
-                    $.each(vals,
-                        function(index, value) {
-                            $ddlDelregister.append("<option value=" + index + " >" + value + "</option>");
-                        });
-                    $ddlDelregister.removeAttr('readonly');
-                }
-            }
-        });
-    }
 
     function setPeriodDrop(selectedDelregister) {
         var selectedRegister = $('#ddlRegister').val();
         //Hämta perioder för valt delregister
-        registerLista.forEach(function(register, index) {
+        registerLista.forEach(function (register, index) {
             if (selectedRegister === register.Id.toString()) {
                 if (register.DelregisterList.length !== 0) {
-                    register.DelregisterList.forEach(function(delregister, index) {
+                    register.DelregisterList.forEach(function (delregister, index) {
                         if (selectedDelregister === delregister.Id.toString()) {
                             if (delregister.ForvantadeLeveranserList.length !== 0) {
                                 //Populera period-dropdown
                                 var vals = {};
-                                delregister.ForvantadeLeveranserList.forEach(function(unit, index) {
+                                delregister.ForvantadeLeveranserList.forEach(function (unit, index) {
                                     vals[unit.Period] = unit.Period;
                                 });
                                 var $ddlPeriod = $("#ddlPeriod");
                                 $ddlPeriod.empty();
                                 $ddlPeriod.append("<option> - Välj period - </option>");
                                 $.each(vals,
-                                    function(index, value) {
+                                    function (index, value) {
                                         $ddlPeriod.append("<option value=" + index + " >" + value + "</option>");
                                     });
                                 $ddlPeriod.removeAttr('readonly');
@@ -108,9 +62,51 @@
         });
     }
 
+    $(function() {
+        $("#ddlDelregister").focus();
+    });
+
+    $(function () {
+        $('th a, tfoot a').click(function () {
+            var newUrl = $(this).attr('href') +
+                "&regId=" +
+                $("#SelectedRegisterId").val() +
+                "&delregId=" +
+                $("#SelectedDelregisterId").val() +
+                "&period=" +
+                $("#SelectedPeriod").val();
+            $('form').attr('action', newUrl).submit();
+            return false;
+        });
+    });
+
+    function setDelregDrop(selectedRegister) {
+        //Hämta delregister för valt register
+        registerLista.forEach(function (register, index) {
+            if (selectedRegister === register.Id.toString()) {
+                if (register.DelregisterList.length !== 0) {
+                    //Populera delregister-dropdown
+                    var vals = {};
+                    register.DelregisterList.forEach(function (unit, index) {
+                        vals[unit.Id] = unit.Kortnamn;
+                    });
+
+                    var $ddlDelregister = $("#ddlDelregister");
+                    $ddlDelregister.empty();
+                    $ddlDelregister.append("<option> - Välj delregister - </option>");
+                    $.each(vals,
+                        function (index, value) {
+                            $ddlDelregister.append("<option value=" + index + " >" + value + "</option>");
+                        });
+                    $ddlDelregister.removeAttr('readonly');
+                }
+            }
+        });
+    }
+
     $(document).on('change',
         '#ddlRegister',
-        function() {
+        function () {
             //Nollställ dropparna
             $('#ddlPeriod').empty();
             $("#ddlPeriod").append("<option> - Välj period - </option>");
@@ -123,7 +119,7 @@
 
     $(document).on('change',
         '#ddlDelregister',
-        function() {
+        function () {
             var selectedRegister = $('#ddlRegister').val();
             var selectedDelregister = $('#ddlDelregister').val();
             $("#SelectedDelregisterId").val(selectedDelregister);
@@ -133,7 +129,7 @@
 
     $(document).on('change',
         '#ddlPeriod',
-        function() {
+        function () {
             $("#SelectedPeriod").val($('#ddlPeriod').val());
         });
 
@@ -151,6 +147,9 @@
                 }
             });
     }
+
+    var registerLista = @Html.Raw(Json.Encode(Model.RegisterList));
+    var antalRader = @Html.Raw(Json.Encode(Model.AntRader));
 
     @*function selectAll() {
         var rappResLista = @Html.Raw(Json.Encode(Model.RapportResList));
@@ -170,18 +169,6 @@
         //var f = $('#gridContent table tbody').html();
         //$("#GridBody").html("<table style='width:1140px;'>" + $('#gridContent table tbody').html() + "</table>");
     }*@
-
-
-    //$(function () {
-    //    $('th a, tfoot a').click(function () {
-    //        alert("Klick! KOd: " + $('#SelectedCountyCode').val());
-    //        $('#SelectedCountyCode').val($('#Kommunkod').val());
-    //        alert("Klick!2 " + $('#SelectedCountyCode').val());
-    //        //$('form').attr('action', $(this).attr('href')).submit();
-    //        //return false;
-    //    });
-    //});
-
 </script>
 
 <style type="text/css">
@@ -255,7 +242,7 @@
 
     <p class="text-success">@ViewBag.StatusMessage</p>
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-   
+
 
     @if (Model.RapportResList != null)
     {
@@ -270,9 +257,6 @@
                     @*<div class="" style=""><input type="button" value="Välj alla TEST" onclick="selectAll();" class="btn btn-default" /></div>*@
                 </div>
 
-                @Html.HiddenFor(m => m.SelectedRegisterId)
-                @Html.HiddenFor(m => m.SelectedDelregisterId)
-                @Html.HiddenFor(m => m.SelectedPeriod)
                 @Html.HiddenFor(m => m.AntRader)
 
                 for (var index = 0; index < Model.RapportResList.Count(); index++)
@@ -324,12 +308,12 @@
                               mode: WebGridPagerModes.All,
                               columns: grid.Columns(
                                 grid.Column(null, format: @<text><input type="hidden" id="Id" value="@item.Id" class="form-control hide" /></text>, style: "colZeroWidth"),
-                                grid.Column("Kommunkod", format: @<text><span class="">@item.Kommunkod</span></text>, style: "col1Width"),
-                                grid.Column("Organisation", format: @<text><span class="">@item.Organisationsnamn</span></text>, style: "col3Width"),
-                                grid.Column("E-post, kontaktperson", format: @<text><label id="ContactEmail" class="">@item.Email</label></text>, style: "col5Width"),
-                                grid.Column("Antal leveranser", format: @<text><label id="NumberOfDeliveries" class="">@item.AntalLeveranser</label></text>, style: "col1Width"),
-                                grid.Column("Leveranstidpunkt", format: @<text><label id="DeliveryTime" class="">@item.Leveranstidpunkt</label></text>, style: "col2Width"),
-                                grid.Column("Skicka påminnelse", format: @<text><span class="centered"><input id="chkbxMail" class="checkbox" onchange="setMail('@item.Id');" name="select" type="checkbox" @( item.Mail ? "checked='checked'" : "") value="@item.Mail" /></span></text>, style: "colMinWidth centered", canSort: false)))
+                                grid.Column("Kommunkod", "Kommunkod", format: @<text><span class="">@item.Kommunkod</span></text>, style: "col1Width"),
+                                grid.Column("Organisationsnamn", "Organisation", format: @<text><span class="">@item.Organisationsnamn</span></text>, style: "col3Width"),
+                                grid.Column("Email", "E-post, kontaktperson", format: @<text><label id="ContactEmail" class="">@item.Email</label></text>, style: "col5Width"),
+                                grid.Column("AntalLeveranser", "Antal leveranser", format: @<text><label id="NumberOfDeliveries" class="">@item.AntalLeveranser</label></text>, style: "col1Width"),
+                                grid.Column("Leveranstidpunkt", "Leveranstidpunkt", format: @<text><label id="DeliveryTime" class="">@item.Leveranstidpunkt</label></text>, style: "col2Width"),
+                                grid.Column("Mail","Skicka påminnelse", format: @<text><span class="centered"><input id="chkbxMail" class="checkbox" onchange="setMail('@item.Id');" name="select" type="checkbox" @( item.Mail ? "checked='checked'" : "") value="@item.Mail" /></span></text>, style: "colMinWidth centered", canSort: false)))
                 </div>
                 @*<div id="Outer">
                     <div id="GridHeader"></div>

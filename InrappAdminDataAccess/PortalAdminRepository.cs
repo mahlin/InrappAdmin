@@ -115,7 +115,12 @@ namespace InrappAdmin.DataAccess
         {
             var orgId = DbContext.AdmUppgiftsskyldighet.Where(u => u.Id == repObligationId).Select(o => o.OrganisationId).SingleOrDefault();
             return orgId;
+        }
 
+        public AdmUppgiftsskyldighet GetReportObligationById(int repOblId)
+        {
+            var repObl = DbContext.AdmUppgiftsskyldighet.SingleOrDefault(x => x.Id == repOblId);
+            return repObl;
         }
 
         public IEnumerable<ApplicationUser> GetContactPersonsForOrg(int orgId)
@@ -266,6 +271,7 @@ namespace InrappAdmin.DataAccess
             var subDirectories = DbContext.AdmDelregister.Where(x => x.RegisterId == dirId).ToList();
             return subDirectories;
         }
+
 
         public AdmDelregister GetSubDirectoryByShortName(string shortName)
         {
@@ -889,11 +895,12 @@ namespace InrappAdmin.DataAccess
             IdentityDbContext.SaveChanges();
         }
 
-        public IEnumerable<AdmRegister> GetDirectoriesForOrg(int orgId)
-        {
-            throw new NotImplementedException();
-        }
 
- 
+        //public IEnumerable<AdmRegister> GetDirectoriesForOrg(int orgId)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+
     }
 }

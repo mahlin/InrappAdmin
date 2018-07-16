@@ -96,9 +96,11 @@ namespace InrappAdmin.Web.Models.ViewModels
             public int SelectedInformationId { get; set; }
             [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public DateTime Specialdagdatum { get; set; }
+            [DisplayName("Öppna")]
             public TimeSpan Oppna { get; set; }
             [RegularExpression("^(?:[01][0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Felaktigt format.")]
             public string OppnaStr { get; set; }
+            [DisplayName("Stäng")]
             public TimeSpan Stang { get; set; }
             public string Anledning { get; set; }
            

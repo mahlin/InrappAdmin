@@ -78,7 +78,7 @@
              rowStyle: "webgrid-row-style",
              mode: WebGridPagerModes.All,
              columns: grid.Columns(
-                 grid.Column("Register", format: @<text><label class="col1Width">@item.RegisterKortnamn</label></text>),
+                 grid.Column("RegisterKortnamn", "Register", format: @<text><label class="col1Width">@item.RegisterKortnamn</label></text>),
                  grid.Column("Period", format: @<text><label class="colMinWidth">@item.Period</label></text>),
                  grid.Column("Leveranstidpunkt", format: @<text><label class="col170Width">@item.Leveranstidpunkt</label></text>),
                  grid.Column("Leveransid", format: @<text><label class="colMinWidth">@item.Leveransid</label></text>),

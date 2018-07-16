@@ -59,6 +59,8 @@ namespace InrappAdmin.ApplicationService.Interface
         IEnumerable<AdmDelregister> HamtaDelRegister();
 
         IEnumerable<AdmDelregister> HamtaDelRegisterForRegister(int regId);
+
+        AdmDelregister HamtaDelRegisterForUppgiftsskyldighet(int uppgSkId);
         AdmDelregister HamtaDelRegisterForKortnamn(string shortName);
 
         IEnumerable<RegisterInfo> HamtaDelregisterOchFilkrav();
