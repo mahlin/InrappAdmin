@@ -6,7 +6,7 @@
     var orgLista = @Html.Raw(Json.Encode(Model.OrganisationList));
 
     $(function () {
-        $("#txtKommunkod").focus();
+        $("#ddlOrganisation").focus();
     });
 
     $(function () {
@@ -46,7 +46,8 @@
         });
 
     $(document).on('change', '#ddlOrgenheter',
-        function() {
+        function () {
+            $('#raderSaknas').hide();
             var selectedOrgenhet = $('#ddlOrgenheter').val();
             $("#SelectedOrganisationsenhetsId").val(selectedOrgenhet);
             
@@ -145,7 +146,7 @@
             var tmp = $(this).attr('href');
 
             window.location = $(this).attr('href') + '?orgId=' + orgId + '&orgenhetsId=' + orgenhetsId;
-        });
+    });
 
 </script>
 
@@ -202,7 +203,7 @@
 
         <div id="skapaNy">
             @*@Html.ActionLink("Skapa ny enhetsuppgiftsskyldighet", "CreateUnitReportObligation", "Organisation", new { orgId = Model.SelectedOrganisationId, orgenhetsId = Model.SelectedOrganisationsenhetsId }, null)*@
-            @Html.ActionLink("Skapa ny enhetsuppgiftsskyldighet", "CreateUnitReportObligation", null, new { @class = "createNew" })
+            @Html.ActionLink("Skapa ny enhetsuppgiftsskyldighet", "CreateUnitReportObligation", new { selectedOrgId = Model.SelectedOrganisationId, selectedOrgenhetsId = Model.SelectedOrganisationsenhetsId }, null)
         </div>
         @Html.HiddenFor(m => m.SelectedOrganisationId)
 
@@ -246,9 +247,11 @@
 
                 </div>
             }
-            else
+            else 
             {
-                <H5>Enhetsuppgiftsskyldighet för vald kommun saknas</H5>
+                <div id="raderSaknas">
+                    <H5>Enhetsuppgiftsskyldighet för vald kommun saknas</H5>
+                </div>
             }
         }
 

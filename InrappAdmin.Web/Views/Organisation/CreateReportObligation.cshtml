@@ -17,7 +17,7 @@
 </script>
 
 
-@using (Html.BeginForm("CreateReportObligation", "Organisation", new { orgId = Model.OrganisationId }, FormMethod.Post, null))
+@using (Html.BeginForm("CreateReportObligation", "Organisation", new { selectedOrgId = Model.OrganisationId }, FormMethod.Post, null))
     {
     @Html.AntiForgeryToken()
 
@@ -73,7 +73,7 @@
         </div>
     </div>
     <div>
-        @Html.ActionLink("Tillbaka", "GetOrganisationsReportObligations", "Organisation", new { orgId = Model.OrganisationId }, null)
+        @Html.ActionLink("Tillbaka", "GetOrganisationsReportObligations", "Organisation", new { selectedOrgId = Model.OrganisationId }, null)
 
     </div>
 }

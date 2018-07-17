@@ -25,11 +25,12 @@ namespace InrappAdmin.Web.Models.ViewModels
             public string SelectedContactId { get; set; }
 
             public string SelectedCountyCode { get; set; }
+            public int SelectedOrganisationId { get; set; }
+
 
             public IEnumerable<Organisationsenhet> OrgUnits { get; set; }
 
             public  IEnumerable<ReportObligationsViewModel> ReportObligations { get; set; }
-            
 
         }
         

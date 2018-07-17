@@ -30,24 +30,30 @@ namespace InrappAdmin.Web.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            // Ladda drop down lists. 
+            var orgListDTO = GetOrganisationDTOList();
+            ViewBag.OrganisationList = new SelectList(orgListDTO, "Id", "KommunkodOchOrgnamn");
             return View();
         }
 
         [Authorize]
         // GET: Organisation
-        public ActionResult GetOrganisation(string kommunkod)
+        public ActionResult GetOrganisation(OrganisationViewModels.OrganisationViewModel model)
         {
-            var model = new OrganisationViewModels.OrganisationViewModel();
             try
             {
-                model.Kommunkod = kommunkod;
-                model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+                model.Organisation = _portalAdminService.HamtaOrganisation(model.SelectedOrganisationId);
+                model.Kommunkod = model.Organisation.Kommunkod;
                 var contacts = _portalAdminService.HamtaKontaktpersonerForOrg(model.Organisation.Id);
                 model.ContactPersons = ConvertUsersViewModelUser(contacts);
 
                 model.OrgUnits = _portalAdminService.HamtaOrgEnheterForOrg(model.Organisation.Id);
                 var reportObligationsDb = _portalAdminService.HamtaUppgiftsskyldighetForOrg(model.Organisation.Id);
                 model.ReportObligations = ConvertAdmUppgiftsskyldighetToViewModel(reportObligationsDb.ToList());
+                // Ladda drop down lists. 
+                var orgListDTO = GetOrganisationDTOList();
+                ViewBag.OrganisationList = new SelectList(orgListDTO, "Id", "KommunkodOchOrgnamn");
+                //model.SelectedOrganisationId = 0;
             }
             catch (Exception e)
             {
@@ -74,21 +80,31 @@ namespace InrappAdmin.Web.Controllers
         [Authorize]
         public ActionResult GetContacts()
         {
+            // Ladda drop down lists. 
+            var orgListDTO = GetOrganisationDTOList();
+            ViewBag.OrganisationList = new SelectList(orgListDTO, "Id", "KommunkodOchOrgnamn");
+
             return View("EditContacts");
         }
 
 
         // GET
         [Authorize]
-        public ActionResult GetOrganisationsContacts(string kommunkod)
+        public ActionResult GetOrganisationsContacts(OrganisationViewModels.OrganisationViewModel model, int selectedOrgId = 0)
         {
-            var model = new OrganisationViewModels.OrganisationViewModel();
             try
             {
-                model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+                if (selectedOrgId != 0)
+                {
+                    model.SelectedOrganisationId = selectedOrgId;
+                }
+                model.Organisation = _portalAdminService.HamtaOrganisation(model.SelectedOrganisationId);
+                model.Kommunkod = model.Organisation.Kommunkod;
                 var contacts = _portalAdminService.HamtaKontaktpersonerForOrg(model.Organisation.Id);
                 model.ContactPersons = ConvertUsersViewModelUser(contacts);
-                model.Kommunkod = kommunkod;
+                // Ladda drop down lists. 
+                var orgListDTO = GetOrganisationDTOList();
+                ViewBag.OrganisationList = new SelectList(orgListDTO, "Id", "KommunkodOchOrgnamn");
             }
             catch (Exception e)
             {
@@ -113,27 +129,30 @@ namespace InrappAdmin.Web.Controllers
         [Authorize]
         public ActionResult GetOrgUnits()
         {
+            // Ladda drop down lists. 
+            var orgListDTO = GetOrganisationDTOList();
+            ViewBag.OrganisationList = new SelectList(orgListDTO, "Id", "KommunkodOchOrgnamn");
             return View("EditOrgUnits");
         }
 
         // GET
         [Authorize]
-        public ActionResult GetOrganisationsOrgUnits(string kommunkod = "", int orgId = 0)
+        public ActionResult GetOrganisationsOrgUnits(OrganisationViewModels.OrganisationViewModel model, int selectedOrgId = 0)
         {
-            var model = new OrganisationViewModels.OrganisationViewModel();
             try
             {
-                if (kommunkod != "")
+                if (selectedOrgId != 0)
                 {
-                    model.Kommunkod = kommunkod;
-                    model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+                    model.SelectedOrganisationId = selectedOrgId;
                 }
-                else if (orgId != 0)
-                {
-                    model.Organisation = _portalAdminService.HamtaOrganisation(orgId);
-                    model.Kommunkod = _portalAdminService.HamtaKommunkodForOrg(orgId);
-                }
+
+                model.Organisation = _portalAdminService.HamtaOrganisation(model.SelectedOrganisationId);
+                model.Kommunkod = model.Organisation.Kommunkod;
                 model.OrgUnits = _portalAdminService.HamtaOrgEnheterForOrg(model.Organisation.Id);
+                // Ladda drop down lists. 
+                var orgListDTO = GetOrganisationDTOList();
+                ViewBag.OrganisationList = new SelectList(orgListDTO, "Id", "KommunkodOchOrgnamn");
+
             }
             catch (Exception e)
             {
@@ -159,27 +178,28 @@ namespace InrappAdmin.Web.Controllers
         [Authorize]
         public ActionResult GetReportObligations()
         {
+            // Ladda drop down lists. 
+            var orgListDTO = GetOrganisationDTOList();
+            ViewBag.OrganisationList = new SelectList(orgListDTO, "Id", "KommunkodOchOrgnamn");
             return View("EditReportObligations");
         }
 
         [Authorize]
-        public ActionResult GetOrganisationsReportObligations(string kommunkod = "", int orgId = 0)
+        public ActionResult GetOrganisationsReportObligations(OrganisationViewModels.OrganisationViewModel model, int selectedOrgId = 0)
         {
-            var model = new OrganisationViewModels.OrganisationViewModel();
             try
             {
-                if (kommunkod != "")
+                if (selectedOrgId != 0)
                 {
-                    model.Kommunkod = kommunkod;
-                    model.Organisation = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+                    model.SelectedOrganisationId = selectedOrgId;
                 }
-                else if (orgId != 0)
-                {
-                    model.Organisation = _portalAdminService.HamtaOrganisation(orgId);
-                    model.Kommunkod = _portalAdminService.HamtaKommunkodForOrg(orgId);
-                }
+                model.Organisation = _portalAdminService.HamtaOrganisation(model.SelectedOrganisationId);
+                model.Kommunkod = model.Organisation.Kommunkod;
                 var admUppgSkyldighetList = _portalAdminService.HamtaUppgiftsskyldighetForOrg(model.Organisation.Id);
                 model.ReportObligations = ConvertAdmUppgiftsskyldighetToViewModel(admUppgSkyldighetList.ToList());
+                // Ladda drop down lists. 
+                var orgListDTO = GetOrganisationDTOList();
+                ViewBag.OrganisationList = new SelectList(orgListDTO, "Id", "KommunkodOchOrgnamn");
             }
             catch (Exception e)
             {
@@ -213,17 +233,17 @@ namespace InrappAdmin.Web.Controllers
 
 
         [Authorize]
-        public ActionResult GetOrganisationsUnitReportObligations(OrganisationViewModels.UnitReportObligationsViewModel model, int orgId = 0, int orgenhetsId = 0)
+        public ActionResult GetOrganisationsUnitReportObligations(OrganisationViewModels.UnitReportObligationsViewModel model, int selectedOrgId = 0, int selectedOrgenhetsId = 0)
         {
             try
             {
-                if (orgId != 0)
+                if (selectedOrgId != 0)
                 {
-                    model.SelectedOrganisationId = orgId;
+                    model.SelectedOrganisationId = selectedOrgId;
                 }
-                if (orgenhetsId != 0)
+                if (selectedOrgenhetsId != 0)
                 {
-                    model.SelectedOrganisationsenhetsId = orgenhetsId;
+                    model.SelectedOrganisationsenhetsId = selectedOrgenhetsId;
                 }
                 var admEnhetUppgSkyldighetList = _portalAdminService.HamtaEnhetsUppgiftsskyldighetForOrgEnhet(model.SelectedOrganisationsenhetsId).ToList();
                 model.UnitReportObligations = ConvertEnhetsUppgSkyldighetToViewModel(admEnhetUppgSkyldighetList);
@@ -281,11 +301,10 @@ namespace InrappAdmin.Web.Controllers
         [Authorize]
         public ActionResult UpdateOrganisationsContact(ApplicationUser user)
         {
-            var kommunkod = String.Empty;
+            var org = new Organisation();
             try
             {
-                var org = _portalAdminService.HamtaOrgForAnvandare(user.Id);
-                kommunkod = _portalAdminService.HamtaKommunkodForOrg(org.Id);
+                org = _portalAdminService.HamtaOrgForAnvandare(user.Id);
                 if (ModelState.IsValid)
                 {
                     var userName = User.Identity.GetUserName();
@@ -304,7 +323,7 @@ namespace InrappAdmin.Web.Controllers
                 };
                 return View("CustomError", errorModel);
             }
-            return RedirectToAction("GetOrganisationsContacts", new { kommunkod = kommunkod });
+            return RedirectToAction("GetOrganisationsContacts", new { selectedOrgId = org.Id });
 
         }
 
@@ -312,12 +331,10 @@ namespace InrappAdmin.Web.Controllers
         [Authorize]
         public ActionResult UpdateOrganisationsOrgUnit(Organisationsenhet orgUnit)
         {
-            var kommunkod = String.Empty;
+            var org = new Organisation();
             try
             {
-
-                var org = _portalAdminService.HamtaOrgForOrganisationsenhet(orgUnit.Id);
-                kommunkod = _portalAdminService.HamtaKommunkodForOrg(org.Id);
+                org = _portalAdminService.HamtaOrgForOrganisationsenhet(orgUnit.Id);
                 if (ModelState.IsValid)
                 {
                     var userName = User.Identity.GetUserName();
@@ -336,7 +353,7 @@ namespace InrappAdmin.Web.Controllers
                 };
                 return View("CustomError", errorModel);
             }
-            return RedirectToAction("GetOrganisationsOrgUnits", new { kommunkod = kommunkod });
+            return RedirectToAction("GetOrganisationsOrgUnits", new { selectedOrgId = org.Id });
 
         }
 
@@ -344,12 +361,10 @@ namespace InrappAdmin.Web.Controllers
         [Authorize]
         public ActionResult UpdateOrganisationsReportObligation(OrganisationViewModels.ReportObligationsViewModel admUppgSkyldighet)
         {
-            var kommunkod = String.Empty;
+            var org = new Organisation();
             try
             {
-
-                var org = _portalAdminService.HamtaOrgForUppgiftsskyldighet(admUppgSkyldighet.Id);
-                kommunkod = _portalAdminService.HamtaKommunkodForOrg(org.Id);
+                org = _portalAdminService.HamtaOrgForUppgiftsskyldighet(admUppgSkyldighet.Id);
                 if (ModelState.IsValid)
                 {
                     var userName = User.Identity.GetUserName();
@@ -369,7 +384,7 @@ namespace InrappAdmin.Web.Controllers
                 };
                 return View("CustomError", errorModel);
             }
-            return RedirectToAction("GetOrganisationsReportObligations", new { kommunkod = kommunkod });
+            return RedirectToAction("GetOrganisationsReportObligations", new { selectedOrgId = org.Id });
 
         }
 
@@ -399,7 +414,7 @@ namespace InrappAdmin.Web.Controllers
                 };
                 return View("CustomError", errorModel);
             }
-            return RedirectToAction("GetOrganisationsUnitReportObligations", new { orgId = org.Id, orgenhetsId = admEnhetsUppgSkyldighet.OrganisationsenhetsId});
+            return RedirectToAction("GetOrganisationsUnitReportObligations", new { selectedOrgId = org.Id, selectedOrgenhetsId = admEnhetsUppgSkyldighet.OrganisationsenhetsId});
 
         }
 
@@ -442,10 +457,10 @@ namespace InrappAdmin.Web.Controllers
         }
 
         [Authorize]
-        public ActionResult CreateOrganisationUnit(int orgId = 0)
+        public ActionResult CreateOrganisationUnit(int selectedOrgId = 0)
         {
             var model = new OrganisationViewModels.OrganisationsenhetViewModel();
-            model.Organisationsid = orgId;
+            model.Organisationsid = selectedOrgId;
             return View(model);
         }
 
@@ -455,14 +470,13 @@ namespace InrappAdmin.Web.Controllers
         [Authorize]
         public ActionResult CreateOrganisationUnit(Organisationsenhet orgenhet)
         {
-            var kommunkod = String.Empty;
+            var org = new Organisation();
             if (ModelState.IsValid)
             {
                 try
                 {
                     var userName = User.Identity.GetUserName();
                     _portalAdminService.SkapaOrganisationsenhet(orgenhet, userName);
-                    kommunkod = _portalAdminService.HamtaKommunkodForOrg(orgenhet.OrganisationsId);
                 }
                 catch (Exception e)
                 {
@@ -475,17 +489,17 @@ namespace InrappAdmin.Web.Controllers
                     };
                     return View("CustomError", errorModel);
                 }
-                return RedirectToAction("GetOrganisationsOrgUnits", new { kommunkod = kommunkod});
+                return RedirectToAction("GetOrganisationsOrgUnits", new { selectedOrgId = org.Id });
             }
 
             return View();
         }
 
         [Authorize]
-        public ActionResult CreateReportObligation(int orgId = 0)
+        public ActionResult CreateReportObligation(int selectedOrgId = 0)
         {
             var model = new OrganisationViewModels.ReportObligationsViewModel();
-            model.OrganisationId = orgId;
+            model.OrganisationId = selectedOrgId;
             var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
             this.ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
             model.DelregisterId = 0;
@@ -496,18 +510,17 @@ namespace InrappAdmin.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult CreateReportObligation(OrganisationViewModels.ReportObligationsViewModel uppgSk, int orgId)
+        public ActionResult CreateReportObligation(OrganisationViewModels.ReportObligationsViewModel uppgSk, int selectedOrgId)
         {
-            var kommunkod = String.Empty;
+            var org = new Organisation();
             if (ModelState.IsValid)
             {
                 try
                 {
                     var userName = User.Identity.GetUserName();
                     var admUppgSkyldighet = ConvertToDbFromVM(uppgSk);
-                    admUppgSkyldighet.OrganisationId = orgId;
+                    admUppgSkyldighet.OrganisationId = selectedOrgId;
                     _portalAdminService.SkapaUppgiftsskyldighet(admUppgSkyldighet, userName);
-                    kommunkod = _portalAdminService.HamtaKommunkodForOrg(uppgSk.OrganisationId);
                 }
                 catch (Exception e)
                 {
@@ -520,30 +533,30 @@ namespace InrappAdmin.Web.Controllers
                     };
                     return View("CustomError", errorModel);
                 }
-                return RedirectToAction("GetOrganisationsReportObligations", new { kommunkod = kommunkod });
+                return RedirectToAction("GetOrganisationsReportObligations", new { selectedOrgId = org.Id });
             }
 
             return View();
         }
 
         [Authorize]
-        public ActionResult CreateUnitReportObligation(int orgId = 0, int orgenhetsId = 0)
+        public ActionResult CreateUnitReportObligation(int selectedOrgId = 0, int selectedOrgenhetsId = 0)
         {
             var model = new OrganisationViewModels.UnitReportObligationsViewModel();
 
             try
             {
-                model.SelectedOrganisationId = orgId;
-                model.SelectedOrganisationsenhetsId = orgenhetsId;
+                model.SelectedOrganisationId = selectedOrgId;
+                model.SelectedOrganisationsenhetsId = selectedOrgenhetsId;
                 var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
                 this.ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
 
-                if (orgId != 0)
+                if (selectedOrgId != 0)
                 {
-                    model.Organisationsnamn = _portalAdminService.HamtaOrganisation(orgId).Organisationsnamn;
+                    model.Organisationsnamn = _portalAdminService.HamtaOrganisation(selectedOrgId).Organisationsnamn;
                 }
 
-                var orgenhetsList = _portalAdminService.HamtaOrgEnheterForOrg(orgId);
+                var orgenhetsList = _portalAdminService.HamtaOrgEnheterForOrg(selectedOrgId);
                 this.ViewBag.OrgenhetList = CreateOrgenhetDropDownList(orgenhetsList);
             }
             catch (Exception e)
@@ -588,7 +601,7 @@ namespace InrappAdmin.Web.Controllers
                     };
                     return View("CustomError", errorModel);
                 }
-                return RedirectToAction("GetOrganisationsUnitReportObligations", new { orgId = Convert.ToInt32(enhetsUppgSk.SelectedOrganisationId), orgenhetsId = Convert.ToInt32(enhetsUppgSk.SelectedOrganisationsenhetsId) });
+                return RedirectToAction("GetOrganisationsUnitReportObligations", new { selectedOrgId = Convert.ToInt32(enhetsUppgSk.SelectedOrganisationId), selectedOrgenhetsId = Convert.ToInt32(enhetsUppgSk.SelectedOrganisationsenhetsId) });
             }
 
             return View();
@@ -620,6 +633,36 @@ namespace InrappAdmin.Web.Controllers
         private OrganisationViewModels.UnitReportObligationsViewModel GetOrgDropDownLists(OrganisationViewModels.UnitReportObligationsViewModel model)
         {
             var orgList = _portalAdminService.HamtaAllaOrganisationer();
+            var orgListDTO = GetOrganisationDTOList();
+
+            foreach (var org in orgListDTO)
+            {
+                    var orgenheter = _portalAdminService.HamtaOrgEnheterForOrg(org.Id).ToList();
+                    var orgenhetsListDTO = new List<OrganisationsenhetDTO>();
+
+                    foreach (var orgenhet in orgenheter)
+                    {
+                        var orgenhetDTO = new OrganisationsenhetDTO
+                        {
+                            Id = orgenhet.Id,
+                            Enhetsnamn = orgenhet.Enhetsnamn,
+                            Enhetskod = orgenhet.Enhetskod
+                        };
+                        orgenhetsListDTO.Add(orgenhetDTO);
+                    }
+                    org.Organisationsenheter = orgenhetsListDTO;
+            }
+
+            model.OrganisationList = orgListDTO.ToList();
+            ViewBag.OrganisationList = new SelectList(orgListDTO, "Id", "KommunkodOchOrgnamn");
+
+            return model;
+
+        }
+
+        private IEnumerable<OrganisationDTO> GetOrganisationDTOList()
+        {
+            var orgList = _portalAdminService.HamtaAllaOrganisationer();
             var orgListDTO = new List<OrganisationDTO>();
 
             foreach (var org in orgList)
@@ -634,30 +677,14 @@ namespace InrappAdmin.Web.Controllers
                         Organisationsnamn = org.Organisationsnamn,
                         KommunkodOchOrgnamn = org.Kommunkod + ", " + org.Organisationsnamn
                     };
-                    var orgenheter = _portalAdminService.HamtaOrgEnheterForOrg(org.Id).ToList();
-                    var orgenhetsListDTO = new List<OrganisationsenhetDTO>();
-
-                    foreach (var orgenhet in orgenheter)
-                    {
-                        var orgenhetDTO = new OrganisationsenhetDTO
-                        {
-                            Id = orgenhet.Id,
-                            Enhetsnamn = orgenhet.Enhetsnamn,
-                            Enhetskod = orgenhet.Enhetskod
-                        };
-                        orgenhetsListDTO.Add(orgenhetDTO);
-                    }
-                    organisationDTO.Organisationsenheter = orgenhetsListDTO;
                     orgListDTO.Add(organisationDTO);
                 }
             }
 
-            model.OrganisationList = orgListDTO;
-            ViewBag.OrganisationList = new SelectList(orgListDTO, "Id", "KommunkodOchOrgnamn");
-
-            return model;
-
+            return orgListDTO;
         }
+
+
 
         private IEnumerable<OrganisationViewModels.ApplicationUserViewModel> ConvertUsersViewModelUser(IEnumerable<ApplicationUser> contacts)
         {

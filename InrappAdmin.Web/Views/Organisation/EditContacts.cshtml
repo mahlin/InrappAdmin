@@ -42,8 +42,14 @@
     });
 
     $(function () {
-        $("#txtKommunkod").focus();
+        $("#ddlOrganisation").focus();
     });
+
+    $(document).on('change', '#ddlOrganisation',
+        function() {
+            var selectedOrg = $('#ddlOrganisation').val();
+            $("#SelectedOrganisationId").val(selectedOrg);
+        });
 
     $(function () {
         $('th a, tfoot a').click(function () {
@@ -154,11 +160,11 @@
                     @Html.HiddenFor(m => m.SelectedCountyCode)
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
                     <div class="form-group">
-                        @Html.LabelFor(m => m.Kommunkod, new { @class = "col-md-2 control-label" })
+                        @Html.Label("Organisation", new { @class = "col-md-2 control-label" })
                         <div class="col-md-10">
-                            @Html.TextBoxFor(m => m.Kommunkod, new { maxlength = 4, placeholder = "4 siffror", @class = "form-control", id = "txtKommunkod" })
-                            @Html.ValidationMessageFor(m => m.Kommunkod, "", new { @class = "text-danger" })
+                            @Html.DropDownListFor(m => m.SelectedOrganisationId, ViewBag.OrganisationList as SelectList, " - Välj kommunkod -", new { @class = "form-control", id = "ddlOrganisation" })
                         </div>
                     </div>
                     <div class="form-group">

@@ -7,7 +7,7 @@
 
 <script type="text/javascript">
     $(function () {
-        $("#txtKommunkod").focus();
+        $("#ddlOrganisation").focus();
     });
 
     $(document).ready(function () {
@@ -37,6 +37,12 @@
         return false;
     });
 
+    $(document).on('change', '#ddlOrganisation',
+        function() {
+            var selectedOrg = $('#ddlOrganisation').val();
+            $("#SelectedOrganisationId").val(selectedOrg);
+        });
+
 
 </script>
 
@@ -50,11 +56,18 @@
                 <h4>Administrera organisation</h4>
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
+                @*<div class="form-group">
                     @Html.LabelFor(m => m.Kommunkod, new { @class = "col-md-2 control-label" })
                     <div class="col-md-10">
                         @Html.TextBoxFor(m => m.Kommunkod, new { maxlength = 4, placeholder = "4 siffror", @class = "form-control", id = "txtKommunkod" })
                         @Html.ValidationMessageFor(m => m.Kommunkod, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+                <div class="form-group">
+                    @Html.Label("Organisation", new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(m => m.SelectedOrganisationId, ViewBag.OrganisationList as SelectList, " - Välj kommunkod -", new { @class = "form-control", id = "ddlOrganisation" })
                     </div>
                 </div>
                 <div class="form-group">
@@ -376,7 +389,7 @@
 
     @Html.Partial("_Contactpersons")
     <p>
-        @Html.ActionLink(HttpUtility.HtmlDecode("Administrera kontaktpersoner &raquo;"), "GetOrganisationsContacts", "Organisation", new { kommunkod = Model.Kommunkod }, new { @class = "btn btn-primary" })
+        @Html.ActionLink(HttpUtility.HtmlDecode("Administrera kontaktpersoner &raquo;"), "GetOrganisationsContacts", "Organisation", new { selectedOrgId = Model.SelectedOrganisationId }, new { @class = "btn btn-primary" })
     </p>
 
 
