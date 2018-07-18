@@ -31,6 +31,13 @@
             var x = $('#RapportResList').length;
             $('<H4><span style="font-size: 0.7em">Antal rader: ' + antalRader + '</span></H4>').appendTo('#headerText');
         }
+
+        $('#cbSelectAll').click(function() {
+            var ischecked = $(this).is(':checked');
+            $('#GridBody').find("input:checkbox").each(function() {
+                this.checked = ischecked;
+            });
+        });
     });
 
     function setFixedTableHeaderWidths() {
@@ -173,6 +180,8 @@
     var registerLista = @Html.Raw(Json.Encode(Model.RegisterList));
     var antalRader = @Html.Raw(Json.Encode(Model.AntRader));
 
+
+
     @*function selectAll() {
         var rappResLista = @Html.Raw(Json.Encode(Model.RapportResList));
         $.each(rappResLista, function (index, item) {
@@ -272,7 +281,13 @@
                     <div class="col-md-10 padding-top-15" id="headerText" style="padding-left: 20px; ">
                     </div>
                     <div class="" style=""><input type="submit" value="Skicka påminnelse" class="btn btn-default" /></div>
-                    @*<div class="" style=""><input type="button" value="Välj alla TEST" onclick="selectAll();" class="btn btn-default" /></div>*@
+                </div>
+                <div class="row col-md-11">
+                    <div style="float: right;">
+                        <input type="checkbox" id="cbSelectAll" style="float: right;padding-right: 40px; margin-top: 7px;"/>
+                        <label for="cbSelectAll" style="width: 65px;">Välj alla</label>
+                    </div>
+                    @*<input type="checkbox" id="cbSelectAll" value="Välj alla TEST" class="btn btn-default" />*@
                 </div>
 
                 @Html.HiddenFor(m => m.AntRader)
