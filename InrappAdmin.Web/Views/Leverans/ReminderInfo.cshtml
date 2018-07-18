@@ -4,12 +4,13 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        //$("#GridHeader").html("<table>" + $('#gridContent table thead').html() + "</table>");
-        //$("#GridHeader").html(
-        //        "<table style='width:1140px;'><tr><th class='colMinWidth'>Kommunkod</th><th class='col3Width'>Organisation</th><th class='col5Width'>Epostadress</th><th class='col1Width'>Antal</th><th class='col2Width'>Leveranstidpunkt</th><th class='colMinWidth'>Påminn</th></tr></table>");
-        //$("#GridHeader table tr:first").append("<th style='width:12px;'></th>");
-        //$("#GridBody").html("<table style='width:1140px;'>" + $('#gridContent table tbody').html() + "</table>");
-        //$("#gridContent").hide();
+        //Fix webgrid-header
+        $("#GridHeader").html("<table id='headerTable'>" + $('#gridContent table thead').html() + "</table>");
+        $("#GridHeader table tr:first").append("<th style='width:12px;' ></th>");
+        $("#GridBody").html("<table>" + $('#gridContent table tbody').html() + "</table>");
+        //$("#GridFooter").html("<table>" + $('#gridContent table tfoot').html() + "</table>");
+        $("#gridContent").hide();
+        setFixedTableHeaderWidths();
 
         if ($("#SelectedRegisterId").val() > 0) {
             //set delreg-ddl
@@ -31,6 +32,27 @@
             $('<H4><span style="font-size: 0.7em">Antal rader: ' + antalRader + '</span></H4>').appendTo('#headerText');
         }
     });
+
+    function setFixedTableHeaderWidths() {
+        var x = $('#GridHeader table tbody');
+        //$('#GridHeader table tbody tr').find('th:nth-child(1)').css('background-color', '#E8A2A2');
+
+        var y = $('#GridBody table tbody');
+        //$('#GridBody table tbody tr').find('td:nth-child(1)').css('background-color', '#66E0ED');
+
+        var $body = $('#GridBody table tbody');
+        var $header = $('#GridHeader table tbody');
+
+        $body.find('tr:first-child').children().each(function (i) {
+            //if (i === 0) {
+            //    $($header.find('tr:first-child').children()[i]).css('width', 1);
+            //} else {
+                $($header.find('tr:first-child').children()[i]).css('width', $(this).width() + 15 );
+
+            //}
+
+        });
+    }
 
     function setPeriodDrop(selectedDelregister) {
         var selectedRegister = $('#ddlRegister').val();
@@ -174,23 +196,19 @@
 <style type="text/css">
 
     #GridBody {
-        width: 1140px;
+        width: 1070px;
         height: 400px;
         overflow-y: scroll;
         border: solid 1px #e8eef4;
     }
 
     #GridHeader table {
-        width: 1140px;
+        width: 1072px;
         text-align: left;
         margin-top: 0px;
-        border: solid 1px #A7C942;
+        /*border: solid 1px #A7C942;*/
         padding: 0px;
         border-collapse: collapse;
-    }
-
-    #GridHeader table th .colMinWidth {
-        width: 50px;
     }
 </style>
 
@@ -307,18 +325,18 @@
                               rowStyle: "webgrid-row-style",
                               mode: WebGridPagerModes.All,
                               columns: grid.Columns(
-                                grid.Column(null, format: @<text><input type="hidden" id="Id" value="@item.Id" class="form-control hide" /></text>, style: "colZeroWidth"),
+                                @*grid.Column(null, format: @<text><input type="hidden" id="Id" value="@item.Id" class="form-control hide" /></text>, style: "colZeroWidth"),*@
                                 grid.Column("Kommunkod", "Kommunkod", format: @<text><span class="">@item.Kommunkod</span></text>, style: "col1Width"),
                                 grid.Column("Organisationsnamn", "Organisation", format: @<text><span class="">@item.Organisationsnamn</span></text>, style: "col3Width"),
                                 grid.Column("Email", "E-post, kontaktperson", format: @<text><label id="ContactEmail" class="">@item.Email</label></text>, style: "col5Width"),
                                 grid.Column("AntalLeveranser", "Antal leveranser", format: @<text><label id="NumberOfDeliveries" class="">@item.AntalLeveranser</label></text>, style: "col1Width"),
                                 grid.Column("Leveranstidpunkt", "Leveranstidpunkt", format: @<text><label id="DeliveryTime" class="">@item.Leveranstidpunkt</label></text>, style: "col2Width"),
-                                grid.Column("Mail","Skicka påminnelse", format: @<text><span class="centered"><input id="chkbxMail" class="checkbox" onchange="setMail('@item.Id');" name="select" type="checkbox" @( item.Mail ? "checked='checked'" : "") value="@item.Mail" /></span></text>, style: "colMinWidth centered", canSort: false)))
+                                grid.Column("Mail","Skicka påminnelse", format: @<text><span class=""><input id="chkbxMail" class="checkbox" onchange="setMail('@item.Id');" name="select" type="checkbox" @( item.Mail ? "checked='checked'" : "") value="@item.Mail" /></span></text>, style: "colMinWidth", canSort: false)))
                 </div>
-                @*<div id="Outer">
+                <div id="Outer">
                     <div id="GridHeader"></div>
                     <div id="GridBody"></div>
-                </div>*@
+                </div>
             }
         }
     }
