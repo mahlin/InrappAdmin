@@ -53,9 +53,15 @@
 
     $(function () {
         $('th a, tfoot a').click(function () {
+            //if querystring already contains selectedOrgId, remove it
+            var index = $(this).attr('href').indexOf("&selectedOrgId=");
+            if (index >= 0) {
+                var cleanUrl = $(this).attr('href').substring(0, index);
+                $(this).attr('href', cleanUrl);
+            }
             var newUrl = $(this).attr('href') +
-                "&kommunkod=" +
-                $("#Kommunkod").val();
+                "&selectedOrgId=" +
+                $("#SelectedOrganisationId").val();
             $('form').attr('action', newUrl).submit();
             return false;
         });
@@ -157,21 +163,22 @@
             <section id="orgForm">
                 @using (Html.BeginForm("GetOrganisationsContacts", "Organisation", new { ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
-                    @Html.HiddenFor(m => m.SelectedCountyCode)
-                    @Html.AntiForgeryToken()
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(m => m.SelectedCountyCode)
+                        @Html.HiddenFor(m => m.SelectedOrganisationId)
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                    <div class="form-group">
-                        @Html.Label("Organisation", new { @class = "col-md-2 control-label" })
-                        <div class="col-md-10">
-                            @Html.DropDownListFor(m => m.SelectedOrganisationId, ViewBag.OrganisationList as SelectList, " - Välj kommunkod -", new { @class = "form-control", id = "ddlOrganisation" })
+                        <div class="form-group">
+                            @Html.Label("Organisation", new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(m => m.SelectedOrganisationId, ViewBag.OrganisationList as SelectList, " - Välj kommunkod -", new { @class = "form-control", id = "ddlOrganisation" })
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Sök kontaktpersoner" class="btn btn-default" />
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Sök kontaktpersoner" class="btn btn-default" />
+                            </div>
                         </div>
-                    </div>
                 }
             </section>
         </div>

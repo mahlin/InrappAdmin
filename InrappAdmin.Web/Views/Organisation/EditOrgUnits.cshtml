@@ -16,9 +16,15 @@
 
     $(function () {
         $('th a, tfoot a').click(function () {
+            //if querystring already contains selectedOrgId, remove it
+            var index = $(this).attr('href').indexOf("&selectedOrgId=");
+            if (index >= 0) {
+                var cleanUrl = $(this).attr('href').substring(0, index);
+                $(this).attr('href', cleanUrl);
+            }
             var newUrl = $(this).attr('href') +
-                "&kommunkod=" +
-                $("#Kommunkod").val();
+                "&selectedOrgId=" +
+                $("#SelectedOrganisationId").val();
             $('form').attr('action', newUrl).submit();
             return false;
         });
@@ -120,6 +126,8 @@
     {
         <br/><br/>
         <hr/>
+
+        @Html.HiddenFor(m => m.SelectedOrganisationId)
 
         @Html.ActionLink("Skapa ny organisationsenhet", "CreateOrganisationUnit", "Organisation", new { selectedOrgId = Model.SelectedOrganisationId }, null)
  

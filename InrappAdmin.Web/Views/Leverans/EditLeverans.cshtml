@@ -15,8 +15,8 @@
     $(function () {
         $('th a, tfoot a').click(function () {
             var newUrl = $(this).attr('href') +
-                "&kommunkod=" +
-                $("#Kommunkod").val();
+                "&selectedOrgId=" +
+                $("#SelectedOrganisationId").val();
             $('form').attr('action', newUrl).submit();
             return false;
         });

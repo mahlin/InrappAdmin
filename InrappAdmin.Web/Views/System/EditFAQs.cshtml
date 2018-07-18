@@ -7,8 +7,16 @@
     var faqLista = @Html.Raw(Json.Encode(Model.FAQs));
 
     $(document).ready(function () {
+        //Fix webgrid-header
+        $("#GridHeader").html("<table id='headerTable'>" + $('#gridContent table thead').html() + "</table>");
+        $("#GridHeader table tr:first").append("<th style='width:12px;' ></th>");
+        $("#GridBody").html("<table>" + $('#gridContent table tbody').html() + "</table>");
+        //$("#GridFooter").html("<table>" + $('#gridContent table tfoot').html() + "</table>");
+        $("#gridContent").hide();
+        setFixedTableHeaderWidths();
 
         $("#editSelectedFAQForm").hide();
+
         var modalConfirm = function test(callback) {
             $("#modal-btn-si").on("click", function () {
                 callback(true);
@@ -39,6 +47,28 @@
             }
         });
     });
+
+    function setFixedTableHeaderWidths() {
+        var x = $('#GridHeader table tbody');
+        //$('#GridHeader table tbody tr').find('th:nth-child(1)').css('background-color', '#E8A2A2');
+
+        var y = $('#GridBody table tbody');
+        //$('#GridBody table tbody tr').find('td:nth-child(1)').css('background-color', '#66E0ED');
+
+        var $body = $('#GridBody table tbody');
+        var $header = $('#GridHeader table tbody');
+
+        $body.find('tr:first-child').children().each(function (i) {
+            var x = $(this).width();
+            var y = $($header.find('tr:first-child'));
+            $($header.find('tr:first-child').children()[i]).css('width', $(this).width() + 12);
+
+            ////Dra bort 12 px från benämningskolumnen vid scroll för att få headern i linje med budgeten. Vet ej varför detta behövs. Nåt med i:et i konto-kolumnen?
+            //if (i === 2) {
+            //    $($header.find('tr:first-child').children()[i]).css('width', $(this).width() - 15);
+            //}
+        });
+    }
 
     function deleteFAQ(id, fraga) {
         $('#SelectedFAQId').val(id);
@@ -143,6 +173,60 @@
     });
 </script>
 
+<style type="text/css">
+    .webgrid-table td th {
+        /*border: 1px solid #98BF21;*/
+        /*margin: -5px;
+        padding: 3px 7px 2px;*/
+    }
+    /*.label {
+        padding: 3px 0px 2px !important;
+    }*/
+
+    /*.webgrid-header td th {
+        color: #FFFFFF;
+        text-align: left;
+        padding: 3px 28px 2px;
+    }*/
+
+    /*.webgrid-alternating-row {
+        background-color: #EAF2D3;
+    }*/
+
+    /*.colWidth {
+        width: 200px;
+    }*/
+
+    /*#Outer {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    }*/
+
+    #GridBody {
+        width: 1020px;
+        height: 400px;
+        overflow-y: scroll;
+        border: solid 1px #e8eef4;
+    }
+
+    #GridHeader table {
+        width: 1022px;
+        text-align: left;
+        margin-top: 0px;
+        /*border: solid 1px #A7C942;*/
+        padding: 0px;
+        border-collapse: collapse;
+    }
+
+    /*#GridFooter {
+        border: solid 1px #e8eef4;
+        width: 1020px;
+    }*/
+
+    /*#GridHeader table th {
+        width: 200px;
+    }*/
+</style>
+
 
 
 @{
@@ -180,39 +264,45 @@
             <div class="col-md-8">
                 @Html.ActionLink("Skapa ny FAQ", "CreateFAQ", "System", routeValues: new { catId = Model.SelectedFAQCategory }, htmlAttributes: null)
             </div>
-            @Html.ActionLink("Tillbaka till kategorier", "GetFAQCategories", "System")
+            @Html.ActionLink("Tillbaka till kategorier", "GetFAQCategories", "System", null, new { @style = "padding-left:90px;" })
         </div>
 
         <div id="gridContent" style="font-family: Arial; padding: 20px;">
 
             @{
                 ViewBag.Title = "Administrera FAQs";
-                var grid = new WebGrid(source: Model.FAQs, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "faqsGrid");
-                grid.Pager(WebGridPagerModes.All);
+                var grid = new WebGrid(source: Model.FAQs, canPage: false, rowsPerPage: 10, ajaxUpdateContainerId: "faqsGrid");
+                //grid.Pager(WebGridPagerModes.All);
             }
 
 
             @grid.GetHtml(htmlAttributes: new { id = "FAQAnswerTable" },
-         tableStyle: "webgrid-table",
-         headerStyle: "webgrid-header",
-         footerStyle: "webgrid-footer",
-         alternatingRowStyle: "webgrid-alternating-row",
-         selectedRowStyle: "webgrid-selected-row",
-         rowStyle: "webgrid-row-style",
-         mode: WebGridPagerModes.All,
-         columns: grid.Columns(
-             grid.Column("Id", format: @<text><label id="FAQId">@item.Id</label></text>, style: "colMinWidth"),
-                 grid.Column("RegisterKortNamn","Register", format: @<text><label id="lblRegister">@item.RegisterKortNamn</label></text>, style: "colMinWidth"),
-                     grid.Column("Sortering", format: @<text><label id="lblSortering">@item.Sortering</label></text>, style: "colMinWidth"),
-                         grid.Column("Fraga", "Fråga", format: @<text><label id="lblFraga" class="longColumnText" style="width: 200px;">@item.Fraga</label></text>, style: "col2Width"),
-                             grid.Column("Svar", format: @<text> <label id="lblSvar" class="longColumnText" style="width: 200px;">@item.Svar</label></text>, style: "col3Width"),
+                tableStyle: "webgrid-table",
+                headerStyle: "webgrid-header",
+                footerStyle: "webgrid-footer",
+                alternatingRowStyle: "webgrid-alternating-row",
+                selectedRowStyle: "webgrid-selected-row",
+                rowStyle: "webgrid-row-style",
+                mode: WebGridPagerModes.All,
+                columns: grid.Columns(
+                    grid.Column("Id", format: @<text><label id="FAQId">@item.Id</label></text>, style: "colMinWidth"),
+                    grid.Column("RegisterKortNamn","Register", format: @<text><label id="lblRegister">@item.RegisterKortNamn</label></text>, style: "colMinWidth"),
+                    grid.Column("Sortering", format: @<text><label id="lblSortering">@item.Sortering</label></text>, style: "colMinWidth"),
+                    grid.Column("Fraga", "Fråga", format: @<text><label id="lblFraga" class="longColumnText" style="width: 200px;">@item.Fraga</label></text>, style: "col2Width"),
+                    grid.Column("Svar", format: @<text> <label id="lblSvar" class="longColumnText" style="width: 200px;">@item.Svar</label></text>, style: "col3Width"),
 
-                              grid.Column(null, format: @<text>
-                                <button class="edit-user display-mode btn btn-default" onclick="showEditForm('@item.Id');">Ändra</button>
-                                <button class="display-mode btn btn-default" onclick="deleteFAQ(@item.Id,'@item.Fraga');return false;">Ta bort</button>
-                                @*<button class="save-user edit-mode btn btn-default">Spara</button>*@
-                                <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-                            </text>, style: "col3Width", canSort: false)))
+                    grid.Column(null, format: @<text>
+                                                  <button class="edit-user display-mode btn btn-default" style="padding-left: 10px;" onclick="showEditForm('@item.Id');">Ändra</button>
+                                                  <button class="display-mode btn btn-default" onclick="deleteFAQ(@item.Id,'@item.Fraga');return false;">Ta bort</button>
+                                                  @*<button class="save-user edit-mode btn btn-default">Spara</button>*@
+                                                  <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                                               </text>, style: "col3Width", canSort: false)))
+        </div>
+
+        <div id="Outer" >
+            <div id="GridHeader"></div>
+            <div id="GridBody"></div>
+            <div id="GridFooter"></div>
         </div>
 
         <div id="editSelectedFAQForm">
