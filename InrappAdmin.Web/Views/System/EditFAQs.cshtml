@@ -7,13 +7,18 @@
     var faqLista = @Html.Raw(Json.Encode(Model.FAQs));
 
     $(document).ready(function () {
-        //Fix webgrid-header
-        $("#GridHeader").html("<table id='headerTable'>" + $('#gridContent table thead').html() + "</table>");
-        $("#GridHeader table tr:first").append("<th style='width:12px;' ></th>");
-        $("#GridBody").html("<table>" + $('#gridContent table tbody').html() + "</table>");
-        //$("#GridFooter").html("<table>" + $('#gridContent table tfoot').html() + "</table>");
-        $("#gridContent").hide();
-        setFixedTableHeaderWidths();
+        //Sätt fast header och scroll om fler än 10 rader i listan
+        if (faqLista.length > 10) {
+            //Fix webgrid-header
+            $("#GridHeader").html("<table id='headerTable'>" + $('#gridContent table thead').html() + "</table>");
+            $("#GridHeader table tr:first").append("<th style='width:12px;' ></th>");
+            $("#GridBody").html("<table>" + $('#gridContent table tbody').html() + "</table>");
+            //$("#GridFooter").html("<table>" + $('#gridContent table tfoot').html() + "</table>");
+            $("#gridContent").hide();
+            setFixedTableHeaderWidths();
+        } else {
+            $("#GridBody").hide();
+        }
 
         $("#editSelectedFAQForm").hide();
 
