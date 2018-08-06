@@ -179,6 +179,7 @@ namespace InrappAdmin.ApplicationService.Interface
         void UppdateraAnvandarInfo(AppUserAdmin user, string userName);
 
         void SparaOppettider(OpeningHoursInfoDTO oppetTider, string userName);
+        IEnumerable<AdmForvantadleverans> SkapaForvantadeLeveranserUtkast(int selectedYear, int selectedDelRegId, int selectedFilkravId);
 
         void TaBortFAQKategori(int faqKategoriId);
 

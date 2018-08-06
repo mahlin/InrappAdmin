@@ -325,6 +325,7 @@
     <Content Include="Views\Leverans\LatestDeliveries.cshtml" />
     <Content Include="Views\Organisation\EditUnitReportObligations.cshtml" />
     <Content Include="Views\Organisation\CreateUnitReportObligation.cshtml" />
+    <Content Include="Views\Leverans\CreateForvantadeLeveranser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

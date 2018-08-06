@@ -13,16 +13,24 @@ namespace InrappAdmin.Web.Models.ViewModels
     {
         public class LeveransViewModel
         {
+            public IEnumerable<RegisterInfo> RegisterList { get; set; }
             public IEnumerable<AdmForvantadleveransViewModel> ForvantadeLeveranser { get; set; }
+
+            public List<AdmForvantadleveransViewModel> BlivandeForvantadeLeveranser { get; set; }
             public IEnumerable<AdmForvantadfilViewModel> ForvantadeFiler { get; set; }
             public IEnumerable<AdmFilkravViewModel> Filkrav { get; set; }
             public IEnumerable<FilloggDetaljDTO> Leveranser { get; set; }
             public int SelectedRegisterId { get; set; }
+            public int SelectedDelregisterId { get; set; }
+            public int SelectedFilkravId { get; set; }
             [DisplayName("Visa endast pågående")]
             public bool FilterPagaende{ get; set; }
+            [Display(Name = "År")]
+            public int SelectedYear { get; set; }
             public string SelectedCountyCode { get; set; }
             [Display(Name = "Kommunkod")]
             public string Kommunkod { get; set; }
+            
         }
 
         public class AdmForvantadleveransViewModel
@@ -34,6 +42,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public int SelectedDelregisterId { get; set; }
             public int SelectedRegisterId { get; set; }
             public int SelectedFilkravId { get; set; }
+
             public string DelregisterKortnamn { get; set; }
             public IEnumerable<RegisterInfo> RegisterList { get; set; }
             public IEnumerable<FilloggDetaljDTO> Leveranser { get; set; }

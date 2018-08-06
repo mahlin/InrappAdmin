@@ -209,13 +209,32 @@ namespace InrappAdmin.DataAccess
             modelBuilder.Entity<AdmEnhetsUppgiftsskyldighet>().Property(e => e.AndradDatum).HasColumnName("andraddatum");
             modelBuilder.Entity<AdmEnhetsUppgiftsskyldighet>().Property(e => e.AndradAv).HasColumnName("andradav");
 
+            //AdmInsamlingsfrekvens
+            modelBuilder.Entity<AdmInsamlingsfrekvens>().ToTable("admInsamlingsfrekvens");
+            modelBuilder.Entity<AdmInsamlingsfrekvens>().Property(e => e.Id).HasColumnName("insamlingsfrekvensid");
+            modelBuilder.Entity<AdmInsamlingsfrekvens>().Property(e => e.Insamlingsfrekvens).HasColumnName("insamlingsfrekvens");
+            modelBuilder.Entity<AdmInsamlingsfrekvens>().Property(e => e.SkapadDatum).HasColumnName("skapaddatum");
+            modelBuilder.Entity<AdmInsamlingsfrekvens>().Property(e => e.SkapadAv).HasColumnName("skapadav");
+            modelBuilder.Entity<AdmInsamlingsfrekvens>().Property(e => e.AndradDatum).HasColumnName("andraddatum");
+            modelBuilder.Entity<AdmInsamlingsfrekvens>().Property(e => e.AndradAv).HasColumnName("andradav");
 
             //AdmFilkrav
             modelBuilder.Entity<AdmFilkrav>().ToTable("admFilkrav");
             modelBuilder.Entity<AdmFilkrav>().Property(e => e.Id).HasColumnName("filkravid");
             modelBuilder.Entity<AdmFilkrav>().Property(e => e.DelregisterId).HasColumnName("delregisterid");
             modelBuilder.Entity<AdmFilkrav>().Property(e => e.ForeskriftsId).HasColumnName("foreskriftsId");
+            modelBuilder.Entity<AdmFilkrav>().Property(e => e.InsamlingsfrekvensId).HasColumnName("insamlingsfrekvensId");
             modelBuilder.Entity<AdmFilkrav>().Property(e => e.Namn).HasColumnName("namn");
+            modelBuilder.Entity<AdmFilkrav>().Property(e => e.Uppgiftsstartdag).HasColumnName("uppgiftsstartdag");
+            modelBuilder.Entity<AdmFilkrav>().Property(e => e.Uppgiftslutdag).HasColumnName("uppgiftslutdag");
+            modelBuilder.Entity<AdmFilkrav>().Property(e => e.Rapporteringsstartdag).HasColumnName("rapporteringsstartdag");
+            modelBuilder.Entity<AdmFilkrav>().Property(e => e.Rapporteringsslutdag).HasColumnName("rapporteringsslutdag");
+            modelBuilder.Entity<AdmFilkrav>().Property(e => e.RapporteringSenastdag).HasColumnName("rapporteringsenastdag");
+            modelBuilder.Entity<AdmFilkrav>().Property(e => e.Paminnelse1dag).HasColumnName("paminnelse1dag");
+            modelBuilder.Entity<AdmFilkrav>().Property(e => e.Paminnelse2dag).HasColumnName("paminnelse2dag");
+            modelBuilder.Entity<AdmFilkrav>().Property(e => e.Paminnelse3dag).HasColumnName("paminnelse3dag");
+            modelBuilder.Entity<AdmFilkrav>().Property(e => e.RapporteringEfterAntalManader).HasColumnName("rapporteringefterantalmanader");
+            modelBuilder.Entity<AdmFilkrav>().Property(e => e.UppgifterAntalmanader).HasColumnName("uppgifterantalmanader");
             modelBuilder.Entity<AdmFilkrav>()
                 .HasRequired(c => c.AdmDelregister)
                 .WithMany(d => d.AdmFilkrav)
@@ -224,6 +243,10 @@ namespace InrappAdmin.DataAccess
                 .HasRequired(c => c.AdmForskrift)
                 .WithMany(d => d.AdmFilkrav)
                 .HasForeignKey(c => c.ForeskriftsId);
+            modelBuilder.Entity<AdmFilkrav>()
+                .HasRequired(c => c.AdmInsamlingsfrekvens)
+                .WithMany(d => d.AdmFilkrav)
+                .HasForeignKey(c => c.InsamlingsfrekvensId);
             modelBuilder.Entity<AdmFilkrav>().Property(e => e.SkapadDatum).HasColumnName("skapaddatum");
             modelBuilder.Entity<AdmFilkrav>().Property(e => e.SkapadAv).HasColumnName("skapadav");
             modelBuilder.Entity<AdmFilkrav>().Property(e => e.AndradDatum).HasColumnName("andraddatum");
@@ -402,6 +425,7 @@ namespace InrappAdmin.DataAccess
         public DbSet<LevereradFil> LevereradFil { get; set; }
         public DbSet<AdmRegister> AdmRegister { get; set; }
         public DbSet<AdmDelregister> AdmDelregister { get; set; }
+        public DbSet<AdmInsamlingsfrekvens> AdmInsamlingsfrekvens { get; set; }
         public DbSet<AdmFilkrav> AdmFilkrav { get; set; }
         public DbSet<AdmForvantadfil> AdmForvantadfil { get; set; }
         public DbSet<AdmForvantadleverans> AdmForvantadleverans { get; set; }

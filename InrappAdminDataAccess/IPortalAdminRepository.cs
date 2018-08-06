@@ -92,6 +92,7 @@ namespace InrappAdmin.DataAccess
         IEnumerable<AdmFilkrav> GetFileRequirementsForDirectory(int dirId);
 
         IEnumerable<AdmFilkrav> GetFileRequirementsForSubDirectory(int subdirId);
+        AdmFilkrav GetFileRequirementsForSubDirectoryAndFileReqId(int subdirId, int filereqId);
 
         IEnumerable<AdmForvantadfil> GetExpectedFilesForDirectory(int dirId);
 

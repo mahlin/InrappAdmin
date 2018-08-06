@@ -689,13 +689,104 @@ namespace InrappAdmin.Web.Controllers
 
         // GET
         [Authorize]
+        public ActionResult CreateForvantadeLeveranser(bool filterPgnde = false, int selectedRegId = 0)
+        {
+            // Ladda drop down lists
+            var model = new LeveransViewModels.LeveransViewModel();
+            model.RegisterList = _portalAdminService.HamtaDelregisterOchFilkrav();
+            var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
+            ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
+            ViewBag.FilkravList = CreateDummyFilkravDropDownList();
+            ViewBag.YearList = CreateYearDropDownList();
+            model.SelectedDelregisterId = 0;
+            model.SelectedFilkravId = 0;
+            model.SelectedRegisterId = selectedRegId;
+            model.FilterPagaende = filterPgnde;
+            return View(model);
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public ActionResult CreateForvantadeLeveranserDraft(LeveransViewModels.LeveransViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var forvLevList = _portalAdminService.SkapaForvantadeLeveranserUtkast(model.SelectedYear, model.SelectedDelregisterId, model.SelectedFilkravId);
+                    //Lägg över i modellen
+                    model.BlivandeForvantadeLeveranser = ConvertForvLevToViewModel(forvLevList.ToList());
+                    model.RegisterList = _portalAdminService.HamtaDelregisterOchFilkrav();
+                    var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
+                    ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
+                    ViewBag.FilkravList = CreateDummyFilkravDropDownList();
+                    ViewBag.YearList = CreateYearDropDownList();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("LeveransController", "CreateForvantadeLeveranserDraft", e.ToString(), e.HResult, User.Identity.Name);
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade när utkast för förväntade leveranser skulle skapas.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
+                return View("CreateForvantadeLeveranser", model);
+            }
+
+            return View("CreateForvantadeLeveranser");
+        }
+
+        // POST
+        public ActionResult SaveForvantadeLeveranser(IEnumerable<LeveransViewModels.AdmForvantadleveransViewModel> forvLevLista)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var userName = User.Identity.GetUserName();
+
+                    //var admForvlev = new AdmForvantadleverans();
+                    //admForvlev.DelregisterId = forvantadLeverans.SelectedDelregisterId;
+                    //admForvlev.FilkravId = forvantadLeverans.SelectedFilkravId;
+                    //admForvlev.Period = forvantadLeverans.Period;
+                    //admForvlev.Uppgiftsstart = forvantadLeverans.Uppgiftsstart;
+                    //admForvlev.Uppgiftsslut = forvantadLeverans.Uppgiftsslut;
+                    //admForvlev.Rapporteringsstart = forvantadLeverans.Rapporteringsstart;
+                    //admForvlev.Rapporteringsslut = forvantadLeverans.Rapporteringsslut;
+                    //admForvlev.Rapporteringsenast = forvantadLeverans.Rapporteringsenast;
+                    //_portalAdminService.SkapaForvantadLeverans(admForvlev, userName);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("LeveransController", "SaveForvantadeLeveranser", e.ToString(), e.HResult, User.Identity.Name);
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade när förväntade leveranser skulle sparas.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
+                return RedirectToAction("Index");
+            }
+
+            return View("Index");
+        }
+
+        // GET
+        [Authorize]
         public ActionResult CreateForvantadLeverans(bool filterPgnde = false, int selectedRegId = 0)
         {
             // Ladda drop down lists
             var model = new LeveransViewModels.AdmForvantadleveransViewModel();
             model.RegisterList = _portalAdminService.HamtaDelregisterOchFilkrav();
             var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
-            this.ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
+            ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
             ViewBag.FilkravList = CreateDummyFilkravDropDownList();
             model.SelectedDelregisterId = 0;
             model.SelectedFilkravId = 0;
@@ -1007,6 +1098,34 @@ namespace InrappAdmin.Web.Controllers
             var list = new List<SelectListItem>();
 
             lstobj = new SelectList(list,"Value", "Text");
+
+            return lstobj;
+        }
+
+        /// <summary>  
+        /// Create list for year-dropdown  
+        /// </summary>  
+        /// <returns>Return years for drop down list.</returns>  
+        private IEnumerable<SelectListItem> CreateYearDropDownList()
+        {
+            SelectList lstobj = null;
+
+            var yearList = new List<int>();
+
+            for (int i = 0; i < 3; i++)
+            {
+                yearList.Add(DateTime.Now.Year + i);
+            }
+
+            var list = yearList
+                .Select(p =>
+                    new SelectListItem
+                    {
+                        Value = p.ToString(),
+                        Text = p.ToString()
+                    });
+
+            lstobj = new SelectList(list, "Value", "Text");
 
             return lstobj;
         }

@@ -62,6 +62,7 @@
     <Compile Include="AdmForvantadleverans.cs" />
     <Compile Include="AdmHelgdag.cs" />
     <Compile Include="AdmInformation.cs" />
+    <Compile Include="AdmInsamlingsfrekvens.cs" />
     <Compile Include="AdmKonfiguration.cs" />
     <Compile Include="AdmRegister.cs" />
     <Compile Include="AdmSpecialdag.cs" />

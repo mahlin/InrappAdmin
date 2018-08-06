@@ -370,6 +370,12 @@ namespace InrappAdmin.DataAccess
             return fileRequirementList;
         }
 
+        public AdmFilkrav GetFileRequirementsForSubDirectoryAndFileReqId(int subdirId, int filereqId)
+        {
+            var fileRequirement = DbContext.AdmFilkrav.SingleOrDefault(x => x.DelregisterId == subdirId && x.Id == filereqId);
+            return fileRequirement;
+        }
+
         public IEnumerable<AdmRegister> GetAllRegisters()
         {
             var registersList = DbContext.AdmRegister.ToList();
@@ -894,6 +900,8 @@ namespace InrappAdmin.DataAccess
             IdentityDbContext.Users.Remove(cuserToDelete);
             IdentityDbContext.SaveChanges();
         }
+
+
 
 
         //public IEnumerable<AdmRegister> GetDirectoriesForOrg(int orgId)

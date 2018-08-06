@@ -225,6 +225,10 @@
             @Html.ActionLink("Skapa ny förväntad leverans", "CreateForvantadLeverans", "Leverans", new { filterPgnde = Model.FilterPagaende, selectedRegId = Model.SelectedRegisterId }, null)
         </div>
 
+        <div style="padding-left: 4px;">
+            @Html.ActionLink("Skapa förväntade leveranser", "CreateForvantadeLeveranser", "Leverans", new { filterPgnde = Model.FilterPagaende, selectedRegId = Model.SelectedRegisterId }, null)
+        </div>
+
         <div id="gridContent" style="font-family: Arial; padding-top: 20px;">
             @{
         ViewBag.Title = "Administrera förväntade leveranser";
