@@ -762,6 +762,42 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.CreateExpectedDelivery(forvLev);
         }
 
+        public void SkapaForvantadLeveranser(IEnumerable<AdmForvantadleverans> forvLevList, string userName)
+        {
+            foreach (var forvLev in forvLevList)
+            {
+                //Sätt datum och användare
+                forvLev.SkapadDatum = DateTime.Now;
+                forvLev.SkapadAv = userName;
+                forvLev.AndradDatum = DateTime.Now;
+                forvLev.AndradAv = userName;
+                _portalAdminRepository.CreateExpectedDelivery(forvLev);
+            }
+        }
+
+        public IEnumerable<ForvantadLeveransDTO> SkapaForvantadeLeveranserUtkast(int selectedYear, int selectedDelRegId, int selectedFilkravId)
+        {
+            var forvantadeLeveranser = new List<ForvantadLeveransDTO>();
+            var forvantadeLeveranserUtkast = new List<ForvantadLeveransDTO>();
+            //Hämta regler från aktuellt AdmFilkrav 
+            var filkrav = _portalAdminRepository.GetFileRequirementsForSubDirectoryAndFileReqId(selectedDelRegId, selectedFilkravId);
+            //Skapa forväntade leveranser
+            switch (filkrav.InsamlingsfrekvensId)
+            {
+                case 1: //Månadsvis
+                    forvantadeLeveranser = CreateMonthlyDeliveries(filkrav, selectedYear).ToList();
+                    //Markera rader som redan finns i db
+                    forvantadeLeveranserUtkast = MarkAlreadyExisting(forvantadeLeveranser).ToList();
+                    break;
+                case 2: //Årlig
+                    forvantadeLeveranser = CreateAnnualDeliveries(filkrav, selectedYear).ToList();
+                    break;
+            }
+
+            return forvantadeLeveranserUtkast;
+        }
+
+
         public void SkapaForvantadFil(AdmForvantadfil forvFil, string userName)
         {
             //Sätt datum och användare
@@ -1149,25 +1185,6 @@ namespace InrappAdmin.ApplicationService
             return email;
         }
 
-        public IEnumerable<AdmForvantadleverans> SkapaForvantadeLeveranserUtkast(int selectedYear, int selectedDelRegId, int selectedFilkravId)
-        {
-            var forvantadeLeveranserUtkast = new List<AdmForvantadleverans>();
-            //Hämta regler från aktuellt AdmFilkrav 
-            var filkrav = _portalAdminRepository.GetFileRequirementsForSubDirectoryAndFileReqId(selectedDelRegId, selectedFilkravId);
-            //Skapa forväntade leveranser
-            switch (filkrav.InsamlingsfrekvensId)
-            {
-                case 1: //Månadsvis
-                    forvantadeLeveranserUtkast = CreateMonthlyDeliveries(filkrav, selectedYear).ToList();
-                    break;
-                case 2: //Årlig
-                    forvantadeLeveranserUtkast = CreateAnnualDeliveries(filkrav, selectedYear).ToList();
-                    break;
-            }
-
-            return forvantadeLeveranserUtkast;
-        }
-
         public void SkickaPaminnelse(IEnumerable<RapporteringsresultatDTO> rappResList, string userId)
         {
             var emailList = String.Empty;
@@ -1248,14 +1265,14 @@ namespace InrappAdmin.ApplicationService
             return stream;
         }
 
-        private IEnumerable<AdmForvantadleverans> CreateMonthlyDeliveries(AdmFilkrav filkrav, int selectedYear)
+        private IEnumerable<ForvantadLeveransDTO> CreateMonthlyDeliveries(AdmFilkrav filkrav, int selectedYear)
         {
-            var forvantadeLeveranserUtkast = new List<AdmForvantadleverans>();
+            var forvantadeLeveranserUtkast = new List<ForvantadLeveransDTO>();
 
             for (int i = 1; i < 13; i++)
             {
                 var newDate = new DateTime(selectedYear, i, 1);
-                var forvLev = new AdmForvantadleverans
+                var forvLev = new ForvantadLeveransDTO
                 {
                     DelregisterId = filkrav.DelregisterId,
                     FilkravId = filkrav.Id,
@@ -1338,9 +1355,50 @@ namespace InrappAdmin.ApplicationService
             return forvantadeLeveranserUtkast;
         }
 
-        private IEnumerable<AdmForvantadleverans> CreateAnnualDeliveries(AdmFilkrav filkrav, int selectedYear)
+        private IEnumerable<ForvantadLeveransDTO> CreateAnnualDeliveries(AdmFilkrav filkrav, int selectedYear)
         {
             throw new NotImplementedException();
+        }
+
+        private IEnumerable<ForvantadLeveransDTO> MarkAlreadyExisting(IEnumerable<ForvantadLeveransDTO> forvLevList)
+        {
+            var checkedForvLevList = new List<ForvantadLeveransDTO>();
+
+            foreach (var forvLev in forvLevList)
+            {
+                var dbForvLev =
+                    _portalAdminRepository.GetExpectedDeliveryBySubDirAndFileReqIdAndPeriod(forvLev.DelregisterId, forvLev.FilkravId, forvLev.Period);
+                if (dbForvLev != null)
+                {
+                    var forvLevDTO = new ForvantadLeveransDTO()
+                    {
+                        Id = dbForvLev.Id,
+                        FilkravId = dbForvLev.FilkravId,
+                        DelregisterId = dbForvLev.DelregisterId,
+                        Period = dbForvLev.Period,
+                        Uppgiftsstart = dbForvLev.Uppgiftsstart,
+                        Uppgiftsslut = dbForvLev.Uppgiftsslut,
+                        Rapporteringsstart = dbForvLev.Rapporteringsstart,
+                        Rapporteringsslut = dbForvLev.Rapporteringsslut,
+                        Rapporteringsenast = dbForvLev.Rapporteringsenast,
+                        Paminnelse1 = dbForvLev.Paminnelse1,
+                        Paminnelse2 = dbForvLev.Paminnelse2,
+                        Paminnelse3 = dbForvLev.Paminnelse3,
+                        SkapadDatum = dbForvLev.SkapadDatum,
+                        SkapadAv = dbForvLev.SkapadAv,
+                        AndradDatum = dbForvLev.AndradDatum,
+                        AndradAv = dbForvLev.AndradAv,
+                        AlreadyExists = true
+                    };
+                    checkedForvLevList.Add(forvLevDTO);
+                }
+                else
+                {
+                    forvLev.AlreadyExists = false;
+                    checkedForvLevList.Add(forvLev);
+                }
+            }
+            return checkedForvLevList;
         }
 
 

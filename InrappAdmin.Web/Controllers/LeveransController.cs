@@ -717,7 +717,7 @@ namespace InrappAdmin.Web.Controllers
                 {
                     var forvLevList = _portalAdminService.SkapaForvantadeLeveranserUtkast(model.SelectedYear, model.SelectedDelregisterId, model.SelectedFilkravId);
                     //Lägg över i modellen
-                    model.BlivandeForvantadeLeveranser = ConvertForvLevToViewModel(forvLevList.ToList());
+                    model.BlivandeForvantadeLeveranser = ConvertForvLevDTOToViewModel(forvLevList.ToList());
                     model.RegisterList = _portalAdminService.HamtaDelregisterOchFilkrav();
                     var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
                     ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
@@ -749,17 +749,17 @@ namespace InrappAdmin.Web.Controllers
                 try
                 {
                     var userName = User.Identity.GetUserName();
+                    var forvLevDbList = new List<AdmForvantadleverans>();
 
-                    //var admForvlev = new AdmForvantadleverans();
-                    //admForvlev.DelregisterId = forvantadLeverans.SelectedDelregisterId;
-                    //admForvlev.FilkravId = forvantadLeverans.SelectedFilkravId;
-                    //admForvlev.Period = forvantadLeverans.Period;
-                    //admForvlev.Uppgiftsstart = forvantadLeverans.Uppgiftsstart;
-                    //admForvlev.Uppgiftsslut = forvantadLeverans.Uppgiftsslut;
-                    //admForvlev.Rapporteringsstart = forvantadLeverans.Rapporteringsstart;
-                    //admForvlev.Rapporteringsslut = forvantadLeverans.Rapporteringsslut;
-                    //admForvlev.Rapporteringsenast = forvantadLeverans.Rapporteringsenast;
-                    //_portalAdminService.SkapaForvantadLeverans(admForvlev, userName);
+                    foreach (var forvLev in forvLevLista)
+                    {
+                        if (!forvLev.AlreadyExists) //spara endast nya
+                        {
+                            var forvLevDB = ConvertViewModelToForvLev(forvLev);
+                            forvLevDbList.Add(forvLevDB);
+                        }
+                    }
+                    _portalAdminService.SkapaForvantadLeveranser(forvLevDbList, userName);
                 }
                 catch (Exception e)
                 {
@@ -985,6 +985,35 @@ namespace InrappAdmin.Web.Controllers
                     Pagaende = IsOngoing(forvLev),
                     Sen = IsLate(forvLev)
 
+                };
+
+                forvLevViewList.Add(forvLevView);
+            }
+            return forvLevViewList;
+        }
+
+        private List<LeveransViewModels.AdmForvantadleveransViewModel> ConvertForvLevDTOToViewModel(List<ForvantadLeveransDTO> forvLevList)
+        {
+            var forvLevViewList = new List<LeveransViewModels.AdmForvantadleveransViewModel>();
+            foreach (var forvLev in forvLevList)
+            {
+                var forvLevView = new LeveransViewModels.AdmForvantadleveransViewModel
+                {
+                    Id = forvLev.Id,
+                    FilkravId = forvLev.FilkravId,
+                    FilkravNamn = _portalAdminService.HamtaNamnForFilkrav(forvLev.FilkravId),
+                    DelregisterId = forvLev.DelregisterId,
+                    DelregisterKortnamn = _portalAdminService.HamtaKortnamnForDelregisterMedFilkravsId(forvLev.FilkravId),
+                    Period = forvLev.Period,
+                    Uppgiftsstart = forvLev.Uppgiftsstart,
+                    Uppgiftsslut = forvLev.Uppgiftsslut,
+                    Rapporteringsstart = forvLev.Rapporteringsstart,
+                    Rapporteringsslut = forvLev.Rapporteringsslut,
+                    Rapporteringsenast = forvLev.Rapporteringsenast,
+                    Paminnelse1 = forvLev.Paminnelse1,
+                    Paminnelse2 = forvLev.Paminnelse2,
+                    Paminnelse3 = forvLev.Paminnelse3,
+                    AlreadyExists = forvLev.AlreadyExists
                 };
 
                 forvLevViewList.Add(forvLevView);

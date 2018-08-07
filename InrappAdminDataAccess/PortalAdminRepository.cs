@@ -493,6 +493,12 @@ namespace InrappAdmin.DataAccess
             return forvLevId;
         }
 
+        public AdmForvantadleverans GetExpectedDeliveryBySubDirAndFileReqIdAndPeriod(int subDirId, int fileReqId, string period)
+        {
+            var forvLev = DbContext.AdmForvantadleverans.SingleOrDefault(x => x.DelregisterId == subDirId && x.Period == period && x.FilkravId == fileReqId);
+            return forvLev;
+        }
+
         public Leverans GetLatestDeliveryForOrganisationSubDirectoryAndPeriod(int orgId, int subdirId, int forvlevId)
         {
             var latestsDeliveryForOrgAndSubdirectory = AllaLeveranser()

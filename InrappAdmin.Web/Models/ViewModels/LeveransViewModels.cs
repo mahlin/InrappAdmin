@@ -62,6 +62,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public DateTime? Paminnelse3 { get; set; }
             public bool Pagaende { get; set; }
             public bool Sen { get; set; }
+            public bool AlreadyExists { get; set; }
         }
 
         public class AdmForvantadfilViewModel

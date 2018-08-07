@@ -139,6 +139,8 @@ namespace InrappAdmin.ApplicationService.Interface
         void SkapaDelregister(AdmDelregister delReg, string userName);
 
         void SkapaForvantadLeverans(AdmForvantadleverans forvLev, string userName);
+        void SkapaForvantadLeveranser(IEnumerable<AdmForvantadleverans> forvLevList, string userName);
+        IEnumerable<ForvantadLeveransDTO> SkapaForvantadeLeveranserUtkast(int selectedYear, int selectedDelRegId, int selectedFilkravId);
 
         void SkapaForvantadFil(AdmForvantadfil forvFil, string userName);
 
@@ -179,7 +181,6 @@ namespace InrappAdmin.ApplicationService.Interface
         void UppdateraAnvandarInfo(AppUserAdmin user, string userName);
 
         void SparaOppettider(OpeningHoursInfoDTO oppetTider, string userName);
-        IEnumerable<AdmForvantadleverans> SkapaForvantadeLeveranserUtkast(int selectedYear, int selectedDelRegId, int selectedFilkravId);
 
         void TaBortFAQKategori(int faqKategoriId);
 

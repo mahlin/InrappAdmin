@@ -136,6 +136,8 @@ namespace InrappAdmin.DataAccess
         AdmUppgiftsskyldighet GetReportObligationById(int repOblId);
         int GetExpextedDeliveryIdForSubDirAndPeriod(int subDirId, string period);
 
+        AdmForvantadleverans GetExpectedDeliveryBySubDirAndFileReqIdAndPeriod(int subDirId, int fileReqId, string period);
+
         Leverans GetLatestDeliveryForOrganisationSubDirectoryAndPeriod(int orgId, int subdirId, int forvlevId);
 
         string GetUserEmail(string userId);
