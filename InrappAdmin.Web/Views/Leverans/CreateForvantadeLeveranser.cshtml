@@ -48,25 +48,30 @@
         $('#showDraftBtn').show();
     });
 
-    $(document).on('click', '#saveBtn', function () {
-        var data = { 'forvLevLista': utkastLista };
-        $.ajax({
-            url: '/Leverans/SaveForvantadeLeveranser',
-            type: 'POST',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data),
-            success: function (data) {
-                //On ajax success do this
-                alert("success!");
-            }
-        });
-        //utkastLista = null;
-        //$('#BlivandeForvantadeLeveranser').empty();
-        //$('#gridContent').hide();
-        //$('#saveBtn').hide();
-        //$('#clearBtn').hide();
-        //$('#showDraftBtn').show();
-    });
+    //$(document).on('click', '#saveBtn', function () {
+    //    var x = $('#BlivandeBlivandeForvantadeLeveranser').val();
+    //    var y = utkastLista;
+    //    var z = $(this);
+    //    //var data = { 'forvLevLista': utkastLista };
+        
+    //    $.ajax({
+    //        url: '/Leverans/SaveForvantadeLeveranser',
+    //        type: 'POST',
+    //        contentType: 'application/json; charset=utf-8',
+    //        //data: JSON.stringify(data),
+    //        data: $(this).serialize(), // get the form data
+    //        success: function (data) {
+    //            //On ajax success do this
+    //            alert("success!");
+    //        }
+    //    });
+    //    //utkastLista = null;
+    //    //$('#BlivandeForvantadeLeveranser').empty();
+    //    //$('#gridContent').hide();
+    //    //$('#saveBtn').hide();
+    //    //$('#clearBtn').hide();
+    //    //$('#showDraftBtn').show();
+    //});
 
     $(document).on('change', '#ddlDelregister', function () {
         delregChange();
@@ -86,6 +91,7 @@
     });
 
     function delregChange() {
+        $('#SelectedDelregisterId').val($('#ddlDelregister').val());
         if ($('#ddlDelregister').val() === "") {
             addSelectFilkrav("FileRequirementsSelect-container", []);
         } else {
@@ -133,29 +139,29 @@
         @Html.HiddenFor(m => m.SelectedRegisterId)
         @Html.HiddenFor(m => m.FilterPagaende)
 
-        if (Model.BlivandeForvantadeLeveranser != null)
-        {
-            for (int i = 0; i < Model.BlivandeForvantadeLeveranser.Count(); i++)
+        @*if (Model.BlivandeForvantadeLeveranser != null)
             {
-                @Html.HiddenFor(m => m.BlivandeForvantadeLeveranser[i].Id)
-                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].FilkravId)
-                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].FilkravNamn)
-                @Html.HiddenFor(m => m.BlivandeForvantadeLeveranser[i].DelregisterId)
-                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].SelectedRegisterId)
-                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].SelectedDelregisterId)
-                @Html.HiddenFor(m => m.BlivandeForvantadeLeveranser[i].SelectedFilkravId)
-                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Period)
-                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Uppgiftsstart)
-                @Html.HiddenFor(m => m.BlivandeForvantadeLeveranser[i].Uppgiftsslut)
-                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Rapporteringsstart)
-                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Rapporteringsslut)
-                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Rapporteringsenast)
-                @Html.HiddenFor(m => m.BlivandeForvantadeLeveranser[i].Paminnelse1)
-                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Paminnelse2)
-                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Paminnelse3)
-                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Pagaende)
-            }
-        }
+                for (int i = 0; i < Model.BlivandeForvantadeLeveranser.Count(); i++)
+                {
+                    @Html.HiddenFor(m => m.BlivandeForvantadeLeveranser[i].Id)
+                    @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].FilkravId)
+                    @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].FilkravNamn)
+                    @Html.HiddenFor(m => m.BlivandeForvantadeLeveranser[i].DelregisterId)
+                    @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].SelectedRegisterId)
+                    @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].SelectedDelregisterId)
+                    @Html.HiddenFor(m => m.BlivandeForvantadeLeveranser[i].SelectedFilkravId)
+                    @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Period)
+                    @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Uppgiftsstart)
+                    @Html.HiddenFor(m => m.BlivandeForvantadeLeveranser[i].Uppgiftsslut)
+                    @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Rapporteringsstart)
+                    @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Rapporteringsslut)
+                    @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Rapporteringsenast)
+                    @Html.HiddenFor(m => m.BlivandeForvantadeLeveranser[i].Paminnelse1)
+                    @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Paminnelse2)
+                    @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Paminnelse3)
+                    @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Pagaende)
+                }
+            }*@
 
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -187,70 +193,97 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-offset-2 col-md-2">
-                <input type="button" id="saveBtn" value="Spara" class="btn btn-default" />
-            </div>
-            <div class="col-md-2">
-                <input type="button" id="clearBtn" value="Rensa" class="btn btn-default" />
-            </div>
-        </div>
-
     }
-
-
 
 
     @if (Model.BlivandeForvantadeLeveranser != null)
     {
-        <hr />
-        <br />
-        <div id="dotText"><span class="dot" style="background-color: #a3a3c2; margin-left: 20px;"></span><label style="font-size: 0.8em; width: 500px;"> Perioder med denna bakgrundsfärg finns redan i databasen och kommer ej förändras om du sparar.</label></div>
-        <div id="gridContent" style="font-family: Arial; padding: 20px;">
-            @{
-                ViewBag.Title = "Administrera filkrav";
-                var grid = new WebGrid(source: Model.BlivandeForvantadeLeveranser, canPage: false, rowsPerPage: 15, ajaxUpdateContainerId: "forvantadeLeveranserUtkastGrid");
-            }
 
-            @grid.GetHtml(htmlAttributes: new { id = "forvantadeLeveranserUtkastTable" },
-                                     tableStyle: "webgrid-table",
-                                     headerStyle: "webgrid-header",
-                                     footerStyle: "webgrid-footer",
-                                     alternatingRowStyle: "webgrid-alternating-row",
-                                     selectedRowStyle: "webgrid-selected-row",
-                                     rowStyle: "webgrid-row-style",
-                                     mode: WebGridPagerModes.All,
-                                     columns: grid.Columns(
-                                     grid.Column(null, null, format: @<text><input type="hidden" id="AlreadyExists" value="@item.AlreadyExists.ToString()" class="edit-mode form-control hide" /></text>, style: "colZeroWidth"),
-                                         grid.Column("FilkravId", "Filkravid", format: @<text><span class="display-mode"><label>@item.Filkravid</label></span></text>, style: "colMinWidth"),
-                                             grid.Column("FilkravNamn", "Filkravnamn", format: @<text><span class="display-mode"><label>@item.FilkravNamn</label></span></text>, style: "colMinWidth"),
-                                                 grid.Column("Period", "Period", format: @<text><span class="display-mode"><label id="lblPeriod">@item.Period </label></span></text>, style: "col1Width"),
-                                                     grid.Column("Uppgiftsstart", "Uppgiftsstart", format: @<text><span class="display-mode">
-                                                            <label id="lblUppgiftsstart">@(item.Uppgiftsstart != null ? item.Uppgiftsstart.ToString("yyyy-MM-dd") : item.Uppgiftsstart)</label>
-                                                        </span></text>, style: "col2Width"),
-                                                         grid.Column("Uppgiftsslut", "Uppgiftsslut", format: @<text><span class="display-mode">
-                                                                <label id="lblUppgiftsslut">@( item.Uppgiftsslut != null ? item.Uppgiftsslut.ToString("yyyy-MM-dd") : item.Uppgiftsslut)</label>
-                                                            </span></text>, style: "col2Width"),
-                                                             grid.Column("Rapporteringsstart", "Rapporteringsstart", format: @<text><span class="display-mode">
-                                                                    <label id="lblRapporteringsstart">@( item.Rapporteringsstart != null ? item.Rapporteringsstart.ToString("yyyy-MM-dd") : item.Rapporteringsstart)</label>
-                                                                </span></text>, style: "col2Width"),
-                                                                 grid.Column("Rapporteringsslut", "Rapporteringsslut", format: @<text><span class="display-mode">
-                                                                        <label id="lblRapporteringsslut">@( item.Rapporteringsslut != null ? item.Rapporteringsslut.ToString("yyyy-MM-dd") : item.Rapporteringsslut)</label>
-                                                                    </span></text>, style: "col2Width"),
-                                                                     grid.Column("Rapporteringsenast", "Rapporteringsenast", format: @<text><span class="display-mode">
-                                                                            <label id="lblRapporteringsenast">@( item.Rapporteringsenast != null ? item.Rapporteringsenast.ToString("yyyy-MM-dd") : item.Rapporteringsenast)</label>
-                                                                        </span></text>, style: "col2Width"),
-                                                                         grid.Column("Paminnelse1", "Paminnelse1", format: @<text><span class="display-mode">
-                                                                                <label id="lblPaminnelse1">@( item.Paminnelse1 != null ? item.Paminnelse1.ToString("yyyy-MM-dd") : item.Paminnelse1)</label>
-                                                                            </span></text>, style: "col2Width"),
-                                                                             grid.Column("Paminnelse2", "Paminnelse2", format: @<text><span class="display-mode">
-                                                                                    <label id="lblPaminnelse2">@( item.Paminnelse2 != null ? item.Paminnelse2.ToString("yyyy-MM-dd") : item.Paminnelse2)</label>
-                                                                                </span></text>, style: "col2Width"),
-                                                                                 grid.Column("Paminnelse3", "Paminnelse3", format: @<text><span class="display-mode">
-                                                                                        <label id="lblPaminnelse3">@( item.Paminnelse3 != null ? item.Paminnelse3.ToString("yyyy-MM-dd") : item.Paminnelse3)</label>
-                                                                                    </span></text>, style: "col2Width")))
+        using (Html.BeginForm("SaveForvantadeLeveranser", "Leverans", FormMethod.Post))
+        {
+            @Html.HiddenFor(m => m.SelectedDelregisterId)
+            for (int i = 0; i < Model.BlivandeForvantadeLeveranser.Count(); i++)
+            {
+                @Html.HiddenFor(m => m.BlivandeForvantadeLeveranser[i].Id)
+                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].FilkravId)
+                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].FilkravNamn)
+                @Html.HiddenFor(m => m.BlivandeForvantadeLeveranser[i].DelregisterId)
+                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].SelectedRegisterId)
+                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].SelectedDelregisterId)
+                @Html.HiddenFor(m => m.BlivandeForvantadeLeveranser[i].SelectedFilkravId)
+                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Period)
+                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Uppgiftsstart)
+                @Html.HiddenFor(m => m.BlivandeForvantadeLeveranser[i].Uppgiftsslut)
+                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Rapporteringsstart)
+                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Rapporteringsslut)
+                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Rapporteringsenast)
+                @Html.HiddenFor(m => m.BlivandeForvantadeLeveranser[i].Paminnelse1)
+                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Paminnelse2)
+                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Paminnelse3)
+                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].Pagaende)
+                @Html.HiddenFor(x => x.BlivandeForvantadeLeveranser[i].AlreadyExists)
+            }
+    <div class="row">
+        <div class="col-md-offset-2 col-md-2">
+            <input type = "submit" id="saveBtn" value="Spara" class="btn btn-default" />
+        </div>
+        <div class="col-md-2">
+            <input type = "button" id="clearBtn" value="Rensa" class="btn btn-default" />
+        </div>
+    </div>
+
+    <hr />
+    <br />
+
+    <div id = "dotText" >
+        <span class="dot" style="background-color: #a3a3c2; margin-left: 20px;"></span><label style = "font-size: 0.8em; width: 550px;" > Perioder med denna bakgrundsfärg finns redan i databasen och kommer ej förändras om du sparar.</label>
+    </div>
+    <div id = "gridContent" style= "font-family: Arial; padding: 20px;" >
+            @{
+    ViewBag.Title = "Administrera filkrav";
+    var grid = new WebGrid(source: Model.BlivandeForvantadeLeveranser, canPage: false, rowsPerPage: 15, ajaxUpdateContainerId: "forvantadeLeveranserUtkastGrid");
+}
+
+@grid.GetHtml(htmlAttributes: new { id = "forvantadeLeveranserUtkastTable" },
+                 tableStyle: "webgrid-table",
+                 headerStyle: "webgrid-header",
+                 footerStyle: "webgrid-footer",
+                 alternatingRowStyle: "webgrid-alternating-row",
+                 selectedRowStyle: "webgrid-selected-row",
+                 rowStyle: "webgrid-row-style",
+                 mode: WebGridPagerModes.All,
+                 columns: grid.Columns(
+                     grid.Column(null, null, format: @<text><input type="hidden" id="AlreadyExists" value="@item.AlreadyExists.ToString()" class="edit-mode form-control hide" /></text>, style: "colZeroWidth"),
+                                                    grid.Column("FilkravId", "Filkravid", format: @<text><span class="display-mode"><label>@item.Filkravid</label></span></text>, style: "colMinWidth"),
+                                                                                        grid.Column("FilkravNamn", "Filkravnamn", format: @<text><span class="display-mode"><label>@item.FilkravNamn</label></span></text>, style: "colMinWidth"),
+                                                                                                                                grid.Column("Period", "Period", format: @<text><span class="display-mode"><label id="lblPeriod">@item.Period </label></span></text>, style: "col1Width"),
+                                                                                                                                                                            grid.Column("Uppgiftsstart", "Uppgiftsstart", format: @<text><span class="display-mode">
+                                                                                                                                        <label id="lblUppgiftsstart">@( item.Uppgiftsstart != null ? item.Uppgiftsstart.ToString("yyyy-MM-dd") : item.Uppgiftsstart)</label>
+                                                                                                                                    </span></text>, style: "col2Width"),
+                                                                                                                                                                                                                            grid.Column("Uppgiftsslut", "Uppgiftsslut", format: @<text><span class="display-mode">
+                                                                                                                                                                                    <label id="lblUppgiftsslut">@( item.Uppgiftsslut != null ? item.Uppgiftsslut.ToString("yyyy-MM-dd") : item.Uppgiftsslut)</label>
+                                                                                                                                                                                </span></text>, style: "col2Width"),
+                                                                                                                                                                                                                                                                                grid.Column("Rapporteringsstart", "Rapporteringsstart", format: @<text><span class="display-mode">
+                                                                                                                                                                                                                                    <label id="lblRapporteringsstart">@( item.Rapporteringsstart != null ? item.Rapporteringsstart.ToString("yyyy-MM-dd") : item.Rapporteringsstart)</label>
+                                                                                                                                                                                                                                </span></text>, style: "col2Width"),
+                                                                                                                                                                                                                                                                                                                                        grid.Column("Rapporteringsslut", "Rapporteringsslut", format: @<text><span class="display-mode">
+                                                                                                                                                                                                                                                                                        <label id="lblRapporteringsslut">@( item.Rapporteringsslut != null ? item.Rapporteringsslut.ToString("yyyy-MM-dd") : item.Rapporteringsslut)</label>
+                                                                                                                                                                                                                                                                                    </span></text>, style: "col2Width"),
+                                                                                                                                                                                                                                                                                                                                                                                                    grid.Column("Rapporteringsenast", "Rapporteringsenast", format: @<text><span class="display-mode">
+                                                                                                                                                                                                                                                                                                                                                <label id="lblRapporteringsenast">@( item.Rapporteringsenast != null ? item.Rapporteringsenast.ToString("yyyy-MM-dd") : item.Rapporteringsenast)</label>
+                                                                                                                                                                                                                                                                                                                                            </span></text>, style: "col2Width"),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    grid.Column("Paminnelse1", "Paminnelse1", format: @<text><span class="display-mode">
+                                                                                                                                                                                                                                                                                                                                                                                                            <label id="lblPaminnelse1">@( item.Paminnelse1 != null ? item.Paminnelse1.ToString("yyyy-MM-dd") : item.Paminnelse1)</label>
+                                                                                                                                                                                                                                                                                                                                                                                                        </span></text>, style: "col2Width"),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        grid.Column("Paminnelse2", "Paminnelse2", format: @<text><span class="display-mode">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <label id="lblPaminnelse2">@( item.Paminnelse2 != null ? item.Paminnelse2.ToString("yyyy-MM-dd") : item.Paminnelse2)</label>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </span></text>, style: "col2Width"),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                grid.Column("Paminnelse3", "Paminnelse3", format: @<text><span class="display-mode">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <label id="lblPaminnelse3">@( item.Paminnelse3 != null ? item.Paminnelse3.ToString("yyyy-MM-dd") : item.Paminnelse3)</label>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </span></text>, style: "col2Width")))
 
         </div>
+        }
     }
 </div>
 

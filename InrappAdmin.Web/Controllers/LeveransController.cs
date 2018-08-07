@@ -599,7 +599,6 @@ namespace InrappAdmin.Web.Controllers
             {
                 Id = forvLevModel.Id,
                 FilkravId = forvLevModel.FilkravId,
-                DelregisterId = _portalAdminService.HamtaDelRegisterForKortnamn(forvLevModel.DelregisterKortnamn).Id,
                 Period = forvLevModel.Period,
                 Uppgiftsstart = forvLevModel.Uppgiftsstart,
                 Uppgiftsslut = forvLevModel.Uppgiftsslut,
@@ -610,6 +609,15 @@ namespace InrappAdmin.Web.Controllers
                 Paminnelse2 = forvLevModel.Paminnelse2,
                 Paminnelse3 = forvLevModel.Paminnelse3
             };
+
+            if (forvLevModel.SelectedDelregisterId > 0)
+            {
+                forvLev.DelregisterId = forvLevModel.SelectedDelregisterId;
+            }
+            else if (forvLevModel.DelregisterKortnamn != null)
+            {
+                forvLev.DelregisterId = _portalAdminService.HamtaDelRegisterForKortnamn(forvLevModel.DelregisterKortnamn).Id;
+            }
 
             return forvLev;
         }
@@ -742,7 +750,8 @@ namespace InrappAdmin.Web.Controllers
         }
 
         // POST
-        public ActionResult SaveForvantadeLeveranser(IEnumerable<LeveransViewModels.AdmForvantadleveransViewModel> forvLevLista)
+        //public ActionResult SaveForvantadeLeveranser(IEnumerable<LeveransViewModels.AdmForvantadleveransViewModel> forvLevLista)
+        public ActionResult SaveForvantadeLeveranser(LeveransViewModels.LeveransViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -751,10 +760,11 @@ namespace InrappAdmin.Web.Controllers
                     var userName = User.Identity.GetUserName();
                     var forvLevDbList = new List<AdmForvantadleverans>();
 
-                    foreach (var forvLev in forvLevLista)
+                    foreach (var forvLev in model.BlivandeForvantadeLeveranser)
                     {
                         if (!forvLev.AlreadyExists) //spara endast nya
                         {
+                            forvLev.SelectedDelregisterId = model.SelectedDelregisterId;
                             var forvLevDB = ConvertViewModelToForvLev(forvLev);
                             forvLevDbList.Add(forvLevDB);
                         }

@@ -47,9 +47,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public IEnumerable<RegisterInfo> RegisterList { get; set; }
             public IEnumerable<FilloggDetaljDTO> Leveranser { get; set; }
             public string Period { get; set; }
-            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public DateTime Uppgiftsstart { get; set; }
-            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public DateTime Uppgiftsslut { get; set; }
             [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public DateTime Rapporteringsstart { get; set; }
