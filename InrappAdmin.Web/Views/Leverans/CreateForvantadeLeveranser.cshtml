@@ -18,24 +18,33 @@
             }
         });
 
+        //Sätt drop för filkravid
+        if ($('#SelectedDelregisterId') != null) {
+            delregChange();
+            $('#ddlFilkrav').val($('#SelectedFilkravId').val());
+        }
+
         var x = utkastLista;
         if (utkastLista != null) {
             $('#dotText').show();
             $('#showDraftBtn').hide();
             $('#saveBtn').show();
             $('#clearBtn').show();
+            $('#ddlYear').prop('disabled', true);
+            $('#ddlDelregister').prop('disabled', true);
+            $('#ddlFilkrav').prop('disabled', true);
+
         } else {
             $('#dotText').hide();
             $('#saveBtn').hide();
             $('#clearBtn').hide();
             $('#showDraftBtn').show();
+            $('#ddlYear').prop('disabled', false);
+            $('#ddlDelregister').prop('disabled', false);
+            $('#ddlFilkrav').prop('disabled', false);
 
         }
-        //Sätt drop för filkravid
-        if ($('#SelectedDelregisterId') != null) {
-            delregChange();
-            $('#ddlFilkrav').val($('#SelectedFilkravId').val());
-        }
+
     });
 
     $(document).on('click', '#clearBtn', function () {
@@ -46,6 +55,9 @@
         $('#saveBtn').hide();
         $('#clearBtn').hide();
         $('#showDraftBtn').show();
+        $('#ddlYear').prop('disabled', false);
+        $('#ddlDelregister').prop('disabled', false);
+        $('#ddlFilkrav').prop('disabled', false);
     });
 
     //$(document).on('click', '#saveBtn', function () {
