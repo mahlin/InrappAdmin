@@ -519,6 +519,51 @@ namespace InrappAdmin.DataAccess
             return user;
         }
 
+        public IEnumerable<Roll> GetChosenDelRegistersForUser(string userId)
+        {
+            var rollList = new List<Roll>();
+
+            rollList = DbContext.Roll.Where(x => x.ApplicationUserId == userId).ToList();
+
+            return rollList;
+        }
+
+        public IEnumerable<RegisterInfo> GetAllRegisterInformationForOrganisation(int orgId)
+        {
+            var registerInfoList = new List<RegisterInfo>();
+
+            var uppgSkyldighetDelRegIds = DbContext.AdmUppgiftsskyldighet.Where(x => x.OrganisationId == orgId).Select(x => x.DelregisterId).ToList();
+
+            var delregister = DbContext.AdmDelregister
+                .Include(z => z.AdmRegister)
+                .Include(f => f.AdmFilkrav.Select(q => q.AdmForvantadfil))
+                .Where(x => x.Inrapporteringsportal && uppgSkyldighetDelRegIds.Contains(x.Id))
+                .Include(f => f.AdmFilkrav.Select(q => q.AdmForvantadleverans))
+                .ToList();
+
+
+            foreach (var item in delregister)
+            {
+                var regInfoObj = CreateRegisterInfoObj(item);
+                registerInfoList.Add(regInfoObj);
+            }
+
+            return registerInfoList;
+        }
+
+        public AdmUppgiftsskyldighet GetUppgiftsskyldighetForOrganisationAndRegister(int orgId, int delregid)
+        {
+            var uppgiftsskyldighet = DbContext.AdmUppgiftsskyldighet.SingleOrDefault(x => x.OrganisationId == orgId && x.DelregisterId == delregid);
+
+            return uppgiftsskyldighet;
+        }
+
+        public IEnumerable<Organisationsenhet> GetOrganisationUnits(int orgId)
+        {
+            var orgUnits = DbContext.Organisationsenhet.Where(x => x.OrganisationsId == orgId).ToList();
+            return orgUnits;
+        }
+
 
         public int CreateOrganisation(Organisation org)
         {
@@ -910,10 +955,97 @@ namespace InrappAdmin.DataAccess
 
 
 
-        //public IEnumerable<AdmRegister> GetDirectoriesForOrg(int orgId)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        private RegisterInfo CreateRegisterInfoObj(AdmDelregister delReg)
+        {
+            var regInfo = new RegisterInfo
+            {
+                Id = delReg.Id,
+                Namn = delReg.Delregisternamn,
+                Kortnamn = delReg.Kortnamn,
+                InfoText = delReg.AdmRegister.Beskrivning + "<br>" + delReg.Beskrivning,
+                Slussmapp = delReg.Slussmapp
+            };
+
+
+            var filkravList = new List<RegisterFilkrav>();
+            var i = 1;
+
+            foreach (var filkrav in delReg.AdmFilkrav)
+            {
+                var regFilkrav = new RegisterFilkrav();
+                var filmaskList = new List<string>();
+                var regExpList = new List<string>();
+                if (filkrav.Namn != null)
+                {
+                    regFilkrav.Namn = filkrav.Namn;
+                }
+                else
+                {
+                    regFilkrav.Namn = "";
+                }
+
+                //Sök forväntad fil för varje filkrav istället för alla forvantade filer för registret!!
+                //var forvantadFil = delReg.AdmFilkrav.Select(x => x.AdmForvantadfil);
+                var forvantadeFiler = filkrav.AdmForvantadfil.ToList();
+                regFilkrav.AntalFiler = forvantadeFiler.Count();
+
+                foreach (var forvFil in forvantadeFiler)
+                {
+                    filmaskList.Add(forvFil.Filmask);
+                    regExpList.Add(forvFil.Regexp);
+                    regFilkrav.InfoText = regFilkrav.InfoText + "<br> Filformat: " + forvFil.Filmask;
+                    regFilkrav.Obligatorisk = forvFil.Obligatorisk;
+                }
+
+                //get period och forvantadleveransId
+                GetPeriodsForAktuellLeverans(filkrav, regFilkrav);
+                regFilkrav.InfoText = regFilkrav.InfoText + "<br> Antal filer: " + regFilkrav.AntalFiler;
+                regFilkrav.Id = i;
+                regFilkrav.FilMasker = filmaskList;
+                regFilkrav.RegExper = regExpList;
+
+
+                //Om inga aktuella perioder finns för filkravet ska det inte läggas med i RegInfo
+                if (regFilkrav.Perioder != null)
+                {
+                    if (regFilkrav.Perioder.ToList().Count != 0)
+                    {
+                        filkravList.Add(regFilkrav);
+                        i++;
+                    }
+                }
+            }
+
+            regInfo.Filkrav = filkravList;
+            return regInfo;
+        }
+
+        public void GetPeriodsForAktuellLeverans(AdmFilkrav filkrav, RegisterFilkrav regFilkrav)
+        {
+            string period = String.Empty;
+            DateTime startDate;
+            DateTime endDate;
+
+            DateTime dagensDatum = DateTime.Now.Date;
+            var perioder = new List<string>();
+
+            //hämta varje förväntad leverans och sätt rätt period utifrån dagens datum
+            foreach (var item in filkrav.AdmForvantadleverans)
+            {
+                if (item != null)
+                {
+                    startDate = item.Rapporteringsstart;
+                    endDate = item.Rapporteringsslut;
+                    if (dagensDatum >= startDate && dagensDatum <= endDate)
+                    {
+                        //regInfo.Period = item.Period;
+                        perioder.Add(item.Period);
+                        //regInfo.ForvantadLevransId = item.Id;
+                    }
+                }
+                regFilkrav.Perioder = perioder;
+            }
+        }
 
 
     }

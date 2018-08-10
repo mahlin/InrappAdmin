@@ -144,6 +144,14 @@ namespace InrappAdmin.DataAccess
 
         ApplicationUser GetUserByEmail(string email);
 
+        IEnumerable<Roll> GetChosenDelRegistersForUser(string userId);
+
+        IEnumerable<RegisterInfo> GetAllRegisterInformationForOrganisation(int orgId);
+
+        AdmUppgiftsskyldighet GetUppgiftsskyldighetForOrganisationAndRegister(int orgId, int delregid);
+
+        IEnumerable<Organisationsenhet> GetOrganisationUnits(int orgId);
+
         int CreateOrganisation(Organisation org);
 
         void CreateOrgUnit(Organisationsenhet orgUnit);

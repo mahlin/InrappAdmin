@@ -155,7 +155,7 @@
     </div>
 </div>
 
-<div id="pageContainer">
+<div id="pageContainer" style="width: 1500px;">
     <div class="row">
         <div class="col-md-8 padding-top-55">
             <h4>Administrera kontaktpersoner för organisation</h4>
@@ -197,7 +197,7 @@
             var grid = new WebGrid(source: Model.ContactPersons, canPage: false, rowsPerPage: 10, ajaxUpdateContainerId: "contatcsGrid");
         }
 
-        @grid.GetHtml(tableStyle: "webgrid-table",
+        @grid.GetHtml(tableStyle: "webgrid-table1500",
                 headerStyle: "webgrid-header",
                 footerStyle: "webgrid-footer",
                 alternatingRowStyle: "webgrid-alternating-row",
@@ -221,7 +221,7 @@
                     <input type="text" id="ContactAktivTom" value="@( item.AktivTom != null ? item.AktivTom.ToString("yyyy-MM-dd") : item.AktivTom)" class="edit-mode form-control" /></text>, style: "col2Width"),
                     grid.Column("Status", "Status", format: @<text><span class="display-mode col1Width"><label id="lblStatus">@item.Status</label></span>
                     <input type="text" id="ContactStatus" value="@item.Status" class="edit-mode form-control" /></text>, style: "col1Width"),
-
+                    grid.Column("Valda delregister", "Valda delregister", format: @<text><span class="display-mode col350Width" style="display: inline-block;">@item.ValdaDelregister</span><label id="lblValdaDelreg" class="edit-mode col350Width">@item.ValdaDelregister</label></text>, style: "col350Width"),
                     grid.Column(null, format: @<text>
                     <button class="edit-user display-mode btn btn-default">Ändra</button>
                     @if (item.OkToDelete)

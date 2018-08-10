@@ -635,6 +635,53 @@ namespace InrappAdmin.ApplicationService
             return status;
         }
 
+        public IEnumerable<RegisterInfo> HamtaValdaRegistersForAnvandare(string userId, int orgId)
+        {
+            var registerList = _portalAdminRepository.GetChosenDelRegistersForUser(userId);
+            //var allaRegisterList = _portalRepository.GetAllRegisterInformation();
+            var allaRegisterList = _portalAdminRepository.GetAllRegisterInformationForOrganisation(orgId);
+            var userRegisterList = new List<RegisterInfo>();
+
+            foreach (var register in allaRegisterList)
+            {
+                foreach (var userRegister in registerList)
+                {
+                    if (register.Id == userRegister.DelregisterId)
+                    {
+                        register.SelectedFilkrav = "0";
+                        userRegisterList.Add(register);
+                    }
+                }
+            }
+
+            //Check if users organisation reports per unit. If thats the case, get list of units
+            foreach (var item in userRegisterList)
+            {
+                var uppgiftsskyldighet = HamtaUppgiftsskyldighetForOrganisationOchRegister(orgId, item.Id);
+                if (uppgiftsskyldighet.RapporterarPerEnhet)
+                {
+                    item.RapporterarPerEnhet = true;
+                    var orgUnits = _portalAdminRepository.GetOrganisationUnits(orgId);
+                    item.Organisationsenheter = new List<KeyValuePair<string, string>>();
+                    foreach (var orgUnit in orgUnits)
+                    {
+                        KeyValuePair<string, string> keyValuePair = new KeyValuePair<string, string>(orgUnit.Enhetskod, orgUnit.Enhetsnamn);
+                        item.Organisationsenheter.Add(keyValuePair);
+                    }
+
+                }
+            }
+
+            return userRegisterList;
+        }
+
+        public AdmUppgiftsskyldighet HamtaUppgiftsskyldighetForOrganisationOchRegister(int orgId, int delregid)
+        {
+            var uppgiftsskyldighet = _portalAdminRepository.GetUppgiftsskyldighetForOrganisationAndRegister(orgId, delregid);
+
+            return uppgiftsskyldighet;
+        }
+
         public int SkapaOrganisation(Organisation org, string userName)
         {
             //Sätt datum och användare

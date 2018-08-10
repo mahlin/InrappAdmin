@@ -102,6 +102,11 @@ namespace InrappAdmin.Web.Controllers
                 model.Kommunkod = model.Organisation.Kommunkod;
                 var contacts = _portalAdminService.HamtaKontaktpersonerForOrg(model.Organisation.Id);
                 model.ContactPersons = ConvertUsersViewModelUser(contacts);
+                foreach (var contact in model.ContactPersons)
+                {
+                    //Hämta användarens valda register
+                    contact.ValdaDelregister = GetContactsChosenSubDirectories(contact);
+                }
                 // Ladda drop down lists. 
                 var orgListDTO = GetOrganisationDTOList();
                 ViewBag.OrganisationList = new SelectList(orgListDTO, "Id", "KommunkodOchOrgnamn");
@@ -872,9 +877,31 @@ namespace InrappAdmin.Web.Controllers
             return lstobj;
         }
 
+        private string GetContactsChosenSubDirectories(OrganisationViewModels.ApplicationUserViewModel contact)
+        {
+            var valdaDelregister = String.Empty;
+            var regList = _portalAdminService.HamtaValdaRegistersForAnvandare(contact.ID, contact.OrganisationId).ToList();
+
+            for (int i = 0; i < regList.Count(); i++)
+            {
+                if (i == 0)
+                {
+                    valdaDelregister = regList[i].Kortnamn;
+                }
+                else
+                {
+                    valdaDelregister = valdaDelregister + ", " + regList[i].Kortnamn;
+                }
+            }
+
+            return valdaDelregister;
+
+        }
 
 
-        
+
+
+
 
     }
 }

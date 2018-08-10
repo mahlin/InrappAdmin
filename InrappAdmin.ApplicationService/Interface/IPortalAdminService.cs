@@ -115,6 +115,8 @@ namespace InrappAdmin.ApplicationService.Interface
 
         string HamtaSammanlagdStatusForPeriod(IEnumerable<FilloggDetaljDTO> historikLista);
 
+        IEnumerable<RegisterInfo> HamtaValdaRegistersForAnvandare(string userId, int orgId);
+
 
         int SkapaOrganisation(Organisation org, string userName);
 
