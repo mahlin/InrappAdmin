@@ -853,6 +853,16 @@ namespace InrappAdmin.DataAccess
         {
             var filereqToUpdate = DbContext.AdmFilkrav.SingleOrDefault(x => x.Id == filkrav.Id);
             filereqToUpdate.Namn = filkrav.Namn;
+            filereqToUpdate.Uppgiftsstartdag = filkrav.Uppgiftsstartdag;
+            filereqToUpdate.Uppgiftslutdag = filkrav.Uppgiftslutdag;
+            filereqToUpdate.Rapporteringsstartdag = filkrav.Rapporteringsstartdag;
+            filereqToUpdate.Rapporteringsslutdag = filkrav.Rapporteringsslutdag;
+            filereqToUpdate.RapporteringSenastdag = filkrav.RapporteringSenastdag;
+            filereqToUpdate.Paminnelse1dag = filkrav.Paminnelse1dag;
+            filereqToUpdate.Paminnelse2dag = filkrav.Paminnelse2dag;
+            filereqToUpdate.Paminnelse3dag = filkrav.Paminnelse3dag;
+            filereqToUpdate.RapporteringEfterAntalManader = filkrav.RapporteringEfterAntalManader;
+            filereqToUpdate.UppgifterAntalmanader = filkrav.UppgifterAntalmanader;
             filereqToUpdate.AndradAv = filkrav.AndradAv;
             filereqToUpdate.AndradDatum = filkrav.AndradDatum;
 

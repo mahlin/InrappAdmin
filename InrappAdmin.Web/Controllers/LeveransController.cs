@@ -927,10 +927,7 @@ namespace InrappAdmin.Web.Controllers
                 {
                     var userName = User.Identity.GetUserName();
 
-                    var admFilkrav = new AdmFilkrav();
-                    admFilkrav.Namn = filkrav.Namn;
-                    admFilkrav.DelregisterId = filkrav.SelectedDelregisterId;
-                    admFilkrav.ForeskriftsId = filkrav.ForeskriftsId;
+                    var admFilkrav = ConvertAdmFilkravVMToDb(filkrav);
                     _portalAdminService.SkapaFilkrav(admFilkrav, userName);
                 }
                 catch (Exception e)
@@ -1042,12 +1039,44 @@ namespace InrappAdmin.Web.Controllers
                     DelregisterId = filkrav.DelregisterId,
                     DelregisterKortnamn = _portalAdminService.HamtaKortnamnForDelregister(filkrav.DelregisterId),
                     ForeskriftsId = filkrav.ForeskriftsId,
-                    Namn = filkrav.Namn
+                    Namn = filkrav.Namn,
+                    Uppgiftsstartdag = filkrav.Uppgiftsstartdag,
+                    Uppgiftslutdag = filkrav.Uppgiftslutdag,
+                    Rapporteringsstartdag = filkrav.Rapporteringsstartdag,
+                    Rapporteringsslutdag = filkrav.Rapporteringsslutdag,
+                    RapporteringSenastdag = filkrav.RapporteringSenastdag,
+                    Paminnelse1dag = filkrav.Paminnelse1dag,
+                    Paminnelse2dag = filkrav.Paminnelse2dag,
+                    Paminnelse3dag = filkrav.Paminnelse3dag,
+                    RapporteringEfterAntalManader = filkrav.RapporteringEfterAntalManader,
+                    UppgifterAntalmanader = filkrav.UppgifterAntalmanader
                 };
 
                 filkravViewList.Add(filkravView);
             }
             return filkravViewList;
+        }
+
+        private AdmFilkrav ConvertAdmFilkravVMToDb(LeveransViewModels.AdmFilkravViewModel filkrav)
+        {
+            var admFilkravDb = new AdmFilkrav
+            {
+                Namn = filkrav.Namn,
+                DelregisterId = filkrav.SelectedDelregisterId,
+                ForeskriftsId = filkrav.ForeskriftsId,
+                Uppgiftsstartdag = filkrav.Uppgiftsstartdag,
+                Uppgiftslutdag = filkrav.Uppgiftslutdag,
+                Rapporteringsstartdag = filkrav.Rapporteringsstartdag,
+                Rapporteringsslutdag = filkrav.Rapporteringsslutdag,
+                RapporteringSenastdag = filkrav.RapporteringSenastdag,
+                Paminnelse1dag = filkrav.Paminnelse1dag,
+                Paminnelse2dag = filkrav.Paminnelse2dag,
+                Paminnelse3dag = filkrav.Paminnelse3dag,
+                RapporteringEfterAntalManader = filkrav.RapporteringEfterAntalManader,
+                UppgifterAntalmanader = filkrav.UppgifterAntalmanader
+            };
+
+            return admFilkravDb;
         }
 
 
