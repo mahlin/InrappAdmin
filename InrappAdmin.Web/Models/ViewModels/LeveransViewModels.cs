@@ -99,24 +99,16 @@ namespace InrappAdmin.Web.Models.ViewModels
             public int SelectedInsamlingsfrekvensId { get; set; }
             public int? ForeskriftsId { get; set; }
             public string Namn { get; set; }
-            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public int? Uppgiftsstartdag { get; set; }
-            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public int? Uppgiftslutdag { get; set; }
-            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public int? Rapporteringsstartdag { get; set; }
-            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public int? Rapporteringsslutdag { get; set; }
-            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             [Display(Name = "Rapportering senast dag")]
             public int? RapporteringSenastdag { get; set; }
-            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             [Display(Name = "Påminnelse 1")]
             public int? Paminnelse1dag { get; set; }
-            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             [Display(Name = "Påminnelse 2")]
             public int? Paminnelse2dag { get; set; }
-            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             [Display(Name = "Påminnelse 3")]
             public int? Paminnelse3dag { get; set; }
             [Display(Name = "Rapportering efter antal månader")]

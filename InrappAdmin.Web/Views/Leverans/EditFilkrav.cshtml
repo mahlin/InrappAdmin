@@ -49,7 +49,7 @@
                 var rapporteringsstartdag = tr.find("#Rapporteringsstartdag").val();
                 var rapporteringsslutdag = tr.find("#Rapporteringsslutdag").val();
                 var rapporteringSenastdag = tr.find("#RapporteringSenastdag").val();
-                var paminnelse1dag = tr.find("#Paminnelse1dag").val();
+                var paminnelse1dag = tr.find("#Paminnelse1dag").val(); 
                 var paminnelse2dag = tr.find("#Paminnelse2dag").val();
                 var paminnelse3dag = tr.find("#Paminnelse3dag").val();
                 var rapporteringEfterAntalManader = tr.find("#RapporteringEfterAntalManader").val();
@@ -149,7 +149,7 @@
 
         @Html.ActionLink("Skapa nytt filkrav", "CreateFilkrav", "Leverans", new { selectedRegId = Model.SelectedRegisterId }, null)
 
-    <div id="gridContent" style="font-family: Arial; padding: 20px; margin-left: -300px;">
+    <div id="gridContent" style="font-family: Arial; padding: 20px;">
         @{
         ViewBag.Title = "Administrera filkrav";
         var grid = new WebGrid(source: Model.Filkrav, canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "filkravGrid");
@@ -191,13 +191,13 @@
 
                         grid.Column("Påminnelse 1", "Påminnelse 1", format: @<text><span class="display-mode">
                         <label id="lblPaminnelse1">@item.Paminnelse1dag</label></span>
-                        <input type="text" id="Paminnelse1" value="@item.Paminnelse1dag" class="edit-mode form-control" /></text>, style: "col2Width"),
+                        <input type="text" id="Paminnelse1dag" value="@item.Paminnelse1dag" class="edit-mode form-control" /></text>, style: "col2Width"),
                         grid.Column("Påminnelse 2", "Påminnelse 2", format: @<text><span class="display-mode">
                         <label id="lblPaminnelse2">@item.Paminnelse2dag</label></span>
-                        <input type="text" id="Paminnelse2" value="@item.Paminnelse2dag" class="edit-mode form-control" /></text>, style: "col2Width"),
+                        <input type="text" id="Paminnelse2dag" value="@item.Paminnelse2dag" class="edit-mode form-control" /></text>, style: "col2Width"),
                         grid.Column("Påminnelse 3", "Påminnelse 3", format: @<text><span class="display-mode">
                         <label id="lblPaminnelse3">@item.Paminnelse3dag</label></span>
-                        <input type="text" id="Paminnelse3" value="@item.Paminnelse3dag" class="edit-mode form-control" /></text>, style: "col2Width"),
+                        <input type="text" id="Paminnelse3dag" value="@item.Paminnelse3dag" class="edit-mode form-control" /></text>, style: "col2Width"),
                         grid.Column("Rapportering efter antal månader", "Rapportering efter antal månader", format: @<text><span class="display-mode">
                         <label id="lblRapporteringEfterAntalManader">@item.RapporteringEfterAntalManader </label></span>
                         <input type="text" id="RapporteringEfterAntalManader" value="@item.RapporteringEfterAntalManader" class="edit-mode form-control" /></text>, style: "colMinWidth"),
