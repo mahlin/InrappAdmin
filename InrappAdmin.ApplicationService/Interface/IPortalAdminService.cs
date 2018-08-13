@@ -81,11 +81,15 @@ namespace InrappAdmin.ApplicationService.Interface
 
         IEnumerable<AdmDelregister> HamtaAllaDelregisterForPortalen();
 
+        IEnumerable<AdmInsamlingsfrekvens> HamtaAllaInsamlingsfrekvenser();
+
         IEnumerable<Organisation> HamtaAllaOrganisationer();
 
         string HamtaKortnamnForDelregisterMedFilkravsId(int filkravsId);
 
         string HamtaKortnamnForDelregister(int delregId);
+
+        AdmInsamlingsfrekvens HamtaInsamlingsfrekvens(int insamlingsid);
 
         string HamtaKortnamnForRegister(int regId);
 
@@ -148,6 +152,8 @@ namespace InrappAdmin.ApplicationService.Interface
 
         void SkapaFilkrav(AdmFilkrav filkrav, string userName);
 
+        void SkapaInsamlingsfrekvens(AdmInsamlingsfrekvens insamlingsfrekvens, string userName);
+
         void UppdateraOrganisation(Organisation org, string userName);
 
         void UppdateraKontaktperson(ApplicationUser user, string userName);
@@ -179,6 +185,8 @@ namespace InrappAdmin.ApplicationService.Interface
         void UppdateraForvantadFil(AdmForvantadfil forvFil, string userName);
 
         void UppdateraFilkrav(AdmFilkrav filkrav, string userName);
+
+        void UppdateraInsamlingsfrekvens(AdmInsamlingsfrekvens insamlingsfrekvens, string userName);
 
         void UppdateraAnvandarInfo(AppUserAdmin user, string userName);
 

@@ -314,6 +314,31 @@ namespace InrappAdmin.Web.Controllers
             return View("EditFilkrav", model);
         }
 
+        // GET: AdmInsamlingsfrekvens
+        [Authorize]
+        public ActionResult GetInsamlingsfrekvens()
+        {
+            var model = new LeveransViewModels.LeveransViewModel();
+            try
+            {
+                model.Insamlingsfrekvenser = _portalAdminService.HamtaAllaInsamlingsfrekvenser();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorManager.WriteToErrorLog("LeveransController", "GetInsamlingsfrekvens", e.ToString(), e.HResult, User.Identity.Name);
+                var errorModel = new CustomErrorPageModel
+                {
+                    Information = "Ett fel inträffade vid hämtning insamlingsfrekvenser",
+                    ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                };
+                return View("CustomError", errorModel);
+
+            }
+            return View("EditInsamlingsfrekvens", model);
+        }
+
 
         // GET
         [Authorize]
@@ -695,6 +720,35 @@ namespace InrappAdmin.Web.Controllers
 
         }
 
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult UpdateInsamlingsfrekvens(AdmInsamlingsfrekvens insamlingsfrekvens)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var userName = User.Identity.GetUserName();
+                    _portalAdminService.UppdateraInsamlingsfrekvens(insamlingsfrekvens, userName);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("LeveransController", "UpdateInsamlingsfrekvens", e.ToString(), e.HResult, User.Identity.Name);
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade vid uppdatering av insamlingsfrekvens.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+
+                }
+            }
+            return RedirectToAction("GetInsamlingsfrekvens");
+
+        }
+
         // GET
         [Authorize]
         public ActionResult CreateForvantadeLeveranser(bool filterPgnde = false, int selectedRegId = 0)
@@ -912,6 +966,9 @@ namespace InrappAdmin.Web.Controllers
             this.ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
             model.SelectedDelregisterId = 0;
             model.SelectedRegisterId = selectedRegId;
+            var insamlingsfrekvensList = _portalAdminService.HamtaAllaInsamlingsfrekvenser();
+            ViewBag.InsamlingsfrekvensList = CreateInsamlingsfrekvensDropDownList(insamlingsfrekvensList);
+            model.SelectedInsamlingsfrekvensId = 0;
             return View(model);
         }
 
@@ -942,6 +999,43 @@ namespace InrappAdmin.Web.Controllers
                     return View("CustomError", errorModel);
                 }
                 return RedirectToAction("GetFilkrav");
+            }
+
+            return View();
+        }
+
+        // GET
+        [Authorize]
+        public ActionResult CreateInsamlingsfrekvens()
+        {
+            return View();
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public ActionResult CreateInsamlingsfrekvens(LeveransViewModels.LeveransViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var userName = User.Identity.GetUserName();
+                    _portalAdminService.SkapaInsamlingsfrekvens(model.Insamlingsfrekvens, userName);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ErrorManager.WriteToErrorLog("LeveransController", "CreateInsamlingsfrekvens", e.ToString(), e.HResult, User.Identity.Name);
+                    var errorModel = new CustomErrorPageModel
+                    {
+                        Information = "Ett fel inträffade när ny insamlingsfrekvens skulle sparas.",
+                        ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                    };
+                    return View("CustomError", errorModel);
+                }
+                return RedirectToAction("GetInsamlingsfrekvens");
             }
 
             return View();
@@ -1038,6 +1132,7 @@ namespace InrappAdmin.Web.Controllers
                     Id = filkrav.Id,
                     DelregisterId = filkrav.DelregisterId,
                     DelregisterKortnamn = _portalAdminService.HamtaKortnamnForDelregister(filkrav.DelregisterId),
+                    InsamlingsfrekvensId = filkrav.InsamlingsfrekvensId,
                     ForeskriftsId = filkrav.ForeskriftsId,
                     Namn = filkrav.Namn,
                     Uppgiftsstartdag = filkrav.Uppgiftsstartdag,
@@ -1052,6 +1147,17 @@ namespace InrappAdmin.Web.Controllers
                     UppgifterAntalmanader = filkrav.UppgifterAntalmanader
                 };
 
+                if (filkravView.InsamlingsfrekvensId != null)
+                {
+                    var id = filkravView.InsamlingsfrekvensId.Value;
+                    filkravView.Insamlingsfrekvens =
+                        _portalAdminService.HamtaInsamlingsfrekvens(id).Insamlingsfrekvens;
+                }
+                else
+                {
+                    filkravView.Insamlingsfrekvens = String.Empty;
+                }
+
                 filkravViewList.Add(filkravView);
             }
             return filkravViewList;
@@ -1063,6 +1169,7 @@ namespace InrappAdmin.Web.Controllers
             {
                 Namn = filkrav.Namn,
                 DelregisterId = filkrav.SelectedDelregisterId,
+                InsamlingsfrekvensId = filkrav.SelectedInsamlingsfrekvensId,
                 ForeskriftsId = filkrav.ForeskriftsId,
                 Uppgiftsstartdag = filkrav.Uppgiftsstartdag,
                 Uppgiftslutdag = filkrav.Uppgiftslutdag,
@@ -1147,6 +1254,29 @@ namespace InrappAdmin.Web.Controllers
                     {
                         Value = p.Id.ToString(),
                         Text = p.Kortnamn
+                    });
+
+            // Setting.  
+            lstobj = new SelectList(list, "Value", "Text");
+
+            return lstobj;
+        }
+
+
+        /// <summary>  
+        /// Create list for delregister-dropdown  
+        /// </summary>  
+        /// <returns>Return delregister for drop down list.</returns>  
+        private IEnumerable<SelectListItem> CreateInsamlingsfrekvensDropDownList(IEnumerable<AdmInsamlingsfrekvens> insamlingsfrekvensList)
+        {
+            SelectList lstobj = null;
+
+            var list = insamlingsfrekvensList
+                .Select(p =>
+                    new SelectListItem
+                    {
+                        Value = p.Id.ToString(),
+                        Text = p.Insamlingsfrekvens
                     });
 
             // Setting.  

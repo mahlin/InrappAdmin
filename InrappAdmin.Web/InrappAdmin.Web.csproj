@@ -326,6 +326,8 @@
     <Content Include="Views\Organisation\EditUnitReportObligations.cshtml" />
     <Content Include="Views\Organisation\CreateUnitReportObligation.cshtml" />
     <Content Include="Views\Leverans\CreateForvantadeLeveranser.cshtml" />
+    <Content Include="Views\Leverans\CreateInsamlingsfrekvens.cshtml" />
+    <Content Include="Views\Leverans\EditInsamlingsfrekvens.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

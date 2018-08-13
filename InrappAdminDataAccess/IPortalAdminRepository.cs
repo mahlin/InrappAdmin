@@ -65,6 +65,8 @@ namespace InrappAdmin.DataAccess
 
         AdmInformation GetInfoText(int infoId);
 
+        AdmInsamlingsfrekvens GetInsamlingsfrekvens(int insamlingsid);
+
         int GetPageInfoTextId(string pageType);
 
         AdmRegister GetDirectoryByShortName(string shortName);
@@ -86,6 +88,8 @@ namespace InrappAdmin.DataAccess
         IEnumerable<AdmForvantadfil> GetAllExpectedFiles();
 
         IEnumerable<AdmFilkrav> GetAllFileRequirements();
+
+        IEnumerable<AdmInsamlingsfrekvens> GetAllCollectionFrequencies();
 
         IEnumerable<AdmForvantadleverans> GetExpectedDeliveriesForDirectory(int dirId);
         IEnumerable<AdmForvantadleverans> GetExpectedDeliveriesForSubDirectory(int subdirId);
@@ -176,6 +180,8 @@ namespace InrappAdmin.DataAccess
 
         void CreateFileRequirement(AdmFilkrav filkrav);
 
+        void CreateCollectFrequence(AdmInsamlingsfrekvens colFreq);
+
         void UpdateOrganisation(Organisation org);
 
         void UpdateContactPerson(ApplicationUser user);
@@ -206,6 +212,8 @@ namespace InrappAdmin.DataAccess
         void UpdateExpectedFile(AdmForvantadfil forvFil);
 
         void UpdateFileRequirement(AdmFilkrav filkrav);
+
+        void UpdateCollectFrequency(AdmInsamlingsfrekvens insamlingsfrekvens);
 
         void UpdateUserInfo(AppUserAdmin user);
 

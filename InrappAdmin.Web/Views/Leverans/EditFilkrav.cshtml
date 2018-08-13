@@ -171,7 +171,8 @@
                         grid.Column("Namn", "Namn", format: @<text><span class="display-mode">
                         <label id="lblNamn" style="width: 200px;">@item.Namn </label></span>
                         <input type="text" id="Namn" value="@item.Namn" class="edit-mode form-control" style="width: 400px !important;" /></text>, style: "col5Width"),
-
+                        grid.Column("Insamlingsfrekvens", "Insamlingsfrekvens", format: @<text><span class="display-mode"><label id="lblInsamlingsfrekvens">@item.Insamlingsfrekvens</label></span>
+                        <input type="text" id="Insamlingsfrekvens" value="@item.Insamlingsfrekvens" class="edit-mode form-control" /></text>, style: "col1Width"),
                         grid.Column("Uppgiftsstart", "Uppgiftsstart", format: @<text><span class="display-mode">
                         <label id="lblUppgiftsstart">@item.Uppgiftsstartdag</label></span>
                         <input type="text" id="Uppgiftsstartdag" value="@item.Uppgiftsstartdag" class="edit-mode form-control" /></text>, style: "col2Width"),

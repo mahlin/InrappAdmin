@@ -9,6 +9,10 @@
         $("#SelectedDelregisterId").val($('#ddlDelregister').val());
     });
 
+    $(document).on('change', '#ddlInsamlingsfrekvens', function () {
+        $("#SelectedInsamlingsfrekvensId").val($('#ddlInsamlingsfrekvens').val());
+    });
+
 </script>
 
 
@@ -31,7 +35,7 @@
             <div class="form-group">
                 @Html.Label("Delregister", new { @class = "control-label col-md-2" })
                 @*@Html.LabelFor(model => model.DelregisterId, htmlAttributes: new {@class = "control-label col-md-2"})*@
-                <div class="col-md-10" style="width: 225px !important;">
+                <div class="col-md-10" style="width: 255px !important;">
                     @Html.DropDownListFor(m => m.SelectedDelregisterId, ViewBag.DelregisterList as SelectList, " - Välj delregister -", new {id = "ddlDelregister", @class = "form-control", style = "max-width:250px !important"})
                 </div>
             </div>
@@ -43,6 +47,14 @@
                     @Html.ValidationMessageFor(model => model.Namn, "", new { @class = "text-danger" })
                 </div>
             </div>
+            
+            <div class="form-group">
+                @Html.Label("Insamlingsfrekvens", new { @class = "control-label col-md-2" })
+                <div class="col-md-10" style="width: 255px !important;">
+                    @Html.DropDownListFor(m => m.SelectedInsamlingsfrekvensId, ViewBag.InsamlingsfrekvensList as SelectList, " - Välj insamlingsfrekvens -", new {id = "ddlInsamlingsfrekvens", @class = "form-control", style = "max-width:250px !important"})
+                </div>
+            </div>
+
             <div class="form-group">
                 @Html.LabelFor(model => model.Uppgiftsstartdag, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">

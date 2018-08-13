@@ -20,6 +20,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public IEnumerable<AdmForvantadfilViewModel> ForvantadeFiler { get; set; }
             public IEnumerable<AdmFilkravViewModel> Filkrav { get; set; }
             public IEnumerable<FilloggDetaljDTO> Leveranser { get; set; }
+            public IEnumerable<AdmInsamlingsfrekvens> Insamlingsfrekvenser { get; set; }
             public int SelectedRegisterId { get; set; }
             public int SelectedDelregisterId { get; set; }
             public int SelectedFilkravId { get; set; }
@@ -30,7 +31,9 @@ namespace InrappAdmin.Web.Models.ViewModels
             public string SelectedCountyCode { get; set; }
             [Display(Name = "Kommunkod")]
             public string Kommunkod { get; set; }
-            
+
+            public AdmInsamlingsfrekvens Insamlingsfrekvens { get; set; }
+
         }
 
         public class AdmForvantadleveransViewModel
@@ -91,6 +94,9 @@ namespace InrappAdmin.Web.Models.ViewModels
             public int SelectedDelregisterId { get; set; }
             public int SelectedRegisterId { get; set; }
             public string DelregisterKortnamn { get; set; }
+            public int? InsamlingsfrekvensId { get; set; }
+            public string Insamlingsfrekvens { get; set; }
+            public int SelectedInsamlingsfrekvensId { get; set; }
             public int? ForeskriftsId { get; set; }
             public string Namn { get; set; }
             [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]

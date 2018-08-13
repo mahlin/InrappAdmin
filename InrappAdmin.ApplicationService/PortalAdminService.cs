@@ -131,6 +131,12 @@ namespace InrappAdmin.ApplicationService
             return infoTexts;
         }
 
+        public AdmInsamlingsfrekvens HamtaInsamlingsfrekvens(int insamlingsid)
+        {
+            var insamlingsfrekvens = _portalAdminRepository.GetInsamlingsfrekvens(insamlingsid);
+            return insamlingsfrekvens;
+        }
+
         public OpeningHoursInfoDTO HamtaOppettider()
         {
             var configInfo = _portalAdminRepository.GetAdmConfiguration();
@@ -274,6 +280,12 @@ namespace InrappAdmin.ApplicationService
         {
             var filkravList = _portalAdminRepository.GetAllFileRequirements();
             return filkravList;
+        }
+
+        public IEnumerable<AdmInsamlingsfrekvens> HamtaAllaInsamlingsfrekvenser()
+        {
+            var insamlingsfrekvensList = _portalAdminRepository.GetAllCollectionFrequencies();
+            return insamlingsfrekvensList;
         }
 
         public string HamtaKortnamnForDelregisterMedFilkravsId(int filkravId)
@@ -865,6 +877,16 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.CreateFileRequirement(filkrav);
         }
 
+        public void SkapaInsamlingsfrekvens(AdmInsamlingsfrekvens insamlingsfrekvens, string userName)
+        {
+            //Sätt datum och användare
+            insamlingsfrekvens.SkapadDatum = DateTime.Now;
+            insamlingsfrekvens.SkapadAv = userName;
+            insamlingsfrekvens.AndradDatum = DateTime.Now;
+            insamlingsfrekvens.AndradAv = userName;
+            _portalAdminRepository.CreateCollectFrequence(insamlingsfrekvens);
+        }
+
         public void UppdateraOrganisation(Organisation org, string userName)
         {
             //Sätt datum och användare
@@ -931,6 +953,7 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.UpdateFAQ(faq);
         }
 
+
         public void UppdateraHelgdag(AdmHelgdag holiday, string userName)
         {
             holiday.AndradDatum = DateTime.Now;
@@ -986,6 +1009,13 @@ namespace InrappAdmin.ApplicationService
             filkrav.AndradAv = userName;
             filkrav.AndradDatum = DateTime.Now;
             _portalAdminRepository.UpdateFileRequirement(filkrav);
+        }
+
+        public void UppdateraInsamlingsfrekvens(AdmInsamlingsfrekvens insamlingsfrekvens, string userName)
+        {
+            insamlingsfrekvens.AndradAv = userName;
+            insamlingsfrekvens.AndradDatum = DateTime.Now;
+            _portalAdminRepository.UpdateCollectFrequency(insamlingsfrekvens);
         }
 
         public void UppdateraAnvandarInfo(AppUserAdmin user, string userName)

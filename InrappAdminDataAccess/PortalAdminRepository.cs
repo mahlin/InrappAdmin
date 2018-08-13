@@ -236,6 +236,12 @@ namespace InrappAdmin.DataAccess
             return pageInfoId;
         }
 
+        public AdmInsamlingsfrekvens GetInsamlingsfrekvens(int insamlingsid)
+        {
+            var insamlingsfrekvens = DbContext.AdmInsamlingsfrekvens.SingleOrDefault(x => x.Id == insamlingsid);
+            return insamlingsfrekvens;
+        }
+
         public IEnumerable<AdmRegister> GetDirectories()
         {
             var registers = DbContext.AdmRegister.ToList();
@@ -301,6 +307,12 @@ namespace InrappAdmin.DataAccess
         {
             var fileReqs = DbContext.AdmFilkrav.ToList();
             return fileReqs;
+        }
+
+        public IEnumerable<AdmInsamlingsfrekvens> GetAllCollectionFrequencies()
+        {
+            var collFreq = DbContext.AdmInsamlingsfrekvens.ToList();
+            return collFreq;
         }
 
         public string GetSubDirectoryShortNameForExpectedFile(int filkravId)
@@ -648,6 +660,12 @@ namespace InrappAdmin.DataAccess
             DbContext.SaveChanges();
         }
 
+        public void CreateCollectFrequence(AdmInsamlingsfrekvens colFreq)
+        {
+            DbContext.AdmInsamlingsfrekvens.Add(colFreq);
+            DbContext.SaveChanges();
+        }
+
         public void UpdateOrganisation(Organisation org)
         {
             var orgDb = DbContext.Organisation.Where(u => u.Id == org.Id).Select(u => u).SingleOrDefault();
@@ -866,6 +884,13 @@ namespace InrappAdmin.DataAccess
             filereqToUpdate.AndradAv = filkrav.AndradAv;
             filereqToUpdate.AndradDatum = filkrav.AndradDatum;
 
+            DbContext.SaveChanges();
+        }
+
+        public void UpdateCollectFrequency(AdmInsamlingsfrekvens insamlingsfrekvens)
+        {
+            var collFreqToUpdate = DbContext.AdmInsamlingsfrekvens.SingleOrDefault(x => x.Id == insamlingsfrekvens.Id);
+            collFreqToUpdate.Insamlingsfrekvens = insamlingsfrekvens.Insamlingsfrekvens;
             DbContext.SaveChanges();
         }
 
