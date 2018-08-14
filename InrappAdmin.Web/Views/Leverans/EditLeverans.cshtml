@@ -9,7 +9,7 @@
     });
 
     $(function () {
-        $("#txtKommunkod").focus();
+        $("#ddlOrganisation").focus();
     });
 
     $(function () {
@@ -22,6 +22,12 @@
         });
     });
 
+    $(document).on('change', '#ddlOrganisation',
+        function() {
+            var selectedOrg = $('#ddlOrganisation').val();
+            $("#SelectedOrganisationId").val(selectedOrg);
+        });
+
 </script>
 
 @{
@@ -29,6 +35,7 @@
 }
 
 @Html.HiddenFor(m => m.Kommunkod)
+@Html.HiddenFor(m => m.SelectedOrganisationId)
 
 <div id="pageContainer">
     <div class="row">
@@ -41,11 +48,11 @@
                     @Html.HiddenFor(m => m.SelectedCountyCode)
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
                     <div class="form-group">
-                        @Html.LabelFor(m => m.Kommunkod, new { @class = "col-md-2 control-label" })
+                        @Html.Label("Kommun", new { @class = "col-md-2 control-label" })
                         <div class="col-md-10">
-                            @Html.TextBoxFor(m => m.Kommunkod, new { @class = "form-control", id = "txtKommunkod" })
-                            @Html.ValidationMessageFor(m => m.Kommunkod, "", new { @class = "text-danger" })
+                            @Html.DropDownListFor(m => m.SelectedOrganisationId, ViewBag.OrganisationList as SelectList, " - Välj kommunkod -", new { @class = "form-control", id = "ddlOrganisation" })
                         </div>
                     </div>
                     <div class="form-group">
@@ -63,33 +70,33 @@
     {
         @Html.HiddenFor(m => m.Kommunkod)
 
-    <div id="gridContent" style="font-family: Arial; padding: 20px;">
+        <div id="gridContent" style="font-family: Arial; padding: 20px;">
 
-        @{
-        ViewBag.Title = "Administrera levranser";
-        var grid = new WebGrid(source: Model.Leveranser, canPage: false, rowsPerPage: 10, ajaxUpdateContainerId: "deliveriesGrid");
-        }
+            @{
+                ViewBag.Title = "Administrera levranser";
+                var grid = new WebGrid(source: Model.Leveranser, canPage: false, rowsPerPage: 10, ajaxUpdateContainerId: "deliveriesGrid");
+            }
 
-        @grid.GetHtml(tableStyle: "webgrid-table",
-             headerStyle: "webgrid-header",
-             footerStyle: "webgrid-footer",
-             alternatingRowStyle: "webgrid-alternating-row",
-             selectedRowStyle: "webgrid-selected-row",
-             rowStyle: "webgrid-row-style",
-             mode: WebGridPagerModes.All,
-             columns: grid.Columns(
-                 grid.Column("RegisterKortnamn", "Register", format: @<text><label class="col1Width">@item.RegisterKortnamn</label></text>),
-                 grid.Column("Period", format: @<text><label class="colMinWidth">@item.Period</label></text>),
-                 grid.Column("Leveranstidpunkt", format: @<text><label class="col170Width">@item.Leveranstidpunkt</label></text>),
-                 grid.Column("Leveransid", format: @<text><label class="colMinWidth">@item.Leveransid</label></text>),
-                 grid.Column("Leveransstatus", format: @<text><label class="col1Width">@item.Leveransstatus</label></text>),
-                 grid.Column("Filnamn", format: @<text><label class="col350Width">@item.Filnamn</label></text>),
-                 grid.Column("Filstatus", format: @<text><label class="col1Width">@item.Filstatus</label></text>),
-                 //grid.Column("Test", format: (item) => (item.Resultatfil == "Ej kontrollerad") ? item.Resultatfil :
-                 //    Html.ActionLink("Visa återkopplingsfil", "DownloadFile", "FileUpload", new { fileName = item.Resultatfil }, null)),
-                 grid.Column("Återkoppling", format: @<text><label class="col3Width">@item.Resultatfil</label></text>)))
+            @grid.GetHtml(tableStyle: "webgrid-table",
+                      headerStyle: "webgrid-header",
+                      footerStyle: "webgrid-footer",
+                      alternatingRowStyle: "webgrid-alternating-row",
+                      selectedRowStyle: "webgrid-selected-row",
+                      rowStyle: "webgrid-row-style",
+                      mode: WebGridPagerModes.All,
+                      columns: grid.Columns(
+                          grid.Column("RegisterKortnamn", "Register", format: @<text><label class="col1Width">@item.RegisterKortnamn</label></text>),
+                                 grid.Column("Period", format: @<text><label class="colMinWidth">@item.Period</label></text>),
+                                         grid.Column("Leveranstidpunkt", format: @<text><label class="col170Width">@item.Leveranstidpunkt</label></text>),
+                                                 grid.Column("Leveransid", format: @<text><label class="colMinWidth">@item.Leveransid</label></text>),
+                                                         grid.Column("Leveransstatus", format: @<text><label class="col1Width">@item.Leveransstatus</label></text>),
+                                                                 grid.Column("Filnamn", format: @<text><label class="col350Width">@item.Filnamn</label></text>),
+                                                                         grid.Column("Filstatus", format: @<text><label class="col1Width">@item.Filstatus</label></text>),
+                                                                                 //grid.Column("Test", format: (item) => (item.Resultatfil == "Ej kontrollerad") ? item.Resultatfil :
+                                                                                 //    Html.ActionLink("Visa återkopplingsfil", "DownloadFile", "FileUpload", new { fileName = item.Resultatfil }, null)),
+                                                                                 grid.Column("Återkoppling", format: @<text><label class="col3Width">@item.Resultatfil</label></text>)))
 
-    </div>
+        </div>
     }
 </div>
 

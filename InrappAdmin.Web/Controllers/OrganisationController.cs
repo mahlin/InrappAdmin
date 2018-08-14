@@ -38,10 +38,14 @@ namespace InrappAdmin.Web.Controllers
 
         [Authorize]
         // GET: Organisation
-        public ActionResult GetOrganisation(OrganisationViewModels.OrganisationViewModel model)
+        public ActionResult GetOrganisation(OrganisationViewModels.OrganisationViewModel model, int selectedOrganisationId)
         {
             try
             {
+                if (selectedOrganisationId != 0)
+                {
+                    model.SelectedOrganisationId = selectedOrganisationId;
+                }
                 model.Organisation = _portalAdminService.HamtaOrganisation(model.SelectedOrganisationId);
                 model.Kommunkod = model.Organisation.Kommunkod;
                 var contacts = _portalAdminService.HamtaKontaktpersonerForOrg(model.Organisation.Id);
@@ -299,7 +303,7 @@ namespace InrappAdmin.Web.Controllers
                 };
                 return View("CustomError", errorModel);
             }
-            return RedirectToAction("GetOrganisation", new { kommunkod = model.Organisation.Kommunkod });
+            return RedirectToAction("GetOrganisation", new { selectedOrganisationId = model.SelectedOrganisationId });
         }
 
         [HttpPost]

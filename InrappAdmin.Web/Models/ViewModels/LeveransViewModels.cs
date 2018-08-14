@@ -22,6 +22,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public IEnumerable<FilloggDetaljDTO> Leveranser { get; set; }
             public IEnumerable<AdmInsamlingsfrekvens> Insamlingsfrekvenser { get; set; }
             public int SelectedRegisterId { get; set; }
+            public int SelectedOrganisationId { get; set; }
             public int SelectedDelregisterId { get; set; }
             public int SelectedFilkravId { get; set; }
             [DisplayName("Visa endast pågående")]
@@ -134,6 +135,7 @@ namespace InrappAdmin.Web.Models.ViewModels
         public class HistoryViewModel
         {
             public string Kommunkod { get; set; }
+            public int SelectedOrganisationId { get; set; }
             public string OrganisationsNamn { get; set; }
             public List<FilloggDetaljDTO> HistorikLista { get; set; }
             public List<AdmRegisterViewModel> RegisterList { get; set; }

@@ -344,23 +344,30 @@ namespace InrappAdmin.Web.Controllers
         [Authorize]
         public ActionResult GetDeliveries()
         {
+            // Ladda drop down lists. 
+            var orgListDTO = GetOrganisationDTOList();
+            ViewBag.OrganisationList = new SelectList(orgListDTO, "Id", "KommunkodOchOrgnamn");
             return View("EditLeverans");
         }
 
 
         // GET
-        public ActionResult GetOrganisationsDeliveries(string kommunkod)
+        public ActionResult GetOrganisationsDeliveries(int selectedOrganisationId)
         {
             var model = new LeveransViewModels.LeveransViewModel();
 
             try
             {
-                var org = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+                var org = _portalAdminService.HamtaOrganisation(selectedOrganisationId);
                 IEnumerable<FilloggDetaljDTO>
                     historyFileList = _portalAdminService.HamtaHistorikForOrganisation(org.Id);
                 
                 model.Leveranser = historyFileList;
-                model.Kommunkod = kommunkod;
+                model.Kommunkod = org.Kommunkod;
+                // Ladda drop down lists. 
+                var orgListDTO = GetOrganisationDTOList();
+                ViewBag.OrganisationList = new SelectList(orgListDTO, "Id", "KommunkodOchOrgnamn");
+
             }
             catch (Exception e)
             {
@@ -469,12 +476,16 @@ namespace InrappAdmin.Web.Controllers
         {
             var model = new LeveransViewModels.HistoryViewModel();
             model.SelectableYears = new List<int>();
+            // Ladda drop down lists. 
+            var orgListDTO = GetOrganisationDTOList();
+            ViewBag.OrganisationList = new SelectList(orgListDTO, "Id", "KommunkodOchOrgnamn");
             return View("LatestDeliveries", model);
         }
 
         // POST: Leveransstatus
-        public ActionResult GetDeliveryStatusForOrg(int chosenYear = 0, string kommunkod = "")
+        public ActionResult GetDeliveryStatusForOrg( int selectedOrganisationId,int chosenYear = 0)
         {
+            var org = _portalAdminService.HamtaOrganisation(selectedOrganisationId);
             var model = new LeveransViewModels.HistoryViewModel();
             model.LeveransListaRegister = new List<RegisterLeveransDTO>();
             var selectableYearsForUser = new List<int>();
@@ -487,8 +498,8 @@ namespace InrappAdmin.Web.Controllers
                 }
 
                 model.SelectedYear = chosenYear;
-                model.Kommunkod = kommunkod;
-                var org = _portalAdminService.HamtaOrganisationForKommunkod(kommunkod);
+                model.Kommunkod = org.Kommunkod;
+                model.SelectedOrganisationId = selectedOrganisationId;
                 model.OrganisationsNamn = org.Organisationsnamn;
                 IEnumerable<AdmRegister> admRegList = _portalAdminService.HamtaRegisterForOrg(org.Id);
 
@@ -568,10 +579,9 @@ namespace InrappAdmin.Web.Controllers
                     model.SelectableYears = selectableYearsForUser;
                 }
 
-                //// Ladda drop down lists. 
-                //var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
-                //this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
-                ////model.SelectedFAQ.SelectedRegisterId = 0;
+                // Ladda drop down lists. 
+                var orgListDTO = GetOrganisationDTOList();
+                ViewBag.OrganisationList = new SelectList(orgListDTO, "Id", "KommunkodOchOrgnamn");
             }
             catch (Exception e)
             {
@@ -1379,6 +1389,30 @@ namespace InrappAdmin.Web.Controllers
             //model.SelectedRegisterId = 0;
 
             return model;
+        }
+
+        private IEnumerable<OrganisationDTO> GetOrganisationDTOList()
+        {
+            var orgList = _portalAdminService.HamtaAllaOrganisationer();
+            var orgListDTO = new List<OrganisationDTO>();
+
+            foreach (var org in orgList)
+            {
+                if (org.Kommunkod != null) //Endast kommuner tills vidare
+                {
+                    var organisationDTO = new OrganisationDTO
+                    {
+                        Id = org.Id,
+                        Kommunkod = org.Kommunkod,
+                        Landstingskod = org.Landstingskod,
+                        Organisationsnamn = org.Organisationsnamn,
+                        KommunkodOchOrgnamn = org.Kommunkod + ", " + org.Organisationsnamn
+                    };
+                    orgListDTO.Add(organisationDTO);
+                }
+            }
+
+            return orgListDTO;
         }
     }
 }

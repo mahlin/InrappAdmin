@@ -18,6 +18,10 @@
 
 <script>
 
+    $(function () {
+        $("#ddlOrganisation").focus();
+    });
+
     var selecteableYearsList = @Html.Raw(Json.Encode(Model.SelectableYears));
     $(document).ready(function () {
         $('.panel-heading').toggleClass('collapsed');
@@ -54,11 +58,19 @@
             .collapse('show');
     });
 
+    $(document).on('change', '#ddlOrganisation',
+        function() {
+            var selectedOrg = $('#ddlOrganisation').val();
+            $("#SelectedOrganisationId").val(selectedOrg);
+        });
+
 </script>
 
 @{
     ViewBag.Title = "Leveransstatus";
 }
+
+@Html.HiddenFor(m => m.SelectedOrganisationId)
 
 <div class="row">
     <div class="col-md-8 padding-top-25">
@@ -70,11 +82,17 @@
                 <h4>Välj organisation</h4>
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @*<div class="form-group">
+                        @Html.LabelFor(m => m.Kommunkod, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.Kommunkod, new { maxlength = 4, placeholder = "4 siffror", @class = "form-control", id = "txtKommunkod" })
+                            @Html.ValidationMessageFor(m => m.Kommunkod, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
                 <div class="form-group">
-                    @Html.LabelFor(m => m.Kommunkod, new { @class = "col-md-2 control-label" })
+                    @Html.Label("Kommun", new { @class = "col-md-2 control-label" })
                     <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.Kommunkod, new { maxlength = 4, placeholder = "4 siffror", @class = "form-control", id = "txtKommunkod" })
-                        @Html.ValidationMessageFor(m => m.Kommunkod, "", new { @class = "text-danger" })
+                        @Html.DropDownListFor(m => m.SelectedOrganisationId, ViewBag.OrganisationList as SelectList, " - Välj kommunkod -", new { @class = "form-control", id = "ddlOrganisation" })
                     </div>
                 </div>
                 <div class="form-group">
@@ -92,25 +110,25 @@
 {
     if (Model.OrganisationsNamn != null)
     {
-    <div>
-        <div class="col-md-4">
-            <H4>Leveransstatus för @Html.Raw(Model.OrganisationsNamn)</H4>
+        <div>
+            <div class="col-md-4">
+                <H4>Leveransstatus för @Html.Raw(Model.OrganisationsNamn)</H4>
+            </div>
+            @Html.HiddenFor(m => m.SelectedYear)
+            @Html.HiddenFor(m => m.Kommunkod)
+            <div class="row col-md-6">
+                @*<H4> &lt; &nbsp;&nbsp;&nbsp;&nbsp;@Html.Raw(Model.SelectedYear)&nbsp;&nbsp;&nbsp;&nbsp; &gt;</H4>*@
+                <div class="col-md-1" id="previousYear">
+                    <H4>@Html.ActionLink("<", "GetDeliveryStatusForOrg", "Leverans", new { chosenYear = (Model.SelectedYear - 1), selectedOrganisationId = Model.SelectedOrganisationId }, null)</H4>
+                </div>
+                <div class="col-md-2">
+                    <H4>&nbsp;&nbsp;@Html.Raw(Model.SelectedYear)</H4>
+                </div>
+                <div class="col-md-2" id="nextYear">
+                    <H4> @Html.ActionLink(">", "GetDeliveryStatusForOrg", "Leverans", new { chosenYear = (Model.SelectedYear + 1), selectedOrganisationId = Model.SelectedOrganisationId }, null)</H4>
+                </div>
+            </div>
         </div>
-        @Html.HiddenFor(m => m.SelectedYear)
-        @Html.HiddenFor(m => m.Kommunkod)
-        <div class="row col-md-6">
-            @*<H4> &lt; &nbsp;&nbsp;&nbsp;&nbsp;@Html.Raw(Model.SelectedYear)&nbsp;&nbsp;&nbsp;&nbsp; &gt;</H4>*@
-            <div class="col-md-1" id="previousYear">
-                <H4>@Html.ActionLink("<", "GetDeliveryStatusForOrg", "Leverans", new { chosenYear = (Model.SelectedYear - 1), kommunkod = Model.Kommunkod }, null)</H4>
-            </div>
-            <div class="col-md-2">
-                <H4>&nbsp;&nbsp;@Html.Raw(Model.SelectedYear)</H4>
-            </div>
-            <div class="col-md-2" id="nextYear">
-                <H4> @Html.ActionLink(">", "GetDeliveryStatusForOrg", "Leverans", new { chosenYear = (Model.SelectedYear + 1), kommunkod = Model.Kommunkod }, null)</H4>
-            </div>
-        </div>
-    </div>
 
         @Html.Raw(ViewBag.Text)
         <br />
