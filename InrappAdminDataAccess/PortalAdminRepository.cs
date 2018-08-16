@@ -433,7 +433,7 @@ namespace InrappAdmin.DataAccess
 
         public IEnumerable<Rapporteringsresultat> GetReportResultForDirAndPeriod(int delRegId, string period)
         {
-            var repResults = DbContext.RapporteringsResultat.Where(x => x.DelregisterId == delRegId && x.Period == period).ToList();
+            var repResults = DbContext.RapporteringsResultat.Where(x => x.DelregisterId == delRegId && x.Period == period && x.AntalLeveranser == null).ToList();
             return repResults;
         }
 
