@@ -37,6 +37,12 @@
             $('#GridBody').find("input:checkbox").each(function() {
                 this.checked = ischecked;
             });
+            $.each(rappResLista,function(index, item) {
+                if (ischecked)
+                    $('#RapportResList_' + index + '__Mail').val('True');
+                else
+                    $('#RapportResList_' + index + '__Mail').val('False');
+            });
         });
     });
 
@@ -163,8 +169,8 @@
         });
 
     function setMail(id) {
-        var rappResLista = @Html.Raw(Json.Encode(Model.RapportResList));
-        var y = $('#RapportResList_1__Mail').val();
+        //var rappResLista = @Html.Raw(Json.Encode(Model.RapportResList));
+        //var y = $('#RapportResList_1__Mail').val();
         var selectedId = parseInt(id);
         $.each(rappResLista,
             function(index, item) {
@@ -177,6 +183,7 @@
             });
     }
 
+    var rappResLista = @Html.Raw(Json.Encode(Model.RapportResList));
     var registerLista = @Html.Raw(Json.Encode(Model.RegisterList));
     var antalRader = @Html.Raw(Json.Encode(Model.AntRader));
 
@@ -277,6 +284,10 @@
         {
             using (Html.BeginForm("SendReminder", "Leverans", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "reminderForm" }))
             {
+                @Html.HiddenFor(m => m.SelectedRegisterId)
+                @Html.HiddenFor(m => m.SelectedDelregisterId)
+                @Html.HiddenFor(m => m.SelectedPeriod)
+
                 <div class="row col-md-12">
                     <div class="col-md-10 padding-top-15" id="headerText" style="padding-left: 20px; ">
                     </div>

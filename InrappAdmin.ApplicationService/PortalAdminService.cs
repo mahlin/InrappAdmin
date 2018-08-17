@@ -449,8 +449,23 @@ namespace InrappAdmin.ApplicationService
         public IEnumerable<RapporteringsresultatDTO> HamtaRapporteringsresultatForRegOchPeriod(int delRegId, string period)
         {
             var rappResList = _portalAdminRepository.GetReportResultForDirAndPeriod(delRegId, period);
+            var ejLevList = new List<Rapporteringsresultat>();
 
-            var rappResListDTO = ConvertRappListDBToVM(rappResList, delRegId);
+            //Ta bara med dem som inte rapporterat alls eller som har leveransstatus "Leveransen är inte godkänd"
+            foreach (var rappRes in rappResList)
+            {
+                if (rappRes.AntalLeveranser == null)
+                {
+                    ejLevList.Add(rappRes);
+                }
+                else if (rappRes.Leveransstatus == "Leveransen är inte godkänd")
+                {
+                    ejLevList.Add(rappRes);
+                }
+                
+            }
+
+            var rappResListDTO = ConvertRappListDBToVM(ejLevList, delRegId);
             return rappResListDTO;
         }
 
@@ -1180,6 +1195,7 @@ namespace InrappAdmin.ApplicationService
             foreach (var resRad in rappResList)
             {
                 i++;
+
                 var rappResRadVM = new RapporteringsresultatDTO
                 {
                     Id = i,
