@@ -44,6 +44,7 @@
                 var x = tr.find("#FilkravId").html();
                 var filkravId = tr.find("#FilkravId").html();
                 var namn = tr.find("#Namn").val();
+                var insamlingsfrekvens = tr.find("#Insamlingsfrekvens").val();
                 var uppgiftsstartdag = tr.find("#Uppgiftsstartdag").val();
                 var uppgiftslutdag = tr.find("#Uppgiftslutdag").val();
                 var rapporteringsstartdag = tr.find("#Rapporteringsstartdag").val();
@@ -60,6 +61,7 @@
                 {
                     "Id": filkravId,
                     "Namn": namn,
+                    "InsamlingsfrekvensId": insamlingsfrekvens,
                     "Uppgiftsstartdag": uppgiftsstartdag,
                     "Uppgiftslutdag": uppgiftslutdag,
                     "Rapporteringsstartdag": rapporteringsstartdag,
@@ -97,6 +99,7 @@
             function() {
                 var tr = $(this).parents('tr:first');
                 var namn = tr.find("#Namn").val();
+                var insamlingsfrekvens = tr.find("#Insamlingsfrekvens").val();
                 var uppgiftsstartdag = tr.find("#Uppgiftsstartdag").val();
                 var uppgiftslutdag = tr.find("#Uppgiftslutdag").val();
                 var rapporteringsstartdag = tr.find("#Rapporteringsstartdag").val();
@@ -109,6 +112,7 @@
                 var uppgifterAntalmanader = tr.find("#UppgifterAntalmanader").val();
 
                 tr.find("#lblNamn").text(namn);
+                tr.find("#lblInsamlingsfrekvens").text(insamlingsfrekvens);
                 tr.find("#lblUppgiftsstart").text(uppgiftsstartdag);
                 tr.find("#lblUppgiftslutdag").text(uppgiftslutdag);
                 tr.find("#lblRapporteringsstartdag").text(rapporteringsstartdag);
