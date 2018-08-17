@@ -289,6 +289,11 @@ namespace InrappAdmin.Web.Controllers
                         Namn = filkrav.Namn
                     };
 
+                    if (filkrav.InsamlingsfrekvensId != null)
+                    {
+                        var id = filkrav.InsamlingsfrekvensId.Value;
+                        forvFilView.SelectedInsamlingsfrekvensId = id;
+                    }
                     filkravViewList.Add(forvFilView);
                 }
 
@@ -298,6 +303,8 @@ namespace InrappAdmin.Web.Controllers
                 var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
                 this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
                 model.SelectedRegisterId = regId;
+                var insamlingsfrekvensList = _portalAdminService.HamtaAllaInsamlingsfrekvenser();
+                ViewBag.InsamlingsfrekvensList = CreateInsamlingsfrekvensDropDownList(insamlingsfrekvensList);
             }
             catch (Exception e)
             {
