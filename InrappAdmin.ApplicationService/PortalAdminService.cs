@@ -1259,7 +1259,7 @@ namespace InrappAdmin.ApplicationService
                     //Check if user is active
                     if (contactList[i].AktivTom == null)
                     {
-                        if (i == 0)
+                        if (email == String.Empty)
                         {
                             email = contactList[i].Email;
                         }
@@ -1272,7 +1272,7 @@ namespace InrappAdmin.ApplicationService
                     {
                         if (contactList[i].AktivTom >= DateTime.Now.Date)
                         {
-                            if (i == 0)
+                            if (email == String.Empty)
                             {
                                 email = contactList[i].Email;
                             }
