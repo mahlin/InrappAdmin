@@ -440,13 +440,14 @@ namespace InrappAdmin.Web.Controllers
         public ActionResult CreateOrganisation(OrganisationViewModels.OrganisationViewModel model)
         {
             var kommunkod = String.Empty;
+            var orgId = 0;
             if (ModelState.IsValid)
             {
                 try
                 {
                     var userName = User.Identity.GetUserName();
-                    var orgId = _portalAdminService.SkapaOrganisation(model.Organisation, userName);
-                    kommunkod = _portalAdminService.HamtaKommunkodForOrg(orgId);
+                    orgId = _portalAdminService.SkapaOrganisation(model.Organisation, userName);
+                    //kommunkod = _portalAdminService.HamtaKommunkodForOrg(orgId);
                 }
                 catch (Exception e)
                 {
@@ -459,7 +460,7 @@ namespace InrappAdmin.Web.Controllers
                     };
                     return View("CustomError", errorModel);
                 }
-                return RedirectToAction("GetOrganisation", new { kommunkod = kommunkod });
+                return RedirectToAction("GetOrganisation", new { selectedOrganisationId = orgId });
             }
 
             return View();
@@ -618,7 +619,7 @@ namespace InrappAdmin.Web.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult DeleteContact(string contactId, string kommunkod)
+        public ActionResult DeleteContact(string contactId, int selectedOrgId = 0)
         {
             try
             {
@@ -635,7 +636,7 @@ namespace InrappAdmin.Web.Controllers
                 };
                 return View("CustomError", errorModel);
             }
-            return RedirectToAction("GetOrganisationsContacts", new {kommunkod = kommunkod});
+            return RedirectToAction("GetOrganisationsContacts", new { selectedOrgId = selectedOrgId });
         }
 
 
