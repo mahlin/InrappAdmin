@@ -65,6 +65,8 @@ namespace InrappAdmin.Web.Models
                     return "Lösenordet måste ha minst en liten bokstav ('a'-'z').";
                 case "Passwords must have at least one uppercase ('A'-'Z').":
                     return "Lösenordet måste ha minst en stor bokstav ('A'-'Z').";
+                case "Passwords must have at least one non letter or digit character. Passwords must have at least one digit ('0'-'9'). Passwords must have at least one uppercase ('A'-'Z').":
+                    return "Lösenordet måste ha minst ett tecken som inte är alfanumersikt eller en siffra. Lösenordet måste ha minst en siffra ('0'-'9'). Lösenordet måste ha minst en stor bokstav ('A'-'Z').";
                 default:
                     return "";
             }

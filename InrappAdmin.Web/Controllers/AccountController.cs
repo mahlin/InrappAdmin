@@ -32,9 +32,11 @@ namespace InrappAdmin.Web.Controllers
         {
           _portalAdminService =
               new PortalAdminService(new PortalAdminRepository(new InrappAdminDbContext(), new InrappAdminIdentityDbContext()));
+            _errorDecsriber = new CustomIdentityResultErrorDescriber();
+
         }
 
-      public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager roleManager)
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager roleManager)
       {
           _errorDecsriber = new CustomIdentityResultErrorDescriber();
           UserManager = userManager;
@@ -42,9 +44,11 @@ namespace InrappAdmin.Web.Controllers
           RoleManager = roleManager;
           _portalAdminService =
               new PortalAdminService(new PortalAdminRepository(new InrappAdminDbContext(), new InrappAdminIdentityDbContext()));
-      }
+          _errorDecsriber = new CustomIdentityResultErrorDescriber();
 
-       public ApplicationUserManager UserManager
+        }
+
+        public ApplicationUserManager UserManager
        {
          get
          {
@@ -300,6 +304,7 @@ namespace InrappAdmin.Web.Controllers
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
             AddErrors(result);
+
             return View();
         }
 
@@ -359,8 +364,19 @@ namespace InrappAdmin.Web.Controllers
         {
             foreach (var error in result.Errors)
             {
-            ModelState.AddModelError("", error);
+                //ModelState.AddModelError("", error);
+                ModelState.AddModelError("", _errorDecsriber.LocalizeErrorMessage(error));
             }
+            //foreach (var errorMsg in result.Errors)
+            //{
+            //    //Om flera felmdedelanden i samma error - splitta på '.'
+            //    string[] errors = errorMsg.Split('.');
+
+            //    foreach (var error in errors)
+            //    {
+            //        ModelState.AddModelError("", _errorDecsriber.LocalizeErrorMessage(error + "."));
+            //    }
+            //}
         }
 
         private ActionResult RedirectToLocal(string returnUrl, bool admin)
