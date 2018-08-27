@@ -710,7 +710,7 @@ namespace InrappAdmin.Web.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult UpdateFilkrav(AdmFilkrav filkrav, string regId = "0")
+        public ActionResult UpdateFilkrav(LeveransViewModels.AdmFilkravViewModel filkrav, string regId = "0")
         {
 
             if (ModelState.IsValid)
@@ -718,7 +718,19 @@ namespace InrappAdmin.Web.Controllers
                 try
                 {
                     var userName = User.Identity.GetUserName();
-                    _portalAdminService.UppdateraFilkrav(filkrav, userName);
+                    var filkravDb = ConvertAdmFilkravVMToDb(filkrav);
+                    
+                    //Felkatigt insamlingsfrekvensid
+                    if (filkravDb.InsamlingsfrekvensId == 0)
+                    {
+                        var errorModel = new CustomErrorPageModel
+                        {
+                            Information = "Ett fel inträffade vid uppdatering av filkrav. Felaktig insamlingsfrekvens.",
+                            ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
+                        };
+                        return View("CustomError", errorModel);
+                    }
+                    _portalAdminService.UppdateraFilkrav(filkravDb, userName);
                 }
                 catch (Exception e)
                 {
@@ -1164,6 +1176,11 @@ namespace InrappAdmin.Web.Controllers
                     UppgifterAntalmanader = filkrav.UppgifterAntalmanader
                 };
 
+                //Dropdown för insamlingsfrekvens
+                var insamlingsfrekvensList = _portalAdminService.HamtaAllaInsamlingsfrekvenser();
+                filkravView.InsamlingsfrekvensDDL = GetInsamlingsfrekvensSelectlist(insamlingsfrekvensList);
+                //filkravView.SelectedInsamlingsfrekvensId = filkravView.InsamlingsfrekvensId;
+
                 if (filkravView.InsamlingsfrekvensId != null)
                 {
                     var id = filkravView.InsamlingsfrekvensId.Value;
@@ -1184,6 +1201,7 @@ namespace InrappAdmin.Web.Controllers
         {
             var admFilkravDb = new AdmFilkrav
             {
+                Id = filkrav.Id,
                 Namn = filkrav.Namn,
                 DelregisterId = filkrav.SelectedDelregisterId,
                 InsamlingsfrekvensId = filkrav.SelectedInsamlingsfrekvensId,
@@ -1199,6 +1217,20 @@ namespace InrappAdmin.Web.Controllers
                 RapporteringEfterAntalManader = filkrav.RapporteringEfterAntalManader,
                 UppgifterAntalmanader = filkrav.UppgifterAntalmanader
             };
+
+            //TODO - tillfällig lösning. Använd dropdown i gridden i editläget istället => Insamlingsfrekvensid
+            //Hämta Insamlingsfrekvensid utifrån Insamlingsfrekvens (text)
+            if (admFilkravDb.InsamlingsfrekvensId == 0 && !String.IsNullOrEmpty(filkrav.Insamlingsfrekvens))
+            {
+                var insamlingsfrekvenser =  _portalAdminService.HamtaAllaInsamlingsfrekvenser();
+                foreach (var insamlingsfrekvens in insamlingsfrekvenser)
+                {
+                    if (insamlingsfrekvens.Insamlingsfrekvens.ToUpper() == filkrav.Insamlingsfrekvens.ToUpper())
+                    {
+                        admFilkravDb.InsamlingsfrekvensId = insamlingsfrekvens.Id;
+                    }
+                }
+            }
 
             return admFilkravDb;
         }
@@ -1300,6 +1332,24 @@ namespace InrappAdmin.Web.Controllers
             lstobj = new SelectList(list, "Value", "Text");
 
             return lstobj;
+        }
+
+        //TODO - bara en metod för detta? (se CreateInsamlingsfrekvensDropDownList ovan) Denna för drop i editable grid, filkrav
+        public SelectList GetInsamlingsfrekvensSelectlist(IEnumerable<AdmInsamlingsfrekvens> insamlingsfrekvensList)
+        {
+            SelectList lstobj = null;
+
+            var list = insamlingsfrekvensList
+                .Select(p =>
+                    new SelectListItem
+                    {
+                        Value = p.Id.ToString(),
+                        Text = p.Insamlingsfrekvens
+                    });
+
+            SelectList objinfo = new SelectList(list, "Value", "Text");
+
+            return objinfo;
         }
 
         /// <summary>  

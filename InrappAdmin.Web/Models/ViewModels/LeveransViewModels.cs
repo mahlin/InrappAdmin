@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using InrappAdmin.ApplicationService.DTOModel;
 using InrappAdmin.DomainModel;
 
@@ -18,7 +19,7 @@ namespace InrappAdmin.Web.Models.ViewModels
 
             public List<AdmForvantadleveransViewModel> BlivandeForvantadeLeveranser { get; set; }
             public IEnumerable<AdmForvantadfilViewModel> ForvantadeFiler { get; set; }
-            public IEnumerable<AdmFilkravViewModel> Filkrav { get; set; }
+            public List<AdmFilkravViewModel> Filkrav { get; set; }
             public IEnumerable<FilloggDetaljDTO> Leveranser { get; set; }
             public IEnumerable<AdmInsamlingsfrekvens> Insamlingsfrekvenser { get; set; }
             public int SelectedRegisterId { get; set; }
@@ -96,6 +97,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public int SelectedRegisterId { get; set; }
             public string DelregisterKortnamn { get; set; }
             public int? InsamlingsfrekvensId { get; set; }
+            public SelectList InsamlingsfrekvensDDL { get; set; }
             public string Insamlingsfrekvens { get; set; }
             public int SelectedInsamlingsfrekvensId { get; set; }
             public int? ForeskriftsId { get; set; }

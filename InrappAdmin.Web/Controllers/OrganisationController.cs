@@ -499,7 +499,7 @@ namespace InrappAdmin.Web.Controllers
                     };
                     return View("CustomError", errorModel);
                 }
-                return RedirectToAction("GetOrganisationsOrgUnits", new { selectedOrgId = org.Id });
+                return RedirectToAction("GetOrganisationsOrgUnits", new { selectedOrgId = orgenhet.OrganisationsId });
             }
 
             return View();

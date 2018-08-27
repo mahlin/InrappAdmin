@@ -61,7 +61,7 @@
                 {
                     "Id": filkravId,
                     "Namn": namn,
-                    "InsamlingsfrekvensId": insamlingsfrekvens,
+                    "Insamlingsfrekvens": insamlingsfrekvens,
                     "Uppgiftsstartdag": uppgiftsstartdag,
                     "Uppgiftslutdag": uppgiftslutdag,
                     "Rapporteringsstartdag": rapporteringsstartdag,
@@ -175,6 +175,8 @@
                         grid.Column("Namn", "Namn", format: @<text><span class="display-mode">
                         <label id="lblNamn" style="width: 200px;">@item.Namn </label></span>
                         <input type="text" id="Namn" value="@item.Namn" class="edit-mode form-control" style="width: 400px !important;" /></text>, style: "col5Width"),
+                        //grid.Column(header: "Status", format: @item => Html.DropDownList(@item.SelectedDelregisterId, (IEnumerable<SelectListItem>)Model.Filkrav[0].InsamlingsfrekvensDDL)),
+                        //grid.Column(header: "Status2", format: @item => Html.DropDownList("value", @item.InsamlingsfrekvensDDL, " - Välj delregister -", new {id = "ddlDelregister", @class = "form-control", style = "max-width:250px !important"})),
                         grid.Column("Insamlingsfrekvens", "Insamlingsfrekvens", format: @<text><span class="display-mode"><label id="lblInsamlingsfrekvens">@item.Insamlingsfrekvens</label></span>
                         <input type="text" id="Insamlingsfrekvens" value="@item.Insamlingsfrekvens" class="edit-mode form-control" /></text>, style: "col1Width"),
                         grid.Column("Uppgiftsstart", "Uppgiftsstart", format: @<text><span class="display-mode">
