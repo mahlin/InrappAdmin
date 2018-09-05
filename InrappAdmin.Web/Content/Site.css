@@ -234,8 +234,20 @@ textarea {
     padding: 3px 7px 2px;
 }
 
+.col165Width {
+    width: 165px;
+    margin: -5px;
+    padding: 3px 7px 2px;
+}
+
 .col170Width {
     width: 170px;
+    margin: -5px;
+    padding: 3px 7px 2px;
+}
+
+.col180Width {
+    width: 180px;
     margin: -5px;
     padding: 3px 7px 2px;
 }

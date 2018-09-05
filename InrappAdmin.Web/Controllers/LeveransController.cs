@@ -1117,6 +1117,11 @@ namespace InrappAdmin.Web.Controllers
 
                 };
 
+                if (!String.IsNullOrEmpty(forvLevView.FilkravNamn))
+                {
+                    forvLevView.FilkravNamn = forvLevView.FilkravNamn.Trim();
+                }
+
                 forvLevViewList.Add(forvLevView);
             }
             return forvLevViewList;
