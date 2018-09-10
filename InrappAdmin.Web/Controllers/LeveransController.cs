@@ -197,6 +197,9 @@ namespace InrappAdmin.Web.Controllers
                     var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
                     this.ViewBag.RegisterList = CreateRegisterDropDownList(registerList);
                     model.SelectedRegisterId = dirId;
+                    var insamlingsfrekvensList = _portalAdminService.HamtaAllaInsamlingsfrekvenser();
+                    ViewBag.InsamlingsfrekvensList = CreateInsamlingsfrekvensDropDownList(insamlingsfrekvensList);
+                    model.SelectedInsamlingsfrekvensId = 0;
                 }
                 else
                 {
@@ -278,26 +281,9 @@ namespace InrappAdmin.Web.Controllers
             {
                 var filkravViewList = new List<LeveransViewModels.AdmFilkravViewModel>();
                 var filkravList = _portalAdminService.HamtaAllaFilkrav();
-
-                foreach (var filkrav in filkravList)
-                {
-                    var forvFilView = new LeveransViewModels.AdmFilkravViewModel
-                    {
-                        Id = filkrav.Id,
-                        DelregisterKortnamn = _portalAdminService.HamtaKortnamnForDelregister(filkrav.DelregisterId),
-                        ForeskriftsId = filkrav.ForeskriftsId,
-                        Namn = filkrav.Namn
-                    };
-
-                    if (filkrav.InsamlingsfrekvensId != null)
-                    {
-                        var id = filkrav.InsamlingsfrekvensId.Value;
-                        forvFilView.SelectedInsamlingsfrekvensId = id;
-                    }
-                    filkravViewList.Add(forvFilView);
-                }
-
-                model.Filkrav = filkravViewList;
+               
+                //Lägg över i modellen
+                model.Filkrav = ConvertFilkravToViewModel(filkravList.ToList());
 
                 // Ladda drop down lists. 
                 var registerList = _portalAdminService.HamtaAllaRegisterForPortalen();
@@ -712,25 +698,15 @@ namespace InrappAdmin.Web.Controllers
         [Authorize]
         public ActionResult UpdateFilkrav(LeveransViewModels.AdmFilkravViewModel filkrav, string regId = "0")
         {
-
+            var x = filkrav.InsamlingsfrekvensId;
             if (ModelState.IsValid)
             {
                 try
                 {
                     var userName = User.Identity.GetUserName();
                     var filkravDb = ConvertAdmFilkravVMToDb(filkrav);
-                    
-                    //Felkatigt insamlingsfrekvensid
-                    if (filkravDb.InsamlingsfrekvensId == 0)
-                    {
-                        var errorModel = new CustomErrorPageModel
-                        {
-                            Information = "Ett fel inträffade vid uppdatering av filkrav. Felaktig insamlingsfrekvens.",
-                            ContactEmail = ConfigurationManager.AppSettings["ContactEmail"],
-                        };
-                        return View("CustomError", errorModel);
-                    }
-                    _portalAdminService.UppdateraFilkrav(filkravDb, userName);
+
+                     _portalAdminService.UppdateraFilkrav(filkravDb, userName);
                 }
                 catch (Exception e)
                 {
@@ -997,7 +973,7 @@ namespace InrappAdmin.Web.Controllers
             model.SelectedRegisterId = selectedRegId;
             var insamlingsfrekvensList = _portalAdminService.HamtaAllaInsamlingsfrekvenser();
             ViewBag.InsamlingsfrekvensList = CreateInsamlingsfrekvensDropDownList(insamlingsfrekvensList);
-            model.SelectedInsamlingsfrekvensId = 0;
+            model.InsamlingsfrekvensId = 0;
             return View(model);
         }
 
@@ -1181,16 +1157,12 @@ namespace InrappAdmin.Web.Controllers
                     UppgifterAntalmanader = filkrav.UppgifterAntalmanader
                 };
 
-                //Dropdown för insamlingsfrekvens
-                var insamlingsfrekvensList = _portalAdminService.HamtaAllaInsamlingsfrekvenser();
-                filkravView.InsamlingsfrekvensDDL = GetInsamlingsfrekvensSelectlist(insamlingsfrekvensList);
-                //filkravView.SelectedInsamlingsfrekvensId = filkravView.InsamlingsfrekvensId;
-
                 if (filkravView.InsamlingsfrekvensId != null)
                 {
                     var id = filkravView.InsamlingsfrekvensId.Value;
                     filkravView.Insamlingsfrekvens =
                         _portalAdminService.HamtaInsamlingsfrekvens(id).Insamlingsfrekvens;
+                    filkravView.InsamlingsfrekvensId = filkravView.InsamlingsfrekvensId.Value;
                 }
                 else
                 {
@@ -1209,7 +1181,7 @@ namespace InrappAdmin.Web.Controllers
                 Id = filkrav.Id,
                 Namn = filkrav.Namn,
                 DelregisterId = filkrav.SelectedDelregisterId,
-                InsamlingsfrekvensId = filkrav.SelectedInsamlingsfrekvensId,
+                InsamlingsfrekvensId = filkrav.InsamlingsfrekvensId,
                 ForeskriftsId = filkrav.ForeskriftsId,
                 Uppgiftsstartdag = filkrav.Uppgiftsstartdag,
                 Uppgiftslutdag = filkrav.Uppgiftslutdag,
@@ -1222,20 +1194,6 @@ namespace InrappAdmin.Web.Controllers
                 RapporteringEfterAntalManader = filkrav.RapporteringEfterAntalManader,
                 UppgifterAntalmanader = filkrav.UppgifterAntalmanader
             };
-
-            //TODO - tillfällig lösning. Använd dropdown i gridden i editläget istället => Insamlingsfrekvensid
-            //Hämta Insamlingsfrekvensid utifrån Insamlingsfrekvens (text)
-            if (admFilkravDb.InsamlingsfrekvensId == 0 && !String.IsNullOrEmpty(filkrav.Insamlingsfrekvens))
-            {
-                var insamlingsfrekvenser =  _portalAdminService.HamtaAllaInsamlingsfrekvenser();
-                foreach (var insamlingsfrekvens in insamlingsfrekvenser)
-                {
-                    if (insamlingsfrekvens.Insamlingsfrekvens.ToUpper() == filkrav.Insamlingsfrekvens.ToUpper())
-                    {
-                        admFilkravDb.InsamlingsfrekvensId = insamlingsfrekvens.Id;
-                    }
-                }
-            }
 
             return admFilkravDb;
         }
@@ -1337,24 +1295,6 @@ namespace InrappAdmin.Web.Controllers
             lstobj = new SelectList(list, "Value", "Text");
 
             return lstobj;
-        }
-
-        //TODO - bara en metod för detta? (se CreateInsamlingsfrekvensDropDownList ovan) Denna för drop i editable grid, filkrav
-        public SelectList GetInsamlingsfrekvensSelectlist(IEnumerable<AdmInsamlingsfrekvens> insamlingsfrekvensList)
-        {
-            SelectList lstobj = null;
-
-            var list = insamlingsfrekvensList
-                .Select(p =>
-                    new SelectListItem
-                    {
-                        Value = p.Id.ToString(),
-                        Text = p.Insamlingsfrekvens
-                    });
-
-            SelectList objinfo = new SelectList(list, "Value", "Text");
-
-            return objinfo;
         }
 
         /// <summary>  

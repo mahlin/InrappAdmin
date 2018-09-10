@@ -51,7 +51,7 @@
             <div class="form-group">
                 @Html.Label("Insamlingsfrekvens", new { @class = "control-label col-md-2" })
                 <div class="col-md-10" style="width: 255px !important;">
-                    @Html.DropDownListFor(m => m.SelectedInsamlingsfrekvensId, ViewBag.InsamlingsfrekvensList as SelectList, " - Välj insamlingsfrekvens -", new {id = "ddlInsamlingsfrekvens", @class = "form-control", style = "max-width:250px !important"})
+                    @Html.DropDownListFor(m => m.InsamlingsfrekvensId, ViewBag.InsamlingsfrekvensList as SelectList, " - Välj insamlingsfrekvens -", new {id = "ddlInsamlingsfrekvens", @class = "form-control", style = "max-width:250px !important"})
                 </div>
             </div>
 

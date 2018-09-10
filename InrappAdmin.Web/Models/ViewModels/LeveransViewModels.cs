@@ -26,6 +26,7 @@ namespace InrappAdmin.Web.Models.ViewModels
             public int SelectedOrganisationId { get; set; }
             public int SelectedDelregisterId { get; set; }
             public int SelectedFilkravId { get; set; }
+            public int SelectedInsamlingsfrekvensId { get; set; }
             [DisplayName("Visa endast pågående")]
             public bool FilterPagaende{ get; set; }
             [Display(Name = "År")]
@@ -99,7 +100,6 @@ namespace InrappAdmin.Web.Models.ViewModels
             public int? InsamlingsfrekvensId { get; set; }
             public SelectList InsamlingsfrekvensDDL { get; set; }
             public string Insamlingsfrekvens { get; set; }
-            public int SelectedInsamlingsfrekvensId { get; set; }
             public int? ForeskriftsId { get; set; }
             public string Namn { get; set; }
             public int? Uppgiftsstartdag { get; set; }

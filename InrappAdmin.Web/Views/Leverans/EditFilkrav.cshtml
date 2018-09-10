@@ -8,9 +8,24 @@
 @*<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />*@
 
 <script type="text/javascript">
+    var filkravsLista = @Html.Raw(Json.Encode(Model.Filkrav));
 
     $(document).ready(function () {
-
+        //Dold kolumn för InsamlingsfrekvensId
+        //Göm kolumnen med dropdown/Insamlingsfrekvens om ej edit-mode
+        $('#filkravTable tr th:eq(0)').hide();
+        $('#filkravTable tr th:eq(5)').hide();
+        $("#filkravTable tr").each(function (i, row) {
+            $(row).find('td:eq(0)').hide();
+            $(row).find('td:eq(5)').hide();
+        });
+        //filkravsLista.forEach(function (filkrav, index) {
+        //    if (filkrav.InsamlingsfrekvensId != null) {
+        //        $('#ddlInsamlingsfrekvens').val(filkrav.Insamlingsfrekvens);
+        //    } else {
+        //        $('#ddlInsamlingsfrekvens').val(0);
+        //    }
+        //});
     });
 
     $(function () {
@@ -31,17 +46,53 @@
         $("#SelectedRegisterId").val($('#ddlRegister').val());
     });
 
+    $(document).on('change', '#ddlInsamlingsfrekvens', function () {
+        $("#SelectedInsamlingsfrekvensId").val($('#ddlInsamlingsfrekvens').val());
+    });
+
+    //$(document).on('change','#ddlInsamlingsfrekvens',function() {
+    //    var tr = $(this).parents('tr:first');
+    //    var filkravId = tr.find("#FilkravId").html();
+    //    filkravsLista.forEach(function (filkrav, index) {
+    //        if (filkrav.Id === parseInt(filkravId)) {
+    //            filkrav.SelectedInsamlingsfrekvensId = ($('#ddlInsamlingsfrekvens').val());
+    //        }
+    //    });
+    //    $("#SelectedInsamlingsfrekvensId").val($('#ddlInsamlingsfrekvens').val());
+    //});
+
+
+
     $(function() {
         $('.edit-mode').hide();
-        $('.edit-user, .cancel-user').on('click',
+        
+        $('.cancel-user').on('click',
             function () {
                 var tr = $(this).parents('tr:first');
+                //Göm kolumnen med dropdown/Insamlingsfrekvens om ej edit-mode
+                tr.find('td:eq(5)').hide();
+                tr.find('td:eq(4)').show();
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+
+        $('.edit-user').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                //Visa kolumnen med dropdown/Insamlingsfrekvens om ej edit-mode
+                tr.find('td:eq(5)').show();
+                tr.find('td:eq(4)').hide();
+                var currentId = tr.find("#InsamlingsfrekvensId").val();
+                if (currentId !== "0") {
+                    tr.find("#ddlInsamlingsfrekvens").val(currentId);
+                } else {
+                    tr.find("#ddlInsamlingsfrekvens").val("");
+                }
                 tr.find('.edit-mode, .display-mode').toggle();
             });
         $('.save-user').on('click',
             function() {
                 var tr = $(this).parents('tr:first');
-                var x = tr.find("#FilkravId").html();
+                var insamlingsfrekvensId = tr.find("#ddlInsamlingsfrekvens").val();
                 var filkravId = tr.find("#FilkravId").html();
                 var namn = tr.find("#Namn").val();
                 var insamlingsfrekvens = tr.find("#Insamlingsfrekvens").val();
@@ -50,7 +101,7 @@
                 var rapporteringsstartdag = tr.find("#Rapporteringsstartdag").val();
                 var rapporteringsslutdag = tr.find("#Rapporteringsslutdag").val();
                 var rapporteringSenastdag = tr.find("#RapporteringSenastdag").val();
-                var paminnelse1dag = tr.find("#Paminnelse1dag").val(); 
+                var paminnelse1dag = tr.find("#Paminnelse1dag").val();
                 var paminnelse2dag = tr.find("#Paminnelse2dag").val();
                 var paminnelse3dag = tr.find("#Paminnelse3dag").val();
                 var rapporteringEfterAntalManader = tr.find("#RapporteringEfterAntalManader").val();
@@ -71,8 +122,9 @@
                     "Paminnelse2dag": paminnelse2dag,
                     "Paminnelse3dag": paminnelse3dag,
                     "RapporteringEfterAntalManader": rapporteringEfterAntalManader,
-                    "UppgifterAntalmanader": uppgifterAntalmanader
-                    };
+                    "UppgifterAntalmanader": uppgifterAntalmanader,
+                    "InsamlingsfrekvensId": insamlingsfrekvensId 
+                };
                 var x = admFilkrav;
                 var regId = $("#SelectedRegisterId").val();
                 //Posting AdmFilkrav object to controller's Update action method
@@ -150,6 +202,7 @@
 
     @if (Model != null)
     {
+        @*@Html.HiddenFor(m => m.SelectedInsamlingsfrekvensId)*@
 
         @Html.ActionLink("Skapa nytt filkrav", "CreateFilkrav", "Leverans", new { selectedRegId = Model.SelectedRegisterId }, null)
 
@@ -161,63 +214,84 @@
         }
 
         @grid.GetHtml(htmlAttributes: new { id = "filkravTable" },
-                    tableStyle: "webgrid-table",
-                    headerStyle: "webgrid-header",
-                    footerStyle: "webgrid-footer",
-                    alternatingRowStyle: "webgrid-alternating-row",
-                    selectedRowStyle: "webgrid-selected-row",
-                    rowStyle: "webgrid-row-style",
-                    mode: WebGridPagerModes.All,
-                    columns: grid.Columns(
-                        grid.Column("Id", format: @<text><span class="display-mode">@item.ID</span><label id="FilkravId" class="edit-mode colMinWidth">@item.Id</label></text>, style: "colMinWidth"),
-                        grid.Column("DelregisterKortnamn", "Delregister", format: @<text><span class="display-mode"><label id="lblDelregister">@item.DelregisterKortnamn</label></span>
-                        <input type="text" id="Delregister" value="@item.DelregisterKortnamn" class="edit-mode form-control" /></text>, style: "col1Width"),
-                        grid.Column("Namn", "Namn", format: @<text><span class="display-mode">
-                        <label id="lblNamn" style="width: 200px;">@item.Namn </label></span>
-                        <input type="text" id="Namn" value="@item.Namn" class="edit-mode form-control" style="width: 400px !important;" /></text>, style: "col5Width"),
-                        //grid.Column(header: "Status", format: @item => Html.DropDownList(@item.SelectedDelregisterId, (IEnumerable<SelectListItem>)Model.Filkrav[0].InsamlingsfrekvensDDL)),
-                        //grid.Column(header: "Status2", format: @item => Html.DropDownList("value", @item.InsamlingsfrekvensDDL, " - Välj delregister -", new {id = "ddlDelregister", @class = "form-control", style = "max-width:250px !important"})),
-                        grid.Column("Insamlingsfrekvens", "Insamlingsfrekvens", format: @<text><span class="display-mode"><label id="lblInsamlingsfrekvens">@item.Insamlingsfrekvens</label></span>
-                        <input type="text" id="Insamlingsfrekvens" value="@item.Insamlingsfrekvens" class="edit-mode form-control" /></text>, style: "col1Width"),
-                        grid.Column("Uppgiftsstart", "Uppgiftsstart", format: @<text><span class="display-mode">
-                        <label id="lblUppgiftsstart">@item.Uppgiftsstartdag</label></span>
-                        <input type="text" id="Uppgiftsstartdag" value="@item.Uppgiftsstartdag" class="edit-mode form-control" /></text>, style: "col2Width"),
-                        grid.Column("Uppgiftsslut", "Uppgiftsslut", format: @<text><span class="display-mode">
-                        <label id="lblUppgiftsslut">@item.Uppgiftslutdag</label></span>
-                        <input type="text" id="Uppgiftslutdag" value="@item.Uppgiftslutdag" class="edit-mode form-control" /></text>, style: "col2Width"),
-                        grid.Column("Rapporteringsstart", "Rapporteringsstart", format: @<text><span class="display-mode">
-                        <label id="lblRapporteringsstart">@item.Rapporteringsstartdag</label></span>
-                        <input type="text" id="Rapporteringsstartdag" value="@item.Rapporteringsstartdag" class="edit-mode form-control" /></text>, style: "col2Width"),
-                        grid.Column("Rapporteringsslut", "Rapporteringsslut", format: @<text><span class="display-mode">
-                        <label id="lblRapporteringsslut">@item.Rapporteringsslutdag</label></span>
-                        <input type="text" id="Rapporteringsslutdag" value="@item.Rapporteringsslutdag" class="edit-mode form-control" /></text>, style: "col2Width"),
-                        grid.Column("Rapportering senast", "Rapportering senast", format: @<text><span class="display-mode">
-                        <label id="lblRapporteringsenast">@item.RapporteringSenastdag</label></span>
-                        <input type="text" id="RapporteringSenastdag" value="@item.RapporteringSenastdag" class="edit-mode form-control" /></text>, style: "col2Width"),
+                        tableStyle: "webgrid-table",
+                        headerStyle: "webgrid-header",
+                        footerStyle: "webgrid-footer",
+                        alternatingRowStyle: "webgrid-alternating-row",
+                        selectedRowStyle: "webgrid-selected-row",
+                        rowStyle: "webgrid-row-style",
+                        mode: WebGridPagerModes.All,
+                        columns: grid.Columns(
+                            grid.Column(null, null, format: @<text><input type="hidden" id="InsamlingsfrekvensId" value="@item.InsamlingsfrekvensId" class="edit-mode form-control hide" /></text>, style: "colZeroWidth"),
+                            grid.Column("Id", format: @<text><span class="display-mode">@item.ID</span><label id="FilkravId" class="edit-mode colMinWidth">@item.Id</label></text>, style: "colMinWidth"),
+                            grid.Column("DelregisterKortnamn", "Delregister", format: @<text><span class="display-mode">@item.DelregisterKortnamn</span>
+                                        <label id="Delregister" class="edit-mode col1Width">@item.DelregisterKortnamn</label></text>, style: "col1Width"),
+                            grid.Column("Namn", "Namn", format: @<text><span class="display-mode"><label id="lblNamn" style="width: 200px;">@item.Namn </label></span>
+                                    <input type="text" id="Namn" value="@item.Namn" class="edit-mode form-control" style="width: 400px !important;" /></text>, style: "col5Width"),
+                            grid.Column("Insamlingsfrekvens", "Insamlingsfrekvens", format: @<text><span class="display-mode"><label id="lblInsamlingsfrekvens">@item.Insamlingsfrekvens</label></span></text>, style: "col1Width"),
+                            grid.Column("Insamlingsfrekvens", format: @item => Html.DropDownListFor(m => m.SelectedInsamlingsfrekvensId, ViewBag.InsamlingsfrekvensList as SelectList, " - Välj -", new { id = "ddlInsamlingsfrekvens", @class = "form-control edit-mode", style = "min-width:100px !important" })),
+                            grid.Column("Uppgiftsstart", "Uppgiftsstart", format: @<text><span class="display-mode"><label id="lblUppgiftsstart">@item.Uppgiftsstartdag</label></span>
+                                <input type="text" id="Uppgiftsstartdag" value="@item.Uppgiftsstartdag" class="edit-mode form-control" /></text>, style: "col2Width"),
+                             grid.Column("Uppgiftsslut", "Uppgiftsslut", format: @<text><span class="display-mode"><label id="lblUppgiftsslut">@item.Uppgiftslutdag</label></span>
+                                <input type="text" id="Uppgiftslutdag" value="@item.Uppgiftslutdag" class="edit-mode form-control" />
+                            </text>, style: "col2Width"),
+                                     grid.Column("Rapporteringsstart", "Rapporteringsstart", format: @<text>
+                                        <span class="display-mode">
+                                            <label id="lblRapporteringsstart">@item.Rapporteringsstartdag</label>
+                                        </span>
+                                        <input type="text" id="Rapporteringsstartdag" value="@item.Rapporteringsstartdag" class="edit-mode form-control" />
+                                    </text>, style: "col2Width"),
+                                             grid.Column("Rapporteringsslut", "Rapporteringsslut", format: @<text>
+                                                <span class="display-mode">
+                                                    <label id="lblRapporteringsslut">@item.Rapporteringsslutdag</label>
+                                                </span>
+                                                <input type="text" id="Rapporteringsslutdag" value="@item.Rapporteringsslutdag" class="edit-mode form-control" />
+                                            </text>, style: "col2Width"),
+                                                     grid.Column("Rapportering senast", "Rapportering senast", format: @<text>
+                                                        <span class="display-mode">
+                                                            <label id="lblRapporteringsenast">@item.RapporteringSenastdag</label>
+                                                        </span>
+                                                        <input type="text" id="RapporteringSenastdag" value="@item.RapporteringSenastdag" class="edit-mode form-control" />
+                                                    </text>, style: "col2Width"),
 
-                        grid.Column("Påminnelse 1", "Påminnelse 1", format: @<text><span class="display-mode">
-                        <label id="lblPaminnelse1">@item.Paminnelse1dag</label></span>
-                        <input type="text" id="Paminnelse1dag" value="@item.Paminnelse1dag" class="edit-mode form-control" /></text>, style: "col2Width"),
-                        grid.Column("Påminnelse 2", "Påminnelse 2", format: @<text><span class="display-mode">
-                        <label id="lblPaminnelse2">@item.Paminnelse2dag</label></span>
-                        <input type="text" id="Paminnelse2dag" value="@item.Paminnelse2dag" class="edit-mode form-control" /></text>, style: "col2Width"),
-                        grid.Column("Påminnelse 3", "Påminnelse 3", format: @<text><span class="display-mode">
-                        <label id="lblPaminnelse3">@item.Paminnelse3dag</label></span>
-                        <input type="text" id="Paminnelse3dag" value="@item.Paminnelse3dag" class="edit-mode form-control" /></text>, style: "col2Width"),
-                        grid.Column("Rapportering efter antal månader", "Rapportering efter antal månader", format: @<text><span class="display-mode">
-                        <label id="lblRapporteringEfterAntalManader">@item.RapporteringEfterAntalManader </label></span>
-                        <input type="text" id="RapporteringEfterAntalManader" value="@item.RapporteringEfterAntalManader" class="edit-mode form-control" /></text>, style: "colMinWidth"),
-                        grid.Column("Uppgifter antal månader", "Uppgifter antal månader", format: @<text><span class="display-mode">
-                        <label id="lblUppgifterAntalmanader">@item.UppgifterAntalmanader </label></span>
-                        <input type="text" id="UppgifterAntalmanader" value="@item.UppgifterAntalmanader" class="edit-mode form-control" /></text>, style: "colMinWidth"),
+                                                             grid.Column("Påminnelse 1", "Påminnelse 1", format: @<text>
+                                                                <span class="display-mode">
+                                                                    <label id="lblPaminnelse1">@item.Paminnelse1dag</label>
+                                                                </span>
+                                                                <input type="text" id="Paminnelse1dag" value="@item.Paminnelse1dag" class="edit-mode form-control" />
+                                                            </text>, style: "col2Width"),
+                                                                     grid.Column("Påminnelse 2", "Påminnelse 2", format: @<text>
+                                                                        <span class="display-mode">
+                                                                            <label id="lblPaminnelse2">@item.Paminnelse2dag</label>
+                                                                        </span>
+                                                                        <input type="text" id="Paminnelse2dag" value="@item.Paminnelse2dag" class="edit-mode form-control" />
+                                                                    </text>, style: "col2Width"),
+                                                                             grid.Column("Påminnelse 3", "Påminnelse 3", format: @<text>
+                                                                                <span class="display-mode">
+                                                                                    <label id="lblPaminnelse3">@item.Paminnelse3dag</label>
+                                                                                </span>
+                                                                                <input type="text" id="Paminnelse3dag" value="@item.Paminnelse3dag" class="edit-mode form-control" />
+                                                                            </text>, style: "col2Width"),
+                                                                                     grid.Column("Rapportering efter antal månader", "Rapportering efter antal månader", format: @<text>
+                                                                                        <span class="display-mode">
+                                                                                            <label id="lblRapporteringEfterAntalManader">@item.RapporteringEfterAntalManader </label>
+                                                                                        </span>
+                                                                                        <input type="text" id="RapporteringEfterAntalManader" value="@item.RapporteringEfterAntalManader" class="edit-mode form-control" />
+                                                                                    </text>, style: "colMinWidth"),
+                                                                                             grid.Column("Uppgifter antal månader", "Uppgifter antal månader", format: @<text>
+                                                                                                <span class="display-mode">
+                                                                                                    <label id="lblUppgifterAntalmanader">@item.UppgifterAntalmanader </label>
+                                                                                                </span>
+                                                                                                <input type="text" id="UppgifterAntalmanader" value="@item.UppgifterAntalmanader" class="edit-mode form-control" />
+                                                                                            </text>, style: "colMinWidth"),
 
 
-                        grid.Column(null, format: @<text>
-                            <button class="edit-user display-mode btn btn-default">Ändra</button>
-                            <button class="save-user edit-mode btn btn-default">Spara</button>
-                            <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
-                        </text>, style: "col3Width", canSort: false)))
+                                                                                                     grid.Column(null, format: @<text>
+                                                                                                        <button class="edit-user display-mode btn btn-default">Ändra</button>
+                                                                                                        <button class="save-user edit-mode btn btn-default">Spara</button>
+                                                                                                        <button class="cancel-user edit-mode btn btn-default">Avbryt</button>
+                                                                                                    </text>, style: "col3Width", canSort: false)))
 
-    </div>
+</div>
     }
 </div>
