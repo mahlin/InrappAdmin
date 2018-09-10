@@ -4,6 +4,7 @@
     ViewBag.Title = "Organisation";
 }
 
+<script src="@Url.Content("~/Scripts/custom.js")" type="text/javascript"></script>
 
 <script type="text/javascript">
     $(function () {
@@ -42,15 +43,6 @@
             var selectedOrg = $('#ddlOrganisation').val();
             $("#SelectedOrganisationId").val(selectedOrg);
         });
-
-    //document.onkeydown = function () {
-    //Prevent.default?
-    //    var x = $('#ddlOrganisation').val();
-    //    if (window.event.keyCode === 13 && $('#ddlOrganisation').val() !== "") {
-    //        //$('#orgForm').submit();
-    //        $('#searchBtn').click();
-    //    }
-    //}
 
 
 </script>
