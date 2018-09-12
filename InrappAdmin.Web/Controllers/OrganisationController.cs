@@ -522,7 +522,6 @@ namespace InrappAdmin.Web.Controllers
         [Authorize]
         public ActionResult CreateReportObligation(OrganisationViewModels.ReportObligationsViewModel uppgSk, int selectedOrgId)
         {
-            var org = new Organisation();
             if (ModelState.IsValid)
             {
                 try
@@ -543,7 +542,7 @@ namespace InrappAdmin.Web.Controllers
                     };
                     return View("CustomError", errorModel);
                 }
-                return RedirectToAction("GetOrganisationsReportObligations", new { selectedOrgId = org.Id });
+                return RedirectToAction("GetOrganisationsReportObligations", new { selectedOrgId = selectedOrgId });
             }
 
             return View();

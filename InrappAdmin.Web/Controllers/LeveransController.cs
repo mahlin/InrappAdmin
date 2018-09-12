@@ -526,7 +526,7 @@ namespace InrappAdmin.Web.Controllers
                     }
                     //För varje (distinct) period i listan ovan spara i ett LeveransStatusDTO-objekt.
                     //I detta objekt spara registerId och registernamn oxå
-                    //För varje period för registret hämta historik för alla delregister - spara som historiklista i LevereansStatusDTO-objekt
+                    //För varje period för registret hämta historik för alla delregister - spara som historiklista i LeveransStatusDTO-objekt
                     var i = 0;
                     foreach (var period in periodsForRegister)
                     {

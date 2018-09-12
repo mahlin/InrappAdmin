@@ -884,6 +884,7 @@ namespace InrappAdmin.ApplicationService
                     break;
                 case 2: //Årlig
                     forvantadeLeveranser = CreateAnnualDeliveries(filkrav, selectedYear).ToList();
+                    forvantadeLeveranserUtkast = MarkAlreadyExisting(forvantadeLeveranser).ToList();
                     break;
             }
 
@@ -1391,6 +1392,8 @@ namespace InrappAdmin.ApplicationService
                     Period = newDate.ToString("yyyyMM")
                 };
 
+                forvLev = SetDeliveryDates(forvLev,filkrav, newDate);
+
                 //Uppgiftsstart/uppgiftsslut
                 var uppgDate = newDate.AddMonths(- (Convert.ToInt32(filkrav.UppgifterAntalmanader) -1));
                 forvLev.Uppgiftsstart = new DateTime(uppgDate.Year, uppgDate.Month, Convert.ToInt32(filkrav.Uppgiftsstartdag));
@@ -1469,7 +1472,94 @@ namespace InrappAdmin.ApplicationService
 
         private IEnumerable<ForvantadLeveransDTO> CreateAnnualDeliveries(AdmFilkrav filkrav, int selectedYear)
         {
-            throw new NotImplementedException();
+            var forvantadeLeveranserUtkast = new List<ForvantadLeveransDTO>();
+            var newDate = new DateTime(selectedYear,1,1);
+            var forvLev = new ForvantadLeveransDTO
+            {
+                DelregisterId = filkrav.DelregisterId,
+                FilkravId = filkrav.Id,
+                Period = newDate.ToString("yyyy")
+            };
+            forvLev = SetDeliveryDates(forvLev, filkrav, newDate);
+            forvantadeLeveranserUtkast.Add(forvLev);
+            return forvantadeLeveranserUtkast;
+        }
+
+        private ForvantadLeveransDTO SetDeliveryDates(ForvantadLeveransDTO forvLev, AdmFilkrav filkrav, DateTime newDate)
+        {
+            //Uppgiftsstart/uppgiftsslut
+            var uppgDate = newDate.AddMonths(-(Convert.ToInt32(filkrav.UppgifterAntalmanader) - 1));
+            forvLev.Uppgiftsstart = new DateTime(uppgDate.Year, uppgDate.Month, Convert.ToInt32(filkrav.Uppgiftsstartdag));
+            var uppgslutDate = forvLev.Uppgiftsstart.AddMonths(Convert.ToInt32(filkrav.UppgifterAntalmanader));
+            if (filkrav.Uppgiftslutdag == 31)
+            {
+                forvLev.Uppgiftsslut = uppgslutDate.AddDays(-1);
+            }
+            else
+            {
+                forvLev.Uppgiftsslut = new DateTime(uppgslutDate.Year, uppgslutDate.Month, Convert.ToInt32(filkrav.Uppgiftslutdag));
+            }
+
+            //Rapporteringsstart/rapporteringsslut/rapporteringsenast
+            var rappDate = newDate.AddMonths(Convert.ToInt32(filkrav.RapporteringEfterAntalManader));
+            forvLev.Rapporteringsstart = new DateTime(rappDate.Year, rappDate.Month, Convert.ToInt32(filkrav.Rapporteringsstartdag));
+            if (filkrav.Rapporteringsslutdag == 31)
+            {
+                forvLev.Rapporteringsslut = forvLev.Rapporteringsstart.AddMonths(1).AddDays(-1);
+            }
+            else
+            {
+                forvLev.Rapporteringsslut = new DateTime(rappDate.Year, rappDate.Month + Convert.ToInt32(filkrav.RapporteringEfterAntalManader), Convert.ToInt32(filkrav.Rapporteringsslutdag));
+            }
+            if (filkrav.RapporteringSenastdag == 31)
+            {
+                forvLev.Rapporteringsenast = forvLev.Rapporteringsstart.AddMonths(1).AddDays(-1);
+            }
+            else
+            {
+                //forvLev.Rapporteringsenast = new DateTime(rappDate.Year, rappDate.Month + Convert.ToInt32(filkrav.RapporteringEfterAntalManader), Convert.ToInt32(filkrav.RapporteringSenastdag));
+                forvLev.Rapporteringsenast = new DateTime(forvLev.Rapporteringsslut.Year, forvLev.Rapporteringsslut.Month, Convert.ToInt32(filkrav.RapporteringSenastdag));
+
+            }
+
+            //Påminnelse1,-2, -3
+            if (filkrav.Paminnelse1dag != null)
+            {
+                var p1Date = new DateTime(rappDate.Year, rappDate.Month, Convert.ToInt32(filkrav.Paminnelse1dag));
+                //Kontrollera att datum ej infaller på helgen
+                if (p1Date.DayOfWeek == DayOfWeek.Saturday)
+                    forvLev.Paminnelse1 = p1Date.AddDays(2);
+                else if (p1Date.DayOfWeek == DayOfWeek.Sunday)
+                    forvLev.Paminnelse1 = p1Date.AddDays(1);
+                else
+                    forvLev.Paminnelse1 = p1Date;
+            }
+
+            if (filkrav.Paminnelse2dag != null)
+            {
+                var p2Date = new DateTime(rappDate.Year, rappDate.Month, Convert.ToInt32(filkrav.Paminnelse2dag));
+                //Kontrollera att datum ej infaller på helgen
+                if (p2Date.DayOfWeek == DayOfWeek.Saturday)
+                    forvLev.Paminnelse2 = p2Date.AddDays(2);
+                else if (p2Date.DayOfWeek == DayOfWeek.Sunday)
+                    forvLev.Paminnelse2 = p2Date.AddDays(1);
+                else
+                    forvLev.Paminnelse2 = p2Date;
+            }
+            if (filkrav.Paminnelse3dag != null)
+            {
+                var p3Date = new DateTime(rappDate.Year, rappDate.Month, Convert.ToInt32(filkrav.Paminnelse3dag));
+                //Kontrollera att datum ej infaller på helgen
+                if (p3Date.DayOfWeek == DayOfWeek.Saturday)
+                    forvLev.Paminnelse3 = p3Date.AddDays(2);
+                else if (p3Date.DayOfWeek == DayOfWeek.Sunday)
+                    forvLev.Paminnelse3 = p3Date.AddDays(1);
+                else
+                    forvLev.Paminnelse3 = p3Date;
+            }
+
+            return forvLev;
+
         }
 
         private IEnumerable<ForvantadLeveransDTO> MarkAlreadyExisting(IEnumerable<ForvantadLeveransDTO> forvLevList)
