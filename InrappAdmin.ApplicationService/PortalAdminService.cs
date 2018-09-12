@@ -606,7 +606,7 @@ namespace InrappAdmin.ApplicationService
                             filloggDetalj.Period = period;
                             if (aterkoppling != null)
                             {
-                                filloggDetalj.Leveransstatus = aterkoppling.Leveransstatus;
+                                //filloggDetalj.Leveransstatus = aterkoppling.Leveransstatus; //Skriv ej över leveransstatusen från återkopplingen. Beslut 20180912, ärende #128
                                 filloggDetalj.Resultatfil = aterkoppling.Resultatfil;
                             }
                             historikLista.Add(filloggDetalj);
@@ -633,6 +633,8 @@ namespace InrappAdmin.ApplicationService
             bool ekbAo = false;
             bool sol1 = false;
             bool sol2 = false;
+
+
 
             foreach (var rad in historikLista)
             {
