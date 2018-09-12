@@ -557,8 +557,22 @@ namespace InrappAdmin.Web.Controllers
             {
                 model.SelectedOrganisationId = selectedOrgId;
                 model.SelectedOrganisationsenhetsId = selectedOrgenhetsId;
+                //Skapa dropdown för valbara delregister
                 var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
-                this.ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterList);
+                var admUppgSkyldighetList = _portalAdminService.HamtaUppgiftsskyldighetForOrg(selectedOrgId);
+                var delregisterDropDownList = new List<AdmDelregister>();
+                foreach (var delregister in delregisterList)
+                {
+                    foreach (var admUppgSkyldighet in admUppgSkyldighetList)
+                    {
+                        if (delregister.Id == admUppgSkyldighet.DelregisterId)
+                        {
+                            delregisterDropDownList.Add(delregister);
+                        }
+                    }
+                }
+
+                this.ViewBag.DelregisterList = CreateDelRegisterDropDownList(delregisterDropDownList);
 
                 if (selectedOrgId != 0)
                 {
