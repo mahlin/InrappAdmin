@@ -568,6 +568,8 @@ namespace InrappAdmin.Web.Controllers
                         //Lägg hela DTO-objektet i regLev.Leveranser
                         regLev.Leveranser.Add(leveransStatus);
                     }
+
+                    regLev.Leveranser = regLev.Leveranser.OrderBy(x => x.RegisterKortnamn).ThenBy(x => x.Period).ToList();
                     model.LeveransListaRegister.Add(regLev);
                     model.SelectableYears = selectableYearsForUser;
                 }
