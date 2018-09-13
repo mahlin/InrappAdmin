@@ -519,6 +519,14 @@ namespace InrappAdmin.DataAccess
             return latestsDeliveryForOrgAndSubdirectory;
         }
 
+        public Leverans GetLatestDeliveryForOrganisationSubDirectoryPeriodAndOrgUnit(int orgId, int subdirId, int forvlevId,int orgUnitId)
+        {
+            var latestsDeliveryForOrgAndSubdirectory = AllaLeveranser()
+                .Where(a => a.OrganisationId == orgId && a.DelregisterId == subdirId &&
+                            a.ForvantadleveransId == forvlevId && a.OrganisationsenhetsId == orgUnitId).OrderByDescending(x => x.Id).FirstOrDefault();
+            return latestsDeliveryForOrgAndSubdirectory;
+        }
+
         public string GetUserEmail(string userId)
         {
             var email = IdentityDbContext.Users.Where(x => x.Id == userId).Select(x => x.Email).SingleOrDefault();
@@ -569,6 +577,7 @@ namespace InrappAdmin.DataAccess
 
             return uppgiftsskyldighet;
         }
+
 
         public IEnumerable<Organisationsenhet> GetOrganisationUnits(int orgId)
         {
