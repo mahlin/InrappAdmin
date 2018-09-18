@@ -411,6 +411,7 @@ namespace InrappAdmin.DataAccess
             modelBuilder.Entity<Rapporteringsresultat>().Property(e => e.Lankod).HasColumnName("lankod");
             modelBuilder.Entity<Rapporteringsresultat>().Property(e => e.Kommunkod).HasColumnName("kommunkod");
             modelBuilder.Entity<Rapporteringsresultat>().Property(e => e.Organisationsnamn).HasColumnName("organisationsnamn");
+            modelBuilder.Entity<Rapporteringsresultat>().Property(e => e.RegisterId).HasColumnName("registerid");
             modelBuilder.Entity<Rapporteringsresultat>().Property(e => e.Register).HasColumnName("register");
             modelBuilder.Entity<Rapporteringsresultat>().Property(e => e.Period).HasColumnName("period");
             modelBuilder.Entity<Rapporteringsresultat>().Property(e => e.RegisterKortnamn).HasColumnName("kortnamn");

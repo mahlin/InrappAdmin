@@ -13,6 +13,7 @@ namespace InrappAdmin.DomainModel
         public string Lankod { get; set; }
         public string Kommunkod { get; set; }
         public string Organisationsnamn { get; set; }
+        public int RegisterId { get; set; }
         public string Register { get; set; }
         public string Period { get; set; }
         public string RegisterKortnamn { get; set; }

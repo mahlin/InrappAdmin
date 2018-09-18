@@ -447,9 +447,9 @@ namespace InrappAdmin.ApplicationService
             return foreskrift;
         }
 
-        public IEnumerable<RapporteringsresultatDTO> HamtaRapporteringsresultatForRegOchPeriod(int delRegId, string period)
+        public IEnumerable<RapporteringsresultatDTO> HamtaRapporteringsresultatForDelregOchPeriod(int delRegId, string period)
         {
-            var rappResList = _portalAdminRepository.GetReportResultForDirAndPeriod(delRegId, period);
+            var rappResList = _portalAdminRepository.GetReportResultForSubdirAndPeriod(delRegId, period);
             var ejLevList = new List<Rapporteringsresultat>();
 
             //Ta bara med dem som inte rapporterat alls eller som har leveransstatus "Leveransen är inte godkänd"
@@ -466,7 +466,30 @@ namespace InrappAdmin.ApplicationService
                 
             }
 
-            var rappResListDTO = ConvertRappListDBToVM(ejLevList, delRegId);
+            var rappResListDTO = ConvertRappListDBToVM(ejLevList, 0, delRegId);
+            return rappResListDTO;
+        }
+
+        public IEnumerable<RapporteringsresultatDTO> HamtaRapporteringsresultatForRegOchPeriod(int regId, string period)
+        {
+            var rappResList = _portalAdminRepository.GetReportResultForDirAndPeriod(regId, period);
+            var ejLevList = new List<Rapporteringsresultat>();
+
+            //Ta bara med dem som inte rapporterat alls eller som har leveransstatus "Leveransen är inte godkänd"
+            foreach (var rappRes in rappResList)
+            {
+                if (rappRes.AntalLeveranser == null)
+                {
+                    ejLevList.Add(rappRes);
+                }
+                else if (rappRes.Leveransstatus == "Leveransen är inte godkänd")
+                {
+                    ejLevList.Add(rappRes);
+                }
+
+            }
+
+            var rappResListDTO = ConvertRappListDBToVM(ejLevList, regId, 0);
             return rappResListDTO;
         }
 
@@ -1158,7 +1181,7 @@ namespace InrappAdmin.ApplicationService
             _portalAdminRepository.DeleteAdminUser(userId);
         }
 
-        private IEnumerable<RapporteringsresultatDTO> ConvertRappListDBToVM(IEnumerable<Rapporteringsresultat> rappResList, int delRegId)
+        private IEnumerable<RapporteringsresultatDTO> ConvertRappListDBToVM(IEnumerable<Rapporteringsresultat> rappResList, int regId, int delRegId)
         {
             var rappListDTO = new List<RapporteringsresultatDTO>();
             var i = 0;
@@ -1209,7 +1232,7 @@ namespace InrappAdmin.ApplicationService
                 //If no emailadress/contactperson for delivery, get organisations contactperson for chosen subdir
                 if (String.IsNullOrEmpty(rappResRadVM.Email))
                 {
-                    rappResRadVM.Email = GetEmail(rappResRadVM, delRegId);
+                    rappResRadVM.Email = GetEmail(rappResRadVM, regId, delRegId);
                 }
                 rappListDTO.Add(rappResRadVM);
             }
@@ -1217,11 +1240,29 @@ namespace InrappAdmin.ApplicationService
             return rappListDTO;
         }
 
-        private string GetEmail(RapporteringsresultatDTO rappRes, int delRegId)
+        private string GetEmail(RapporteringsresultatDTO rappRes, int regId, int delRegId)
         {
             var email = String.Empty;
+            var contactList = new List<ApplicationUser>();
+
             //Get email from Organisations Kontaktperson
-            var contactList = _portalAdminRepository.GetContactPersonsForOrgAndSubdir(rappRes.OrganisationsId, delRegId).ToList();
+            if (delRegId == 0)
+            {
+                var delregContactList = new List<ApplicationUser>();
+                //Hämta delregister för valt register
+                var delregisterList = _portalAdminRepository.GetSubDirectoriesForDirectory(regId);
+                foreach (var delregister in delregisterList)
+                {
+                    delregContactList = _portalAdminRepository.GetContactPersonsForOrgAndSubdir(rappRes.OrganisationsId, delregister.Id).ToList();
+                    contactList.Union(delregContactList).ToList();
+                }
+                
+            }
+            else
+            {
+                contactList = _portalAdminRepository.GetContactPersonsForOrgAndSubdir(rappRes.OrganisationsId, delRegId).ToList();
+            }
+
             if (contactList.Count > 0)
             {
                 for (int i = 0; i < contactList.Count; i++)

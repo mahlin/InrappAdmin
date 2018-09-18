@@ -15,14 +15,18 @@
         if ($("#SelectedRegisterId").val() > 0) {
             //set delreg-ddl
             setDelregDrop($("#SelectedRegisterId").val());
+            setPeriodDropForReg();
         }
         if ($("#SelectedDelregisterId").val() !== "0") {
             $('#ddlDelregister').val($("#SelectedDelregisterId").val());
             //set period-ddl
-            setPeriodDrop($("#SelectedDelregisterId").val());
+            setPeriodDropForDelreg($("#SelectedDelregisterId").val());
         }
-        if ($("#SelectedPeriod").val() != null) {
+        if ($("#SelectedPeriod").val()) {
             $('#ddlPeriod').val($("#SelectedPeriod").val());
+            $("#btnSearch").removeAttr('disabled'); 
+        } else {
+            $('#btnSearch').attr('disabled', 'disabled');
         }
 
         //Sätt antal rader
@@ -67,7 +71,35 @@
         });
     }
 
-    function setPeriodDrop(selectedDelregister) {
+    function setPeriodDropForReg() {
+        var selectedRegister = $('#ddlRegister').val();
+        //Hämta perioder för valt registers alla delregister
+        registerLista.forEach(function (register, index) {
+            if (selectedRegister === register.Id.toString()) {
+                if (register.DelregisterList.length !== 0) {
+                    var vals = {};
+                    register.DelregisterList.forEach(function (delregister, index) {
+                        if (delregister.ForvantadeLeveranserList.length !== 0) {
+                            delregister.ForvantadeLeveranserList.forEach(function (unit, index) {
+                                vals[unit.Period] = unit.Period;
+                            });
+                        }
+                        //Populera period-dropdown
+                        var $ddlPeriod = $("#ddlPeriod");
+                        $ddlPeriod.empty();
+                        $ddlPeriod.append("<option value=0> - Välj period - </option>");
+                        $.each(vals,
+                            function (index, value) {
+                                $ddlPeriod.append("<option value=" + index + " >" + value + "</option>");
+                            });
+                        $ddlPeriod.removeAttr('readonly');
+                    });
+                }
+            }
+        });
+    }
+
+    function setPeriodDropForDelreg(selectedDelregister) {
         var selectedRegister = $('#ddlRegister').val();
         //Hämta perioder för valt delregister
         registerLista.forEach(function (register, index) {
@@ -83,7 +115,7 @@
                                 });
                                 var $ddlPeriod = $("#ddlPeriod");
                                 $ddlPeriod.empty();
-                                $ddlPeriod.append("<option> - Välj period - </option>");
+                                $ddlPeriod.append("<option avlue=0> - Välj period - </option>");
                                 $.each(vals,
                                     function (index, value) {
                                         $ddlPeriod.append("<option value=" + index + " >" + value + "</option>");
@@ -128,7 +160,7 @@
 
                     var $ddlDelregister = $("#ddlDelregister");
                     $ddlDelregister.empty();
-                    $ddlDelregister.append("<option> - Välj delregister - </option>");
+                    $ddlDelregister.append("<option value=0> - Välj delregister - </option>");
                     $.each(vals,
                         function (index, value) {
                             $ddlDelregister.append("<option value=" + index + " >" + value + "</option>");
@@ -139,17 +171,23 @@
         });
     }
 
-    $(document).on('change',
-        '#ddlRegister',
-        function () {
+    $(document).on('change','#ddlRegister',function () {
             //Nollställ dropparna
             $('#ddlPeriod').empty();
-            $("#ddlPeriod").append("<option> - Välj period - </option>");
+            $("#ddlPeriod").append("<option value=0> - Välj period - </option>");
             $('#ddlPeriod').attr('readonly', 'readonly');
+            $('#btnSearch').attr('disabled', 'disabled');
             var selectedRegister = $('#ddlRegister').val();
             $("#SelectedRegisterId").val(selectedRegister);
             //Hämta delregister för valt register
-            setDelregDrop(selectedRegister);
+            if (selectedRegister !== "") {
+                setDelregDrop(selectedRegister);
+                setPeriodDropForReg();
+            } else {
+                $('#ddlDelregister').empty(); 
+                $("#ddlDelregister").append("<option value=0> - Välj delregister - </option>");
+                $('#ddlDelregister').attr('readonly', 'readonly');
+            }
         });
 
     $(document).on('change',
@@ -159,14 +197,28 @@
             var selectedDelregister = $('#ddlDelregister').val();
             $("#SelectedDelregisterId").val(selectedDelregister);
             //Hämta perioder för valt delregister
-            setPeriodDrop(selectedDelregister);
+            if (selectedDelregister !== "0") {
+                setPeriodDropForDelreg(selectedDelregister);
+            } else if (selectedDelregister === "0" && selectedRegister !== "0") {
+                setPeriodDropForReg();
+            } else {
+                $('#ddlPeriod').empty(); 
+                $("#ddlPeriod").append("<option value=0> - Välj period - </option>");
+                $('#ddlPeriod').attr('readonly', 'readonly');
+            }
+            $('#btnSearch').attr('disabled', 'disabled');
         });
 
-    $(document).on('change',
-        '#ddlPeriod',
-        function () {
-            $("#SelectedPeriod").val($('#ddlPeriod').val());
-        });
+    $(document).on('change', '#ddlPeriod', function () {
+        var x = $('#ddlPeriod').val();
+        $("#SelectedPeriod").val($('#ddlPeriod').val());
+        if ($('#ddlPeriod').val() !== "0") {
+            $("#btnSearch").removeAttr('disabled');
+        } else {
+            $('#btnSearch').attr('disabled', 'disabled');
+        }
+
+    });
 
     function setMail(id) {
         //var rappResLista = @Html.Raw(Json.Encode(Model.RapportResList));
@@ -264,7 +316,7 @@
                     <div class="col-md-12" style="padding-left: 0px; margin-left: -10px;">
                         <label class="col-md-2">&nbsp;</label>
                         <div>
-                            <input type="submit" value="Sök" class="btn btn-default" />
+                            <input type="submit" id="btnSearch" value="Sök" class="btn btn-default" disabled />
                         </div>
                     </div>
 

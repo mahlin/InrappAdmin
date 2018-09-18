@@ -431,9 +431,15 @@ namespace InrappAdmin.DataAccess
             return foreskrift;
         }
 
-        public IEnumerable<Rapporteringsresultat> GetReportResultForDirAndPeriod(int delRegId, string period)
+        public IEnumerable<Rapporteringsresultat> GetReportResultForSubdirAndPeriod(int delRegId, string period)
         {
             var repResults = DbContext.RapporteringsResultat.Where(x => x.DelregisterId == delRegId && x.Period == period).ToList();
+            return repResults;
+        }
+
+        public IEnumerable<Rapporteringsresultat> GetReportResultForDirAndPeriod(int regId, string period)
+        {
+            var repResults = DbContext.RapporteringsResultat.Where(x => x.RegisterId == regId && x.Period == period).ToList();
             return repResults;
         }
 

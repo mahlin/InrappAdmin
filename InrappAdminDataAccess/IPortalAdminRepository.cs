@@ -124,6 +124,8 @@ namespace InrappAdmin.DataAccess
 
         IEnumerable<LevereradFil> GetFilerForLeveransId(int leveransId);
 
+        IEnumerable<Rapporteringsresultat> GetReportResultForSubdirAndPeriod(int delRegId, string period);
+
         IEnumerable<Rapporteringsresultat> GetReportResultForDirAndPeriod(int delRegId, string period);
 
         //IEnumerable<AdmRegister> GetDirectoriesForOrg(int orgId);

@@ -101,7 +101,9 @@ namespace InrappAdmin.ApplicationService.Interface
 
         IEnumerable<AppUserAdmin> HamtaAdminUsers();
 
-        IEnumerable<RapporteringsresultatDTO> HamtaRapporteringsresultatForRegOchPeriod(int delRegId, string period);
+        IEnumerable<RapporteringsresultatDTO> HamtaRapporteringsresultatForDelregOchPeriod(int delRegId, string period);
+
+        IEnumerable<RapporteringsresultatDTO> HamtaRapporteringsresultatForRegOchPeriod(int regId, string period);
 
         IEnumerable<AdmRegister> HamtaRegisterForOrg(int orgId);
 

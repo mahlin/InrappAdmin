@@ -408,7 +408,17 @@ namespace InrappAdmin.Web.Controllers
                     model.SelectedPeriod = period;
                 }
 
-                var rappList = _portalAdminService.HamtaRapporteringsresultatForRegOchPeriod(model.SelectedDelregisterId, model.SelectedPeriod);
+                var rappList = new List<RapporteringsresultatDTO>();
+
+                if (model.SelectedDelregisterId != 0)
+                {
+                    rappList = _portalAdminService.HamtaRapporteringsresultatForDelregOchPeriod(model.SelectedDelregisterId, model.SelectedPeriod).ToList();
+                }
+                else
+                {
+                    rappList = _portalAdminService.HamtaRapporteringsresultatForRegOchPeriod(model.SelectedRegisterId, model.SelectedPeriod).ToList();
+                }
+                
                 model.RapportResList = rappList.ToList();
                 model.AntRader = model.RapportResList.Count();
                 model = GetDropDownLists(model);
