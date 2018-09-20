@@ -15,7 +15,7 @@
         //Göm kolumnen med dropdown/Insamlingsfrekvens om ej edit-mode
         $('#filkravTable tr th:eq(0)').hide();
         $('#filkravTable tr th:eq(5)').hide();
-        $("#filkravTable tr").each(function (i, row) {
+        $("#filkravTable tbody tr").each(function (i, row) {
             $(row).find('td:eq(0)').hide();
             $(row).find('td:eq(5)').hide();
         });
