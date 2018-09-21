@@ -571,16 +571,26 @@ namespace InrappAdmin.Web.Controllers
                 model.SelectedOrganisationsenhetsId = selectedOrgenhetsId;
                 //Skapa dropdown för valbara delregister
                 var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
-                var admUppgSkyldighetList = _portalAdminService.HamtaUppgiftsskyldighetForOrg(selectedOrgId);
+                var admUppgSkyldighetList = _portalAdminService.HamtaUppgiftsskyldighetForOrg(selectedOrgId).ToList();
                 var delregisterDropDownList = new List<AdmDelregister>();
+                //foreach (var delregister in delregisterList)
+                //{
+                //    foreach (var admUppgSkyldighet in admUppgSkyldighetList)
+                //    {
+                //        if (delregister.Id == admUppgSkyldighet.DelregisterId)
+                //        {
+                //            delregisterDropDownList.Add(delregister);
+                //        }
+                //    }
+                //}
+
+                //Endast delregister som har uppgiftsskyldighet ska visas i dropdown
                 foreach (var delregister in delregisterList)
                 {
-                    foreach (var admUppgSkyldighet in admUppgSkyldighetList)
+                    var finns = admUppgSkyldighetList.Find(r => r.DelregisterId == delregister.Id);
+                    if (finns != null)
                     {
-                        if (delregister.Id == admUppgSkyldighet.DelregisterId)
-                        {
-                            delregisterDropDownList.Add(delregister);
-                        }
+                        delregisterDropDownList.Add(delregister);
                     }
                 }
 
