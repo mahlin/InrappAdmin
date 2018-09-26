@@ -573,16 +573,6 @@ namespace InrappAdmin.Web.Controllers
                 var delregisterList = _portalAdminService.HamtaAllaDelregisterForPortalen();
                 var admUppgSkyldighetList = _portalAdminService.HamtaUppgiftsskyldighetForOrg(selectedOrgId).ToList();
                 var delregisterDropDownList = new List<AdmDelregister>();
-                //foreach (var delregister in delregisterList)
-                //{
-                //    foreach (var admUppgSkyldighet in admUppgSkyldighetList)
-                //    {
-                //        if (delregister.Id == admUppgSkyldighet.DelregisterId)
-                //        {
-                //            delregisterDropDownList.Add(delregister);
-                //        }
-                //    }
-                //}
 
                 //Endast delregister som har uppgiftsskyldighet ska visas i dropdown
                 foreach (var delregister in delregisterList)
@@ -590,7 +580,13 @@ namespace InrappAdmin.Web.Controllers
                     var finns = admUppgSkyldighetList.Find(r => r.DelregisterId == delregister.Id);
                     if (finns != null)
                     {
-                        delregisterDropDownList.Add(delregister);
+                        //Kolla att enhetsuppgiftsskyldighet inte redan finns för delreg
+                        var uppgskh = admUppgSkyldighetList.SingleOrDefault(x => x.DelregisterId == delregister.Id);
+                        var enhetsuppgiftsskyldighet = _portalAdminService.HamtaEnhetsUppgiftsskyldighetForUppgiftsskyldighetOchOrgEnhet(uppgskh.Id, selectedOrgenhetsId);
+                        if (enhetsuppgiftsskyldighet == null)
+                        {
+                            delregisterDropDownList.Add(delregister);
+                        }
                     }
                 }
 

@@ -30,6 +30,8 @@ namespace InrappAdmin.ApplicationService.Interface
 
         IEnumerable<AdmEnhetsUppgiftsskyldighet> HamtaEnhetsUppgiftsskyldighetForOrgEnhet(int orgenhetId);
 
+        AdmEnhetsUppgiftsskyldighet HamtaEnhetsUppgiftsskyldighetForUppgiftsskyldighetOchOrgEnhet(int uppgskhId, int orgenhetId);
+
         IEnumerable<AdmFAQKategori> HamtaFAQkategorier();
 
         IEnumerable<AdmFAQ> HamtaFAQs(int faqCatId);

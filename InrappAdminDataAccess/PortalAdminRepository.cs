@@ -175,6 +175,12 @@ namespace InrappAdmin.DataAccess
 
         }
 
+        public AdmEnhetsUppgiftsskyldighet GetUnitReportObligationForReportObligationAndOrg(int oblId, int orgunitId)
+        {
+            var unitReportObigation = DbContext.AdmEnhetsUppgiftsskyldighet.SingleOrDefault(x => x.UppgiftsskyldighetId == oblId && x.OrganisationsenhetsId == orgunitId);
+            return unitReportObigation;
+        }
+
         public string GetKommunkodForOrg(int orgId)
         {
             var kommunkod = DbContext.Organisation.Where(x => x.Id == orgId).Select(x => x.Kommunkod).SingleOrDefault();

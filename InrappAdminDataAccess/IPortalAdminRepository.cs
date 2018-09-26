@@ -45,6 +45,7 @@ namespace InrappAdmin.DataAccess
         AdmUppgiftsskyldighet GetReportObligationInformationForOrgAndSubDir(int orgId, int subdirId);
 
         IEnumerable<AdmEnhetsUppgiftsskyldighet> GetUnitReportObligationInformationForOrgUnit(int orgUnitId);
+        AdmEnhetsUppgiftsskyldighet GetUnitReportObligationForReportObligationAndOrg(int oblId, int orgunitId);
 
         IEnumerable<AdmFAQKategori> GetFAQCategories();
 

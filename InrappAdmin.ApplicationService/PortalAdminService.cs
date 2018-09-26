@@ -83,6 +83,13 @@ namespace InrappAdmin.ApplicationService
             var uppgiftsskyldigheter = _portalAdminRepository.GetUnitReportObligationInformationForOrgUnit(orgenhetId);
             return uppgiftsskyldigheter;
         }
+
+        public AdmEnhetsUppgiftsskyldighet HamtaEnhetsUppgiftsskyldighetForUppgiftsskyldighetOchOrgEnhet(int uppgskhId, int orgenhetId)
+        {
+            var enhetsuppgiftsskyldighet = _portalAdminRepository.GetUnitReportObligationForReportObligationAndOrg(uppgskhId, orgenhetId);
+            return enhetsuppgiftsskyldighet;
+        }
+
         public Organisation HamtaOrgForAnvandare(string userId)
         {
             var org = _portalAdminRepository.GetOrgForUser(userId);
@@ -1676,6 +1683,7 @@ namespace InrappAdmin.ApplicationService
             }
             return historikLista;
         }
+
 
     }
 }
